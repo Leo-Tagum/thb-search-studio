@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
 const BY = "juan: approved by Juan in writing, 2026-10-10 (relayed by Leo)";
-const SRC = "Juan's written confirmation, 2026-10-10 (relayed by Leo; channel not yet stated: Leo's message still showed the placeholder "[Slack / email / text / in person]").";
+const SRC = "Juan's written confirmation, 2026-10-10 (relayed by Leo; channel not yet stated: Leo's message still showed the placeholder [Slack / email / text / in person]).";
 const COMBINED = "Juan Diaz has 25+ years of experience in Bay Area real estate and has been investing since 2002.";
 
 const rows: Record<string, string>[] = [
