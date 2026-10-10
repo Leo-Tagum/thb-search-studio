@@ -95,6 +95,7 @@ Each step has a **Check** column. Record each result in the Handoff.
 - **Decision (Leo, 2026-10-10):** identifying details in the seller briefs (C-16, C-17, area + detail combinations, dates, amounts) are fine for internal use only and must never appear in a blog draft. Recorded in the handoff under OPEN DECISIONS as resolved and carried into Phase 1. Not covered by it: the seller first name in C-12 (still to fix or accept).
 - **Step 9 PENDING (Leo, 2026-10-10):** the partner is absent and the message has not been sent. Not required to finish this phase. Until the list arrives, **every page's protection status is treated as unknown**, so an UPDATE on any page shows the design's warning and needs explicit acknowledgement (design §7); Leo can mark a page manually with an audited reason.
 - **Step 12 (2026-10-10):** handoff filled in as PARTIAL, STATUS.md left IN PROGRESS, first commit made.
+- **Step 10 update (2026-10-10, second identity):** mechanism proven with a second identity; Juan's own click still needed before Phase 3. A second org account (Bryan Cadahing, via remote desktop; not Juan) approved the test artifact. Read back from the artifact database: two approval records for TEST-0001 / dummy-v1, both with the same version hash (starts 7ffd393a); the two viewer identities differ (Leo's account vs Bryan Cadahing); the hash was recomputed independently from the artifact text and matches. Caveats: the hash is computed in the viewer's browser and the timestamp uses the viewer's clock.
 - **PARTIAL accepted by Leo (2026-10-10).** Phase 1 may start. Still open: Juan's approval click (step 10) and the partner's protected-URL list (step 9); every page stays protection-status UNKNOWN until the list is imported.
 
 ## Out of scope
@@ -122,7 +123,7 @@ Each step has a **Check** column. Record each result in the Handoff.
 
 ```text
 PHASE: 0 — Setup & Access Audit
-STATUS: PARTIAL (waiting on Juan's click for step 10 and on the partner for the protected-URL list)
+STATUS: PARTIAL (step 10: mechanism proven with a second identity, Juan's own click still needed before Phase 3; protected-URL list pending from the partner)
 WHAT WAS BUILT:
   - Next.js + TypeScript + Tailwind + ESLint app, Vitest, git repo, secret-read deny rules.
   - Server-only Supabase health check (/api/health) and a bundle scan script.
@@ -135,7 +136,7 @@ TESTS RUN + RESULTS:
   - npm run build OK; npm run lint clean; npm test 1/1; dev server HTTP 200; /api/health {"ok":true}.
   - Bundle scan: service key in 0 of 23 files. Deny-rule test read of secrets/ refused.
   - WP audit: 8 requests at <=20/min, no block. GSC 798 rows (webmasters.readonly). GA4 19 organic landing-page rows (analytics.readonly).
-  - Approval round-trip: SELF-TEST passed (Leo's account); Juan's click not yet done.
+  - Approval round-trip: self-test passed (Leo's account); a second identity (Bryan Cadahing) also approved with the same hash, identities differ, hash recomputed and matches. Juan's own click not yet done.
 DATA / PERMISSION / PRIVACY IMPACT:
   - Read-only against all THB systems; no WordPress writes; request rate within limit.
   - Secrets live only in .env.local and secrets/ (both git-ignored and deny-listed). Seller briefs were read in place and not copied into the repo.
@@ -153,7 +154,7 @@ OPEN DECISIONS:
   - CLOSED (2026-10-10): C-37 six-figure value quote. Re-checked in `seller-library-fixed.md`: replaced with "that much". Those were the only two lines that differ from the original; still 21 briefs, index matches.
   - PENDING: protected-URL list. Not yet requested (partner absent as of 2026-10-10). Until it arrives every page's protection status is UNKNOWN: UPDATE shows a warning requiring acknowledgement (design §7).
   - OPEN: Yoast data is not in the REST API; Phase 1 must choose a source (rendered snapshot, or test a Yoast endpoint).
-  - PENDING: Juan's approval click (step 10). If identity or read-back fails for him, stop and present fallbacks to Leo.
+  - PENDING: Juan's own approval click (step 10); mechanism already proven with a second identity. Needed before Phase 3. If identity or read-back fails for him, stop and present fallbacks to Leo.
   - OPEN: accept Phase 0 as PARTIAL so Phase 1 can start, or wait for Juan and the partner.
 NEXT APPROVED STEP: Juan opens the approval-test artifact (Contributor access, his own account) and clicks one button; Claude Code reads it back and records it. Leo sends the protected-URL request when the partner is back. Then Leo accepts or rejects PARTIAL. Do not start Phase 1 before that.
 ```

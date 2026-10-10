@@ -4,7 +4,7 @@ Update this table at the end of every phase. Only one phase is IN PROGRESS at a 
 
 | Phase | File | Status | Date | Handoff |
 |---|---|---|---|---|
-| 0 — Setup & Access Audit | [phase-0-setup.md](phase-0-setup.md) | PARTIAL | 2026-10-10 (PARTIAL, accepted by Leo; open: Juan's approval click, partner's protected-URL list) | [Handoff](phase-0-setup.md#handoff) |
+| 0 — Setup & Access Audit | [phase-0-setup.md](phase-0-setup.md) | PARTIAL | 2026-10-10 (PARTIAL, accepted by Leo; step 10 mechanism proven with a second identity, Juan's own click still needed before Phase 3; open: partner's protected-URL list) | [Handoff](phase-0-setup.md#handoff) |
 | 1 — Foundation & Ingestion | [phase-1-foundation.md](phase-1-foundation.md) | PARTIAL | 2026-10-10 (PARTIAL, accepted by Leo; open: 503 blocker on rendered-title crawl, voice reference, Juan's brand-facts approval, protected-URL list) | [Handoff](phase-1-foundation.md#handoff) |
 | 2 — SEO Growth Intelligence MVP | [phase-2-engine-a.md](phase-2-engine-a.md) | NOT STARTED | — | [Handoff](phase-2-engine-a.md#handoff) |
 | 3 — Seven-Agent Content Studio | [phase-3-content-studio.md](phase-3-content-studio.md) | NOT STARTED | — | [Handoff](phase-3-content-studio.md#handoff) |
