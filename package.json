@@ -8,24 +8,35 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "audit:wp": "node scripts/wp-audit.ts"
+    "audit:wp": "node scripts/wp-audit.ts",
+    "db:migrate": "tsx --env-file=.env.local scripts/migrate.mts",
+    "db:check": "tsx --env-file=.env.local scripts/db-check.mts",
+    "smoke:state": "tsx --env-file=.env.local scripts/state-smoke.mts",
+    "import:sellers": "tsx --env-file=.env.local scripts/import-sellers.mts",
+    "ingest:list": "tsx --env-file=.env.local scripts/ingest-inventory.mts list",
+    "ingest:rendered": "tsx --env-file=.env.local scripts/ingest-inventory.mts rendered",
+    "flag:templates": "tsx --env-file=.env.local scripts/flag-templates.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",
     "google-auth-library": "^11.2.0",
     "next": "16.4.0",
+    "pg": "^8.23.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^24.19.2",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.0.3"
   }
