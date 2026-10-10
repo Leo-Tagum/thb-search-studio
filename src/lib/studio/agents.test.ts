@@ -115,13 +115,13 @@ describe("subagent files and the no-write guarantees", () => {
       const text = readFileSync(join(dir, `${k}.md`), "utf8");
       expect(text).toMatch(/prompt_version: 1\.0\.0/);
       expect(text).toContain(`**Prohibited action: ${phrase}.**`);
-      expect(text.split("\n").find((l) => l.startsWith("tools:"))).toBe("tools: Read, Write");
+      expect(text.split(/\r?\n/).find((l) => l.startsWith("tools:"))).toBe("tools: Read, Write");
       expect(text).toContain("editorial-standards");
     });
   }
   it("only Agent 2 has a web tool", () => {
     for (const f of readdirSync(dir)) {
-      const tools = readFileSync(join(dir, f), "utf8").split("\n").find((l) => l.startsWith("tools:"));
+      const tools = readFileSync(join(dir, f), "utf8").split(/\r?\n/).find((l) => l.startsWith("tools:"));
       if (!f.startsWith("thb-02")) expect(tools).not.toMatch(/Web/);
     }
   });
