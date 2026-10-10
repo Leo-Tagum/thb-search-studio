@@ -21,6 +21,15 @@ Phase 2 **DONE**. It must have produced:
 - at least one approved brief;
 - approved brand facts and voice reference (from Phase 1). Without them, Agent 7 and the fact checks block by design.
 
+## Design note: approval sync (Leo, 2026-10-10)
+Never trust the browser's hash or clock when syncing approvals from the artifact:
+- **Recompute the hash server-side** from the stored version (the `article_versions` row the proposal points at). The hash the browser computed and wrote to the artifact record is only a claim to check, not evidence.
+- **Reject any approval whose hash does not match** the recomputed hash of the current stored version. Log the rejection in `audit_events` (accepted = false) with both hashes; do not import it as an approval.
+- **Use the server-recorded time** (when the sync read the record, or the record's server `updatedAt`), not the browser's `decidedAt`. Keep the browser value only as an untrusted note.
+- Identity comes from the artifact platform's viewer id, resolved at sync time; never from a field the page's own code wrote freely.
+- Why: the Phase 0 test showed the hash and timestamp are computed in the viewer's browser, so anyone with page access could write a record claiming any hash or time.
+- Required test: a forged record (wrong hash, or a backdated `decidedAt`) is rejected or its time is ignored; an edit after approval invalidates it.
+
 ## Tasks
 **To be detailed at the start of this phase**, using the Phase 2 handoff. The session's first job is to write numbered small tasks here, each with a check, and get Leo's OK before building.
 
@@ -45,6 +54,7 @@ Expected areas (outline only):
 - [ ] A targeted fix passes re-review; a changed material claim always re-enters fact review
 - [ ] No agent can approve itself or set an approval (tested)
 - [ ] Juan's artifact approval is recorded with his identity and hash; an edit after approval invalidates it (tested)
+- [ ] Approval sync recomputes the hash server-side, rejects mismatches, and uses server-recorded time (tested with a forged record)
 
 ## Handoff
 _Fill in at the end of the phase._
