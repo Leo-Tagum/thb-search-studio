@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
 const BY = "juan: approved by Juan in writing, 2026-10-10 (relayed by Leo)";
-const SRC = "Juan's written confirmation, 2026-10-10 (relayed by Leo; channel and original message not yet attached: add the link/screenshot reference here).";
+const SRC = "Juan's written confirmation, 2026-10-10 (relayed by Leo; channel not yet stated: Leo's message still showed the placeholder "[Slack / email / text / in person]").";
 const COMBINED = "Juan Diaz has 25+ years of experience in Bay Area real estate and has been investing since 2002.";
 
 const rows: Record<string, string>[] = [
@@ -22,7 +22,7 @@ for (const r of rows) {
   const body = { ...r, approved_at: new Date().toISOString() };
   const res = ex ? await db.from("brand_facts").update(body).eq("id", ex.id) : await db.from("brand_facts").insert(body);
   if (res.error) throw res.error;
-  await db.from("audit_events").insert({ actor: "leo", subject_type: "brand_fact", subject_id: r.fact_key, event_type: "brand_fact_updated", accepted: true, prior_state: ex?.status ?? null, new_state: r.status, detail: { value: r.fact_value, previous_value: ex?.fact_value ?? null, confirmation: "Juan, in writing, 2026-10-10 (relayed by Leo; original message reference still to be attached)", applied_by: "claude (on Leo's instruction)" } });
+  await db.from("audit_events").insert({ actor: "leo", subject_type: "brand_fact", subject_id: r.fact_key, event_type: "brand_fact_updated", accepted: true, prior_state: ex?.status ?? null, new_state: r.status, detail: { value: r.fact_value, previous_value: ex?.fact_value ?? null, confirmation: "Juan, in writing, 2026-10-10 (relayed by Leo; channel still to be stated)", applied_by: "claude (on Leo's instruction)" } });
 }
 await db.from("brand_fact_conflicts").update({ resolved_value: `Two separate facts: "25+ years of experience in Bay Area real estate" (approved by Juan in writing, 2026-10-10) and "Juan Diaz has been investing in Bay Area real estate since 2002". Exact counts such as 27 years stay blocked.`, resolved_by: "leo (2026-10-10, revised)" }).eq("fact_key", "industry_experience");
 await db.from("audit_events").insert({ actor: "leo", subject_type: "brand_fact", subject_id: "conflict:experience", event_type: "brand_fact_conflict_resolved", accepted: true, detail: { revises: "2002-only wording", now: "25+ years (experience sense) and since 2002 are two separate approved facts", lawrence_sop: "voice guide only; none of its facts count" } });

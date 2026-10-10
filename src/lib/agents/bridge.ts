@@ -105,10 +105,10 @@ export function experienceYearViolations(out: Record<string, any>): string[] {
 
 /**
  * PERMANENT RULE (Leo, 2026-10-10): the site's rating badge is a live Google widget. Agents never write a star rating,
- * a score such as 4.8/5, or a review count in text. Unlike PENDING JUAN items this is never lifted, and it applies everywhere
+ * a score such as 4.8/5, a percentage rating such as "92% excellent rating", or a review count in text. Unlike PENDING JUAN items this is never lifted, and it applies everywhere
  * in the output (including open_items).
  */
-export const RATING_RULE_PATTERN = /(\b\d(\.\d)?\s*(\/|out of)\s*5\b|\b\d[\d,]*\+?\s*(five[- ]star\s+|google\s+|verified\s+)?(reviews|ratings)\b|\b\d(\.\d)?[- ]?stars?\b|\bfive[- ]star)/i;
+export const RATING_RULE_PATTERN = /(\b\d(\.\d)?\s*(\/|out of)\s*5\b|\b\d[\d,]*\+?\s*(five[- ]star\s+|google\s+|verified\s+)?(reviews|ratings)\b|\b\d(\.\d)?[- ]?stars?\b|\bfive[- ]star|\b\d{1,3}(\.\d+)?\s?%\s+(excellent|five[- ]star|positive|satisf\w*|approval|rating|rated|recommend\w*)|\bexcellent\s+(google\s+)?rating|\b(rated|rating)\s+(of\s+)?(excellent|\d))/i;
 export function ratingRuleHits(out: Record<string, any>): string[] {
   return RATING_RULE_PATTERN.test(JSON.stringify(out)) ? ["a star rating, score or review count"] : [];
 }

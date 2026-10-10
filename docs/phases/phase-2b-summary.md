@@ -25,6 +25,7 @@ These posts have no other problem; they only use claims that are not approved ye
 
 ## One fix for many posts
 - A block of text shared by **60 posts** ("see all 115 reviews") shows a typed review count, which breaks our rule that the rating always comes from the live Google widget. Fix it once in the site template, not post by post. Developer Change Request for Gian: docs/phases/phase-2b-dcr-reviews-block.md.
+- A block of text shared by **58 posts** ("⭐ 92% excellent rating") shows a typed review count, which breaks our rule that the rating always comes from the live Google widget. Fix it once in the site template, not post by post. Developer Change Request for Gian: docs/phases/phase-2b-dcr-reviews-block.md.
 
 ## Redirects (301)
 No redirect has been approved yet. Currently proposed: 0 retire, 2 merge (a merge combines the best parts first, then redirects).

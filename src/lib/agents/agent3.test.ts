@@ -78,6 +78,12 @@ describe("PENDING JUAN facts stay blocked", () => {
       expect(check(brief({ answer_first: `A direct answer: ${bad}` })).join(" "), bad).toMatch(/experience years not allowed/);
     }
   });
+  it("rating rule also catches percentage / excellent-rating claims", () => {
+    for (const bad of ["92% excellent rating", "Rated excellent on Google", "98% positive reviews", "an excellent rating", "rating of 4.9"]) {
+      expect(check(brief({ answer_first: `A direct answer: ${bad}` })).join(" "), bad).toMatch(/rating rule/);
+    }
+    expect(check(brief({ answer_first: "A direct answer: Sellers keep 100% of the proceeds after the agreed fees" })).join(" ")).not.toMatch(/rating rule/);
+  });
   it("lets APPROVED facts through: name, 1,000+ homes, phones, website, address", () => {
     const ok = "Twin Home Buyer has purchased 1,000+ homes. Call (415) 415-8946 or (415) 415-TWIN, https://www.twinhomebuyer.com, 170 Glenn Way Ste 5, San Carlos, CA 94070.";
     expect(check(brief({ answer_first: `A direct answer: ${ok}` }))).toEqual([]);
