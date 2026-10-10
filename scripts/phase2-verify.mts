@@ -38,5 +38,7 @@ for (let i = 1; i <= MAX_ATTEMPTS; i++) {
 }
 const { data: after } = await db.from("opportunities").select("state").eq("id", fx!.id).single();
 console.log("fixture opportunity state after malformed output x" + MAX_ATTEMPTS + ":", after!.state);
-await db.from("opportunities").update({ state: "CANCELLED", prior_state: "INTEGRATION_ERROR", intent_key: null }).eq("id", fx!.id); // fixture only; audit rows stay
-console.log("fixture cancelled (audit rows retained)");
+await db.from("agent_runs").delete().eq("subject_id", fx!.id);
+await db.from("opportunities").delete().eq("id", fx!.id);
+await db.from("audit_events").insert({ actor: "system:phase2-verify", subject_type: "opportunity", subject_id: fx!.id, event_type: "fixture_removed", accepted: true, detail: { note: "test fixture removed after the injection check; audit rows kept" } });
+console.log("fixture removed (audit rows retained)");

@@ -63,6 +63,10 @@ export function validationContext(db: SupabaseClient) {
     const ctx: ValidationContext = { packet: run.task_packet };
     const { data: o } = await db.from("opportunities").select("packet").eq("id", run.subject_id).single();
     if (run.agent_key === "thb-01-seo-strategist") ctx.candidate = o!.packet as any;
+    if (run.agent_key === "thb-02-research-evidence") {
+      const { data: pas } = await db.from("evidence_passages").select("id,source_id,passage").limit(2000);
+      ctx.libraryPassages = new Map((pas ?? []).map((p: any) => [p.id, { source_id: p.source_id, text: p.passage }]));
+    }
     if (run.agent_key === "thb-03-content-architect") {
       const { data: b } = await db.from("briefs").select("evidence_packet").eq("opportunity_id", run.subject_id).single();
       const ep = b?.evidence_packet as any;
@@ -88,9 +92,11 @@ export async function queueRun(db: SupabaseClient, agent: AgentKey, oppId: strin
   } else if (agent === "thb-02-research-evidence") {
     if (o.state !== "EVIDENCE_REVIEW" || o.human_decision !== "approve") throw new Error("Agent 2 runs only after Leo approved this opportunity (state EVIDENCE_REVIEW)");
     if (o.dev_change_request) throw new Error("This opportunity changes a template-rendered page: it routes to a Developer Change Request (Phase 4), not an Elementor brief.");
-    const { data: lib } = await db.from("evidence_sources").select("id,title,source_tier,jurisdiction,effective_date,source_url").limit(100);
+    const { data: lib } = await db.from("evidence_sources").select("id,title,source_tier,jurisdiction,effective_date,retrieved_date,source_url,provenance_note").limit(100);
+    const { data: pas } = await db.from("evidence_passages").select("id,source_id,passage,locator").limit(2000);
+    const library = (lib ?? []).map((l: any) => ({ ...l, passages: (pas ?? []).filter((p: any) => p.source_id === l.id).map((p: any) => ({ passage_id: p.id, locator: p.locator, text: p.passage })) }));
     const { data: facts } = await db.from("brand_facts").select("*").limit(50);
-    data = { candidate_packet: pkt, agent1_decision: o.agent_decision, human_reason: o.human_reason, evidence_library: lib ?? [], brand_facts_status: (facts ?? []).map((f: any) => ({ key: f.key ?? f.fact_key ?? f.id, status: f.status })), seller_library: { publication_cleared_briefs: 0, note: "No seller story is cleared for publication; do not use seller material." } };
+    data = { candidate_packet: pkt, agent1_decision: o.agent_decision, human_reason: o.human_reason, evidence_library: library, library_first_rule: "Use Evidence Library sources FIRST. Cite them with kind=library, library_source_id, passage_ids and a short verbatim quote. Fetch official web pages only for points the library does not cover.", brand_facts_status: (facts ?? []).map((f: any) => ({ key: f.key ?? f.fact_key ?? f.id, status: f.status })), seller_library: { publication_cleared_briefs: 0, note: "No seller story is cleared for publication; do not use seller material." } };
     allowed = "agent-defined";
   } else {
     const { data: b } = await db.from("briefs").select("evidence_packet").eq("opportunity_id", oppId).maybeSingle();

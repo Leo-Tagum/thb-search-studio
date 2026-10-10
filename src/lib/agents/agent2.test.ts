@@ -40,3 +40,25 @@ describe("Agent 2 evidence rules (blueprint §14 rows 5, 8, 9)", () => {
     expect(JSON.stringify(packet)).not.toMatch(/seller_brief_passages/);
   });
 });
+
+describe("Agent 2 Evidence Library citations are checked against the stored text", () => {
+  const lib = new Map([["p1", { source_id: "L1", text: "1102. (c) Any waiver of the requirements of this article is void as against public policy." }]]);
+  const libSrc = { id: "src:1", kind: "library", library_source_id: "L1", url: undefined, title: "Civil Code 1102", tier: 1, jurisdiction: "California", effective_date: null, retrieved_date: "2026-10-10", locality_matches: true };
+  const run = (claim: Record<string, unknown>) => {
+    const o = out({ sources: [libSrc], claims: [clm(claim)] });
+    const p = outputSchemas["thb-02-research-evidence"].safeParse(o);
+    return p.success ? semanticChecks("thb-02-research-evidence", p.data as Record<string, any>, { packet, libraryPassages: lib }) : p.error.issues.map((i) => i.message);
+  };
+  it("accepts a verbatim quote from the cited passage", () => {
+    expect(run({ passage_ids: ["p1"], quote: "Any waiver of the requirements of this article is void as against public policy." })).toEqual([]);
+  });
+  it("rejects an invented quote, a missing quote, an unknown passage and a passage from another source", () => {
+    expect(run({ passage_ids: ["p1"], quote: "The seller must always give a 30 day notice." }).join(" ")).toMatch(/not appear verbatim/);
+    expect(run({}).join(" ")).toMatch(/passage_ids and a short verbatim quote/);
+    expect(run({ passage_ids: ["nope"], quote: "x" }).join(" ")).toMatch(/unknown passage/);
+    const other = new Map([["p1", { source_id: "L2", text: "a" }]]);
+    const o = out({ sources: [libSrc], claims: [clm({ passage_ids: ["p1"], quote: "a" })] });
+    const p = outputSchemas["thb-02-research-evidence"].safeParse(o);
+    expect(p.success && semanticChecks("thb-02-research-evidence", p.data as Record<string, any>, { packet, libraryPassages: other }).join(" ")).toMatch(/does not belong/);
+  });
+});

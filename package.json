@@ -19,6 +19,7 @@
     "import:gsc": "tsx --env-file=.env.local scripts/import-gsc.mts",
     "candidates": "tsx --env-file=.env.local scripts/build-candidates.mts",
     "fold": "tsx --env-file=.env.local scripts/fold-opportunity.mts",
+    "evidence:extract": "tsx --env-file=.env.local scripts/extract-evidence.mts",
     "studio": "tsx --env-file=.env.local scripts/studio.mts"
   },
   "dependencies": {

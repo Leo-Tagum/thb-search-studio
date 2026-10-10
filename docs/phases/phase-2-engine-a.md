@@ -102,7 +102,7 @@ TESTS RUN + RESULTS:
   - db:check: 34 tables, none without RLS, anon refused.
   - Live: GSC import 2026-07-10..2026-10-07 (final), 31,790 rows, 194 pages (143 matched, 50 not in the inventory snapshot, mostly city pages), not truncated, 2 API requests. 252 candidates (overlap 15, improve 72, city_swap 117, gap 48); excluded 5 brand queries, 116 off-topic, 1,686 under 40 impressions.
   - Agent 1 on 15 real candidates: all accepted first time (UPDATE 11, HOLD 4). The agent changed all 3 engine CREATE proposals to HOLD (homepage/existing pages already rank) and moved 3 city-pattern HOLDs to UPDATE (a page for that city already exists).
-  - Malformed-output injection (phase2-verify.mts): 3 bad submissions -> run FAILED -> fixture opportunity INTEGRATION_ERROR. The verify script creates and cancels a fixture each run, so the opportunities table holds 2 cancelled fixtures.
+  - Malformed-output injection (phase2-verify.mts): 3 bad submissions -> run FAILED -> fixture opportunity INTEGRATION_ERROR. The verify script creates and cancels a fixture each run, the script now removes its own fixture (one older cancelled fixture is kept as the injection-test record).
   - Agent 2: first output REJECTED by the validator (claims used a "claim" key); corrected and accepted on attempt 2 of 3.
 DATA / PERMISSION / PRIVACY IMPACT:
   - Read-only against Google (GSC). No THB site requests this phase. No WordPress writes. No secrets in git or prompts. No seller material in any packet (the Agent 2 packet carries only counts/status; first-party proof "restricted"; no brief is publication-cleared).
@@ -119,7 +119,7 @@ KNOWN LIMITATIONS:
   - The Seller Situation Map and PENDING JUAN checks are validated by schema and tests, but no Agent 3 run has exercised them on real data.
 OPEN DECISIONS:
   - Leo: how to support the legal claims for the hoarder brief. (a) Upload the official text (Civil Code 1102 et seq., H&S 17920.3, a Bay Area county or city hoarding/code-enforcement page) to the Evidence Library as tier 1-3 records with provenance, then re-run Agent 2 and Agent 3; (b) allow a brief with every legal point as an open item (no legal content); (c) pick a different approved candidate whose claims do not need statute text.
-  - Leo: accept Phase 2 as PARTIAL (STATUS stays IN PROGRESS until you do).
+  - DECIDED (Leo, 2026-10-10): Phase 2 accepted as PARTIAL. Leo uploaded 2 official statute texts to the Evidence Library (Civil Code 1102, Health and Safety Code 17920.3) and asked for Agent 2 to be re-run Library-first, then Agent 3, with the brief shown to him before anything is marked done.
   - The other 10 candidates stay pending, as instructed.
   - Partner: protected-URL list (3 holds wait on it).
   - Phase 1 items still open: 503 crawl, voice reference, Juan's brand-facts approval, Equity Track Inc question.

@@ -52,6 +52,9 @@ const claim = z.strictObject({
   support: z.enum(["supported", "unsupported", "conflicting"]),
   jurisdiction: z.string(),
   risk: z.enum(["low", "medium", "high"]),
+  // For claims supported by an Evidence Library source: the passage ids and a short verbatim quote (checked against the stored text).
+  passage_ids: z.array(z.string()).optional(),
+  quote: z.string().max(400).optional(),
   note: z.string().optional(),
 });
 export const agent2Result = z.strictObject({

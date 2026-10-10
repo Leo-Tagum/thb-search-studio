@@ -75,7 +75,10 @@ export type ValidationContext = {
   candidate?: { covering_pages: unknown[]; overlap: { supported: boolean }; pages: { url: string }[] }; // Agent 1
   agent2Claims?: { id: string; support: string }[]; // Agent 3
   agent2SourceIds?: string[]; // Agent 3
+  libraryPassages?: Map<string, { source_id: string; text: string }>; // Agent 2: stored text of Evidence Library passages
 };
+
+const norm = (t: string) => t.toLowerCase().replace(/\s+/g, " ").trim();
 
 export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: ValidationContext): string[] {
   const errs: string[] = [];
@@ -108,8 +111,22 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
         if (!v.ok) errs.push(`source ${s.id}: ${v.reason}`);
       }
       if (s.kind === "library" && !s.library_source_id) errs.push(`source ${s.id}: library source needs library_source_id`);
+      if (s.kind === "library" && s.library_source_id && ctx.libraryPassages && ![...ctx.libraryPassages.values()].some((p) => p.source_id === s.library_source_id)) errs.push(`source ${s.id}: library_source_id ${s.library_source_id} has no extracted text in the Evidence Library`);
     }
     for (const c of out.result.claims) {
+      const libSources = c.source_ids.map((sid: string) => out.result.sources.find((s: any) => s.id === sid)).filter((s: any) => s?.kind === "library");
+      if (c.support === "supported" && libSources.length > 0 && ctx.libraryPassages) {
+        const pids: string[] = c.passage_ids ?? [];
+        if (pids.length === 0 || !c.quote) errs.push(`claim ${c.id} is supported by an Evidence Library source: give passage_ids and a short verbatim quote`);
+        const texts: string[] = [];
+        for (const pid of pids) {
+          const ps = ctx.libraryPassages.get(pid);
+          if (!ps) errs.push(`claim ${c.id} cites unknown passage ${pid}`);
+          else if (!libSources.some((s: any) => s.library_source_id === ps.source_id)) errs.push(`claim ${c.id}: passage ${pid} does not belong to the cited library source`);
+          else texts.push(norm(ps.text));
+        }
+        if (c.quote && texts.length && !texts.some((t) => t.includes(norm(c.quote)))) errs.push(`claim ${c.id}: the quote does not appear verbatim in the cited passages`);
+      }
       if (c.support === "supported" && c.source_ids.length === 0) errs.push(`claim ${c.id} is marked supported without source_ids`);
       for (const sid of c.source_ids) if (!ids.has(sid)) errs.push(`claim ${c.id} cites unknown source ${sid}`);
       if (c.support === "supported") {
