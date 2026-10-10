@@ -1,0 +1,87 @@
+# Editorial Standards (Phase 3 input)
+
+Source: "SOP: Lawrence Content Takeover — Juan Voice Content Standard". The SOP's old page template is superseded by the new THB template; its standards below were reviewed rule by rule with Leo on 2026-10-10.
+
+Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's change · **PENDING JUAN** = blocked until Juan decides · **HUMAN PROCESS** = team process, not an agent rule
+
+## 1. Voice (Agent 4 writes to it, Agent 7 checks it)
+- KEEP: Sound like Juan explaining the truth to a homeowner: direct, practical, local, built from real deal experience. Not AI, not corporate, not like other cash-buyer sites.
+- KEEP: Educate first, sell second. Explain the real problem before any solution.
+- KEEP: Be honest about options, including when Twin Home Buyer is not the best one.
+- KEEP: Use Northern California / Bay Area reality where true: older homes, high repairs, tenants, probate, liens, title, family conflict, expensive delays.
+- KEEP: Plain, strong, useful language. No fake motivation, filler or generic seller promises.
+- KEEP: Opening paragraph makes the seller feel understood. No sales-pitch opening, no soft opening.
+
+## 2. Required in every article (Agent 5 / Agent 7 block drafts that lack them)
+- KEEP: Starts from one real seller problem, not a keyword.
+- KEEP (required): An honest-options section covering, where they apply: keep it, list it, fix it, get professional help, sell directly.
+- KEEP (required): At least one real-world warning about what can delay, block or ruin the sale.
+- KEEP: Deal logic where relevant: ownership, authority, condition, people, money, timing, risk.
+- KEEP: Local context when it is true and useful.
+- KEEP: Useful enough that a seller learns something even if they never call THB.
+
+## 3. Seller Situation Map (Agent 3, every brief)
+- KEEP (required): Agent 3 fills all 7 rows before Agent 4 can write. Each row is answered or marked "not relevant".
+  1. Ownership: trust, estate, LLC or individual?
+  2. Authority: trustee, executor, administrator, surviving spouse, multiple heirs?
+  3. Condition: repairs, vacant, damaged, occupied, unsafe?
+  4. People: tenants, family, heirs, decision makers?
+  5. Money: loans, back taxes, liens, code violations, unpaid bills?
+  6. Timing: speed, certainty, privacy or highest price?
+  7. Risk: what could delay, block or kill the sale?
+
+## 4. Voice tools for Agent 7 (Editorial Critic)
+- KEEP: Copy-paste test. Flag any section that could sit on another investor's site unchanged.
+- KEEP: Rewrite examples, used as examples and as banned phrases:
+
+| Don't write | Write it like Juan |
+|---|---|
+| Selling your house can be stressful. | The stressful part is not always the sale. Sometimes the real problem is title, repairs, tenants, family disagreement, or whether escrow can actually close. |
+| We buy houses fast for cash. | A fast cash offer only helps if the right person can sign, the paperwork is clean, and the deal can close without surprises. |
+| Contact us today for a fair offer. | Before you decide what to do, understand the house, the paperwork, the repairs, and the timeline. Then you can decide whether listing, keeping it, or selling directly makes sense. |
+| We make selling easy. | We look at the actual situation: condition, title, tenants, liens, timing, and what the seller really needs. |
+| Sell your inherited house quickly. | If you inherited a house, the first question is whether you have legal authority to sell. A trust, will, probate case, or multiple heirs can all change the process. |
+
+- KEEP: Authenticity checklist (all must be YES):
+  1. Starts with a real seller problem, not a sales pitch
+  2. Sounds like Juan (experience number: see section 7)
+  3. Explains what can go wrong
+  4. Gives honest options, not just THB
+  5. Includes deal logic (title, authority, condition, people, money, timeline or risk)
+  6. Feels local to Northern California / Bay Area where appropriate
+  7. Avoids generic filler
+  8. Plain, direct language
+  9. Answers what the homeowner is actually thinking
+  10. Juan would be comfortable putting his name on it
+- KEEP: Final question: would a homeowner read this and think "this person understands my situation"?
+
+## 5. Escalation / sensitive topics (Agent 5 checks)
+- KEEP: Probate, trusts, legal authority, title, tax liens, code issues: careful language plus "confirm with the right professional" (attorney, title company, CPA, insurance professional).
+- KEEP: No claim that sounds legal, tax or title-specific unless the article tells the seller to confirm with a professional.
+- KEEP: If Juan's exact position on a topic is unknown, write from the seller problem and do not pretend.
+- KEEP: If a draft starts sounding generic, rewrite the opening, examples and conclusion first.
+
+## 6. SEO / AEO / GEO (Agent 6)
+- ADAPTED: Main keyword in the title, the H1, the 40–60 word answer capsule, and one question-style H2. Natural only, never forced. (Replaces the SOP's "title, H1, intro, one H2, conclusion".)
+- KEEP: H2s phrased as the questions sellers actually ask.
+- KEEP: Short, direct FAQ answers.
+- KEEP: Local modifiers only when true and useful (Bay Area, Oakland, East Bay, San Mateo County, Northern California, California).
+- KEEP: No keyword stuffing. If a sentence sounds unnatural, rewrite it.
+
+## 7. Brand facts: PENDING JUAN
+- PENDING JUAN: Experience figure. The SOP says "27 years"; other THB pages say "25+ years". Agents may not use any year figure until Juan picks the wording.
+- PENDING JUAN: "1,000+ homes" (seen in live author boxes). Not usable until confirmed.
+- PENDING JUAN: "East Oakland roots" biography detail. Not usable until confirmed.
+
+## 8. Content Quality Scorecard (Agent 7): ADAPTED, advisory
+- Agent 7 scores every draft: Juan voice 20 · Seller education 20 · Deal logic 20 · Local context 15 · SEO/AEO/GEO structure 15 · Trust and honesty 10.
+- ADAPTED: Under 85 is flagged "revise recommended". It never blocks or approves by itself; Leo makes the final call. (The SOP's hard "under 85 must be revised" rule is not automated.)
+
+## 9. Lead feedback: ADAPTED
+- ADAPTED: Seller questions and objections enter the Studio only in anonymized form (like the 21 seller briefs). No raw CRM notes, call logs or lead data.
+
+## 10. Team process: HUMAN PROCESS (not agent rules)
+- Lawrence's role as voice filter; daily, weekly and monthly review cadence; "save every lesson into the playbook". Kept as team process outside the Studio. The monthly underperforming-page review maps to Phase 6 refresh proposals.
+
+## Not carried over
+- The SOP's old page template / section order (superseded by the new THB template).

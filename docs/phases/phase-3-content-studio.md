@@ -14,6 +14,13 @@ Turn an approved brief into a section-by-section draft that Agents 4–7 write a
   - §13 Phase 3
   - §14 rows 4–8 and 12–14
 - Phase 2 handoff in `phase-2-engine-a.md`, and the Phase 0 handoff (approval round-trip result).
+- **Editorial standards:** `docs/references/editorial-standards.md` (Lawrence's SOP converted to agent rules and reviewed with Leo rule by rule, 2026-10-10). Read it in full before detailing tasks.
+
+## Input: editorial standards (Leo, 2026-10-10)
+- **Agents 3–7 must follow `docs/references/editorial-standards.md`.** Each subagent prompt embeds the rules that apply to it (Agent 3: Seller Situation Map; Agent 4: voice and required content; Agents 5–7: block drafts that lack required elements). Rule tags: KEEP and ADAPTED are binding; HUMAN PROCESS items are not agent rules.
+- **PENDING JUAN items stay blocked.** Agents may not use any year/experience figure, "1,000+ homes", the "East Oakland roots" detail, or any other item tagged PENDING JUAN until Juan decides. Brand-fact checks block by design until then.
+- Add regression fixtures for the required elements and for the blocked PENDING JUAN facts (a draft using one is BLOCKED).
+- The SOP's old page template is superseded by the new THB template; do not reuse it.
 
 ## Depends on
 Phase 2 **DONE**. It must have produced:
