@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Operator CLI for the agent bridge. Usage:
 //   npm run studio -- queue <agent-key|1|2|3> <opportunity_id>
 //   npm run studio -- packet <run_id|next>     (prints the task packet JSON; never prints secrets)
 //   npm run studio -- submit <run_id> <file>   (validates; malformed output retries, then INTEGRATION_ERROR)
+//   npm run studio -- check <run_id> <file>    (dry run: validates without saving or using an attempt)
 //   npm run studio -- runs                     (lists runs)
 import { readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
 import { AGENT_KEYS, type AgentKey } from "../src/lib/agents/schemas";
-import { submitOutput } from "../src/lib/agents/bridge";
+import { semanticChecks, submitOutput } from "../src/lib/agents/bridge";
+import { outputSchemas } from "../src/lib/agents/schemas";
 import { SupabaseBridgeStore, makeOrchestrator, queueRun, validationContext } from "../src/lib/agents/supabase-deps";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
@@ -35,6 +38,17 @@ if (cmd === "queue") {
     for (const e of res.errors.slice(0, 20)) console.log("  -", e);
     process.exitCode = 2;
   }
+} else if (cmd === "check") {
+  // Dry run: same validation as submit, but nothing is saved and no attempt is used.
+  const run = await new SupabaseBridgeStore(db).getRun(a);
+  const errors: string[] = [];
+  try {
+    const r = outputSchemas[run.agent_key].safeParse(JSON.parse(readFileSync(b, "utf8")));
+    if (!r.success) for (const i of r.error.issues) errors.push(`${i.path.join(".") || "(root)"}: ${i.message}`);
+    else errors.push(...semanticChecks(run.agent_key, r.data as Record<string, any>, await validationContext(db)(run)));
+  } catch (e) { errors.push(`not valid JSON: ${e instanceof Error ? e.message : String(e)}`); }
+  console.log(errors.length ? `WOULD REJECT (${errors.length}); attempts used so far: ${run.retries}/3` : `WOULD ACCEPT (attempts used so far: ${run.retries}/3)`);
+  for (const e of errors.slice(0, 20)) console.log("  -", e);
 } else if (cmd === "runs") {
   const { data } = await db.from("agent_runs").select("id,agent_key,subject_id,status,retries,created_at").order("created_at");
   for (const r of data ?? []) console.log(`${r.id} ${r.agent_key} ${r.status} retries=${r.retries} opp=${r.subject_id}`);
