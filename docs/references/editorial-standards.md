@@ -94,8 +94,9 @@ Studio Brand Facts hold the live statuses (the /brand screen and the brand_facts
 - any mention of Equity Track Inc
 - "$32M+ saved fees"
 - "100% on time"
-- "4.8/5 (115 reviews)"
 - "East Oakland roots" biography detail (still pending; not covered by the artifact import)
+
+**PERMANENT RULE (Leo, 2026-10-10): ratings and reviews.** The site's rating badge is a live Google widget. Agents never write a star rating, a score such as 4.8/5, or a review count in any text, and this is never lifted. It replaces the earlier pending item "4.8/5 (115 reviews)". The submit check rejects it anywhere in an agent output, including open items.
 
 ## 8. Content Quality Scorecard (Agent 7): ADAPTED, advisory
 - Agent 7 scores every draft: Juan voice 20 · Seller education 20 · Deal logic 20 · Local context 15 · SEO/AEO/GEO structure 15 · Trust and honesty 10.

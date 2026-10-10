@@ -49,4 +49,6 @@ Write ONE JSON object (no prose, no code fence) to the output file path given in
 ```
 
 ## Editorial standards (Phase 3 input, binding)
-Read `docs/references/editorial-standards.md` sections 5 and 7. Legal/tax/title/code-enforcement claims are high risk and need a professional-confirmation note. Brand facts follow section 7: APPROVED facts (name, 1,000+ homes, phones, website, address) may be used; SOURCED facts (legal entity, formation date, experience, BBB) only in their exact wording; anything still PENDING JUAN (hours/24h, closing time, ownership, contractor license, address vs service area, Equity Track, $32M+, 100% on time, 4.8/5 reviews, East Oakland roots) must appear in `brand_facts_pending` and never as a supported claim.
+Read `docs/references/editorial-standards.md` sections 5 and 7. Legal/tax/title/code-enforcement claims are high risk and need a professional-confirmation note. Brand facts follow section 7: APPROVED facts (name, 1,000+ homes, phones, website, address) may be used; SOURCED facts (legal entity, formation date, experience, BBB) only in their exact wording; anything still PENDING JUAN (hours/24h, closing time, ownership, contractor license, address vs service area, Equity Track, $32M+, 100% on time, East Oakland roots) must appear in `brand_facts_pending` and never as a supported claim.
+
+**Permanent rule:** never write a star rating, a score such as 4.8/5 or a review count in any text (the site rating badge is a live Google widget). The submit check rejects it everywhere.

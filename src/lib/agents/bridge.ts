@@ -79,8 +79,17 @@ export const PENDING_JUAN_PATTERNS: [string, RegExp][] = [
   ['Equity Track mention', /equity\s+track/i],
   ['"$32M+ saved fees"', /\$\s?32\s?(m\b|million)/i],
   ['"100% on time"', /100\s?%\s*on[- ]?time/i],
-  ['"4.8/5 (115 reviews)"', /(4\.8\s*(\/|out of)\s*5|\b115\s+(google\s+)?reviews)/i],
 ];
+
+/**
+ * PERMANENT RULE (Leo, 2026-10-10): the site's rating badge is a live Google widget. Agents never write a star rating,
+ * a score such as 4.8/5, or a review count in text. Unlike PENDING JUAN items this is never lifted, and it applies everywhere
+ * in the output (including open_items).
+ */
+export const RATING_RULE_PATTERN = /(\b\d(\.\d)?\s*(\/|out of)\s*5\b|\b\d[\d,]*\+?\s*(five[- ]star\s+|google\s+|verified\s+)?(reviews|ratings)\b|\b\d(\.\d)?[- ]?stars?\b|\bfive[- ]star)/i;
+export function ratingRuleHits(out: Record<string, any>): string[] {
+  return RATING_RULE_PATTERN.test(JSON.stringify(out)) ? ["a star rating, score or review count"] : [];
+}
 export function pendingJuanHits(out: Record<string, any>): string[] {
   const clone = JSON.parse(JSON.stringify(out));
   if (clone.result) { delete clone.result.brand_facts_pending; delete clone.result.unresolved; if (clone.result.brief) delete clone.result.brief.open_items; }
@@ -177,6 +186,7 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
 
   if (agent !== "thb-01-seo-strategist") {
     for (const hit of pendingJuanHits(out)) errs.push(`uses a PENDING JUAN fact (${hit}); move it to brand_facts_pending / open_items instead`);
+    for (const v of ratingRuleHits(out)) errs.push(`violates the permanent rating rule (${v}): the site's rating badge is a live Google widget; never write a rating or review count in text`);
     for (const v of sourcedFactViolations(out)) errs.push(`sourced brand fact not in its exact wording (${v})`);
   }
 

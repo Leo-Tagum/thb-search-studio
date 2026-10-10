@@ -61,7 +61,7 @@ describe("PENDING JUAN facts stay blocked", () => {
     for (const bad of [
       "With 27 years of experience we know...", "Over 25 years serving the Bay Area", "Juan's East Oakland roots",
       "We are open 24/7", "We close in 7 days", "A family-owned company", "Our licensed contractor team", "Powered by Equity Track Inc",
-      "We have saved sellers $32M in fees", "100% on time closings", "Rated 4.8/5 from 115 reviews",
+      "We have saved sellers $32M in fees", "100% on time closings",
     ]) {
       const errs = check(brief({ answer_first: `A direct answer: ${bad}` }));
       expect(errs.join(" "), bad).toMatch(/PENDING JUAN/);
@@ -108,5 +108,17 @@ describe("human redirect limits (links and forbidden target phrases)", () => {
     expect(run(brief({ link_plan: [] })).join(" ")).toMatch(/must include the required link/);
     expect(run(brief({ ...ok, working_title: "How to Sell My Hoarder House" })).join(" ")).toMatch(/forbidden phrase "sell my hoarder house"/);
     expect(run(brief({ ...ok, outline: [{ h2: "Can you sell hoarder house contents?", purpose: "x", claim_ids: [] }] })).join(" ")).toMatch(/forbidden phrase "sell hoarder house"/);
+  });
+});
+
+describe("permanent rating rule: never a rating or review count in text", () => {
+  it("rejects stars, X/5 scores and review counts anywhere, even in open_items", () => {
+    for (const bad of ["Rated 4.8/5 from 115 reviews", "Our 5-star rating", "five-star service", "Over 200 reviews say", "4.9 out of 5", "115 Google reviews"]) {
+      expect(check(brief({ answer_first: `A direct answer: ${bad}` })).join(" "), bad).toMatch(/permanent rating rule/);
+    }
+    expect(check(brief({ open_items: ["Do not quote 4.8/5 here"] })).join(" ")).toMatch(/permanent rating rule/);
+  });
+  it("allows plain mentions of reviews or ratings without a figure, and ordinary numbers", () => {
+    expect(check(brief({ open_items: ["The site's rating badge is a live Google widget; no rating is written in text."], answer_first: "A direct answer: read reviews on the reviews page and take 5 minutes to check title." }))).toEqual([]);
   });
 });
