@@ -81,8 +81,8 @@ export const PENDING_JUAN_PATTERNS: [string, RegExp][] = [
 ];
 
 /**
- * EXPERIENCE YEARS (Leo, 2026-10-10; Juan to confirm in writing). Two separate approved facts:
- *  - "25+ years of experience in Bay Area real estate" (total experience, incl. pre-2002)  [approved by Leo, pending Juan's written confirmation]
+ * EXPERIENCE YEARS (Leo, 2026-10-10; confirmed APPROVED by Juan in writing, 2026-10-10). Two separate approved facts:
+ *  - "25+ years of experience in Bay Area real estate" (total experience, incl. pre-2002)  [approved by Juan in writing, 2026-10-10]
  *  - "Juan Diaz has been investing in Bay Area real estate since 2002"
  * Combined: "Juan Diaz has 25+ years of experience in Bay Area real estate and has been investing since 2002."
  * "25+ years" is allowed only in that experience sense. Exact counts (27 years, 24 years), "over 25 years", "20+ years" and

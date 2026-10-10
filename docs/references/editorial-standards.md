@@ -82,10 +82,10 @@ Studio Brand Facts hold the live statuses (the /brand screen and the brand_facts
 - Legal entity: "Twin Home Buyer Limited Liability Company". Formed: "Formed February 25, 2022".
 - BBB: "BBB Accredited since 3/1/2022".
 
-**EXPERIENCE: two separate approved facts (Leo, 2026-10-10; Juan to confirm in writing).**
-- "25+ years of experience in Bay Area real estate": total experience, including pre-2002 exploring. **Approved by Leo, pending Juan's written confirmation.**
-- "Juan Diaz has been investing in Bay Area real estate since 2002".
-- Combined sentence allowed: "Juan Diaz has 25+ years of experience in Bay Area real estate and has been investing since 2002."
+**EXPERIENCE: two separate approved facts (Leo, 2026-10-10; confirmed in writing by Juan, 2026-10-10).**
+- "25+ years of experience in Bay Area real estate": total experience, including pre-2002 exploring. **APPROVED by Juan in writing, 2026-10-10.**
+- "Juan Diaz has been investing in Bay Area real estate since 2002": also APPROVED by Juan in writing, 2026-10-10.
+- Combined sentence allowed: "Juan Diaz has 25+ years of experience in Bay Area real estate and has been investing since 2002." (APPROVED by Juan in writing, 2026-10-10.)
 - Rules: "25+ years" is allowed only in this experience sense. Block exact counts ("27 years", "24 years"), "over 25 years", "20+ years" and "25+ years in business". Never use 2002 as the company founding year (the company was formed February 25, 2022).
 - The Lawrence SOP's "27 years" and any other SOP fact do not count: the SOP is a voice guide only. This supersedes the earlier 2002-only wording and the earlier "CONFLICT RESOLVED" note.
 
