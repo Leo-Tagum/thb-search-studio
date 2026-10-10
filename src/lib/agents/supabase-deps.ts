@@ -1,0 +1,109 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- agent outputs and DB JSON columns are validated by zod at the boundary */
+// Supabase-backed storage for the agent bridge. Pass a service-role client (server side / CLI only).
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { Orchestrator, type Actor } from "../orchestrator";
+import { SupabaseRepo } from "../orchestrator/supabase-repo";
+import { buildScore } from "../engine/score";
+import { AGENT_META, type AgentKey } from "./schemas";
+import { buildTaskPacket, type AgentRun, type BridgeStore, type TaskPacket, type ValidationContext } from "./bridge";
+
+/** Flags follow the decision that would change a page (the agent's, once it exists), not the engine's first proposal. */
+export function deriveFlags(packet: { pages: { url: string; protection_status: string | null; template_flag: string | null; in_inventory: boolean; impressions: number }[]; covering_pages: unknown[] }, decision: string) {
+  const changes = decision === "UPDATE" || decision === "MERGE";
+  const target = packet.pages.find((p) => p.in_inventory && !/^https?:\/\/[^/]+\/?$/.test(p.url)) ?? packet.pages[0];
+  const template = target?.template_flag ?? null;
+  return {
+    protected_warning: changes && packet.pages.some((p) => p.protection_status !== "not_protected"),
+    template_flag: template,
+    dev_change_request: changes && template === "city",
+  };
+}
+
+const SYSTEM: Actor = { kind: "system", id: "agent-bridge" };
+
+export class SupabaseBridgeStore implements BridgeStore {
+  constructor(private db: SupabaseClient) {}
+  private fromRow = (d: any): AgentRun => ({
+    id: d.id, agent_key: d.agent_key, subject_type: d.subject_type, subject_id: d.subject_id, status: d.status, task_packet: d.task_packet,
+    output: d.output, prompt_version: d.prompt_version, model_version: d.model_version, retries: d.retries, error: d.error,
+  });
+  async getRun(id: string) {
+    const { data, error } = await this.db.from("agent_runs").select("*").eq("id", id).single();
+    if (error) throw error;
+    return this.fromRow(data);
+  }
+  async saveRun(r: AgentRun) {
+    const { error } = await this.db.from("agent_runs").update({ status: r.status, output: r.output, model_version: r.model_version, retries: r.retries, error: r.error, updated_at: new Date().toISOString() }).eq("id", r.id);
+    if (error) throw error;
+    await this.db.from("audit_events").insert({ actor: `agent:${r.agent_key}`, subject_type: "opportunity", subject_id: r.subject_id, event_type: `agent_run_${r.status.toLowerCase()}`, accepted: r.status !== "FAILED", detail: { run: r.id, retries: r.retries, error: r.error } });
+  }
+  async applyAccepted(run: AgentRun, out: Record<string, any>, orch: Orchestrator) {
+    const oppId = run.subject_id;
+    if (run.agent_key === "thb-01-seo-strategist") {
+      const { data: o } = await this.db.from("opportunities").select("packet,state").eq("id", oppId).single();
+      const t = (o!.packet as any).totals;
+      const score = buildScore({ impressions: t.impressions, position: t.position }, out.result.score_estimates);
+      const flags = deriveFlags(o!.packet as any, out.decision);
+      await this.db.from("opportunities").update({ agent_decision: out, score, protected_warning: flags.protected_warning, dev_change_request: flags.dev_change_request, template_flag: flags.template_flag }).eq("id", oppId);
+      if (o!.state === "CANDIDATE") await orch.transition("opportunity", oppId, "SEO_REVIEW", SYSTEM, { reason: "Agent 1 recommendation recorded; awaiting human decision", run: run.id });
+    } else if (run.agent_key === "thb-02-research-evidence") {
+      const { data: b } = await this.db.from("briefs").select("id").eq("opportunity_id", oppId).maybeSingle();
+      const row = { evidence_packet: { ...out.result, decision: out.decision, run_id: run.id }, notes: "evidence packet recorded; brief not yet built" };
+      if (b) await this.db.from("briefs").update(row).eq("id", b.id);
+      else await this.db.from("briefs").insert({ opportunity_id: oppId, ...row });
+    } else {
+      await this.db.from("briefs").update({ outline: { ...out.result.brief, decision: out.decision, run_id: run.id }, notes: out.decision === "PASS" ? "brief awaiting human review" : `Agent 3 returned ${out.decision}` }).eq("opportunity_id", oppId);
+      if (out.decision === "PASS") await orch.transition("opportunity", oppId, "BRIEF_REVIEW", SYSTEM, { reason: "Agent 3 brief ready for human review", run: run.id });
+    }
+  }
+}
+
+export function validationContext(db: SupabaseClient) {
+  return async (run: AgentRun): Promise<ValidationContext> => {
+    const ctx: ValidationContext = { packet: run.task_packet };
+    const { data: o } = await db.from("opportunities").select("packet").eq("id", run.subject_id).single();
+    if (run.agent_key === "thb-01-seo-strategist") ctx.candidate = o!.packet as any;
+    if (run.agent_key === "thb-03-content-architect") {
+      const { data: b } = await db.from("briefs").select("evidence_packet").eq("opportunity_id", run.subject_id).single();
+      const ep = b?.evidence_packet as any;
+      ctx.agent2Claims = ep?.claims ?? []; ctx.agent2SourceIds = (ep?.sources ?? []).map((s: any) => s.id);
+    }
+    return ctx;
+  };
+}
+
+/** Create (or return the open) QUEUED run for one agent on one opportunity. Prerequisites are enforced here. */
+export async function queueRun(db: SupabaseClient, agent: AgentKey, oppId: string): Promise<{ run: AgentRun; duplicate: boolean }> {
+  const { data: o, error } = await db.from("opportunities").select("*").eq("id", oppId).single();
+  if (error) throw error;
+  const { data: open } = await db.from("agent_runs").select("*").eq("agent_key", agent).eq("subject_id", oppId).eq("status", "QUEUED").maybeSingle();
+  if (open) return { run: new SupabaseBridgeStore(db)["fromRow"](open), duplicate: true };
+
+  let data: unknown; let allowed: string[] | "agent-defined";
+  const pkt = o.packet as any;
+  if (agent === "thb-01-seo-strategist") {
+    if (!["CANDIDATE", "SEO_REVIEW"].includes(o.state)) throw new Error(`Agent 1 needs a CANDIDATE/SEO_REVIEW opportunity (is ${o.state})`);
+    data = { candidate_packet: pkt };
+    allowed = [`gsc:${pkt.window.start}..${pkt.window.end}`, ...pkt.pages.map((p: any) => `inv:${p.page_id ?? p.url}`), ...pkt.queries.map((q: any) => `q:${q.query}`)];
+  } else if (agent === "thb-02-research-evidence") {
+    if (o.state !== "EVIDENCE_REVIEW" || o.human_decision !== "approve") throw new Error("Agent 2 runs only after Leo approved this opportunity (state EVIDENCE_REVIEW)");
+    if (o.dev_change_request) throw new Error("This opportunity changes a template-rendered page: it routes to a Developer Change Request (Phase 4), not an Elementor brief.");
+    const { data: lib } = await db.from("evidence_sources").select("id,title,source_tier,jurisdiction,effective_date,source_url").limit(100);
+    const { data: facts } = await db.from("brand_facts").select("*").limit(50);
+    data = { candidate_packet: pkt, agent1_decision: o.agent_decision, human_reason: o.human_reason, evidence_library: lib ?? [], brand_facts_status: (facts ?? []).map((f: any) => ({ key: f.key ?? f.fact_key ?? f.id, status: f.status })), seller_library: { publication_cleared_briefs: 0, note: "No seller story is cleared for publication; do not use seller material." } };
+    allowed = "agent-defined";
+  } else {
+    const { data: b } = await db.from("briefs").select("evidence_packet").eq("opportunity_id", oppId).maybeSingle();
+    const ep = b?.evidence_packet as any;
+    if (o.state !== "EVIDENCE_REVIEW" || !ep || ep.decision !== "PASS") throw new Error("Agent 3 needs an accepted Agent 2 evidence packet with decision PASS");
+    data = { candidate_packet: pkt, agent1_decision: o.agent_decision, evidence_packet: ep };
+    allowed = (ep.sources as any[]).map((s) => s.id);
+  }
+  const packet: TaskPacket = buildTaskPacket(agent, { id: oppId, versionHash: o.version_hash ?? "" }, data, allowed);
+  const { data: row, error: e2 } = await db.from("agent_runs").insert({ agent_key: agent, subject_type: "opportunity", subject_id: oppId, status: "QUEUED", task_packet: packet, prompt_version: AGENT_META[agent].promptVersion }).select("*").single();
+  if (e2) throw e2;
+  await db.from("audit_events").insert({ actor: "system:agent-bridge", subject_type: "opportunity", subject_id: oppId, event_type: "agent_run_queued", accepted: true, detail: { run: row.id, agent } });
+  return { run: new SupabaseBridgeStore(db)["fromRow"](row), duplicate: false };
+}
+
+export const makeOrchestrator = (db: SupabaseClient) => new Orchestrator(new SupabaseRepo(db));

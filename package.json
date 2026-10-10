@@ -15,7 +15,11 @@
     "import:sellers": "tsx --env-file=.env.local scripts/import-sellers.mts",
     "ingest:list": "tsx --env-file=.env.local scripts/ingest-inventory.mts list",
     "ingest:rendered": "tsx --env-file=.env.local scripts/ingest-inventory.mts rendered",
-    "flag:templates": "tsx --env-file=.env.local scripts/flag-templates.mts"
+    "flag:templates": "tsx --env-file=.env.local scripts/flag-templates.mts",
+    "import:gsc": "tsx --env-file=.env.local scripts/import-gsc.mts",
+    "candidates": "tsx --env-file=.env.local scripts/build-candidates.mts",
+    "fold": "tsx --env-file=.env.local scripts/fold-opportunity.mts",
+    "studio": "tsx --env-file=.env.local scripts/studio.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

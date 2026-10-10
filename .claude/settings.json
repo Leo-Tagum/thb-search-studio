@@ -11,7 +11,9 @@
       "Read(./.env.test.local)",
       "Read(./secrets/**)",
       "Read(**/*.pem)",
-      "Read(**/*service-account*.json)"
+      "Read(**/*service-account*.json)",
+      "WebFetch(domain:twinhomebuyer.com)",
+      "WebFetch(domain:www.twinhomebuyer.com)"
     ]
   }
 }
