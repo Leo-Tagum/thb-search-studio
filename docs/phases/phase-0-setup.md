@@ -95,7 +95,7 @@ Each step has a **Check** column. Record each result in the Handoff.
 - **Decision (Leo, 2026-10-10):** identifying details in the seller briefs (C-16, C-17, area + detail combinations, dates, amounts) are fine for internal use only and must never appear in a blog draft. Recorded in the handoff under OPEN DECISIONS as resolved and carried into Phase 1. Not covered by it: the seller first name in C-12 (still to fix or accept).
 - **Step 9 PENDING (Leo, 2026-10-10):** the partner is absent and the message has not been sent. Not required to finish this phase. Until the list arrives, **every page's protection status is treated as unknown**, so an UPDATE on any page shows the design's warning and needs explicit acknowledgement (design §7); Leo can mark a page manually with an audited reason.
 - **Step 12 (2026-10-10):** handoff filled in as PARTIAL, STATUS.md left IN PROGRESS, first commit made.
-- **Pending:** Juan's click and read-back (step 10); partner message and protected-URL list (step 9).
+- **PARTIAL accepted by Leo (2026-10-10).** Phase 1 may start. Still open: Juan's approval click (step 10) and the partner's protected-URL list (step 9); every page stays protection-status UNKNOWN until the list is imported.
 
 ## Out of scope
 - Database schema, tables, migrations or RLS policies (Phase 1). The only database work here is the health check.
