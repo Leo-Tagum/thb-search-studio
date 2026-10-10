@@ -1,0 +1,24 @@
+# dependencies / build
+node_modules
+.next
+out
+coverage
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# secrets
+.env*
+!.env.example
+secrets/
+*.pem
+*service-account*.json
+
+# partner file with production SSH/deploy host details - never commit
+TECH_STACK (1).md
+
+# scratch
+_scratch/
+
+# local Claude Code permissions (machine-specific)
+.claude/settings.local.json
