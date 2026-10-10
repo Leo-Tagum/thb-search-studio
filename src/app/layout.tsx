@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "Internal search growth and content tool (local)",
 };
 
-const NAV = [["/", "Home"], ["/opportunities", "Opportunities"], ["/inventory", "Inventory"], ["/evidence", "Evidence"], ["/sellers", "Seller briefs"], ["/brand", "Brand facts"]];
+const NAV = [["/", "Home"], ["/opportunities", "Opportunities"], ["/inventory", "Inventory"], ["/evidence", "Evidence"], ["/sellers", "Seller briefs"], ["/brand", "Brand facts"], ["/audit", "Blog audit"]];
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

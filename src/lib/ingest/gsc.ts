@@ -44,3 +44,20 @@ export async function fetchGsc(call: GscCall, opts: { start: string; end: string
   }
   return { rows: out, truncated, requests };
 }
+
+export type GscAggRow = { keys: string[]; clicks: number; impressions: number; position: number };
+/** Aggregated pull (no date dimension) for the blog audit: one row per page, or per page x query. */
+export async function fetchGscAggregate(call: GscCall, opts: { start: string; end: string; dimensions: string[]; pageSize?: number; maxRows?: number }): Promise<{ rows: GscAggRow[]; truncated: boolean; requests: number }> {
+  const pageSize = opts.pageSize ?? 25000;
+  const maxRows = opts.maxRows ?? 200000;
+  const rows: GscAggRow[] = [];
+  let requests = 0, truncated = false;
+  for (let startRow = 0; ; startRow += pageSize) {
+    const got = await call({ startDate: opts.start, endDate: opts.end, dimensions: opts.dimensions, rowLimit: pageSize, startRow, dataState: "final" });
+    requests++;
+    rows.push(...got.map((r) => ({ keys: r.keys, clicks: r.clicks, impressions: r.impressions, position: r.position })));
+    if (got.length < pageSize) break;
+    if (rows.length >= maxRows) { truncated = true; break; }
+  }
+  return { rows, truncated, requests };
+}

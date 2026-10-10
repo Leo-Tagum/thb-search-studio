@@ -1,6 +1,6 @@
-# Phase 2b — Blog Audit (plan only)
+# Phase 2b — Blog Audit
 
-> **Plan written 2026-10-10 from Leo's description. Nothing is built.** Starting needs Leo's "go" after he has read the "What I need from Leo" list below.
+> Plan written 2026-10-10; Leo said go the same day (answers below). Built, awaiting his review of the verdicts.
 
 ## Goal
 Audit every published blog post (122 confirmed in the inventory: all published, all in the sitemap) and give each one a recommended verdict that Leo approves: **KEEP / UPDATE / MERGE (into URL) / RETIRE (301 to URL) / NOINDEX**.
@@ -83,18 +83,46 @@ Each verdict shows its evidence, a confidence level and what is unknown.
 - [ ] The one-page summary for Cherry and Juan exists
 - [ ] No WordPress action was taken by the Studio
 
-## Handoff
-_Fill in at the end of the phase._
+## Leo's answers (2026-10-10) and how they were applied
+1. Bodies: 2 requests (`posts?per_page=100`, `_fields=id,link,modified,content`), paced at <=5/min, stop on 403/429/5xx, no retry. Ran live: 122 posts, 0 errors.
+2. Protection: no blog post known as protected/money; all 122 stay `unknown`. Unknown is shown with a warning, and approving any change (UPDATE/MERGE/RETIRE/NOINDEX) needs an explicit acknowledgement; a protected post can only be FLAG_ONLY.
+3. Competitor domains: his list plus homevestors, webuyuglyhouses, sundae, houzeo, zillow (`COMPETITOR_DOMAINS` in `src/lib/audit/checks.ts`).
+4. GSC: re-imported 2025-06-15..2026-10-07 (read-only).
+5. Agent 1 only on ambiguous MERGE/RETIRE/NOINDEX: 1 case, advisory (stored on the row; not bridge-validated).
+6. Summary: generated locally at `docs/phases/phase-2b-summary.md`. **Not published**; waiting for Leo's OK.
 
+## Handoff
 ```text
 PHASE: 2b — Blog Audit
-STATUS: PASS | PARTIAL | BLOCKED
+STATUS: PARTIAL (engine, queue and action list built and verified; Leo's review of the 122 verdicts has not happened)
 WHAT WAS BUILT:
+- Post bodies fetched (2 requests) into page_snapshots (body_text = rendered HTML, untrusted).
+- 16-month GSC pull as page and page x query totals (no date dimension) in audit_gsc_imports / audit_gsc_rows, kept apart from the Phase 2 import.
+- Evidence + deterministic verdict engine (KEEP/UPDATE/MERGE/RETIRE/NOINDEX/FLAG_ONLY) with all plan guardrails; template-block detection (text shared by 8+ posts is judged once, site-wide).
+- /audit queue, /audit/[id] detail + decision (approve / change / hold, reason required, protection acknowledgement), /audit/actions manual action list + CSV.
+- Plain-language summary generator (not published).
 FILES / TABLES / ENDPOINTS CHANGED:
+- Migration 0010: audit_gsc_imports, audit_gsc_rows, blog_audits, blog_audit_actions (RLS forced).
+- src/lib/audit/*, src/app/audit/*, scripts: fetch-post-bodies, import-gsc-audit, run-blog-audit, audit-smoke, audit-summary; gsc.ts gained fetchGscAggregate; nav link.
+- npm scripts: fetch:bodies, import:gsc-audit, audit:blog.
 TESTS RUN + RESULTS:
+- vitest 130/130 (35 new: 5/min limiter + stop on 429/503/500, structure, content checks incl. clean post, verdict guardrails incl. no-data, protected, chains/loops, overlap on shared queries only, action-list validation, no-WordPress-write scan).
+- db:check PASS (38 tables, RLS everywhere, anon refused). next build OK; /audit, /audit/actions and the CSV route return 200 on live data.
+- Live smoke on a throwaway audit_run: one approved, one changed (to RETIRE), one held; refused: no reason, missing acknowledgement, missing target, self-redirect, bulk approval of MERGE. 3 audit_events written; fixture rows removed.
+- Real numbers: 122 posts, 122 bodies, 99 with search data (was 42 in the 90-day window), 23 unknown. Proposed: KEEP 22, UPDATE 98, MERGE 2, RETIRE 0, NOINDEX 0, FLAG_ONLY 0. Agent 1 reviewed the one low-confidence MERGE and recommended HOLD.
 DATA / PERMISSION / PRIVACY IMPACT:
-STAGING DEMO:
+- Only 2 GET requests to twinhomebuyer.com. GSC read-only scope. No WordPress writes; a test scans the audit code for non-GET methods and credentials.
+- Side effect to know: a first 480-day page x query x date import hit the 200,000-row cap (truncated) and would have replaced the Phase 2 candidate data as "latest import"; it was deleted. Phase 2 data is unchanged (31,790 rows). Running npm run phase2-verify earlier also created and cancelled its labelled fixture opportunity.
+STAGING DEMO: npm run dev, open /audit.
 KNOWN LIMITATIONS:
+- 98 UPDATE verdicts is high: most come from real brand-rule hits (pending facts such as 24 hours / closing timeframe / contractor license, 25+/27 years, typed review counts). They are sorted by impressions; severity tiers would help review.
+- 491 of 801 URLs in GSC are not in the inventory (city/county pages, contact page and others). They count for overlap but cannot be redirect targets.
+- Legal-claim and filler detectors are heuristics; author box and Sources are checked in the body only (the theme may add them).
+- Inbound links counted from the 122 posts only.
+- Agent 1 review is advisory and outside the bridge validation (the bridge is built for opportunities).
 OPEN DECISIONS:
-NEXT APPROVED STEP:
+- Leo: review the 122 verdicts in /audit (each with a reason); 60 posts share one template block with a typed review count (fix once in the template, developer change request).
+- Leo: OK to publish the summary as one artifact shared with the org?
+- Partner's protected-URL list (still outstanding); local cash-buyer competitor domains to add.
+NEXT APPROVED STEP: Leo reviews /audit; then mark Phase 2b DONE and hand the action list to Gian.
 ```

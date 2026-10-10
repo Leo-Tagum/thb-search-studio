@@ -22,7 +22,10 @@
     "evidence:extract": "tsx --env-file=.env.local scripts/extract-evidence.mts",
     "redirect:create": "tsx --env-file=.env.local scripts/redirect-to-create.mts",
     "import:brand": "tsx --env-file=.env.local scripts/import-brand-facts.mts",
-    "studio": "tsx --env-file=.env.local scripts/studio.mts"
+    "studio": "tsx --env-file=.env.local scripts/studio.mts",
+    "import:gsc-audit": "tsx --env-file=.env.local scripts/import-gsc-audit.mts",
+    "fetch:bodies": "tsx --env-file=.env.local scripts/fetch-post-bodies.mts",
+    "audit:blog": "tsx --env-file=.env.local scripts/run-blog-audit.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",
