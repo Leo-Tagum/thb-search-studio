@@ -47,9 +47,11 @@ describe("content checks", () => {
     const r = runChecks("<p>Rated 4.8/5 from 115 reviews.</p>");
     expect(r.ratingHits.length).toBeGreaterThan(0);
     expect(blockingIssues(r).join(" ")).toMatch(/rating/);
-    const b = runChecks("<p>We respond within 24 hours and close in 7 days. Our licensed general contractor team handles repairs.</p>");
+    const b = runChecks("<p>We respond within 24 hours. Our licensed general contractor team handles repairs.</p>");
     expect(blockingIssues(b)).toEqual([]);
-    expect(pendingJuanClaims(b).map((c) => c.fact).join(" ")).toMatch(/24 hours[\s\S]*closing timeframe[\s\S]*contractor license/);
+    expect(pendingJuanClaims(b).map((c) => c.fact).join(" ")).toMatch(/24 hours[\s\S]*contractor license/);
+    // Leo 2026-10-10: a closing timeframe, $32M and "founder" are fix-list items (group A), not just waiting on Juan.
+    expect(blockingIssues(runChecks("<p>We close in 7 days.</p>")).join(" ")).toMatch(/Studio blocks/);
   });
   it("flags legal claims with no official source", () => {
     const f = runChecks("<p>Probate liens and capital gains tax apply. A code violation or a lien can block escrow.</p>");

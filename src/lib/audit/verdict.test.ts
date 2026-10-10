@@ -69,10 +69,13 @@ describe("verdict guardrails", () => {
     expect(r.verdict).toBe("KEEP"); expect(r.notes.join(" ")).toMatch(/never merged into pages/);
   });
   it("only-pending-Juan claims give HOLD with the exact claims listed; a real problem plus pending claims stays UPDATE", () => {
-    const h = proposeVerdicts([post("a", { findings: runChecks("<p>Confirm with an attorney. We reply within 24 hours and close in 7 days.</p><h2>Sources</h2><p>About the author</p>") })], NOW).get("a")!;
+    const h = proposeVerdicts([post("a", { findings: runChecks("<p>Confirm with an attorney. We reply within 24 hours.</p><h2>Sources</h2><p>About the author</p>") })], NOW).get("a")!;
     expect(h.verdict).toBe("HOLD");
     expect(h.reason).toMatch(/within 24 hours/);
     expect(h.reason).toMatch(/Waiting on Juan/);
+    const fx = proposeVerdicts([post("a", { findings: runChecks("<p>Confirm with an attorney. Juan is our founder and we close in 7 days.</p><h2>Sources</h2><p>About the author</p>") })], NOW).get("a")!;
+    expect(fx.verdict).toBe("UPDATE");
+    expect(fx.reason).toMatch(/Studio blocks/);
     const u = proposeVerdicts([post("a", { findings: runChecks("<p>27 years of experience. We reply within 24 hours.</p>") })], NOW).get("a")!;
     expect(u.verdict).toBe("UPDATE");
     expect(u.notes.join(" ")).toMatch(/waiting on Juan/);

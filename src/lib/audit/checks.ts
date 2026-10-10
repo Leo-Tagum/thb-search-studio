@@ -21,10 +21,23 @@ const LEGAL = /\b(probate|statute|california\s+(civil|revenue|health|business|pr
 const PRO_CONFIRM = /(attorney|lawyer|\bcpa\b|tax\s+(professional|advisor|preparer)|title\s+company|licensed\s+professional|consult\s+(with\s+)?(a|an|your)\s+\w+|confirm\s+with)/i;
 
 export type Hit = { text: string; context: string };
+
+/**
+ * Leo 2026-10-10: live posts that use these claims go on the audit FIX list (an UPDATE to remove or reword them), not only on the
+ * "waiting on Juan" hold: "founder"/title (ownership is PENDING JUAN), "$32M" saved fees, and a closing timeframe such as "7 days".
+ * The closing-time pattern is wider than the Phase 2 submit check: it also catches "cash closing options as fast as 7 days".
+ * Heuristic: it needs THB-voice wording ("we", "our", "cash closing", "close in"), so statutory day counts are not flagged.
+ */
+export const FIX_NOW_PATTERNS: [string, RegExp][] = [
+  ['"founder" / owner title (ownership is PENDING JUAN)', /\b(co-?founder|founder)\b/i],
+  ['"$32M+ saved fees"', /\$\s?32\s?(m\b|million)/i],
+  ['a closing timeframe such as "7 days"', /(\b(?:we|our)\b[^.]{0,80}|cash\s+clos\w+[^.]{0,40}|clos(?:e|ing)\s+(?:in|within|as\s+fast\s+as)\s+(?:as\s+little\s+as\s+)?)\b(?:\d+|seven|ten|fourteen)[- ]?(?:business\s+)?days?\b|\b(?:in|within|as\s+(?:fast|quickly)\s+as)\s+(?:as\s+little\s+as\s+)?(?:\d+|seven|ten|fourteen)[- ]?days?\b[^.]{0,40}\b(?:clos\w+|cash\s+offer)/i],
+];
 export type Findings = {
   competitors: { kind: "link" | "image"; domain: string; url: string }[];
   wrongYears: Hit[]; // experience-year wordings that are not approved (27 years, 24 years, over 25 years, 20+ years ...)
   pendingFacts: { fact: string; hit: Hit }[]; // facts still waiting on Juan (24h, closing time, contractor license ...)
+  fixNow: { fact: string; hit: Hit }[]; // founder title, $32M, closing timeframe: on the fix list (see FIX_NOW_PATTERNS)
   sourcedFactIssues: string[];
   ratingHits: Hit[];
   legal: { count: number; samples: Hit[]; officialLinks: string[]; professionalConfirmation: boolean; unsourced: boolean };
@@ -49,6 +62,7 @@ export function runChecks(html: string, ownText?: string): Findings {
 
   const wrongYears = EXPERIENCE_YEARS_PATTERNS.flatMap((re) => all(re, text)).filter((h) => !isApprovedExperienceSense(h.text));
   const pendingFacts = PENDING_JUAN_PATTERNS.flatMap(([fact, re]) => all(re, text).map((hit) => ({ fact, hit })));
+  const fixNow = FIX_NOW_PATTERNS.flatMap(([fact, re]) => all(re, text).map((hit) => ({ fact, hit })));
   const sourcedFactIssues: string[] = [];
   for (const f of SOURCED_FACTS) if (f.mentions.test(text) && !usesApprovedWording(f, text)) sourcedFactIssues.push(`${f.name}: mentioned but not in an approved wording ("${f.exact}"${f.okIf ? ' or "25+ years of experience in Bay Area real estate"' : ""})`);
   if (/(founded|established|started|began operations|in business)[^."\n]{0,40}2002/i.test(text)) sourcedFactIssues.push("2002 appears as a company founding year (it is Juan's experience start)");
@@ -62,7 +76,7 @@ export function runChecks(html: string, ownText?: string): Findings {
   const filler = FILLER.map((phrase) => ({ phrase, count: lower.split(phrase).length - 1 })).filter((f) => f.count > 0);
 
   return {
-    competitors, wrongYears, pendingFacts, sourcedFactIssues, ratingHits,
+    competitors, wrongYears, pendingFacts, fixNow, sourcedFactIssues, ratingHits,
     legal: { count: legalCount, samples: legalHits, officialLinks, professionalConfirmation, unsourced: legalCount >= 2 && officialLinks.length === 0 },
     missingSources: !hasSourcesSection(html), missingAuthorBox: !hasAuthorBox(html), filler,
   };
@@ -81,6 +95,7 @@ export function blockingIssues(f: Findings): string[] {
   if (f.legal.count >= 2 && !f.legal.professionalConfirmation) out.push('legal/tax-type content without "confirm with a professional" language (editorial standards section 5)');
   if (f.legal.count >= 2 && f.missingSources) out.push("no Sources section on a post that makes legal/tax/permit-type statements");
   out.push(...f.sourcedFactIssues);
+  if (f.fixNow.length) out.push(`claims the Studio blocks until Juan decides (remove or reword): ${[...new Set(f.fixNow.map((h) => `${h.fact}: "${h.hit.text.trim()}"`))].slice(0, 5).join("; ")}`);
   return out;
 }
 /** Group B: claims that are only waiting on Juan (not wrong, not yet approved). Exact text, deduplicated. */

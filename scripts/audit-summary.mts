@@ -30,7 +30,7 @@ const md = `# Blog audit summary (${run!.audit_run})
 ## Where the ${rows.length} posts stand (proposed)
 ${counts((r) => r.proposed_verdict)}
 
-- **Update**: a real problem fixable on the same page (wrong years, competitor links, unsourced legal claims, typed ratings, missing sources). **Hold**: nothing wrong except claims Juan has not approved yet (24 hours, closing time, contractor license); we wait for him. **Keep**: nothing blocking found. **Merge / Retire**: two posts compete for the same searches; keep the stronger one. **Noindex**: keep the page but hide it from Google. **Flag only**: protected page, look but don't touch.
+- **Update**: a real problem fixable on the same page (wrong years, competitor links, unsourced legal claims, typed ratings, missing sources, and claims the Studio now blocks: "founder", "$32M" saved fees, closing timeframes such as "7 days"). **Hold**: nothing wrong except claims Juan has not approved yet (24 hours, contractor license, ownership); we wait for him. **Keep**: nothing blocking found. **Merge / Retire**: two posts compete for the same searches; keep the stronger one. **Noindex**: keep the page but hide it from Google. **Flag only**: protected page, look but don't touch.
 - ${noData} posts have no Google data at all. That means "unknown", not "not working". None was marked for removal because of it.
 
 ## Top 10 fixes (biggest search visibility first)
