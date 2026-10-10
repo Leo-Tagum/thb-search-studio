@@ -105,7 +105,13 @@ KNOWN LIMITATIONS:
   - No login: the local app uses the service role and records the actor as "leo". Fine on localhost; needs auth before any sharing.
   - Subject state lives on opportunities/articles; the Supabase repo is smoke-tested only on articles.
   - Brand facts: voice reference not drafted (needs Leo's 3-5 post picks); proposal is a markdown file, not an approval artifact, because Juan's round-trip is still unproven.
-OPEN DECISIONS:
+OPEN DECISIONS (Leo, 2026-10-10: Phase 1 accepted as PARTIAL):
+  - BLOCKER (503): rendered-title/meta crawl hit HTTP 503 and must NOT be resumed now. Resume later only at <=5 req/min and off-hours, OR replace with a Yoast export from Gian. Until then rendered titles exist for ~36 of 352 URLs.
+  - DECIDED: city template flags stay "inferred" (slug-based, unconfirmed).
+  - DECIDED: voice reference waits for Leo to send 3-5 posts later.
+  - DECIDED: brand facts stay pending until Juan's approval click is proven.
+  - QUESTION FOR JUAN: "Equity Track Inc vs Twin Home Buyer": what is the relationship, and may content mention Equity Track Inc?
+  (Earlier open items, still open:)
   - Leo: OK to retry the rendered-title crawl (it resumes where it stopped, about 16 minutes), now or later, or skip it? Also whether to check if WP Engine/Wordfence throttled us.
   - Leo: pick 3-5 posts for the voice reference.
   - Juan: approve/correct the brand facts proposal; Equity Track Inc conflict; supply needed facts; clear his 8 flagged briefs.

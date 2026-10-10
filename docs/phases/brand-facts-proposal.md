@@ -13,6 +13,9 @@ Juan: please approve, correct or reject each line. Until you approve a line, wri
 | Primary geography | San Francisco Bay Area | Home page title |
 | Core service | Buys houses for cash, as-is | Home page title, as-is pages. Please confirm wording |
 
+## Question for Juan: Equity Track Inc vs Twin Home Buyer
+One page is titled "Equity Track Inc powered by Twin Home Buyer"; all others use only "Twin Home Buyer". See the conflict below.
+
 ## Conflict: your decision needed
 - **Related entity.** One page is titled "Equity Track Inc powered by Twin Home Buyer"; every other page uses only "Twin Home Buyer". What is the relationship, and may content mention Equity Track Inc?
 
