@@ -2,7 +2,7 @@
 
 Source: "SOP: Lawrence Content Takeover — Juan Voice Content Standard". The SOP's old page template is superseded by the new THB template; its standards below were reviewed rule by rule with Leo on 2026-10-10.
 
-Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's change · **PENDING JUAN** = blocked until Juan decides · **HUMAN PROCESS** = team process, not an agent rule
+Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's change · **PENDING JUAN** = blocked until Juan decides (see section 7 for current brand-fact statuses) · **HUMAN PROCESS** = team process, not an agent rule
 
 ## 1. Voice (Agent 4 writes to it, Agent 7 checks it)
 - KEEP: Sound like Juan explaining the truth to a homeowner: direct, practical, local, built from real deal experience. Not AI, not corporate, not like other cash-buyer sites.
@@ -44,7 +44,7 @@ Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's chang
 
 - KEEP: Authenticity checklist (all must be YES):
   1. Starts with a real seller problem, not a sales pitch
-  2. Sounds like Juan (experience number: see section 7)
+  2. Sounds like Juan (experience only in the exact approved wording: see section 7)
   3. Explains what can go wrong
   4. Gives honest options, not just THB
   5. Includes deal logic (title, authority, condition, people, money, timeline or risk)
@@ -68,10 +68,34 @@ Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's chang
 - KEEP: Local modifiers only when true and useful (Bay Area, Oakland, East Bay, San Mateo County, Northern California, California).
 - KEEP: No keyword stuffing. If a sentence sounds unnatural, rewrite it.
 
-## 7. Brand facts: PENDING JUAN
-- PENDING JUAN: Experience figure. The SOP says "27 years"; other THB pages say "25+ years". Agents may not use any year figure until Juan picks the wording.
-- PENDING JUAN: "1,000+ homes" (seen in live author boxes). Not usable until confirmed.
-- PENDING JUAN: "East Oakland roots" biography detail. Not usable until confirmed.
+## 7. Brand facts (source: Brand Consistency Project artifact, version 1791655944-cad8, imported 2026-10-10)
+Studio Brand Facts hold the live statuses (the /brand screen and the brand_facts table). Summary:
+
+**APPROVED: use.**
+- Name: "Twin Home Buyer".
+- Homes purchased: "1,000+".
+- Phone: (415) 415-8946 and (415) 415-TWIN.
+- Website: https://www.twinhomebuyer.com
+- Address: 170 Glenn Way Ste 5, San Carlos, CA 94070.
+
+**SOURCED: use the exact wording only.**
+- Legal entity: "Twin Home Buyer Limited Liability Company". Formed: "Formed February 25, 2022".
+- Experience: "Juan Diaz has been investing in Bay Area real estate since 2002". Never "X+ years". Never as the company's founding year.
+- BBB: "BBB Accredited since 3/1/2022".
+
+**CONFLICT RESOLVED (Leo, 2026-10-10).** "27 years" (Lawrence SOP) and "25+ years" (site pages) are both superseded by the 2002 wording above. Do not use either.
+
+**STILL PENDING JUAN: blocked.** Agents may not use any of these until Juan decides:
+- hours / "24 hours" / "24/7"
+- closing time (any closing timeframe)
+- ownership of the company
+- contractor license
+- how the address relates to the service area (do not present the address as the service area)
+- any mention of Equity Track Inc
+- "$32M+ saved fees"
+- "100% on time"
+- "4.8/5 (115 reviews)"
+- "East Oakland roots" biography detail (still pending; not covered by the artifact import)
 
 ## 8. Content Quality Scorecard (Agent 7): ADAPTED, advisory
 - Agent 7 scores every draft: Juan voice 20 · Seller education 20 · Deal logic 20 · Local context 15 · SEO/AEO/GEO structure 15 · Trust and honesty 10.

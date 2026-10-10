@@ -57,11 +57,30 @@ describe("Agent 3: editorial standards", () => {
 });
 
 describe("PENDING JUAN facts stay blocked", () => {
-  it("rejects an experience figure, '1,000+ homes' and 'East Oakland roots' in a brief", () => {
-    for (const bad of ["With 27 years of experience we know...", "Over 25 years serving the Bay Area", "We have bought 1,000+ homes", "Juan's East Oakland roots"]) {
+  it("rejects X+ years figures, East Oakland roots and every still-pending Brand Fact in a brief", () => {
+    for (const bad of [
+      "With 27 years of experience we know...", "Over 25 years serving the Bay Area", "Juan's East Oakland roots",
+      "We are open 24/7", "We close in 7 days", "A family-owned company", "Our licensed contractor team", "Powered by Equity Track Inc",
+      "We have saved sellers $32M in fees", "100% on time closings", "Rated 4.8/5 from 115 reviews",
+    ]) {
       const errs = check(brief({ answer_first: `A direct answer: ${bad}` }));
-      expect(errs.join(" ")).toMatch(/PENDING JUAN/);
+      expect(errs.join(" "), bad).toMatch(/PENDING JUAN/);
     }
+  });
+  it("lets APPROVED facts through: name, 1,000+ homes, phones, website, address", () => {
+    const ok = "Twin Home Buyer has purchased 1,000+ homes. Call (415) 415-8946 or (415) 415-TWIN, https://www.twinhomebuyer.com, 170 Glenn Way Ste 5, San Carlos, CA 94070.";
+    expect(check(brief({ answer_first: `A direct answer: ${ok}` }))).toEqual([]);
+  });
+  it("SOURCED facts need their exact wording; 2002 is never the company founding year", () => {
+    const exact = "Juan Diaz has been investing in Bay Area real estate since 2002";
+    expect(check(brief({ answer_first: `A direct answer: ${exact}.` }))).toEqual([]);
+    expect(check(brief({ answer_first: "A direct answer: Juan has invested in Bay Area real estate since 2002." })).join(" ")).toMatch(/exact wording/);
+    expect(check(brief({ answer_first: "A direct answer: with more than 20 years of experience" })).join(" ")).toMatch(/PENDING JUAN|exact wording/);
+    expect(check(brief({ answer_first: `A direct answer: ${exact}. Our company was founded in 2002.` })).join(" ")).toMatch(/never the company founding year/);
+    expect(check(brief({ answer_first: "A direct answer: BBB Accredited since 3/1/2022" }))).toEqual([]);
+    expect(check(brief({ answer_first: "A direct answer: BBB accredited since 2022" })).join(" ")).toMatch(/BBB accreditation/);
+    expect(check(brief({ answer_first: "A direct answer: Twin Home Buyer Limited Liability Company, formed in 2022" }))).toEqual([]);
+    expect(check(brief({ answer_first: "A direct answer: Twin Home Buyer LLC" })).join(" ")).toMatch(/legal entity/);
   });
   it("allows them only in open_items (named as pending)", () => {
     expect(check(brief({ open_items: ["Experience figure (27 years vs 25+) is PENDING JUAN"] }))).toEqual([]);

@@ -18,7 +18,7 @@ Turn an approved brief into a section-by-section draft that Agents 4–7 write a
 
 ## Input: editorial standards (Leo, 2026-10-10)
 - **Agents 3–7 must follow `docs/references/editorial-standards.md`.** Each subagent prompt embeds the rules that apply to it (Agent 3: Seller Situation Map; Agent 4: voice and required content; Agents 5–7: block drafts that lack required elements). Rule tags: KEEP and ADAPTED are binding; HUMAN PROCESS items are not agent rules.
-- **PENDING JUAN items stay blocked.** Agents may not use any year/experience figure, "1,000+ homes", the "East Oakland roots" detail, or any other item tagged PENDING JUAN until Juan decides. Brand-fact checks block by design until then.
+- **PENDING JUAN items stay blocked.** Brand facts follow editorial-standards section 7 (updated 2026-10-10 from the Brand Consistency Project artifact): approved facts may be used, sourced facts only in their exact wording (experience only as "Juan Diaz has been investing in Bay Area real estate since 2002", never "X+ years"), and every still-pending item (hours, closing time, ownership, contractor license, address vs service area, Equity Track, $32M+, 100% on time, 4.8/5 reviews, East Oakland roots) stays blocked. The submit check enforces this.
 - Add regression fixtures for the required elements and for the blocked PENDING JUAN facts (a draft using one is BLOCKED).
 - The SOP's old page template is superseded by the new THB template; do not reuse it.
 

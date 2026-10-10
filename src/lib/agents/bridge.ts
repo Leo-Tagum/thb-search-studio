@@ -64,11 +64,22 @@ HUMAN DIRECTIVE (from Leo, the operator; trusted): ${directive}` : ""),
   };
 }
 
-/** Editorial standards §7: PENDING JUAN facts are blocked everywhere except in the lists that name them as pending. */
+/**
+ * Editorial standards §7 / Brand Facts (imported from the Brand Consistency Project artifact, 2026-10-10).
+ * PENDING JUAN facts are blocked everywhere except in the lists that name them as pending.
+ * Approved facts (name, 1,000+ homes, phones, website, address) are usable. Sourced facts are usable only in their exact wording.
+ */
 export const PENDING_JUAN_PATTERNS: [string, RegExp][] = [
-  ["experience year figure (e.g. 25+/27 years of experience)", /(\b\d{2}\s?\+?\s*years?\s+(of\s+)?(experience|in\s+business|serving|helping|buying)|\b(over|more than|nearly|almost)\s+\d{2}\s*\+?\s*years)/i],
-  ["'1,000+ homes'", /1,?000\s?\+?\s*(homes|houses)/i],
-  ["'East Oakland roots'", /east\s+oakland/i],
+  ['experience as an "X+ years" figure (27 years / 25+ years / 20+ years)', /(\b\d{2}\s?\+?\s*years?\s+(of\s+)?(experience|in\s+business|serving|helping|buying)|\b(over|more than|nearly|almost)\s+\d{2}\s*\+?\s*years)/i],
+  ['"East Oakland roots"', /east\s+oakland/i],
+  ['business hours / "24 hours" / "24/7"', /(24\s*\/\s*7|24[- ]hours?|open\s+24|around the clock)/i],
+  ['a closing timeframe', /(clos(e|ing)\s+(in|within)\s+(as\s+little\s+as\s+)?\d+\s*(days?|hours?)|\b\d+\s*days?\s+(close|closing)|sell(\s+your\s+house)?\s+in\s+7\s+days|in\s+as\s+little\s+as\s+\d+\s*days?)/i],
+  ['an ownership claim (family/locally/minority/veteran-owned)', /(family|locally|minority|veteran|woman|women)[- ]owned/i],
+  ['a contractor license claim', /(licensed\s+(general\s+)?contractor|contractor'?s?\s+licen[sc]e)/i],
+  ['Equity Track mention', /equity\s+track/i],
+  ['"$32M+ saved fees"', /\$\s?32\s?(m\b|million)/i],
+  ['"100% on time"', /100\s?%\s*on[- ]?time/i],
+  ['"4.8/5 (115 reviews)"', /(4\.8\s*(\/|out of)\s*5|\b115\s+(google\s+)?reviews)/i],
 ];
 export function pendingJuanHits(out: Record<string, any>): string[] {
   const clone = JSON.parse(JSON.stringify(out));
@@ -76,6 +87,23 @@ export function pendingJuanHits(out: Record<string, any>): string[] {
   const text = JSON.stringify(clone);
   return PENDING_JUAN_PATTERNS.filter(([, re]) => re.test(text)).map(([name]) => name);
 }
+
+/** Sourced facts: when a topic is mentioned, the exact approved wording must be used. Never as the company founding year. */
+export const SOURCED_FACTS: { name: string; mentions: RegExp; exact: string }[] = [
+  { name: 'industry experience', mentions: /(since\s+2002|investing\s+in\s+(the\s+)?bay\s+area|years\s+of\s+experience)/i, exact: 'Juan Diaz has been investing in Bay Area real estate since 2002' },
+  { name: 'BBB accreditation', mentions: /(bbb[- ]accredited|accredited\s+(by\s+)?(the\s+)?bbb|bbb\s+accreditation)/i, exact: 'BBB Accredited since 3/1/2022' },
+  { name: 'legal entity', mentions: /twin\s+home\s+buyer[^.]{0,12}(llc\b|l\.l\.c|limited\s+liability)/i, exact: 'Twin Home Buyer Limited Liability Company' },
+];
+export function sourcedFactViolations(out: Record<string, any>): string[] {
+  const clone = JSON.parse(JSON.stringify(out));
+  if (clone.result) { delete clone.result.brand_facts_pending; delete clone.result.unresolved; if (clone.result.brief) delete clone.result.brief.open_items; }
+  const text = JSON.stringify(clone);
+  const bad: string[] = [];
+  for (const f of SOURCED_FACTS) if (f.mentions.test(text) && !text.includes(f.exact)) bad.push(`${f.name}: use exactly "${f.exact}"`);
+  if (/(founded|established|started|began operations|in business)[^."]{0,40}2002/i.test(text)) bad.push('2002 is Juan\'s experience, never the company founding year');
+  return bad;
+}
+
 
 // ---------- semantic validation on top of the zod schema ----------
 export type ValidationContext = {
@@ -149,6 +177,7 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
 
   if (agent !== "thb-01-seo-strategist") {
     for (const hit of pendingJuanHits(out)) errs.push(`uses a PENDING JUAN fact (${hit}); move it to brand_facts_pending / open_items instead`);
+    for (const v of sourcedFactViolations(out)) errs.push(`sourced brand fact not in its exact wording (${v})`);
   }
 
   if (agent === "thb-03-content-architect") {
