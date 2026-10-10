@@ -3,7 +3,7 @@ import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { bulkApproveAction } from "./actions";
 
-const VERDICTS = ["KEEP", "UPDATE", "MERGE", "RETIRE", "NOINDEX", "FLAG_ONLY"];
+const VERDICTS = ["UPDATE", "HOLD", "KEEP", "MERGE", "RETIRE", "NOINDEX", "FLAG_ONLY"];
 
 async function Queue({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const sp = await searchParams;

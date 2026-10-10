@@ -1,6 +1,6 @@
 # Editorial Standards (Phase 3 input)
 
-Source: "SOP: Lawrence Content Takeover — Juan Voice Content Standard". The SOP's old page template is superseded by the new THB template; its standards below were reviewed rule by rule with Leo on 2026-10-10.
+Source: "SOP: Lawrence Content Takeover — Juan Voice Content Standard". **The SOP is a voice guide only. None of its facts count** (for example its "27 years" is not a fact the Studio may use; facts come only from Brand Facts, section 7). The SOP's old page template is superseded by the new THB template; its standards below were reviewed rule by rule with Leo on 2026-10-10.
 
 Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's change · **PENDING JUAN** = blocked until Juan decides (see section 7 for current brand-fact statuses) · **HUMAN PROCESS** = team process, not an agent rule
 
@@ -44,7 +44,7 @@ Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's chang
 
 - KEEP: Authenticity checklist (all must be YES):
   1. Starts with a real seller problem, not a sales pitch
-  2. Sounds like Juan (experience only in the exact approved wording: see section 7)
+  2. Sounds like Juan (experience only in the approved wordings: see section 7)
   3. Explains what can go wrong
   4. Gives honest options, not just THB
   5. Includes deal logic (title, authority, condition, people, money, timeline or risk)
@@ -80,10 +80,14 @@ Studio Brand Facts hold the live statuses (the /brand screen and the brand_facts
 
 **SOURCED: use the exact wording only.**
 - Legal entity: "Twin Home Buyer Limited Liability Company". Formed: "Formed February 25, 2022".
-- Experience: "Juan Diaz has been investing in Bay Area real estate since 2002". Never "X+ years". Never as the company's founding year.
 - BBB: "BBB Accredited since 3/1/2022".
 
-**CONFLICT RESOLVED (Leo, 2026-10-10).** "27 years" (Lawrence SOP) and "25+ years" (site pages) are both superseded by the 2002 wording above. Do not use either.
+**EXPERIENCE: two separate approved facts (Leo, 2026-10-10; Juan to confirm in writing).**
+- "25+ years of experience in Bay Area real estate": total experience, including pre-2002 exploring. **Approved by Leo, pending Juan's written confirmation.**
+- "Juan Diaz has been investing in Bay Area real estate since 2002".
+- Combined sentence allowed: "Juan Diaz has 25+ years of experience in Bay Area real estate and has been investing since 2002."
+- Rules: "25+ years" is allowed only in this experience sense. Block exact counts ("27 years", "24 years"), "over 25 years", "20+ years" and "25+ years in business". Never use 2002 as the company founding year (the company was formed February 25, 2022).
+- The Lawrence SOP's "27 years" and any other SOP fact do not count: the SOP is a voice guide only. This supersedes the earlier 2002-only wording and the earlier "CONFLICT RESOLVED" note.
 
 **STILL PENDING JUAN: blocked.** Agents may not use any of these until Juan decides:
 - hours / "24 hours" / "24/7"

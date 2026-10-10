@@ -70,7 +70,6 @@ HUMAN DIRECTIVE (from Leo, the operator; trusted): ${directive}` : ""),
  * Approved facts (name, 1,000+ homes, phones, website, address) are usable. Sourced facts are usable only in their exact wording.
  */
 export const PENDING_JUAN_PATTERNS: [string, RegExp][] = [
-  ['experience as an "X+ years" figure (27 years / 25+ years / 20+ years)', /(\b\d{2}\s?\+?\s*years?\s+(of\s+)?(experience|in\s+business|serving|helping|buying)|\b(over|more than|nearly|almost)\s+\d{2}\s*\+?\s*years)/i],
   ['"East Oakland roots"', /east\s+oakland/i],
   ['business hours / "24 hours" / "24/7"', /(24\s*\/\s*7|24[- ]hours?|open\s+24|around the clock)/i],
   ['a closing timeframe', /(clos(e|ing)\s+(in|within)\s+(as\s+little\s+as\s+)?\d+\s*(days?|hours?)|\b\d+\s*days?\s+(close|closing)|sell(\s+your\s+house)?\s+in\s+7\s+days|in\s+as\s+little\s+as\s+\d+\s*days?)/i],
@@ -80,6 +79,29 @@ export const PENDING_JUAN_PATTERNS: [string, RegExp][] = [
   ['"$32M+ saved fees"', /\$\s?32\s?(m\b|million)/i],
   ['"100% on time"', /100\s?%\s*on[- ]?time/i],
 ];
+
+/**
+ * EXPERIENCE YEARS (Leo, 2026-10-10; Juan to confirm in writing). Two separate approved facts:
+ *  - "25+ years of experience in Bay Area real estate" (total experience, incl. pre-2002)  [approved by Leo, pending Juan's written confirmation]
+ *  - "Juan Diaz has been investing in Bay Area real estate since 2002"
+ * Combined: "Juan Diaz has 25+ years of experience in Bay Area real estate and has been investing since 2002."
+ * "25+ years" is allowed only in that experience sense. Exact counts (27 years, 24 years), "over 25 years", "20+ years" and
+ * "25+ years in business" are blocked. The Lawrence SOP is a voice guide only: none of its facts count.
+ */
+export const EXPERIENCE_YEARS_PATTERNS: RegExp[] = [
+  /\b\d{2}\s?\+?[\s-]*years?\s+(of\s+)?(experience|in\s+business|serving|helping|buying|investing|in\s+(the\s+)?(bay\s+area\s+)?real\s+estate|rebuilding|repairing)/gi,
+  /\b(over|more\s+than|nearly|almost)\s+\d{2}\s*\+?\s*years/gi,
+];
+const APPROVED_EXPERIENCE_SENSE = /^25\s?\+\s*years\s+of\s+experience/i;
+export const isApprovedExperienceSense = (hit: string) => APPROVED_EXPERIENCE_SENSE.test(hit.trim());
+export function experienceYearHits(text: string): string[] {
+  return EXPERIENCE_YEARS_PATTERNS.flatMap((re) => [...text.matchAll(new RegExp(re.source, re.flags))].map((m) => m[0])).filter((h) => !isApprovedExperienceSense(h));
+}
+export function experienceYearViolations(out: Record<string, any>): string[] {
+  const clone = JSON.parse(JSON.stringify(out));
+  if (clone.result) { delete clone.result.brand_facts_pending; delete clone.result.unresolved; if (clone.result.brief) delete clone.result.brief.open_items; }
+  return experienceYearHits(JSON.stringify(clone)).slice(0, 3).map((h) => `"${h}"`);
+}
 
 /**
  * PERMANENT RULE (Leo, 2026-10-10): the site's rating badge is a live Google widget. Agents never write a star rating,
@@ -98,17 +120,18 @@ export function pendingJuanHits(out: Record<string, any>): string[] {
 }
 
 /** Sourced facts: when a topic is mentioned, the exact approved wording must be used. Never as the company founding year. */
-export const SOURCED_FACTS: { name: string; mentions: RegExp; exact: string }[] = [
-  { name: 'industry experience', mentions: /(since\s+2002|investing\s+in\s+(the\s+)?bay\s+area|years\s+of\s+experience)/i, exact: 'Juan Diaz has been investing in Bay Area real estate since 2002' },
+export const SOURCED_FACTS: { name: string; mentions: RegExp; exact: string; okIf?: RegExp[] }[] = [
+  { name: 'industry experience', mentions: /(since\s+2002|investing\s+in\s+(the\s+)?bay\s+area|years\s+of\s+experience)/i, exact: 'Juan Diaz has been investing in Bay Area real estate since 2002', okIf: [/25\+\s*years\s+of\s+experience/i, /has\s+been\s+investing\s+(in\s+bay\s+area\s+real\s+estate\s+)?since\s+2002/i] },
   { name: 'BBB accreditation', mentions: /(bbb[- ]accredited|accredited\s+(by\s+)?(the\s+)?bbb|bbb\s+accreditation)/i, exact: 'BBB Accredited since 3/1/2022' },
   { name: 'legal entity', mentions: /twin\s+home\s+buyer[^.]{0,12}(llc\b|l\.l\.c|limited\s+liability)/i, exact: 'Twin Home Buyer Limited Liability Company' },
 ];
+export const usesApprovedWording = (f: (typeof SOURCED_FACTS)[number], text: string) => text.includes(f.exact) || (f.okIf ?? []).some((re) => re.test(text));
 export function sourcedFactViolations(out: Record<string, any>): string[] {
   const clone = JSON.parse(JSON.stringify(out));
   if (clone.result) { delete clone.result.brand_facts_pending; delete clone.result.unresolved; if (clone.result.brief) delete clone.result.brief.open_items; }
   const text = JSON.stringify(clone);
   const bad: string[] = [];
-  for (const f of SOURCED_FACTS) if (f.mentions.test(text) && !text.includes(f.exact)) bad.push(`${f.name}: use exactly "${f.exact}"`);
+  for (const f of SOURCED_FACTS) if (f.mentions.test(text) && !usesApprovedWording(f, text)) bad.push(`${f.name}: use exactly "${f.exact}" (or the approved "25+ years of experience in Bay Area real estate")`);
   if (/(founded|established|started|began operations|in business)[^."]{0,40}2002/i.test(text)) bad.push('2002 is Juan\'s experience, never the company founding year');
   return bad;
 }
@@ -187,6 +210,7 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
   if (agent !== "thb-01-seo-strategist") {
     for (const hit of pendingJuanHits(out)) errs.push(`uses a PENDING JUAN fact (${hit}); move it to brand_facts_pending / open_items instead`);
     for (const v of ratingRuleHits(out)) errs.push(`violates the permanent rating rule (${v}): the site's rating badge is a live Google widget; never write a rating or review count in text`);
+    for (const v of experienceYearViolations(out)) errs.push(`experience years not allowed (${v}): only "25+ years of experience in Bay Area real estate" and "investing in Bay Area real estate since 2002" are approved; never an exact count (27 years) and never 2002 as a founding year`);
     for (const v of sourcedFactViolations(out)) errs.push(`sourced brand fact not in its exact wording (${v})`);
   }
 

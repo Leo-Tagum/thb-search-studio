@@ -1,9 +1,10 @@
 // Deterministic verdict proposals for the blog audit (Phase 2b). Recommends only; Leo decides in /audit.
 // Guardrails (plan Rules): protected => FLAG_ONLY; "no GSC data" is UNKNOWN and never the sole reason for MERGE/RETIRE/NOINDEX;
 // MERGE/RETIRE need supported overlap (shared queries), name a surviving URL that exists, and never chain or loop.
-import { advisoryIssues, blockingIssues, type Findings } from "./checks";
+import { advisoryIssues, blockingIssues, pendingJuanClaims, type Findings } from "./checks";
 
-export type Verdict = "KEEP" | "UPDATE" | "MERGE" | "RETIRE" | "NOINDEX" | "FLAG_ONLY";
+// HOLD = nothing wrong, only claims still waiting on Juan's decision (no change recommended until he decides).
+export type Verdict = "KEEP" | "UPDATE" | "MERGE" | "RETIRE" | "NOINDEX" | "FLAG_ONLY" | "HOLD";
 export type Protection = "unknown" | "protected" | "not_protected";
 
 export type QueryEv = { query: string; impressions: number; clicks: number; position: number };
@@ -20,6 +21,7 @@ export type PostInput = {
 export type Proposal = {
   verdict: Verdict; targetId: string | null; targetUrl: string | null; reason: string; confidence: "low" | "medium" | "high";
   unknowns: string[]; issues: string[]; advisories: string[]; needsAgentReview: boolean; notes: string[];
+  pendingClaims: { fact: string; text: string; context: string }[]; // group B: exact claims waiting on Juan
 };
 
 export const MIN_SHARED_QUERIES = 3;
@@ -95,7 +97,9 @@ export function proposeVerdicts(posts: PostInput[], now = new Date()): Map<strin
     for (const o of rel) n.push(`Possible cannibalization with ${o.kind === "gsc_only" ? "a ranking URL not in the inventory" : "page"} ${o.url} (${o.shared.length} shared queries incl. "${o.shared[0]}"). Posts are never merged into pages automatically; differentiate or link instead.`);
     const weak = p.overlaps.filter((o) => !o.supported && o.shared.length > 0).length;
     if (weak) n.push(`${weak} other URL(s) share 1-2 queries or a small share of this post's impressions: not enough for a cannibalization claim.`);
-    const base = { unknowns, issues: blocking, advisories: advisory, notes: n };
+    const pendingClaims = p.findings ? pendingJuanClaims(p.findings) : [];
+    if (pendingClaims.length && blocking.length) n.push(`Also uses claims waiting on Juan: ${pendingClaims.slice(0, 6).map((c) => `"${c.text}"`).join(", ")}.`);
+    const base = { unknowns, issues: blocking, advisories: advisory, notes: n, pendingClaims };
 
     if (isFlagOnly(p)) {
       out.set(p.id, { ...base, verdict: "FLAG_ONLY", targetId: null, targetUrl: null, confidence: "high", needsAgentReview: false, reason: "Protected / money page: findings are listed for Leo, no change is recommended." });
@@ -127,6 +131,10 @@ export function proposeVerdicts(posts: PostInput[], now = new Date()): Map<strin
     }
     if (blocking.length) {
       out.set(p.id, { ...base, verdict: "UPDATE", targetId: null, targetUrl: null, confidence: p.hasBody ? "medium" : "low", needsAgentReview: false, reason: `Fixable on the same URL: ${blocking.join("; ")}.` });
+      continue;
+    }
+    if (pendingClaims.length) {
+      out.set(p.id, { ...base, verdict: "HOLD", targetId: null, targetUrl: null, confidence: "medium", needsAgentReview: false, reason: `Waiting on Juan: no other problem found, but the post uses ${pendingClaims.length} claim(s) that are not approved yet: ${pendingClaims.slice(0, 8).map((c) => `"...${c.context}..." [${c.fact}]`).join("; ")}. No change recommended until Juan decides.` });
       continue;
     }
     out.set(p.id, { ...base, verdict: "KEEP", targetId: null, targetUrl: null, confidence: p.hasBody ? (p.search.hasData ? "high" : "medium") : "low", needsAgentReview: false, reason: p.search.hasData ? "No blocking issue found." : "No blocking issue found in the body. Search performance is unknown (no rows), so this is not a performance verdict." });

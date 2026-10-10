@@ -3,8 +3,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { validateActions, type ActionRow } from "./actions";
 
-export type Verdict = "KEEP" | "UPDATE" | "MERGE" | "RETIRE" | "NOINDEX" | "FLAG_ONLY";
-export const VERDICTS: Verdict[] = ["KEEP", "UPDATE", "MERGE", "RETIRE", "NOINDEX", "FLAG_ONLY"];
+export type Verdict = "KEEP" | "UPDATE" | "MERGE" | "RETIRE" | "NOINDEX" | "FLAG_ONLY" | "HOLD";
+export const VERDICTS: Verdict[] = ["KEEP", "UPDATE", "MERGE", "RETIRE", "NOINDEX", "FLAG_ONLY", "HOLD"];
 export const RISKY: Verdict[] = ["MERGE", "RETIRE", "NOINDEX"];
 export type Result = { ok: true; status: string; verdict: Verdict | null } | { ok: false; reason: string };
 
@@ -60,7 +60,7 @@ export async function decideAudit(db: SupabaseClient, auditId: string, choice: C
     status = "CHANGED"; verdict = choice.verdict; target = RISKY.includes(verdict) && verdict !== "NOINDEX" ? (choice.targetUrl?.trim() || null) : null;
     if (verdict === "FLAG_ONLY") return { ok: false, reason: "FLAG_ONLY is set by protection status, not chosen per post. Mark protection first." };
   }
-  if (verdict && verdict !== "KEEP" && verdict !== "FLAG_ONLY" && a.protection_status === "unknown" && !opts.ackProtection) {
+  if (verdict && verdict !== "KEEP" && verdict !== "FLAG_ONLY" && verdict !== "HOLD" && a.protection_status === "unknown" && !opts.ackProtection) {
     return { ok: false, reason: "Protection status is UNKNOWN for this post. Tick the acknowledgement to approve a change (recorded in the audit log)." };
   }
   if (verdict && RISKY.includes(verdict) && verdict !== "NOINDEX" && !target) return { ok: false, reason: `${verdict} needs a target (surviving/redirect) URL.` };

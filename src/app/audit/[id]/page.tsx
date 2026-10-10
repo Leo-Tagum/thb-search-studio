@@ -57,7 +57,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
         <input type="hidden" name="id" value={a.id} />
         <textarea name="reason" required placeholder="Reason (required)" className="block w-full max-w-xl border p-1" rows={3} />
         <div className="flex flex-wrap items-center gap-2">
-          <select name="verdict" defaultValue=""><option value="">(change to…)</option>{["KEEP", "UPDATE", "MERGE", "RETIRE", "NOINDEX"].filter((v) => v !== a.proposed_verdict).map((v) => <option key={v}>{v}</option>)}</select>
+          <select name="verdict" defaultValue=""><option value="">(change to…)</option>{["KEEP", "UPDATE", "HOLD", "MERGE", "RETIRE", "NOINDEX"].filter((v) => v !== a.proposed_verdict).map((v) => <option key={v}>{v}</option>)}</select>
           <input name="target" placeholder="target URL (MERGE / RETIRE)" className="w-80 border px-1" />
           <label><input type="checkbox" name="ack" /> I acknowledge protection status is UNKNOWN</label>
         </div>

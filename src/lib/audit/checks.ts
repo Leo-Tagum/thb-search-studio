@@ -1,6 +1,6 @@
 // Deterministic content checks on one post body. Reuses the Phase 2 brand-fact / rating-rule patterns (not rewritten).
 // Every finding carries the exact text matched so a human can judge it. Legal-claim and filler checks are heuristics.
-import { PENDING_JUAN_PATTERNS, RATING_RULE_PATTERN, SOURCED_FACTS } from "../agents/bridge";
+import { EXPERIENCE_YEARS_PATTERNS, isApprovedExperienceSense, PENDING_JUAN_PATTERNS, RATING_RULE_PATTERN, SOURCED_FACTS, usesApprovedWording } from "../agents/bridge";
 import { officialHost } from "../agents/official-sources";
 import { extractImages, extractLinks, hasAuthorBox, hasSourcesSection, hostOf, htmlToText } from "./structure";
 
@@ -23,7 +23,8 @@ const PRO_CONFIRM = /(attorney|lawyer|\bcpa\b|tax\s+(professional|advisor|prepar
 export type Hit = { text: string; context: string };
 export type Findings = {
   competitors: { kind: "link" | "image"; domain: string; url: string }[];
-  pendingFacts: { fact: string; hit: Hit }[];
+  wrongYears: Hit[]; // experience-year wordings that are not approved (27 years, 24 years, over 25 years, 20+ years ...)
+  pendingFacts: { fact: string; hit: Hit }[]; // facts still waiting on Juan (24h, closing time, contractor license ...)
   sourcedFactIssues: string[];
   ratingHits: Hit[];
   legal: { count: number; samples: Hit[]; officialLinks: string[]; professionalConfirmation: boolean; unsourced: boolean };
@@ -46,9 +47,10 @@ export function runChecks(html: string, ownText?: string): Findings {
   for (const l of extractLinks(html)) { const d = isComp(hostOf(l.href)); if (d) competitors.push({ kind: "link", domain: d, url: l.href }); }
   for (const s of extractImages(html)) { const d = isComp(hostOf(s)); if (d) competitors.push({ kind: "image", domain: d, url: s }); }
 
+  const wrongYears = EXPERIENCE_YEARS_PATTERNS.flatMap((re) => all(re, text)).filter((h) => !isApprovedExperienceSense(h.text));
   const pendingFacts = PENDING_JUAN_PATTERNS.flatMap(([fact, re]) => all(re, text).map((hit) => ({ fact, hit })));
   const sourcedFactIssues: string[] = [];
-  for (const f of SOURCED_FACTS) if (f.mentions.test(text) && !text.includes(f.exact)) sourcedFactIssues.push(`${f.name}: mentioned but not in the exact approved wording "${f.exact}"`);
+  for (const f of SOURCED_FACTS) if (f.mentions.test(text) && !usesApprovedWording(f, text)) sourcedFactIssues.push(`${f.name}: mentioned but not in an approved wording ("${f.exact}"${f.okIf ? ' or "25+ years of experience in Bay Area real estate"' : ""})`);
   if (/(founded|established|started|began operations|in business)[^."\n]{0,40}2002/i.test(text)) sourcedFactIssues.push("2002 appears as a company founding year (it is Juan's experience start)");
   const ratingHits = all(RATING_RULE_PATTERN, text);
 
@@ -60,27 +62,36 @@ export function runChecks(html: string, ownText?: string): Findings {
   const filler = FILLER.map((phrase) => ({ phrase, count: lower.split(phrase).length - 1 })).filter((f) => f.count > 0);
 
   return {
-    competitors, pendingFacts, sourcedFactIssues, ratingHits,
+    competitors, wrongYears, pendingFacts, sourcedFactIssues, ratingHits,
     legal: { count: legalCount, samples: legalHits, officialLinks, professionalConfirmation, unsourced: legalCount >= 2 && officialLinks.length === 0 },
     missingSources: !hasSourcesSection(html), missingAuthorBox: !hasAuthorBox(html), filler,
   };
 }
 
-/** Issues fixable on the same URL (these drive an UPDATE). */
+/**
+ * Group A: real problems fixable on the same URL (drive an UPDATE): wrong experience years, competitor links/images,
+ * unsourced legal claims, typed ratings/review counts, sourced facts not in approved wording, missing Sources on a post that makes legal-type claims.
+ */
 export function blockingIssues(f: Findings): string[] {
   const out: string[] = [];
+  if (f.wrongYears.length) out.push(`experience years not in approved wording (${[...new Set(f.wrongYears.map((h) => `"${h.text}"`))].slice(0, 4).join(", ")}); only "25+ years of experience in Bay Area real estate" and "investing since 2002" are approved`);
   if (f.competitors.length) out.push(`links/images to competitor sites (${[...new Set(f.competitors.map((c) => c.domain))].join(", ")})`);
-  if (f.pendingFacts.length) out.push(`pending/unapproved brand facts (${[...new Set(f.pendingFacts.map((p) => p.fact))].join("; ")})`);
-  if (f.sourcedFactIssues.length) out.push(...f.sourcedFactIssues);
   if (f.ratingHits.length) out.push("typed star rating / review count (permanent rating rule)");
   if (f.legal.unsourced) out.push(`${f.legal.count} legal/tax/permit-type statements with no official source link (heuristic)`);
   if (f.legal.count >= 2 && !f.legal.professionalConfirmation) out.push('legal/tax-type content without "confirm with a professional" language (editorial standards section 5)');
+  if (f.legal.count >= 2 && f.missingSources) out.push("no Sources section on a post that makes legal/tax/permit-type statements");
+  out.push(...f.sourcedFactIssues);
   return out;
+}
+/** Group B: claims that are only waiting on Juan (not wrong, not yet approved). Exact text, deduplicated. */
+export function pendingJuanClaims(f: Findings): { fact: string; text: string; context: string }[] {
+  const seen = new Set<string>();
+  return f.pendingFacts.filter((p) => { const k = `${p.fact}|${p.hit.text.toLowerCase()}`; if (seen.has(k)) return false; seen.add(k); return true; }).map((p) => ({ fact: p.fact, text: p.hit.text, context: p.hit.context }));
 }
 /** Advisory only; never decides a verdict alone. */
 export function advisoryIssues(f: Findings): string[] {
   const out: string[] = [];
-  if (f.missingSources) out.push("no Sources section found in the body");
+  if (f.missingSources && f.legal.count < 2) out.push("no Sources section found in the body");
   if (f.missingAuthorBox) out.push("no author box found in the body (the theme may render one outside the content)");
   if (f.filler.length) out.push(`generic filler phrases: ${f.filler.map((x) => `"${x.phrase}" x${x.count}`).join(", ")}`);
   return out;

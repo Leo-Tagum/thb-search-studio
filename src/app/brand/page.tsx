@@ -10,8 +10,8 @@ async function BrandContent() {
       <h1 className="text-xl font-semibold">Brand facts</h1>
       <p className="text-sm">Proposed facts await Juan&apos;s approval. Conflicting claims stay blocked until he picks the wording.</p>
       <table className="w-full text-xs">
-        <thead><tr className="text-left"><th>Key</th><th>Value</th><th>Source</th><th>Status</th></tr></thead>
-        <tbody>{(facts ?? []).map((f) => <tr key={f.id} className="border-t align-top"><td>{f.fact_key}</td><td>{f.fact_value}</td><td>{f.source_ref}</td><td>{f.status}</td></tr>)}</tbody>
+        <thead><tr className="text-left"><th>Key</th><th>Value</th><th>Usage rule</th><th>Source</th><th>Status / approved by</th></tr></thead>
+        <tbody>{(facts ?? []).map((f) => <tr key={f.id} className="border-t align-top"><td>{f.fact_key}</td><td>{f.fact_value}</td><td>{f.usage_rule}</td><td>{f.source_ref}</td><td>{f.status}{f.approved_by ? ` · ${f.approved_by}` : ""}</td></tr>)}</tbody>
       </table>
       <h2 className="font-semibold">Conflicts ({conflicts?.length ?? 0})</h2>
       <ul className="list-disc pl-5 text-xs">{(conflicts ?? []).map((c) => <li key={c.id}>{c.fact_key}: {JSON.stringify(c.variants)} {c.resolved_value ? `→ ${c.resolved_value}` : "(unresolved)"}</li>)}</ul>

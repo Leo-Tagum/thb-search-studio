@@ -20,8 +20,8 @@ const clean = (s: string | null | undefined) => (s ?? "").replace(/<br\s*\/?>/g,
 const top = rows.filter((r) => ["UPDATE", "MERGE", "RETIRE", "NOINDEX"].includes(r.proposed_verdict) && r.status !== "HELD")
   .sort((a, b) => (b.evidence.search.impressions ?? 0) - (a.evidence.search.impressions ?? 0)).slice(0, 10);
 const noData = n((r) => !r.evidence.search.hasData);
-const verdicts = ["KEEP", "UPDATE", "MERGE", "RETIRE", "NOINDEX", "FLAG_ONLY"];
-const counts = (f: (r: (typeof rows)[number]) => string) => verdicts.map((v) => `${v === "FLAG_ONLY" ? "Flag only" : v[0] + v.slice(1).toLowerCase()}: ${n((r) => f(r) === v)}`).join(" · ");
+const verdicts = ["UPDATE", "HOLD", "KEEP", "MERGE", "RETIRE", "NOINDEX", "FLAG_ONLY"];
+const counts = (f: (r: (typeof rows)[number]) => string) => verdicts.map((v) => `${v === "FLAG_ONLY" ? "Flag only" : v === "HOLD" ? "Hold (waiting on Juan)" : v[0] + v.slice(1).toLowerCase()}: ${n((r) => f(r) === v)}`).join(" · ");
 
 const md = `# Blog audit summary (${run!.audit_run})
 
@@ -30,14 +30,17 @@ const md = `# Blog audit summary (${run!.audit_run})
 ## Where the ${rows.length} posts stand (proposed)
 ${counts((r) => r.proposed_verdict)}
 
-- **Keep**: nothing blocking found. **Update**: fixable on the same page. **Merge / Retire**: two posts compete for the same searches; keep the stronger one. **Noindex**: keep the page but hide it from Google. **Flag only**: protected page, look but don't touch.
+- **Update**: a real problem fixable on the same page (wrong years, competitor links, unsourced legal claims, typed ratings, missing sources). **Hold**: nothing wrong except claims Juan has not approved yet (24 hours, closing time, contractor license); we wait for him. **Keep**: nothing blocking found. **Merge / Retire**: two posts compete for the same searches; keep the stronger one. **Noindex**: keep the page but hide it from Google. **Flag only**: protected page, look but don't touch.
 - ${noData} posts have no Google data at all. That means "unknown", not "not working". None was marked for removal because of it.
 
 ## Top 10 fixes (biggest search visibility first)
 ${top.map((r, i) => `${i + 1}. **${clean(meta.get(r.page_id)?.title)}** — ${r.proposed_verdict}. ${r.evidence.search.impressions.toLocaleString("en-US")} Google impressions. ${plain(r.reason).slice(0, 240)}${plain(r.reason).length > 240 ? "…" : ""}`).join("\n")}
 
+## Waiting on Juan (${n((r) => r.proposed_verdict === "HOLD")} posts)
+These posts have no other problem; they only use claims that are not approved yet. No change until Juan decides. Open each in the audit queue for the exact sentences.
+
 ## One fix for many posts
-${(sys?.value?.findings ?? []).length ? (sys!.value.findings as { posts: number; rules: string[]; segment: string }[]).map((f) => `- A block of text shared by **${f.posts} posts** ("${f.segment.slice(0, 80)}") ${f.rules.join("; ").replace("typed star rating / review count (permanent rating rule)", "shows a typed review count, which breaks our rule that the rating always comes from the live Google widget")}. Fix it once in the site template, not post by post.`).join("\n") : "- None found."}
+${(sys?.value?.findings ?? []).length ? (sys!.value.findings as { posts: number; rules: string[]; segment: string }[]).map((f) => `- A block of text shared by **${f.posts} posts** ("${f.segment.slice(0, 80)}") ${f.rules.join("; ").replace("typed star rating / review count (permanent rating rule)", "shows a typed review count, which breaks our rule that the rating always comes from the live Google widget")}. Fix it once in the site template, not post by post. Developer Change Request for Gian: docs/phases/phase-2b-dcr-reviews-block.md.`).join("\n") : "- None found."}
 
 ## Redirects (301)
 ${(actions ?? []).filter((a) => a.action !== "NOINDEX").length ? (actions ?? []).filter((a) => a.action !== "NOINDEX").map((a) => `- ${a.old_url} → ${a.target_url}`).join("\n") : `No redirect has been approved yet. Currently proposed: ${n((r) => r.proposed_verdict === "RETIRE")} retire, ${n((r) => r.proposed_verdict === "MERGE")} merge (a merge combines the best parts first, then redirects).`}

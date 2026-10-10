@@ -57,14 +57,25 @@ describe("Agent 3: editorial standards", () => {
 });
 
 describe("PENDING JUAN facts stay blocked", () => {
-  it("rejects X+ years figures, East Oakland roots and every still-pending Brand Fact in a brief", () => {
+  it("rejects East Oakland roots and every still-pending Brand Fact in a brief", () => {
     for (const bad of [
-      "With 27 years of experience we know...", "Over 25 years serving the Bay Area", "Juan's East Oakland roots",
+      "Juan's East Oakland roots",
       "We are open 24/7", "We close in 7 days", "A family-owned company", "Our licensed contractor team", "Powered by Equity Track Inc",
       "We have saved sellers $32M in fees", "100% on time closings",
     ]) {
       const errs = check(brief({ answer_first: `A direct answer: ${bad}` }));
       expect(errs.join(" "), bad).toMatch(/PENDING JUAN/);
+    }
+  });
+  it("experience years: 25+ in the experience sense and the 2002 fact are approved; exact counts and other wordings are blocked", () => {
+    const ok = [
+      "Juan Diaz has 25+ years of experience in Bay Area real estate and has been investing since 2002.",
+      "Juan brings 25+ years of experience in Bay Area real estate.",
+      "Juan Diaz has been investing in Bay Area real estate since 2002.",
+    ];
+    for (const t of ok) expect(check(brief({ answer_first: `A direct answer: ${t}` })), t).toEqual([]);
+    for (const bad of ["With 27 years of experience we know", "24 years of experience", "Over 25 years serving the Bay Area", "20+ years of experience", "25+ years in business", "more than 40 years in Bay Area real estate", "25 years of experience"]) {
+      expect(check(brief({ answer_first: `A direct answer: ${bad}` })).join(" "), bad).toMatch(/experience years not allowed/);
     }
   });
   it("lets APPROVED facts through: name, 1,000+ homes, phones, website, address", () => {
@@ -75,7 +86,7 @@ describe("PENDING JUAN facts stay blocked", () => {
     const exact = "Juan Diaz has been investing in Bay Area real estate since 2002";
     expect(check(brief({ answer_first: `A direct answer: ${exact}.` }))).toEqual([]);
     expect(check(brief({ answer_first: "A direct answer: Juan has invested in Bay Area real estate since 2002." })).join(" ")).toMatch(/exact wording/);
-    expect(check(brief({ answer_first: "A direct answer: with more than 20 years of experience" })).join(" ")).toMatch(/PENDING JUAN|exact wording/);
+    expect(check(brief({ answer_first: "A direct answer: with more than 20 years of experience" })).join(" ")).toMatch(/experience years not allowed|exact wording/);
     expect(check(brief({ answer_first: `A direct answer: ${exact}. Our company was founded in 2002.` })).join(" ")).toMatch(/never the company founding year/);
     expect(check(brief({ answer_first: "A direct answer: BBB Accredited since 3/1/2022" }))).toEqual([]);
     expect(check(brief({ answer_first: "A direct answer: BBB accredited since 2022" })).join(" ")).toMatch(/BBB accreditation/);

@@ -18,7 +18,8 @@ const rows: Row[] = [
   // SOURCED: use exact wording only
   { fact_key: "legal_entity", fact_value: "Twin Home Buyer Limited Liability Company", source_ref: `${ART}: Legal entity (California Secretary of State record)`, status: "sourced", usage_rule: "Exact wording only." },
   { fact_key: "formation_date", fact_value: "Formed February 25, 2022", source_ref: `${ART}: Legal entity (California Secretary of State record)`, status: "sourced", usage_rule: "Exact wording only. This is the LLC formation date, never a statement of experience." },
-  { fact_key: "industry_experience", fact_value: "Juan Diaz has been investing in Bay Area real estate since 2002", source_ref: `${ART}: Trust and experience > Industry experience`, status: "sourced", usage_rule: "Exact wording only. Never 'X+ years' (not '27 years', not '25+ years', not '20+ years'). Never as the company's founding year. Supersedes the Lawrence SOP '27 years' and the site's '25+ years'." },
+  // Revised 2026-10-10 by Leo: see scripts/update-brand-facts-experience.mts (experience_total + since-2002 are two separate approved facts; run that script after this one).
+  { fact_key: "industry_experience", fact_value: "Juan Diaz has been investing in Bay Area real estate since 2002", source_ref: `${ART}: Trust and experience > Industry experience`, status: "sourced", usage_rule: "Exact wording only (or the combined sentence with experience_total). Separate fact from experience_total. Never as the company's founding year. The Lawrence SOP '27 years' does not count (voice guide only)." },
   { fact_key: "bbb_accreditation", fact_value: "BBB Accredited since 3/1/2022", source_ref: `${ART}: Trust and experience > BBB`, status: "sourced", usage_rule: "Exact wording only." },
   // STILL PENDING JUAN: blocked
   { fact_key: "hours_24h", fact_value: "PENDING JUAN: business hours / any '24 hours' or '24/7' claim", source_ref: "Leo, 2026-10-10 (listed as still pending)", status: "pending_juan" },
