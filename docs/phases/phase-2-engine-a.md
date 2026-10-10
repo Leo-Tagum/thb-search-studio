@@ -76,14 +76,14 @@ Detailed 2026-10-10 from the Phase 1 handoff. Phase 1 is PARTIAL (accepted by Le
 - [x] A generic city-swap candidate is rejected or held; an overlapping intent gets UPDATE, not CREATE
 - [x] Data gaps are shown as unknown, not guessed (blueprint §14: "GSC query absent ≠ no demand")
 - [x] Agent outputs pass schema validation; malformed output retries, then fails to `INTEGRATION_ERROR`
-- [ ] Leo can approve or hold a recommendation (met), and an approved one produces an evidenced brief through Agents 2–3 (NOT met: Agent 2 could not support any claim from official sources, so Agent 3 did not run)
+- [x] Leo can approve or hold a recommendation, and an approved one produces an evidenced brief through Agents 2–3 (met 2026-10-10 for "sell hoarder house": brief is in BRIEF_REVIEW awaiting Leo's review; see Handoff)
 - [x] Protected/template pages are flagged on UPDATE candidates
 
 ## Handoff
 
 ```text
 PHASE: 2 — SEO Growth Intelligence MVP
-STATUS: PARTIAL (5 of 6 "Done when" boxes met; the evidenced brief for the approved hoarder opportunity is not produced; see KNOWN LIMITATIONS)
+STATUS: PARTIAL (all 6 "Done when" boxes met; stays PARTIAL, accepted by Leo, until Leo reviews the hoarder brief and the other open items below)
 WHAT WAS BUILT:
   - GSC importer (read-only, scope webmasters.readonly): page x query x date, paged, exact date range, data state, truncation flag and 5 labelled caveats in gsc_imports; idempotent per (property, range, state).
   - Page<->query matching (URL normalization to inventory canonicals; unmatched kept and listed).
@@ -110,7 +110,7 @@ DATA / PERMISSION / PRIVACY IMPACT:
   - Agent 2 web fetches: about 6 official-site requests per attempt (leginfo, hcd.ca.gov, dre.ca.gov, sf.gov); none to competitors or twinhomebuyer.com.
 STAGING DEMO: n/a (no staging by decision). Demo = npm run dev, then /opportunities (15 candidates: 1 approved, 3 held for duplication, 1 folded/cancelled, 10 pending), plus npm run candidates / studio / phase2-verify.
 KNOWN LIMITATIONS:
-  - BLOCKER FOR THE BRIEF: Agent 2 returned REVISION with all 4 claims unsupported (3 high-risk legal: Civil Code 1102 seller disclosure, as-is sale duties, Health and Safety Code 17920.3 substandard buildings; 1 medium: SF hoarding resources). leginfo.legislature.ca.gov and hcd.ca.gov returned HTTP 403 to automated fetches; dre.ca.gov had nothing relevant; the sf.gov URL was a guess and returned empty. I did not source the law from non-official sites and did not relax the PASS gate, so Agent 3 did not run and no brief exists. The Agent 2 evidence packet (REVISION) is stored in briefs.
+  - HOARDER BRIEF (history): Agent 2 first returned REVISION (leginfo/hcd 403, then library texts covered only part). Leo uploaded Civil Code 1102 and 1102.6 and H&S 17920.3 and gave four wording rules; the third run PASSED with 7 supported library claims (each with passage ids and a verbatim quote checked against the stored text) and 3 open items; Agent 3 then produced the brief (PASS), now in BRIEF_REVIEW. Brief limits: no description of the disclosure form contents (the published 1102.6 text only points to the chaptered bill), no local rules, no as-is/no-cleanout claim (PENDING JUAN), link plan empty, live page body not available so untouched-vs-changed sections need a human check. Agent 3 first submit was rejected by my own allowed-ids bug (corrected, audited; output untouched).
   - The three subagents were not registered when Agent 1 ran (definitions load at session start), so Agent 1's 15 runs used general-purpose agents reading the same subagent file; Agent 2 then ran as the registered thb-02 subagent. "Official sources only" for Agent 2 is enforced by its prompt, the submit-time domain check and a deny rule for twinhomebuyer.com, not by a hard allowlist on what WebFetch can reach.
   - Protection status is unknown for all pages, so all 11 UPDATE recommendations carry the warning (acknowledged by Leo for the approved one and the three holds). Template flag is slug-inferred (1 UPDATE flagged city: Concord, routed to a Developer Change Request, not briefed).
   - 50 of the 194 GSC pages are not in the inventory snapshot (not re-crawled; the Phase 1 503 caveat still stands). Their protection/template status is unknown.

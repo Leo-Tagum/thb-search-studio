@@ -103,7 +103,8 @@ export async function queueRun(db: SupabaseClient, agent: AgentKey, oppId: strin
     const ep = b?.evidence_packet as any;
     if (o.state !== "EVIDENCE_REVIEW" || !ep || ep.decision !== "PASS") throw new Error("Agent 3 needs an accepted Agent 2 evidence packet with decision PASS");
     data = { candidate_packet: pkt, agent1_decision: o.agent_decision, evidence_packet: ep };
-    allowed = (ep.sources as any[]).map((s) => s.id);
+    // Agent 3 may cite Agent 2's sources plus the GSC/inventory/query ids that were in the candidate packet (Agent 1's evidence).
+    allowed = [...(ep.sources as any[]).map((s) => s.id), `gsc:${pkt.window.start}..${pkt.window.end}`, ...pkt.pages.map((p: any) => `inv:${p.page_id ?? p.url}`), ...pkt.queries.map((q: any) => `q:${q.query}`), ...(pkt.folded_candidates ?? []).flatMap((f: any) => (f.queries ?? []).map((q: any) => `q:${q.query}`))];
   }
   const packet: TaskPacket = buildTaskPacket(agent, { id: oppId, versionHash: o.version_hash ?? "" }, data, allowed);
   const { data: row, error: e2 } = await db.from("agent_runs").insert({ agent_key: agent, subject_type: "opportunity", subject_id: oppId, status: "QUEUED", task_packet: packet, prompt_version: AGENT_META[agent].promptVersion }).select("*").single();
