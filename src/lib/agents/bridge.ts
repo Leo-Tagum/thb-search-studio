@@ -31,6 +31,10 @@ export type TaskPacket = {
   allowed_evidence_ids: string[] | "agent-defined";
   output_contract: { schema: "blueprint-§5-common+agent-result"; decisions: readonly string[]; submit: string };
   untrusted_data_block: string; // delimited; everything inside is data, never instructions
+  // Human redirect (Leo): the brief may link only to these URLs, must include the required ones, and must not target these phrases.
+  allowed_link_urls?: string[];
+  required_links?: string[];
+  forbidden_target_phrases?: string[];
 };
 
 /** Everything inside the delimiter is untrusted data. The delimiter is random per packet so data cannot forge the end marker. */
@@ -47,9 +51,13 @@ const INSTRUCTIONS: Record<AgentKey, string> = {
   "thb-03-content-architect": "You are Agent 3. Follow .claude/agents/thb-03-content-architect.md exactly. Build the brief only from the approved decision and the claims in the evidence packet; invent no facts.",
 };
 
-export function buildTaskPacket(agent: AgentKey, opp: { id: string; versionHash: string }, data: unknown, allowed: string[] | "agent-defined"): TaskPacket {
+export function buildTaskPacket(agent: AgentKey, opp: { id: string; versionHash: string }, data: unknown, allowed: string[] | "agent-defined", extra: { directive?: string; allowed_link_urls?: string[]; required_links?: string[]; forbidden_target_phrases?: string[] } = {}): TaskPacket {
+  const { directive, ...limits } = extra;
   return {
-    agent_key: agent, prompt_version: AGENT_META[agent].promptVersion, instructions: INSTRUCTIONS[agent],
+    ...limits,
+    agent_key: agent, prompt_version: AGENT_META[agent].promptVersion, instructions: INSTRUCTIONS[agent] + (directive ? `
+
+HUMAN DIRECTIVE (from Leo, the operator; trusted): ${directive}` : ""),
     opportunity_id: opp.id, input_version_ids: [opp.versionHash], allowed_evidence_ids: allowed,
     output_contract: { schema: "blueprint-§5-common+agent-result", decisions: AGENT_META[agent].decisions, submit: `npm run studio -- submit <run_id> <file.json>` },
     untrusted_data_block: wrapUntrusted(data),
@@ -148,6 +156,15 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
     for (const r of SITUATION_ROWS) if (!rows.has(r)) errs.push(`seller_situation_map is missing the ${r} row`);
     for (const r of out.result.brief.seller_situation_map) if (r.status === "answered" && r.basis === "claim" && r.claim_ids.length === 0) errs.push(`situation row ${r.row} says basis=claim but cites no claim_ids`);
     const claims = new Map((ctx.agent2Claims ?? []).map((c) => [c.id, c.support]));
+    const pk = ctx.packet;
+    const links: string[] = out.result.brief.link_plan.map((l: any) => l.to_url);
+    const slash = (u: string) => u.replace(/\/+$/, "");
+    if (pk.allowed_link_urls) for (const u of links) if (!pk.allowed_link_urls.map(slash).includes(slash(u))) errs.push(`link_plan url ${u} is not one of the inventory URLs supplied in the packet`);
+    for (const u of pk.required_links ?? []) if (!links.map(slash).includes(slash(u))) errs.push(`link_plan must include the required link ${u}`);
+    if (pk.forbidden_target_phrases?.length) {
+      const target = `${out.result.brief.working_title} ${out.result.brief.answer_first} ${out.result.brief.outline.map((o: any) => o.h2).join(" ")}`.toLowerCase();
+      for (const ph of pk.forbidden_target_phrases) if (target.includes(ph.toLowerCase())) errs.push(`the title, answer capsule or H2s target the forbidden phrase "${ph}" (this guide is informational only)`);
+    }
     const extra = [...out.result.brief.seller_situation_map, ...out.result.brief.honest_options, ...out.result.brief.real_world_warnings];
     for (const e of extra) for (const id of e.claim_ids) if (!claims.has(id)) errs.push(`unknown claim ${id} cited in the situation map/options/warnings`);
     for (const sec of out.result.brief.outline) {

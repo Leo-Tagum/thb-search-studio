@@ -70,3 +70,24 @@ describe("PENDING JUAN facts stay blocked", () => {
     expect(pendingJuanHits({ result: { claims: [{ text: "The seller has 30 days to comply" }] } })).toEqual([]);
   });
 });
+
+describe("human redirect limits (links and forbidden target phrases)", () => {
+  const MONEY = "https://www.twinhomebuyer.com/hoarder-houses/";
+  const pk = buildTaskPacket("thb-03-content-architect", { id: "o1", versionHash: "h1" }, {}, ["src:1"], {
+    allowed_link_urls: [MONEY, "https://www.twinhomebuyer.com/bay-area-title-issues-and-liens/"], required_links: [MONEY], forbidden_target_phrases: ["sell hoarder house", "sell my hoarder house"],
+  });
+  const run = (b: Record<string, unknown>) => {
+    const p = outputSchemas["thb-03-content-architect"].safeParse(out(b));
+    return p.success ? semanticChecks("thb-03-content-architect", p.data as Record<string, any>, { ...ctx, packet: pk }) : p.error.issues.map((i) => i.message);
+  };
+  const ok = { link_plan: [{ to_url: MONEY, anchor_intent: "next step" }, { to_url: "https://www.twinhomebuyer.com/bay-area-title-issues-and-liens", anchor_intent: "liens" }] };
+  it("accepts allowed links including the required money page", () => {
+    expect(run(brief(ok))).toEqual([]);
+  });
+  it("rejects an invented URL, a missing required link, and a forbidden target phrase", () => {
+    expect(run(brief({ link_plan: [{ to_url: MONEY, anchor_intent: "x" }, { to_url: "https://www.twinhomebuyer.com/made-up/", anchor_intent: "y" }] })).join(" ")).toMatch(/not one of the inventory URLs/);
+    expect(run(brief({ link_plan: [] })).join(" ")).toMatch(/must include the required link/);
+    expect(run(brief({ ...ok, working_title: "How to Sell My Hoarder House" })).join(" ")).toMatch(/forbidden phrase "sell my hoarder house"/);
+    expect(run(brief({ ...ok, outline: [{ h2: "Can you sell hoarder house contents?", purpose: "x", claim_ids: [] }] })).join(" ")).toMatch(/forbidden phrase "sell hoarder house"/);
+  });
+});

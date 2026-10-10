@@ -20,6 +20,7 @@
     "candidates": "tsx --env-file=.env.local scripts/build-candidates.mts",
     "fold": "tsx --env-file=.env.local scripts/fold-opportunity.mts",
     "evidence:extract": "tsx --env-file=.env.local scripts/extract-evidence.mts",
+    "redirect:create": "tsx --env-file=.env.local scripts/redirect-to-create.mts",
     "studio": "tsx --env-file=.env.local scripts/studio.mts"
   },
   "dependencies": {

@@ -52,7 +52,9 @@ export class SupabaseBridgeStore implements BridgeStore {
       if (b) await this.db.from("briefs").update(row).eq("id", b.id);
       else await this.db.from("briefs").insert({ opportunity_id: oppId, ...row });
     } else {
-      await this.db.from("briefs").update({ outline: { ...out.result.brief, decision: out.decision, run_id: run.id }, notes: out.decision === "PASS" ? "brief awaiting human review" : `Agent 3 returned ${out.decision}` }).eq("opportunity_id", oppId);
+      const { data: prev } = await this.db.from("briefs").select("outline,outline_history").eq("opportunity_id", oppId).single();
+      const history = prev?.outline ? [...((prev.outline_history as any[]) ?? []), { superseded_at: new Date().toISOString(), outline: prev.outline }] : (prev?.outline_history ?? []);
+      await this.db.from("briefs").update({ outline_history: history, outline: { ...out.result.brief, decision: out.decision, run_id: run.id }, notes: out.decision === "PASS" ? "brief awaiting human review" : `Agent 3 returned ${out.decision}` }).eq("opportunity_id", oppId);
       if (out.decision === "PASS") await orch.transition("opportunity", oppId, "BRIEF_REVIEW", SYSTEM, { reason: "Agent 3 brief ready for human review", run: run.id });
     }
   }
@@ -83,7 +85,7 @@ export async function queueRun(db: SupabaseClient, agent: AgentKey, oppId: strin
   const { data: open } = await db.from("agent_runs").select("*").eq("agent_key", agent).eq("subject_id", oppId).eq("status", "QUEUED").maybeSingle();
   if (open) return { run: new SupabaseBridgeStore(db)["fromRow"](open), duplicate: true };
 
-  let data: unknown; let allowed: string[] | "agent-defined";
+  let data: unknown; let allowed: string[] | "agent-defined"; let extra: Parameters<typeof buildTaskPacket>[4] = {};
   const pkt = o.packet as any;
   if (agent === "thb-01-seo-strategist") {
     if (!["CANDIDATE", "SEO_REVIEW"].includes(o.state)) throw new Error(`Agent 1 needs a CANDIDATE/SEO_REVIEW opportunity (is ${o.state})`);
@@ -99,14 +101,22 @@ export async function queueRun(db: SupabaseClient, agent: AgentKey, oppId: strin
     data = { candidate_packet: pkt, agent1_decision: o.agent_decision, human_reason: o.human_reason, evidence_library: library, library_first_rule: "Use Evidence Library sources FIRST. Cite them with kind=library, library_source_id, passage_ids and a short verbatim quote. Fetch official web pages only for points the library does not cover.", brand_facts_status: (facts ?? []).map((f: any) => ({ key: f.key ?? f.fact_key ?? f.id, status: f.status })), seller_library: { publication_cleared_briefs: 0, note: "No seller story is cleared for publication; do not use seller material." } };
     allowed = "agent-defined";
   } else {
-    const { data: b } = await db.from("briefs").select("evidence_packet").eq("opportunity_id", oppId).maybeSingle();
+    const { data: b } = await db.from("briefs").select("evidence_packet,outline").eq("opportunity_id", oppId).maybeSingle();
     const ep = b?.evidence_packet as any;
-    if (o.state !== "EVIDENCE_REVIEW" || !ep || ep.decision !== "PASS") throw new Error("Agent 3 needs an accepted Agent 2 evidence packet with decision PASS");
-    data = { candidate_packet: pkt, agent1_decision: o.agent_decision, evidence_packet: ep };
+    if (!["EVIDENCE_REVIEW", "REVISION_REQUIRED"].includes(o.state) || !ep || ep.decision !== "PASS") throw new Error("Agent 3 needs an accepted Agent 2 evidence packet with decision PASS (state EVIDENCE_REVIEW or REVISION_REQUIRED)");
     // Agent 3 may cite Agent 2's sources plus the GSC/inventory/query ids that were in the candidate packet (Agent 1's evidence).
     allowed = [...(ep.sources as any[]).map((s) => s.id), `gsc:${pkt.window.start}..${pkt.window.end}`, ...pkt.pages.map((p: any) => `inv:${p.page_id ?? p.url}`), ...pkt.queries.map((q: any) => `q:${q.query}`), ...(pkt.folded_candidates ?? []).flatMap((f: any) => (f.queries ?? []).map((q: any) => `q:${q.query}`))];
+    const rd = o.redirect as any;
+    let linkCandidates: { url: string; title: string | null }[] | undefined;
+    if (rd) {
+      const { data: posts } = await db.from("pages").select("canonical_url,title,meta_title,wp_type").eq("wp_type", "post").order("canonical_url");
+      const re = new RegExp(rd.link_topic_regex ?? "(lien|code-violation|title-issue|inherit|authority|executor|as-is|delay|repair|tenant|probate)", "i");
+      linkCandidates = [...(posts ?? []).filter((p: any) => re.test(p.canonical_url) && !/cash-home-buyer|we-buy-houses/.test(p.canonical_url)).map((p: any) => ({ url: p.canonical_url, title: p.meta_title ?? p.title })), ...(rd.required_links ?? []).map((u: string) => ({ url: u, title: "REQUIRED next-step page (money page, do not change it)" }))];
+    }
+    data = { candidate_packet: pkt, agent1_decision: o.agent_decision, evidence_packet: ep, ...(rd ? { human_redirect: rd, previous_brief_for_reference: b?.outline, link_candidates: linkCandidates } : {}) };
+    extra = rd ? { directive: rd.directive, allowed_link_urls: linkCandidates!.map((l) => l.url), required_links: rd.required_links, forbidden_target_phrases: rd.forbidden_target_phrases } : {};
   }
-  const packet: TaskPacket = buildTaskPacket(agent, { id: oppId, versionHash: o.version_hash ?? "" }, data, allowed);
+  const packet: TaskPacket = buildTaskPacket(agent, { id: oppId, versionHash: o.version_hash ?? "" }, data, allowed, extra);
   const { data: row, error: e2 } = await db.from("agent_runs").insert({ agent_key: agent, subject_type: "opportunity", subject_id: oppId, status: "QUEUED", task_packet: packet, prompt_version: AGENT_META[agent].promptVersion }).select("*").single();
   if (e2) throw e2;
   await db.from("audit_events").insert({ actor: "system:agent-bridge", subject_type: "opportunity", subject_id: oppId, event_type: "agent_run_queued", accepted: true, detail: { run: row.id, agent } });
