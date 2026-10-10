@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { decideAction } from "../actions";
+import { approveBriefAction } from "../../studio/actions";
 
 type PageRow = { url: string; impressions: number; clicks: number; position: number; protection_status: string | null; template_flag: string | null; in_inventory: boolean };
 
@@ -99,6 +100,13 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
           <p className="text-xs">{brief.notes}</p>
           {brief.evidence_packet && <details><summary>Evidence packet ({brief.evidence_packet.claims?.length ?? 0} claims, {brief.evidence_packet.sources?.length ?? 0} sources)</summary><pre className="whitespace-pre-wrap text-xs">{JSON.stringify(brief.evidence_packet, null, 2)}</pre></details>}
           {brief.outline && <details open><summary>Brief</summary><pre className="whitespace-pre-wrap text-xs">{JSON.stringify(brief.outline, null, 2)}</pre></details>}
+          {o.state === "BRIEF_REVIEW" && brief.outline?.decision === "PASS" && (
+            <form action={approveBriefAction} className="space-y-2 border p-3">
+              <input type="hidden" name="id" value={o.id} />
+              <p>Approving the brief is a human gate. It creates the article, its sections and the claim ledger, and starts drafting. Agents cannot do this.</p>
+              <button className="border px-3 py-1">Approve this brief and start the article</button>
+            </form>
+          )}
         </>
       )}
     </main>

@@ -1,0 +1,157 @@
+<title>THB Approval Room</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Public+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: one proposal at a time. Header with the proposal's identity, then one decision card per item (article, voice reference),
+   then the evidence behind it. Palette follows the site's own navy and orange. */
+:root{
+  --ink:#0d1b2e; --ink-2:#4a5568; --paper:#f6f4f0; --card:#ffffff; --line:#d9d5cc; --accent:#c2410c; --accent-ink:#ffffff;
+  --ok:#17673b; --ok-bg:#e3f2e8; --warn:#8a5a00; --warn-bg:#fbefd2; --bad:#9b1c1c; --bad-bg:#fbe3e3; --code-bg:#ece8df;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --font-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ink:#e8ecf2; --ink-2:#a7b1c1; --paper:#0c1626; --card:#13233a; --line:#2a3b55; --accent:#f08a4b; --accent-ink:#0c1626;
+  --ok:#7fd3a0; --ok-bg:#12331f; --warn:#f0c46a; --warn-bg:#3a2d0d; --bad:#f19a9a; --bad-bg:#3b1616; --code-bg:#0f1c30; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ink:#e8ecf2; --ink-2:#a7b1c1; --paper:#0c1626; --card:#13233a; --line:#2a3b55; --accent:#f08a4b; --accent-ink:#0c1626;
+  --ok:#7fd3a0; --ok-bg:#12331f; --warn:#f0c46a; --warn-bg:#3a2d0d; --bad:#f19a9a; --bad-bg:#3b1616; --code-bg:#0f1c30; color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--font-body);padding-inline:16px;padding-block:24px}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1{font-size:26px;line-height:1.15;margin:0;text-wrap:balance}
+h2{font-size:18px;margin:0 0 8px;text-wrap:balance}
+h3{font-size:15px;margin:12px 0 4px}
+p{margin:0 0 8px}
+.meta{color:var(--ink-2);font-size:13px}
+.mono{font-family:var(--font-mono);font-size:12px;background:var(--code-bg);padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--code-bg)}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+textarea{width:100%;min-height:64px;font:inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+button{font:inherit;font-weight:600;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;cursor:pointer}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button[disabled]{opacity:.5;cursor:not-allowed}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:6px 8px}
+.scroll{overflow-x:auto}
+.preview{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;max-height:70vh;overflow:auto}
+details summary{cursor:pointer;font-weight:600}
+ul{margin:4px 0 8px;padding-left:20px}
+.notice{border-left:4px solid var(--warn);background:var(--warn-bg);color:var(--ink);padding:8px 12px;border-radius:0 6px 6px 0}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="meta">THB Search Studio · Approval Room</p>
+    <h1 id="title">THB Approval Room</h1>
+    <p class="meta" id="sub"></p>
+  </header>
+  <div class="notice" id="who">Everyone in the organization can read this page and leave feedback. Only accounts that Leo has confirmed as an approver count as an approval; every other click is saved as feedback. The version hash below is checked again on the server before anything counts.</div>
+  <main id="main" class="wrap" style="gap:16px"></main>
+</div>
+
+<script type="application/json" id="payload">__PAYLOAD__</script>
+<script>
+(function(){
+  var P = JSON.parse(document.getElementById('payload').textContent);
+  var main = document.getElementById('main');
+  function el(tag, attrs, kids){ var e=document.createElement(tag); for (var k in (attrs||{})) { if (k==='text') e.textContent=attrs[k]; else if (k==='class') e.className=attrs[k]; else e.setAttribute(k, attrs[k]); } (kids||[]).forEach(function(c){ if(c) e.appendChild(c); }); return e; }
+  function txt(s){ return document.createTextNode(s); }
+
+  if (!P || !P.proposal_id) {
+    document.getElementById('sub').textContent = 'No proposal is open right now.';
+    main.appendChild(el('div',{class:'card',text:'Nothing is waiting for review. Leo will publish the next proposal here, at this same address.'}));
+    return;
+  }
+  document.getElementById('title').textContent = P.article.title;
+  document.getElementById('sub').textContent = 'Proposal ' + P.proposal_id + ' · created ' + P.created_at + ' · ' + P.article.kind;
+
+  async function sha256Hex(s){
+    if (!(window.crypto && crypto.subtle)) return null;
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+  }
+
+  var state = { db:null, user:null, uid:null, me:null };
+  var itemCards = {};
+
+  P.items.forEach(function(it){
+    var card = el('section',{class:'card'});
+    card.appendChild(el('h2',{text:it.label}));
+    var hashRow = el('p',{class:'meta'},[txt('Version hash: '), el('span',{class:'mono',text:it.hash}), txt(' ')]);
+    var verified = el('span',{class:'pill',text:'checking in your browser…'}); hashRow.appendChild(verified);
+    card.appendChild(hashRow);
+    if (it.kind==='article') sha256Hex(P.html).then(function(h){ if(h===null){verified.textContent='browser cannot recompute (the server still does)'; verified.className='pill warn'; it.browserHash=it.hash;} else if(h===it.hash){verified.textContent='matches the text shown below'; verified.className='pill ok'; it.browserHash=h;} else {verified.textContent='DOES NOT MATCH the text below: do not approve'; verified.className='pill bad'; it.browserHash=h; it.mismatch=true;} });
+    else { verified.textContent='voice reference (style only)'; verified.className='pill'; it.browserHash=it.hash; }
+    var note = el('textarea',{id:'note-'+it.kind,'aria-label':'Note for '+it.label,placeholder:'Optional note, or what to change (saved with your decision)'});
+    var status = el('p',{class:'meta',id:'status-'+it.kind,text:'Sign-in check pending…'});
+    var row = el('div',{class:'row'});
+    [['approve','Approve','primary'],['hold','Hold',''],['request_changes','Request changes','']].forEach(function(d){
+      var b = el('button',{type:'button',class:d[2],id:'btn-'+it.kind+'-'+d[0],text:d[1]}); b.disabled=true;
+      b.addEventListener('click', function(){ decide(it, d[0], note.value, status); });
+      row.appendChild(b);
+    });
+    card.appendChild(note); card.appendChild(row); card.appendChild(status);
+    itemCards[it.kind] = { card: card, buttons: row.querySelectorAll('button'), status: status };
+    main.appendChild(card);
+  });
+
+  async function decide(it, decision, note, status){
+    if (!state.db || !state.uid) { status.textContent='Not signed in with write access: your decision cannot be saved.'; return; }
+    if (it.mismatch && decision==='approve') { status.textContent='The text does not match its hash: not saved as an approval.'; return; }
+    var btns = itemCards[it.kind].buttons; btns.forEach(function(b){b.disabled=true;});
+    try {
+      var rec = { proposalId:P.proposal_id, itemKind:it.kind, decision:decision, claimedHash:it.browserHash||it.hash, note:note||'', decidedAt:new Date().toISOString(), displayName:(state.me&&state.me.name)||'' };
+      await state.db.collection('decisions/'+state.uid+'/records').doc(P.proposal_id+'__'+it.kind).set(rec);
+      await state.db.doc('people/'+state.uid).set({ displayName:rec.displayName, lastSeen:rec.decidedAt });
+      status.textContent = 'Saved: '+decision.replace('_',' ')+'. Leo will read it back and the server rechecks the version hash.';
+    } catch(e){ status.textContent = 'Could not save ('+(e&&e.code||'error')+'). '+(e&&e.message||''); }
+    btns.forEach(function(b){b.disabled=false;});
+  }
+
+  // Evidence
+  var ev = el('section',{class:'card'});
+  ev.appendChild(el('h2',{text:'What is in this version'}));
+  ev.appendChild(el('p',{class:'meta',text:'Body only. The header, footer, navigation and review widget come from the site template. About Juan, Related Guides, Sources and the call-to-action are built by the app from approved facts.'}));
+  var tbl = el('table'); var thead = el('thead',{},[el('tr',{},['Section','Words','Status','Claims'].map(function(h){return el('th',{text:h});}))]); tbl.appendChild(thead);
+  var tb = el('tbody'); P.sections.forEach(function(s){ tb.appendChild(el('tr',{},[el('td',{text:s.heading}),el('td',{text:String(s.words)}),el('td',{text:s.status}),el('td',{text:s.claims.join(', ')||'none'})])); }); tbl.appendChild(tb);
+  ev.appendChild(el('div',{class:'scroll'},[tbl]));
+  ev.appendChild(el('p',{class:'meta',text:'Agent reviews recorded: '+P.review_summary.reviews+'. Advisory editorial score (average): '+(P.review_summary.advisory_editorial_score_avg==null?'n/a':P.review_summary.advisory_editorial_score_avg)+'. '+P.review_summary.note}));
+  main.appendChild(ev);
+
+  var cl = el('section',{class:'card'});
+  cl.appendChild(el('h2',{text:'Legal and factual claims used, with their sources'}));
+  var ct = el('table'); ct.appendChild(el('thead',{},[el('tr',{},['Id','Claim (wording locked after verification)','Risk','Source'].map(function(h){return el('th',{text:h});}))]));
+  var cb = el('tbody'); P.claims.forEach(function(c){ var srcCell=el('td'); if(c.source_url){ var a=el('a',{href:c.source_url,target:'_blank',rel:'noopener',text:c.source||'source'}); srcCell.appendChild(a);} else srcCell.textContent=c.source||'none'; cb.appendChild(el('tr',{},[el('td',{text:c.id}),el('td',{text:c.text}),el('td',{text:c.risk}),srcCell])); }); ct.appendChild(cb);
+  cl.appendChild(el('div',{class:'scroll'},[ct]));
+  main.appendChild(cl);
+
+  if (P.open_items && P.open_items.length) { var oi = el('section',{class:'card'}); oi.appendChild(el('h2',{text:'Open items from the brief'})); var ul=el('ul'); P.open_items.forEach(function(t){ul.appendChild(el('li',{text:t}));}); oi.appendChild(ul); main.appendChild(oi); }
+
+  if (P.voice_reference) {
+    var vr = el('section',{class:'card'}); vr.appendChild(el('h2',{text:'Voice reference (for your confirmation)'}));
+    vr.appendChild(el('p',{class:'meta',text:'Style only. Short excerpts from three existing posts, used so drafts sound like Juan. None of those pages\' facts count. Leo approved it provisionally so drafting could proceed; if you do not accept it, the article goes back to the editorial review.'}));
+    var u=el('ul'); P.voice_reference.excerpts.forEach(function(x){u.appendChild(el('li',{text:'['+x.use+'] '+x.text}));}); vr.appendChild(u);
+    vr.appendChild(el('h3',{text:'Imitate'})); var u2=el('ul'); P.voice_reference.imitate.forEach(function(t){u2.appendChild(el('li',{text:t}));}); vr.appendChild(u2);
+    vr.appendChild(el('h3',{text:'Avoid'})); var u3=el('ul'); P.voice_reference.avoid.forEach(function(t){u3.appendChild(el('li',{text:t}));}); vr.appendChild(u3);
+    main.appendChild(vr);
+  }
+
+  var pv = el('section',{class:'card'}); pv.appendChild(el('h2',{text:'The article as it will be published (body only)'}));
+  var host = el('div',{class:'preview'}); pv.appendChild(host);
+  try { var root = host.attachShadow({mode:'open'}); var wrapper=document.createElement('div'); wrapper.innerHTML = P.html; root.appendChild(wrapper); } catch(e){ host.textContent='Preview unavailable in this view.'; }
+  main.appendChild(pv);
+
+  // Capabilities light up after load; the page reads fine without them.
+  (async function(){
+    try {
+      if (!window.claude || !window.claude.use) throw new Error('no runtime');
+      state.db = await window.claude.use('db'); state.user = await window.claude.use('user');
+      if (state.user) { state.uid = await state.user.id(); state.me = await state.user.me(); }
+      var can = state.user ? await state.user.can('data.write') : null;
+      var ok = !!(state.db && state.uid) && can !== false;
+      Object.keys(itemCards).forEach(function(k){ itemCards[k].buttons.forEach(function(b){ b.disabled=!ok; }); itemCards[k].status.textContent = ok ? 'Signed in as '+((state.me&&state.me.name)||'your account')+'. Your decision is saved against your own account.' : 'You can read this page, but your account cannot save decisions (it needs Contributor access).'; });
+      if (ok) P.items.forEach(function(it){ state.db.collection('decisions/'+state.uid+'/records').doc(P.proposal_id+'__'+it.kind).onSnapshot(function(s){ if(s.exists){ var d=s.data(); itemCards[it.kind].status.textContent='Your saved decision: '+String(d.decision).replace('_',' ')+' ('+d.decidedAt+').'; } }, function(){}); });
+    } catch(e){ Object.keys(itemCards).forEach(function(k){ itemCards[k].status.textContent='Decisions are unavailable in this view. You can still read the proposal.'; }); }
+  })();
+})();
+</script>

@@ -25,7 +25,11 @@
     "studio": "tsx --env-file=.env.local scripts/studio.mts",
     "import:gsc-audit": "tsx --env-file=.env.local scripts/import-gsc-audit.mts",
     "fetch:bodies": "tsx --env-file=.env.local scripts/fetch-post-bodies.mts",
-    "audit:blog": "tsx --env-file=.env.local scripts/run-blog-audit.mts"
+    "audit:blog": "tsx --env-file=.env.local scripts/run-blog-audit.mts",
+    "smoke:studio": "tsx --env-file=.env.local scripts/studio-smoke.mts",
+    "voice:build": "tsx --env-file=.env.local scripts/build-voice-reference.mts",
+    "verify:phase3": "tsx --env-file=.env.local scripts/phase3-verify.mts",
+    "room:build": "tsx scripts/build-approval-room.mts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",
