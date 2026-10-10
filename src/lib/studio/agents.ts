@@ -16,7 +16,7 @@ export const STUDIO_AGENT_META: Record<StudioAgentKey, { n: 4 | 5 | 6 | 7; name:
   "thb-07-editorial-critic": { n: 7, name: "Editorial Critic", promptVersion: "1.0.0", decisions: ["PASS", "REVISION"] },
 };
 
-const issue = z.strictObject({ issue_key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i), severity: z.enum(["required", "optional"]), note: z.string().min(5), claim_id: z.string().optional() });
+const issue = z.strictObject({ issue_key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i), severity: z.enum(["required", "optional"]), note: z.string().min(5), claim_id: z.string().nullish() });  // a null claim_id means "no claim"
 const base = {
   article_id: z.string().min(1),
   opportunity_id: z.string().min(1),
