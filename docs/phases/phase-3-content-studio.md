@@ -140,7 +140,8 @@ Detailed 2026-10-10 from the Phase 2 handoff. **Status: awaiting Leo's OK. Nothi
 ## Handoff
 ```text
 PHASE: 3 — Seven-Agent Content Studio
-STATUS: PARTIAL (build and fixture verification done; the real hoarder article run and Juan's click wait on Leo's brief approval)
+STATUS: PARTIAL (accepted by Leo, 2026-10-10). Built and verified; the hoarder guide is drafted and every unit locked, paused at HUMAN_REVIEW as version 4db42fea93cc. Open: Leo's review, Juan's approval, approver registration.
+REAL RUN (hoarder guide, 2026-10-10): Leo approved the brief, provisionally approved the voice reference and shared the Approval Room. Agents 4-7 ran section by section (8 sections + FAQ): 36 reviews (Agent 5: 9 PASS / 4 REVISION; Agent 6: 10 PASS / 2 REVISION; Agent 7: 10 PASS / 1 REVISION), no escalations. Four sections (s1, s4, s6, s7) were BLOCKED_PRIVACY by the seller-quote gate (quoted hypothetical homeowner thoughts); Leo kept the gate and sent them back with "no quotation marks", now a standing writer rule. Final advisory editorial scores 78-84 (all under 85, advisory only). 50 optional findings are deliberately NOT applied: they are the baseline for the Phase 3c comparison test (docs/references/agent-restructure.md). No proposal has been created and nothing has been sent to the Approval Room yet.
 WHAT WAS BUILT:
   - Migrations 0012-0014: section versions/reviews/escalations, claim-ledger columns, approver registry, approval sync log, proposals, article keyword, voice-reference provisional fields. RLS forced.
   - Body renderer (thb-article pattern, fixed order, style block hash-pinned, HTML allowlist; author box, Related Guides, Sources and CTA composed by code from approved facts and the ledger).
@@ -171,10 +172,12 @@ KNOWN LIMITATIONS:
   - Evidence Library sources have no recheck_by (two of three also lack an effective date), so the stale-source check only fires once a re-check date is recorded.
   - UPDATE support (live vs proposed, untouched sections byte-identical) is built and unit-tested on fixtures; the first article is a CREATE. No Developer Change Request path yet.
   - Agents 4-7 run through the operator (/thb-run-agent), one unit at a time; no API runner.
-  - Not done: the real hoarder article run, Juan's own click, an independent secondary on a real privacy exception (none applies to this article).
+  - Not done: Leo's review of the finished draft, Juan's own click, an independent secondary on a real privacy exception (none applies to this article).
+  - The draft can be exported as plain text with scripts/export-draft.mts (the export in docs/drafts/ is local only and not committed).
 OPEN DECISIONS:
-  - Leo: approve the hoarder brief (opportunity page); approve the voice reference provisionally (/studio) after reading the 18 excerpts; set the Approval Room sharing (Anyone in org, Contributor).
-  - Juan and Cherry each click once in the Approval Room so Leo can confirm them by account id; Leo's own account registers as operator.
+  - DONE by Leo: approved the hoarder brief; approved the voice reference provisionally; shared the Approval Room (Anyone in org, Contributor).
+  - Leo: review the locked draft (version 4db42fea93cc). Optional findings stay unapplied until the Phase 3c comparison test.
+  - Juan and Cherry each click once in the Approval Room so Leo can confirm them by account id (display names come from the platform's profiles call); Leo's own account registers as operator.
   - Pending brand facts stay blocked (author_bio needed; the author box uses approved facts only).
-NEXT APPROVED STEP: Leo approves the brief; Agents 4-7 run on the hoarder guide (npm run studio -- plan / queue-next, /thb-run-agent); at HUMAN_REVIEW create the proposal (npm run studio -- proposal <article_id> <file>), rebuild (npm run room:build) and republish the Approval Room; Juan reviews article and voice reference; sync-approvals; npm run verify:phase3.
+NEXT APPROVED STEP: paused. When Leo has reviewed the draft: create the proposal (npm run studio -- proposal <article_id> <file>), rebuild (npm run room:build) and republish the Approval Room; Juan reviews article and voice reference; sync-approvals; npm run verify:phase3. Phase 3c (agent restructure, docs/references/agent-restructure.md) starts only after Phase 3 is finished.
 ```
