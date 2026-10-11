@@ -14,7 +14,7 @@
 //   npm run studio -- sync-approvals <records.json>     (records read from the Approval Room with ArtifactData)
 //   npm run studio -- approvers                         (accounts that clicked; pending ones need Leo's confirmation)
 //   npm run studio -- confirm-approver <viewer_id> <approver|secondary|operator> <label>
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
 import { AGENT_KEYS, type AgentKey } from "../src/lib/agents/schemas";
 import { semanticChecks, submitOutput } from "../src/lib/agents/bridge";
@@ -52,6 +52,24 @@ if (cmd === "queue") {
     if (cmd === "queue-next" && next) {
       try { const { runId, duplicate } = await queueStudioRun(db, next[0] as StudioAgentKey, a, st.key); console.log(`      ${duplicate ? "existing" : "queued"} run ${runId}`); } catch (e) { console.log(`      not queued: ${e instanceof Error ? e.message : e}`); }
     }
+  }
+} else if (cmd === "dump-queued") {
+  // writes every QUEUED Agent 4-7 packet to <dir>/<agent-number>-<unit>-packet.json (the operator hands each file to its subagent)
+  const { data: qs } = await db.from("agent_runs").select("id,agent_key,task_packet").eq("status", "QUEUED").like("agent_key", "thb-0%");
+  for (const r of qs ?? []) {
+    if (!isStudioAgent(r.agent_key)) continue;
+    const file = `${a}/${r.agent_key.slice(4, 6)}-${r.task_packet.unit_key}-packet.json`;
+    writeFileSync(file, JSON.stringify({ run_id: r.id, attempts_used: 0, last_error: null, ...r.task_packet }, null, 2));
+    console.log(`${r.id} ${r.agent_key} ${r.task_packet.unit_key} -> ${file}`);
+  }
+} else if (cmd === "submit-dir") {
+  // submits every <nn>-<unit>-out.json in <dir> that has a matching -packet.json (run id comes from the packet), skipping runs already decided
+  for (const f of readdirSync(a).filter((x) => x.endsWith("-packet.json")).sort()) {
+    const out = `${a}/${f.replace("-packet.json", "-out.json")}`;
+    if (!existsSync(out)) { console.log(`${f}: no output yet`); continue; }
+    const runId = JSON.parse(readFileSync(`${a}/${f}`, "utf8")).run_id as string;
+    const res = await submitStudio(db, runId, readFileSync(out, "utf8"));
+    console.log(`${f.replace("-packet.json", "")}: ${res.ok ? `ACCEPTED${res.note ? ` — ${res.note}` : ""}` : `REJECTED (attempt ${res.attempt}/3)${res.final ? " FINAL" : ""}: ${res.errors.slice(0, 4).join(" | ")}`}`);
   }
 } else if (cmd === "packet") {
   let id = a;
