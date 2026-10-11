@@ -1,0 +1,104 @@
+# Phase 3c — Team Model (Agent Restructure)
+
+## Goal
+Replace the one-agent-at-a-time hand-offs with four agent teams that discuss inside the team and raise typed tickets with any other team, while code keeps every hard rule. Prove it by re-running the paused hoarder guide's revision (its 50 open findings) in team mode and comparing the result with the classic draft at version `4db42fea93cc`.
+
+## Read first
+- `docs/references/agent-restructure.md` — the proposal this phase builds (teams, tickets, feedback card, decision rules, escalation, limits).
+- `docs/phases/phase-3-content-studio.md` — Handoff (section loop, locks, checks, approval sync, the 50 unapplied findings).
+- `src/lib/studio/loop.ts`, `service.ts`, `checks.ts`, `agents.ts`, `src/lib/agents/bridge.ts`, `src/lib/orchestrator/states.ts`.
+- `docs/references/editorial-standards.md` (rules each role must carry).
+
+## Depends on
+Phase 3 accepted as PARTIAL (commit `1cea6ca`, STATUS.md). The hoarder guide is at HUMAN_REVIEW as version `4db42fea93cc`: all 9 units locked, no proposal created, nothing in the Approval Room.
+
+## Input: decisions (Leo, 2026-10-10)
+- **Build now** as Phase 3c; the comparison runs at the END of 3c, inside the Studio, on the hoarder guide.
+- **Round limit: 2 per ticket. Ticket budget: 10 per article.** Over budget the article stops and goes to Leo.
+- **Teams:** Research R1 Legal and official / R2 Search / R3 Experience; Strategy S1 Strategist / S2 Architect; Writing W1 Writer / W2 Co-writer; Review council V1 Fact and Privacy (veto) / V2 one combined SEO/AEO/GEO reviewer / V3 Editorial Critic.
+- **W2 only challenges and suggests.** It never writes into the draft; only W1 does.
+- **Four tickets to start:** EVIDENCE_REQUEST, ROOT_CAUSE_NOTE, QUALITY_CORRECTION, HUMAN_ESCALATION. STRATEGY_CHALLENGE and ARCHITECTURE_REVISION are later.
+- **Visibility:** Leo sees outcomes and escalations first; the full discussion log opens on click.
+- **Classic stays.** A per-article switch (classic or team) chooses the pipeline; classic remains the default and keeps working unchanged.
+
+- **Defaults confirmed by Leo:** team run on a separate branch (classic draft untouched); the 50 findings verified before the run; roughly 3-6x classic usage accepted; R3 limited to brand facts and THB process wording.
+- **Every ticket type and every team must be proven at least once.** The hoarder revision mostly exercises Review -> Writing -> Research, so the smoke tests force the other paths, and the comparison report states which ticket types actually fired.
+
+## Design notes (what stays in code, never agent agreement)
+- Only V1 can block. V1 must pass every unit; only proof clears its veto.
+- Every V2/V3 must-fix is done; should-fix and suggestions are listed for Leo. No unanimity needed.
+- All existing hard rules remain deterministic checks: approved brand facts only, no ratings or review counts, no seller-identifying details or quotation-marked seller thoughts, no competitor sources, money pages protected, no WordPress writes, Juan's approval on the exact hash.
+- No agent writes a lock, a state, an approval or a ledger claim directly. Research adds claims to the ledger only through R1/R2/R3 output that passes the same ledger checks Agent 2 passes today.
+- Every ticket and reply is logged: who, what, when, version.
+- The comparison must not touch the classic draft. Section versions are append-only, but reopening clears a lock, so team runs happen on a separate branch (Task 14) and `4db42fea93cc` is verified byte-identical afterwards.
+
+## Tasks
+**Status: approved by Leo (2026-10-10), with the four defaults below. Build in order.** Each task has a check; stop and tell Leo if a check fails.
+
+*A. Data and routing*
+1. **Migration 0015: team tables.** `tickets` (article_id, unit_key, type, from_role, to_role, issue, severity, evidence, suggested_fix, blocking, status, round, parent_ticket_id, version hash at raising, created/closed), `ticket_messages` (ticket_id, role, body, round, version), `team_runs` (article_id, mode, budget_used, status, started/ended), and `articles.pipeline_mode` (`classic` default | `team`). RLS forced, no policies, service role only, as in 0012.
+   - *Check:* `npm run db:check` shows every table with RLS and anon refused; existing articles stay `classic`.
+2. **Ticket schema and feedback card.** zod schemas for the four ticket types and the feedback card (TICKET, FROM, TO, SECTION, ISSUE, SEVERITY must fix / should fix / suggestion, EVIDENCE, FIX, BLOCKING). `BLOCKING: yes` is accepted only from V1.
+   - *Check (unit):* a V2 or V3 card with BLOCKING yes is rejected; a card without evidence, section or one issue is rejected; unknown ticket types are rejected.
+3. **Router.** Pure module: validates a ticket, routes it to the target role, enforces **2 rounds per ticket** and **10 tickets per article**, logs every message, and turns a limit hit or a HUMAN_ESCALATION into a Leo escalation (the six triggers in the proposal §5). No ticket can bypass the router; any team can ticket any team.
+   - *Check (unit):* round 3 is refused and escalates; ticket 11 stops the article and escalates; a ticket from any team to any team routes; every step produces a log row.
+4. **Team-mode loop.** A new loop module beside `loop.ts` (classic untouched) with the decision rules: V1 pass required, must-fixes closed, should-fix/suggestions collected for Leo, material changes re-enter V1, lock only after V1 plus must-fix closure, and only code sets the lock. It reuses `checks.ts`, the renderer, versions/hash and locks.
+   - *Check (unit):* a deadlocked V2 on a suggestion does not block; V1 veto cannot be argued away; an edit after V1 pass re-enters V1; no role can lock; classic loop tests still pass unchanged.
+
+*B. Agents*
+5. **Research files R1, R2, R3.** `.claude/agents/thb-r1-legal-official.md`, `thb-r2-search.md`, `thb-r3-experience.md`, versioned 1.0.0, each with its Prohibited action verbatim. R1: official sources only (WebFetch limited as Agent 2 is). R2: demand, questions, rankings from stored GSC data (Read/Write only, no web). R3: anonymized seller stories and brand facts from the approved Library only; it cannot clear a seller story (`publication_cleared` stays the gate).
+   - *Check:* script test as Phase 2 task 9: file exists, carries version and Prohibited action, tool list as specified.
+6. **Strategy files S1, S2.** Reuse Agents 1 and 3 contracts as `thb-s1-strategist.md` and `thb-s2-architect.md`; S2 additionally handles ROOT_CAUSE_NOTE (fix the brief, name the affected sections only). A brief change that alters an approved brief or target keyword raises HUMAN_ESCALATION.
+   - *Check (unit):* a ROOT_CAUSE_NOTE yields a brief revision that lists affected units; a keyword change escalates.
+7. **Writing files W1, W2.** `thb-w1-writer.md` (Agent 4's contract plus ticket output), `thb-w2-cowriter.md` (challenges angle, H1, clarity, examples, CTA; output is suggestions only, never draft text). Standing writer rule stays: no quotation marks around imagined homeowner thoughts.
+   - *Check (unit):* W2 output containing draft text, a lock, a claim or a state change is rejected; W1 cannot add claims (Phase 3 rule) and must raise EVIDENCE_REQUEST instead.
+8. **Council files V1, V2, V3.** `thb-v1-fact-privacy.md` (Agent 5 contract, veto), `thb-v2-seo-aeo-geo.md` (Agent 6), `thb-v3-editorial.md` (Agent 7). Each emits feedback cards. The three agree on one combined feedback set before it reaches W1; disagreements are listed, not hidden.
+   - *Check:* script test for files, versions, Prohibited actions, Read/Write only; unit test that a combined set keeps every V1 item and de-duplicates the rest without dropping a must-fix.
+9. **Bridge extension.** Task packets and submit checks for the new roles; the delimited untrusted block for drafts and ticket text; malformed output retries three times then INTEGRATION_ERROR, as today. Ticket text from agents is treated as untrusted data.
+   - *Check (unit):* each role's schema; injected instructions inside ticket text are not followed (fixture).
+
+*C. Studio UI and operator*
+10. **Mode switch.** `articles.pipeline_mode` toggle on `/studio/[id]` (only before any section is written, or on a branch per Task 14); CLI `studio -- mode <article_id> classic|team`.
+    - *Check:* classic articles behave exactly as before (smoke test); a team article refuses classic submits and the reverse.
+11. **Outcomes and escalations first.** `/studio/[id]` adds a Team tab: per unit, the outcome (resolved, open tickets, escalations, must-fix count, V1 status) and the budget bar (tickets used of 10). Full discussion opens on click per ticket. A "Stuck" inbox for Leo lists HUMAN_ESCALATION and limit hits with both positions and a recommendation, with resolve actions that reuse `resolveSection`.
+    - *Check:* smoke script drives a fixture article through a ticket, a limit hit and an escalation, and the page shows each.
+12. **Operator runner for team runs.** `studio -- team-plan <article_id>`, `team-dump`, `team-submit-dir` (same pattern as `dump-queued` and `submit-dir`) so `/thb-run-agent` can run roles one packet at a time, including the discussions. Update the `/thb-run-agent` command for the new keys.
+    - *Check:* a fixture run through the CLI ends with the router log complete.
+
+*D. Tests and the comparison*
+13. **Regression and smoke.** Carry over the Phase 3 fixtures to team mode (unsupported claim, wrong jurisdiction, privacy gate, editor changes a fact, post-approval edit, PENDING JUAN fact, rating text, "founder", no-self-approval) plus: V1 veto, round cap, ticket budget, W2 cannot write, only V1 blocks. The smoke test also **forces** each path the real run may not reach: at least one ROOT_CAUSE_NOTE (V2 -> S2, brief fixed, only the affected units redone), one HUMAN_ESCALATION, one EVIDENCE_REQUEST from Strategy (S1 -> R2 demand request, answered with an evidence pack) and one from Review (V1 -> R1), and a QUALITY_CORRECTION (V3 -> W1). Strategy-side coverage uses the four starting ticket types only; STRATEGY_CHALLENGE (Research -> Strategy) stays out of scope. A test asserts that across the smoke run every one of the four ticket types fired and every one of the four teams sent and received at least one ticket or discussion. `npm run smoke:team` on a fixture article, scripted agents, as `smoke:studio` does.
+    - *Check:* full Vitest, lint, tsc and `next build` pass; classic smoke (`smoke:studio`) still passes.
+14. **Comparison setup (no change to the classic draft).** Create a team-mode **branch** of the hoarder guide: same brief, ledger and voice reference, starting from the 9 locked units of `4db42fea93cc`, and load the **50 open findings** from `section_reviews` as the starting QUALITY_CORRECTION set (count verified to be 50; stop and report if it is not). The classic article stays at HUMAN_REVIEW, untouched.
+    - *Check:* classic article state, section hashes and version `4db42fea93cc` unchanged after loading; 50 findings present, none dropped or invented.
+15. **Run the team revision.** Operator runs the teams through `/thb-run-agent` until every unit is locked or escalated, or the budget is hit. Round limit 2, budget 10, W2 suggestions only.
+    - *Check:* every finding ends fixed, declined with a reason, or escalated; no blocked fact present; every claim has evidence; all deterministic checks pass; audit rows for each step.
+16. **Comparison report** `docs/phases/phase-3c-comparison.md`, from real numbers: classic vs team on findings fixed / declined / escalated, remaining must-fix, editorial scores per unit (classic 78-84), V1 results, tickets and rounds used, escalations, **which ticket types and which teams actually fired in the real run (count per type, from/to), and which only fired in the smoke test**, Claude usage (runs, attempts, token estimate), wall-clock, and a side-by-side diff per unit between `4db42fea93cc` and the team version. It states plainly which result is better and where it is not, and makes a recommendation; Leo decides.
+    - *Check:* every number traces to a table row or log; Leo can open both versions in the Studio.
+17. **Verify and handoff.** `scripts/phase3c-verify.mts` prints each Done-when item with real numbers; fill in the Handoff; update `STATUS.md`.
+    - *Check:* verify output matches the handoff text. Anything unmet makes the handoff PARTIAL and says so.
+
+## Open points for Leo (defaults assumed unless you say otherwise)
+1. **Branch vs in place (Task 14).** I assume a separate team-mode branch so the classic draft stays intact for Leo's review and the Phase 3 sign-off. Reopening the real article in place would overwrite what Juan is meant to review.
+2. **Claude usage.** Expect roughly 3–6x the classic run for the same article (proposal §8). The hoarder run was 36 reviews; budget accordingly before Task 15.
+3. **Roles for R3.** No seller story is cleared for this article, so R3's contribution is limited to brand facts and THB process wording; the comparison may show little R3 effect.
+4. **Phase 3 close-out is independent.** Leo's review, Juan's click and approver registration still apply to the classic draft; none depends on 3c.
+
+## Out of scope
+- STRATEGY_CHALLENGE and ARCHITECTURE_REVISION tickets, a split SEO/AEO/GEO council, an API runner (the operator still runs agents).
+- Any WordPress write; any change to the Approval Room or approval sync.
+- Changing the classic pipeline's behavior.
+
+## Done when
+- [ ] Classic articles behave exactly as before; the mode switch picks the pipeline per article (tested)
+- [ ] The router enforces 2 rounds per ticket and 10 tickets per article, and escalates on a limit hit (tested)
+- [ ] Only V1 can block; V1 cannot be argued away; W2 cannot write; no role can lock, approve or change state (tested)
+- [ ] All Phase 3 hard-rule fixtures pass in team mode
+- [ ] The smoke test fires all four ticket types (including a V2 -> S2 ROOT_CAUSE_NOTE and a Strategy-side EVIDENCE_REQUEST) and touches all four teams
+- [ ] The team revision of the hoarder guide ran on a branch; the classic version `4db42fea93cc` is byte-identical
+- [ ] The comparison report exists with real numbers, lists the ticket types that fired in the real run, and gives a recommendation; Leo has read it
+
+## Handoff
+```text
+PHASE: 3c — Team Model
+STATUS: NOT STARTED (task list approved by Leo, 2026-10-10; build begins at Task 1)
+```
