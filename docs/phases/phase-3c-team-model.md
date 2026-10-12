@@ -90,11 +90,11 @@ Phase 3 accepted as PARTIAL (commit `1cea6ca`, STATUS.md). The hoarder guide is 
 - A ticket type that targets Review (decided by Leo, 2026-10-10): the loop re-sends every revised draft to Review automatically, so none is needed now. Consider a RECHECK_REQUEST (→ V1) if the comparison run shows Research finding new evidence that Review should re-check.
 
 ## Done when
-- [ ] Classic articles behave exactly as before; the mode switch picks the pipeline per article (tested)
-- [ ] The router enforces 2 rounds per ticket and 10 tickets per article, and escalates on a limit hit (tested)
-- [ ] Only V1 can block; V1 cannot be argued away; W2 cannot write; no role can lock, approve or change state (tested)
-- [ ] All Phase 3 hard-rule fixtures pass in team mode
-- [ ] The smoke test fires all four ticket types (including a V2 -> S2 ROOT_CAUSE_NOTE and a Strategy-side EVIDENCE_REQUEST) and touches all four teams
+- [x] Classic articles behave exactly as before; the mode switch picks the pipeline per article (tested)
+- [x] The router enforces 2 rounds per ticket and 10 tickets per article, and escalates on a limit hit (tested)
+- [x] Only V1 can block; V1 cannot be argued away; W2 cannot write; no role can lock, approve or change state (tested)
+- [x] All Phase 3 hard-rule fixtures pass in team mode
+- [x] The smoke test fires all four ticket types (including a V2 -> S2 ROOT_CAUSE_NOTE and a Strategy-side EVIDENCE_REQUEST) and touches all four teams
 - [ ] The team revision of the hoarder guide ran on a branch; the classic version `4db42fea93cc` is byte-identical
 - [ ] The comparison report exists with real numbers, lists the ticket types that fired in the real run, and gives a recommendation; Leo has read it
 
