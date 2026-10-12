@@ -37,7 +37,8 @@ export async function approveBrief(db: SupabaseClient, oppId: string, actorId: s
   if (!o || !b?.outline) return { ok: false, reason: "No brief found for this opportunity." };
   if (o.state !== "BRIEF_REVIEW") return { ok: false, reason: `A brief is approved from BRIEF_REVIEW (this is ${o.state}).` };
   if (b.outline.decision !== "PASS") return { ok: false, reason: "Agent 3's brief did not PASS." };
-  const { data: existing } = await db.from("articles").select("id").eq("opportunity_id", oppId).maybeSingle();
+  // A team-mode branch (Task 14) shares the opportunity with its original: only the original article counts here, so two rows never break this lookup.
+  const { data: existing } = await db.from("articles").select("id").eq("opportunity_id", oppId).is("branch_of", null).maybeSingle();
   if (existing) return { ok: false, reason: "An article already exists for this opportunity." };
   const human: Actor = { kind: "human", id: actorId };
   const t = await orch(db).transition("opportunity", oppId, "BRIEF_APPROVED", human, { reason: "brief approved by Leo" });

@@ -19,7 +19,10 @@
 //   npm run studio -- team-submit <run_id> <file> | team-check <run_id> <file>   (submit one output / dry run)
 //   npm run studio -- team-log <article_id>              (tickets, rounds and the full router log: who, what, when, version)
 //   npm run studio -- mode <article_id> [classic|team]  (Leo: shows or switches the pipeline; switching is allowed only before any section is written, or on a team branch)
-//   npm run studio -- voice-approve                     (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
+//   npm run studio -- branch <article_id> <expected_findings> [--dry-run]   (Leo: creates the team-mode BRANCH of a classic article for the comparison; reads the original only)
+//   npm run studio -- fingerprint <article_id>          (read-only fingerprint of an article and everything attached to it)
+//   npm run studio -- branch-delete <branch_id> --yes   (Leo: removes one branch and what it created; refuses anything that is not a branch)
+//   npm run studio -- voice-approve                    (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
 //   npm run studio -- proposal <article_id> <out.json>  (creates the proposal and writes the Approval Room payload)
 //   npm run studio -- sync-approvals <records.json>     (records read from the Approval Room with ArtifactData)
 //   npm run studio -- approvers                         (accounts that clicked; pending ones need Leo's confirmation)
@@ -32,6 +35,7 @@ import { outputSchemas } from "../src/lib/agents/schemas";
 import { SupabaseBridgeStore, makeOrchestrator, queueRun, validationContext } from "../src/lib/agents/supabase-deps";
 import { STUDIO_AGENT_KEYS, isStudioAgent, type StudioAgentKey } from "../src/lib/studio/agents";
 import { load, queueStudioRun, resolveSection, setPipelineMode, stateOf, submitStudio, validateStudio } from "../src/lib/studio/service";
+import { branchArticle, branchDelete, fingerprint } from "../src/lib/studio/branch";
 import { modeOf } from "../src/lib/team/mode";
 import { checkTeam, dumpTeamQueued, queueNextTeam, queueTeamRun, submitTeam, submitTeamDir, teamPlan } from "../src/lib/studio/team-service";
 import { teamRoleOfAgentKey, isTeamRole } from "../src/lib/team/bridge";
@@ -178,6 +182,21 @@ if (cmd === "queue") {
     console.log(res.ok ? (res.noop ? `already ${res.mode}` : `article ${a} now runs in ${res.mode} mode`) : `NOT CHANGED: ${res.reason}`);
     if (!res.ok) process.exitCode = 2;
   }
+} else if (cmd === "branch") {
+  const res = await branchArticle(db, a, { actor: "leo", expectedFindings: Number(b), dryRun: process.argv.includes("--dry-run") });
+  if (!res.ok) { console.log(`STOPPED: ${res.reason}${res.byUnit ? `\n  findings per unit: ${JSON.stringify(res.byUnit)}` : ""}`); process.exitCode = 2; }
+  else if (res.dryRun) console.log(`DRY RUN ok: ${res.findings} findings ${JSON.stringify(res.byUnit)}; would copy ${res.units} units and ${res.claims} claims.\noriginal fingerprint ${res.fingerprint.total}\n${JSON.stringify(res.fingerprint.parts)}`);
+  else {
+    console.log(`branch ${res.branchId} created: ${res.findings} findings ${JSON.stringify(res.byUnit)}\noriginal fingerprint before ${res.before.total}\noriginal fingerprint after  ${res.after.total}\n${res.changed.length ? `ORIGINAL CHANGED: ${res.changed.join("; ")}` : "original unchanged"}\nisolation: ${res.isolation.ok ? "ok" : `PROBLEMS: ${res.isolation.problems.join("; ")}`} ${JSON.stringify(res.isolation.counts)}`);
+    if (res.changed.length || !res.isolation.ok) process.exitCode = 3;
+  }
+} else if (cmd === "fingerprint") {
+  const f = await fingerprint(db, a);
+  console.log(`${f.total}\n${Object.entries(f.parts).map(([k, v]) => `  ${k}: ${v.count} rows ${v.hash.slice(0, 12)}`).join("\n")}`);
+} else if (cmd === "branch-delete") {
+  const res = await branchDelete(db, a, { actor: "leo", yes: process.argv.includes("--yes") });
+  console.log(res.ok ? `branch ${a} deleted: ${res.summary}\n${res.originalChanged?.length ? `ORIGINAL CHANGED: ${res.originalChanged.join("; ")}` : "original fingerprint unchanged"}` : `NOT DELETED: ${res.reason}`);
+  if (!res.ok || res.originalChanged?.length) process.exitCode = 2;
 } else if (cmd === "runs") {
   const { data } = await db.from("agent_runs").select("id,agent_key,subject_id,status,retries,created_at,task_packet").order("created_at");
   for (const r of data ?? []) console.log(`${r.id} ${r.agent_key} ${r.status} retries=${r.retries} ${r.task_packet?.unit_key ? `unit=${r.task_packet.unit_key} ` : ""}subject=${r.subject_id}`);
