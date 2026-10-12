@@ -7,6 +7,7 @@ import { randomUUID } from "node:crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { budgetUsed, closeTicket, newRouter, respond, runStatus, type LogRow, type Result, type RouterState, type TicketRec } from "./router";
 import { buildTeamView } from "./view";
+import { agentLikeActor, resolveActorError } from "../studio/actors";
 
 export type DiffResult = { newTickets: TicketRec[]; changedTickets: TicketRec[]; newLog: LogRow[]; newlyStopped: boolean };
 
@@ -130,4 +131,47 @@ export async function leoAnswerEscalation(db: SupabaseClient, articleId: string,
   const parent = res.ticket.parentId;
   if (parent) await runRouterOp(db, articleId, row.team_run_id, (s) => { const p = s.tickets.find((x) => x.id === parent); return p && p.status === "ESCALATED" ? closeTicket(s, parent, "LEO", `decided by Leo: ${text}`, { at: new Date(Date.parse(now) + 1).toISOString(), versionHash: "" }) : { ok: true as const, state: s, ticket: p! }; }, now);
   return { ok: true };
+}
+
+export const DEFAULT_TICKET_BUDGET = 10;
+export const BRANCH_BUDGET_MAX = 50;
+
+/**
+ * Leo raises the ticket budget of ONE comparison branch (a deliberate, recorded exception; every other article keeps the default of 10).
+ * Allowed only as leo, only on a team-mode branch (branch_of set), only upward and with a reason. A budget stop becomes RUNNING again; an open
+ * escalation stays open until Leo answers it. The exception is written to the audit log with the old and new budget and the reason.
+ */
+export async function raiseTicketBudget(db: SupabaseClient, articleId: string, newBudget: number, reason: string, actorId: string): Promise<{ ok: true; from: number; to: number; runId: string } | { ok: false; reason: string }> {
+  if (agentLikeActor(actorId) || !actorId.trim()) return { ok: false, reason: resolveActorError(actorId, null)! };   // before any read or write
+  const { data: art } = await db.from("articles").select("id,branch_of,is_fixture,pipeline_mode").eq("id", articleId).single();
+  if (!art) return { ok: false, reason: "no such article" };
+  const denied = resolveActorError(actorId, art);
+  if (denied) return { ok: false, reason: denied };
+  if (!art.branch_of) return { ok: false, reason: `a ticket budget exception is allowed only on a comparison branch; every other article keeps the default of ${DEFAULT_TICKET_BUDGET}` };
+  if (art.pipeline_mode !== "team") return { ok: false, reason: "only a team-mode article has a ticket budget" };
+  if (!Number.isInteger(newBudget) || newBudget < 1 || newBudget > BRANCH_BUDGET_MAX) return { ok: false, reason: `the budget must be a whole number from 1 to ${BRANCH_BUDGET_MAX}` };
+  if (!reason.trim()) return { ok: false, reason: "a reason is required: the exception is recorded" };
+  const { data: runs } = await db.from("team_runs").select("id,ticket_budget,status").eq("article_id", articleId).in("status", ["RUNNING", "ESCALATED", "STOPPED_BUDGET"]).order("started_at", { ascending: false }).limit(1);
+  const run = runs?.[0];
+  if (!run) return { ok: false, reason: "no open team run on this article" };
+  if (newBudget <= run.ticket_budget) return { ok: false, reason: `the new budget must be higher than the current ${run.ticket_budget}` };
+  const { error } = await db.from("team_runs").update({ ticket_budget: newBudget, status: run.status === "STOPPED_BUDGET" ? "RUNNING" : run.status, ended_at: null }).eq("id", run.id);
+  if (error) return { ok: false, reason: error.message };
+  await db.from("audit_events").insert({ actor: actorId, subject_type: "article", subject_id: articleId, event_type: "team_budget_exception", accepted: true, detail: { team_run: run.id, from: run.ticket_budget, to: newBudget, default: DEFAULT_TICKET_BUDGET, reason: reason.trim() } });
+  return { ok: true, from: run.ticket_budget, to: newBudget, runId: run.id };
+}
+
+/** Leo answers an escalation by its router id (T11 ...) from the operator CLI; same closing path as the Stuck inbox, with an actor check (the UI action uses a constant). */
+export async function leoAnswerEscalationAs(db: SupabaseClient, articleId: string, routerTicketId: string, text: string, actorId: string): Promise<{ ok: true } | { ok: false; reason: string }> {
+  if (agentLikeActor(actorId) || !actorId.trim()) return { ok: false, reason: resolveActorError(actorId, null)! };
+  const { data: art } = await db.from("articles").select("id,is_fixture").eq("id", articleId).single();
+  if (!art) return { ok: false, reason: "no such article" };
+  const denied = resolveActorError(actorId, art);
+  if (denied) return { ok: false, reason: denied };
+  if (!text.trim()) return { ok: false, reason: "a decision is required" };
+  const runId = await startTeamRun(db, articleId);
+  const { idByRouterId } = await loadRouter(db, runId);
+  const dbId = idByRouterId.get(routerTicketId);
+  if (!dbId) return { ok: false, reason: `no ticket ${routerTicketId} in this article's run` };
+  return leoAnswerEscalation(db, articleId, dbId, text.trim());
 }

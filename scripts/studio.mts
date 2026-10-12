@@ -18,6 +18,8 @@
 //   npm run studio -- team-submit-dir <dir>              (submits every <ROLE>-...-out.json that has a matching packet; same 3-attempt rule)
 //   npm run studio -- team-submit <run_id> <file> | team-check <run_id> <file>   (submit one output / dry run)
 //   npm run studio -- team-log <article_id>              (tickets, rounds and the full router log: who, what, when, version)
+//   npm run studio -- team-budget <branch_id> <n> <reason...>   (Leo: raises the ticket budget of ONE team branch above the default of 10; recorded as an exception)
+//   npm run studio -- team-answer <article_id> <T-id> <text...>  (Leo: answers an escalation, e.g. T11, and closes it)
 //   npm run studio -- mode <article_id> [classic|team]  (Leo: shows or switches the pipeline; switching is allowed only before any section is written, or on a team branch)
 //   npm run studio -- branch <article_id> <expected_findings> [--dry-run]   (Leo: creates the team-mode BRANCH of a classic article for the comparison; reads the original only)
 //   npm run studio -- fingerprint <article_id>          (read-only fingerprint of an article and everything attached to it)
@@ -39,7 +41,8 @@ import { branchArticle, branchDelete, fingerprint } from "../src/lib/studio/bran
 import { modeOf } from "../src/lib/team/mode";
 import { checkTeam, dumpTeamQueued, queueNextTeam, queueTeamRun, submitTeam, submitTeamDir, teamPlan } from "../src/lib/studio/team-service";
 import { teamRoleOfAgentKey, isTeamRole } from "../src/lib/team/bridge";
-import { loadTeamView, startTeamRun } from "../src/lib/team/store";
+import { leoAnswerEscalationAs, loadTeamView, raiseTicketBudget, startTeamRun } from "../src/lib/team/store";
+import { parseTeamQueueArgs } from "../src/lib/studio/cli-args";
 import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studio/proposals";
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 
@@ -151,8 +154,8 @@ if (cmd === "queue") {
   if (!made.length) console.log("nothing to queue");
 } else if (cmd === "team-queue") {
   if (!isTeamRole(a)) throw new Error(`unknown team role ${a}`);
-  const [, , , article, unit, ticket] = process.argv.slice(2);
-  const r = await queueTeamRun(db, article, a, unit && unit !== "-" ? unit : null, ticket ?? null);
+  const q = parseTeamQueueArgs(process.argv.slice(2));   // team-queue <role> <article> [unit|-] [ticket]
+  const r = await queueTeamRun(db, q.article, a, q.unit, q.ticket);
   console.log(`${r.duplicate ? "existing" : "queued"} run ${r.runId} (${a})`);
 } else if (cmd === "team-dump") {
   const lines = await dumpTeamQueued(db, a);
@@ -175,6 +178,14 @@ if (cmd === "queue") {
     for (const t of [...v.tickets].reverse()) { console.log(`${t.routerId} ${t.type} ${t.from.join("+")}->${t.to} [${t.unit || "-"}] ${t.status} round ${t.round}/${t.roundLimit}${t.trigger ? ` trigger=${t.trigger}` : ""}: ${t.issue}`); for (const m of t.messages) console.log(`    ${m.at} ${m.role} (r${m.round}): ${m.body.slice(0, 140)}`); }
     console.log(`stuck for Leo: ${v.stuck.length}`);
   }
+} else if (cmd === "team-budget") {
+  const res = await raiseTicketBudget(db, a, Number(b), process.argv.slice(5).join(" "), "leo");
+  console.log(res.ok ? `ticket budget of article ${a} raised ${res.from} -> ${res.to} (recorded as a deliberate exception; the default stays 10)` : `NOT CHANGED: ${res.reason}`);
+  if (!res.ok) process.exitCode = 2;
+} else if (cmd === "team-answer") {
+  const res = await leoAnswerEscalationAs(db, a, b, process.argv.slice(5).join(" "), "leo");
+  console.log(res.ok ? `escalation ${b} closed with Leo's answer` : `NOT CLOSED: ${res.reason}`);
+  if (!res.ok) process.exitCode = 2;
 } else if (cmd === "mode") {
   if (!b) { const { data: art } = await db.from("articles").select("pipeline_mode,branch_of,title").eq("id", a).single(); console.log(`${art?.title}: ${modeOf(art ?? {})}${art?.branch_of ? ` (branch of ${art.branch_of})` : ""}`); }
   else {
