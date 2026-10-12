@@ -25,7 +25,7 @@ Tasks 1-9 built and committed. **Task 10 (real run on `54070caa…`) not started
 - **Scope:** V1 reviews the full unit the first time, then the changed sentences plus any cited sentence still present.
 - **Round limit:** the third V1 REVISION in a cycle escalates (a reworded sentence gets a new key each time, so the per-issue count alone would loop). A repeating deterministic finding now keeps its attempt count and also escalates after 2 (before: the count reset every version, so a repeating finding could loop). Leo's resolution restarts the cycle and V1 still has to pass the result.
 - **Persistence:** the gate state is stored in the section's `issues` jsonb (`meta.v1`). No migration.
-- **Bug found and fixed on the way:** the first V1 gate commit did not persist the gate fields; the round-trip test added in the escalation commit found it. Fixed in that commit (disclosed in its message).
+- **Commit `fa12898` is broken on its own and fixed in `7e3d2f5`.** `fa12898` (the V1 gate) did not write the gate fields to the section row or read them back, so the gate would have lost its state between runs. The round-trip test added in `7e3d2f5` found it; `7e3d2f5` stores the fields in `issues.meta.v1`. Anyone bisecting should treat `fa12898` as not working and use `7e3d2f5` or later. The commits were pushed as they are, not rewritten.
 
 ## Agent 5 audit: every check, and where it is covered after the change
 Test: `src/lib/studio/v1-gate.test.ts`, "Agent 5 audit". Any uncovered check is a failing test.
