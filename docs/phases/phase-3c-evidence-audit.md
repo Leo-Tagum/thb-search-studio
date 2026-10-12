@@ -20,7 +20,7 @@ Read-only audit of the Phase 3c comparison report (`phase-3c-comparison.md`) and
 | 5 | P0 | 39 of 50 addressed | Partially verified (agent judged; 5-item sample below) |
 | 6 | P0 | Blind score 67.8 vs 65.7 | Verified (recomputed; mappings present) |
 | 8 | P0 | Rewrites added overstatements | Partially verified (one of the three phrases came from the classic draft) |
-| 20 | P0 | V1's must-fix items are real | Unverified until Leo judges the 10 cards |
+| 20 | P0 | V1's must-fix items are real | Judged by Leo: A 2, B 3, C 5 (V1 too strict on conversational wording; right on legal and statute accuracy) |
 | 2 | P1 | About 1.04M tokens | Contradicted as an absolute figure (measured 5.58M); ratio holds |
 | 3 | P1 | 23 tickets, all QUALITY_CORRECTION | Verified (plus 1 budget escalation) |
 | 7 | P1 | Reviewers contradicted in 3 units | Verified |
@@ -240,11 +240,39 @@ So the report's wording is right for two of the three: the rewrite introduced 'G
 - V1's ruling: MUST FIX (V1 required finding)
 - V1's reason: "A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign." Flagged generalization, no ledger support. Reword to a plain hypothetical, e.g. finding out halfway through that the person selling could not sign.
 
-- **Status:** **Unverified until Leo has judged the cards.**
+- **Status:** **Judged by Leo (see the result below): A 2, B 3, C 5.**
 - **Limitation:** Ten cards is a small sample. The pool is not proportional to the three sources (the instructions given to V1 differed between runs, see Q10, so some sources contribute more quotable sentences). V1's reason sometimes cites another sentence of the same unit or a claim id; those were left in as V1 wrote them. Three cards touch the same FAQ item; that is how the draw fell.
 - **Implication:** If most cards are A, V1's must-fix rate is evidence against classic's fact gate. If many are C, the hybrid's V1 gate would send writers to fix non-problems and the 7 remaining must-fix items need a second reading before Task 10.
 
 
+
+### Q20 result: Leo's judgments, and the key
+
+Leo judged the ten cards blind on 2026-10-12. The key was then opened and its SHA-256 recomputed from the local file: **`be08ec91dd044e10cd70fedfc663a92d06839de55507f2ef810145076c5761c3` matches the hash committed in the first version of this audit.** The key itself stays in the git-ignored local file; the table below is what it says, card by card.
+
+| Card | Pipeline that wrote the text | Unit | Kind of V1 item | V1's severity | Leo | Leo's reason |
+|---|---|---|---|---|---|---|
+| 1 | classic-revised | faq | required finding | must fix | **B** | Generally accurate, but the legal authority being discussed needs context. Clarify the wording without weakening the underlying point. |
+| 2 | team | s3 | required finding | must fix | **A** | Treats trash or pest signs as matching statutory conditions without establishing the legal criteria. V1 is right to ask for more precise wording. |
+| 3 | classic-revised | s2 | required finding | must fix | **C** | Empathetic, conversational language, not a statistical claim. Requiring a source would weaken the natural writing. |
+| 4 | classic-revised | s7 | hedge ruling | must fix | **B** | 'Usually' implies an unsupported frequency, but it is practical guidance, not a specific factual claim. Removing the word resolves it. |
+| 5 | classic (as drafted) | s6 | hedge ruling | must fix | **B** | 'Usually' implies an unsupported frequency, but it is conversational guidance. A minor wording change is enough. |
+| 6 | classic (as drafted) | s1 | required finding | must fix | **C** | Empathetic, conversational language, not a statistical claim. Requiring a source for 'most people' is disproportionate. |
+| 7 | team | s2 | hedge ruling | must fix | **C** | A conditional warning, not a claim about a specific seller. 'never agreed to' vs 'did not agree to' adds no factual accuracy. |
+| 8 | team | faq | required finding | must fix | **C** | A basic legal principle, not a case-specific conclusion. Making it uncertain would weaken useful guidance. |
+| 9 | team | faq | required finding | must fix | **A** | The list implies certain family or estate roles automatically grant signing authority. Authority depends on ownership, documents and law. V1 was right. |
+| 10 | classic (as drafted) | s8 | required finding | must fix | **C** | A hypothetical warning in natural language. 'Nobody' does not assert a verified event or statistic. |
+
+**Totals: A 2, B 3, C 5.** V1 marked all ten must-fix; Leo agrees on 2, would downgrade 3 to a minor or should-fix, and sees 5 as not a problem.
+
+What the key shows:
+- **By pipeline** (small numbers): team text A 2, C 2; classic-revised B 2, C 1; classic as drafted B 1, C 2. V1 applied one standard to all three, so the over-strictness is not specific to one pipeline.
+- **By kind of V1 item:** the five hedge-flag rulings (cards 4, 5, 6, 7, 10) were rated B, B, C, C, C: **none of the five was a must-fix in Leo's view.** The five other required findings were B, A, C, C, A. The two A's are both statute or legal-role claims (cards 2 and 9).
+- **Same topic, three verdicts:** cards 1, 8 and 9 all concern the FAQ item on who may sign; Leo rated them B, C and A. Card 9 (a list of specific roles stated as who holds authority) is rated a real problem; the two plainer statements are not. A rule that keeps legal claims must-fix has to say where the line falls between those.
+- **Consequence for the numbers in the report:** section 7.1 counted hedge rulings as must-fix (for example 'V1: REVISION on 7 of 9 units, 15 must-fix'). On this sample, none of the hedge-based items was a must-fix to Leo, so the 15 and the 7 are an upper bound on the must-fix defects, not a count of them.
+- **Limit:** ten cards, one judge, judged from the sentence and V1's reason without the surrounding text.
+
+Status of Q20: **Verified as judged by Leo: V1's must-fix is too strict on conversational, empathetic and hypothetical wording; right on statute and legal-role accuracy.** Follow-up: a V1 calibration adjustment is proposed separately; Task 10 stays on hold until Leo approves it.
 
 ---
 
