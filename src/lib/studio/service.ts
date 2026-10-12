@@ -181,9 +181,10 @@ async function modeError(db: SupabaseClient, run: any): Promise<string | null> {
 
 /** Switch an article between the classic and team pipelines (Leo). Allowed only before any section is written, or on a team-mode branch; recorded in the audit log. */
 export async function setPipelineMode(db: SupabaseClient, articleId: string, next: unknown, actorId: string): Promise<{ ok: true; mode: PipelineMode; noop: boolean } | { ok: false; reason: string }> {
-  if (!actorId.trim()) return { ok: false, reason: "actor required" };
-  const { data: art } = await db.from("articles").select("id,pipeline_mode,branch_of").eq("id", articleId).single();
+  const { data: art } = await db.from("articles").select("id,pipeline_mode,branch_of,is_fixture").eq("id", articleId).single();
   if (!art) return { ok: false, reason: "no such article" };
+  const denied = resolveActorError(actorId, art);
+  if (denied) return { ok: false, reason: denied };
   const { data: secs } = await db.from("article_sections").select("status,current_version_id").eq("article_id", articleId);
   const { count } = await db.from("proposals").select("id", { count: "exact", head: true }).eq("article_id", articleId);
   const current = modeOf(art);
@@ -329,9 +330,9 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
 // ---------- human actions on sections ----------
 export async function resolveSection(db: SupabaseClient, articleId: string, unitKey: string, action: { kind: "request_revision"; text: string } | { kind: "hold" } | { kind: "reopen"; text: string }, actorId: string) {
   // Leo's action only: an agent-like actor is refused before anything is read or written.
-  if (agentLikeActor(actorId) || !actorId.trim()) return { ok: false as const, reason: resolveActorError(actorId, null)! };
+  if (agentLikeActor(actorId) || !actorId.trim()) return { ok: false as const, reason: resolveActorError(actorId, null)! };   // before any read or write
   const L = await load(db, articleId);
-  const denied = resolveActorError(actorId, modeOf(L.article));
+  const denied = resolveActorError(actorId, L.article);
   if (denied) return { ok: false as const, reason: denied };
   const row = L.sections.find((s) => s.section_key === unitKey);
   if (!row) return { ok: false as const, reason: "no such section" };

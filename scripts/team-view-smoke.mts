@@ -25,6 +25,7 @@ try {
   const ab = await approveBrief(db, opp, "smoke-test");
   if (!ab.ok) fail(ab.reason);
   art = (ab as any).articleId;
+  await db.from("articles").update({ is_fixture: true }).eq("id", art);   // only a fixture article accepts the "smoke-test" actor
   expect((await setPipelineMode(db, art, "team", "smoke-test")).ok, "could not switch the fixture to team mode");
   run = await startTeamRun(db, art);
   expect((await startTeamRun(db, art)) === run, "a second start created another run");

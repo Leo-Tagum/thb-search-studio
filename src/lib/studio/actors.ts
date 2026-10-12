@@ -14,12 +14,20 @@ export function agentLikeActor(id: string): boolean {
   return ROLE_IDS.has(a) || AGENT_KEYS.has(a) || SYSTEM_IDS.has(a) || /^(agent|system|bot|role)[:/_-]/.test(a) || /^thb-/.test(a);
 }
 
-/** The human operators allowed to resolve sections on a team-mode article. "smoke-test" is the fixture actor of the live smoke scripts (fixture articles only). */
-export const TEAM_RESOLVERS: readonly string[] = ["leo", "smoke-test"];
+/** The only human operator of a real article. */
+export const OPERATOR = "leo";
+/** The fixture actor of the live smoke scripts. Accepted only on an article flagged is_fixture (a throwaway article the smoke script created), never on a real one. */
+export const FIXTURE_ACTOR = "smoke-test";
 
-export function resolveActorError(actorId: string, mode: "classic" | "team" | null): string | null {
-  if (!actorId.trim()) return "actor required";
-  if (agentLikeActor(actorId)) return `${actorId} is an agent or system actor; resolving a section is a human action (Leo)`;
-  if (mode === "team" && !TEAM_RESOLVERS.includes(actorId.trim().toLowerCase())) return `on a team-mode article only Leo can resolve a section (not ${actorId})`;
-  return null;
+/**
+ * Why this actor may not resolve a section or switch the pipeline of this article, or null when it may.
+ * A real article accepts only "leo". A fixture article (is_fixture) also accepts "smoke-test". Agent-like actors are refused everywhere.
+ */
+export function resolveActorError(actorId: string, article: { is_fixture?: boolean | null } | null): string | null {
+  const a = actorId.trim().toLowerCase();
+  if (!a) return "actor required";
+  if (agentLikeActor(actorId)) return `${actorId} is an agent or system actor; this is a human action (Leo)`;
+  if (a === OPERATOR) return null;
+  if (a === FIXTURE_ACTOR) return article?.is_fixture === true ? null : `${actorId} is accepted only on fixture articles created by the smoke scripts; a real article accepts only ${OPERATOR}`;
+  return `only ${OPERATOR} can do this on an article (not ${actorId})`;
 }

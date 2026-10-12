@@ -80,6 +80,7 @@ try {
   const ab = await approveBrief(db, opp, "smoke-test");
   if (!ab.ok) fail(ab.reason);
   art = (ab as any).articleId;
+  await db.from("articles").update({ is_fixture: true }).eq("id", art);   // only a fixture article accepts the "smoke-test" actor
   out.task1 = { agentRefused: !refused.ok, articleCreated: !!art, articleState: (await load(db, art)).article.state };
 
   // Phase 3c task 10: the pipeline switch. A new article is classic; a team article refuses classic queueing and submits (without using an attempt).
