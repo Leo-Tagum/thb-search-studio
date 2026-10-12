@@ -119,10 +119,10 @@ describe("subagent files and the no-write guarantees", () => {
       expect(text).toContain("editorial-standards");
     });
   }
-  it("only Agent 2 has a web tool", () => {
+  it("only Agent 2 and team role R1 (the same official-source rules) have a web tool", () => {
     for (const f of readdirSync(dir)) {
       const tools = readFileSync(join(dir, f), "utf8").split(/\r?\n/).find((l) => l.startsWith("tools:"));
-      if (!f.startsWith("thb-02")) expect(tools).not.toMatch(/Web/);
+      if (!f.startsWith("thb-02") && !f.startsWith("thb-r1")) expect(tools).not.toMatch(/Web/);
     }
   });
   const files = (d: string): string[] => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? files(join(d, f)) : [join(d, f)]));
