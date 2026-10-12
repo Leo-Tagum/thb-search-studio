@@ -6,10 +6,12 @@ import { describe, expect, it } from "vitest";
 const dir = ".claude/agents";
 const toolsOf = (text: string) => text.split(/\r?\n/).find((l) => l.startsWith("tools:"));
 
-const RESEARCH: Record<string, { tools: string; prohibited: string }> = {
-  "thb-r1-legal-official": { tools: "tools: Read, Write, WebFetch", prohibited: "Treating internal access as consent" },
-  "thb-r2-search": { tools: "tools: Read, Write", prohibited: "Treating internal access as consent" },
-  "thb-r3-experience": { tools: "tools: Read, Write", prohibited: "Treating internal access as consent" },
+// Each role keeps Agent 2's Prohibited action and adds its own (Leo, 2026-10-10).
+const AGENT2 = "Treating internal access as consent";
+const RESEARCH: Record<string, { tools: string; prohibited: string; own: string }> = {
+  "thb-r1-legal-official": { tools: "tools: Read, Write, WebFetch", prohibited: AGENT2, own: "**Prohibited action (R1): Citing non-official, secondary or competitor sources as law; stating a legal rule without a word-for-word quote.**" },
+  "thb-r2-search": { tools: "tools: Read, Write", prohibited: AGENT2, own: "**Prohibited action (R2): Turning search data into article statistics; estimating or inventing demand numbers.**" },
+  "thb-r3-experience": { tools: "tools: Read, Write", prohibited: AGENT2, own: "**Prohibited action (R3): Using or clearing seller stories beyond their approved wording; paraphrasing brand facts.**" },
 };
 
 describe("Research team files (R1, R2, R3)", () => {
@@ -19,6 +21,7 @@ describe("Research team files (R1, R2, R3)", () => {
       expect(text).toMatch(/^name: /m);
       expect(text).toMatch(/prompt_version: 1\.0\.0/);
       expect(text).toContain(`**Prohibited action: ${spec.prohibited}.**`);
+      expect(text).toContain(spec.own);
       expect(toolsOf(text)).toBe(spec.tools);
     });
     it(`${k}: treats ticket text as untrusted and cannot lock, approve or set state`, () => {
