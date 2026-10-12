@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { supabaseAdmin } from "@/lib/supabase-server";
-import { approveBrief, resolveSection } from "@/lib/studio/service";
+import { approveBrief, resolveSection, setPipelineMode } from "@/lib/studio/service";
 import { confirmApprover } from "@/lib/studio/proposals";
 
 const ACTOR = "leo"; // local single-operator app; the operator is never an approver (see approvals.ts)
@@ -23,6 +23,13 @@ export async function sectionAction(formData: FormData) {
   const res = await resolveSection(supabaseAdmin(), articleId, unit, kind === "hold" ? { kind: "hold" } : { kind: kind as "request_revision" | "reopen", text }, ACTOR);
   revalidatePath(`/studio/${articleId}`);
   redirect(`/studio/${articleId}?${res.ok ? `done=${res.status}` : `error=${encodeURIComponent(res.reason)}`}`);
+}
+
+export async function modeAction(formData: FormData) {
+  const articleId = String(formData.get("article"));
+  const res = await setPipelineMode(supabaseAdmin(), articleId, String(formData.get("mode")), ACTOR);
+  revalidatePath(`/studio/${articleId}`);
+  redirect(`/studio/${articleId}?${res.ok ? `done=${res.mode}-mode` : `error=${encodeURIComponent(res.reason)}`}`);
 }
 
 export async function voiceApproveAction() {

@@ -3,7 +3,7 @@
 // scripted agent outputs, forged Approval Room records and an edit after approval. Everything is removed afterwards; the real voice
 // reference row is restored; audit_events are append-only and stay (actors "smoke-test"). Nothing here touches WordPress.
 import { createClient } from "@supabase/supabase-js";
-import { advanceArticle, approveBrief, load, queueStudioRun, resolveSection, stateOf, submitStudio } from "../src/lib/studio/service";
+import { advanceArticle, approveBrief, load, queueStudioRun, resolveSection, setPipelineMode, stateOf, submitStudio } from "../src/lib/studio/service";
 import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studio/proposals";
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 import { sha256 } from "../src/lib/studio/hash";
@@ -82,6 +82,18 @@ try {
   art = (ab as any).articleId;
   out.task1 = { agentRefused: !refused.ok, articleCreated: !!art, articleState: (await load(db, art)).article.state };
 
+  // Phase 3c task 10: the pipeline switch. A new article is classic; a team article refuses classic queueing and submits (without using an attempt).
+  expect((await load(db, art)).article.pipeline_mode === "classic", "a new article is not classic");
+  const { runId: modeRun } = await queueStudioRun(db, "thb-04-section-writer", art, "s1");
+  const toTeam = await setPipelineMode(db, art, "team", "smoke-test");
+  expect(toTeam.ok, "switching an unwritten article to team failed");
+  const queueOnTeam = await queueStudioRun(db, "thb-05-fact-privacy-auditor", art, "s1").then(() => "queued", (e) => String(e.message).slice(0, 90));
+  const submitOnTeam = await submitStudio(db, modeRun, "{}");
+  expect(queueOnTeam.includes("team mode"), `classic queue accepted on a team article: ${queueOnTeam}`);
+  expect(!submitOnTeam.ok && !submitOnTeam.final && submitOnTeam.attempt === 0, "a classic submit on a team article was not refused cleanly");
+  expect((await setPipelineMode(db, art, "classic", "smoke-test")).ok, "switching back to classic failed");
+  out.task10 = { default: "classic", queueOnTeam, submitOnTeam: submitOnTeam.ok ? "accepted" : submitOnTeam.errors[0].slice(0, 70) };
+
   // voice reference: provisional only for the duration of the smoke
   const { error: vErr } = await db.from("brand_facts").update({ provisional_by: "smoke-test", provisional_at: new Date().toISOString() }).eq("fact_key", "voice_reference");
   if (vErr) throw vErr;
@@ -125,6 +137,9 @@ try {
   expect(s2status0 === "LOCKED", "s2 should be locked before the reopen test");
   // (s2 is locked, so the writer is refused; reopen it as Leo, then try the unsupported version)
   const writerOnLocked = await queueStudioRun(db, "thb-04-section-writer", art, "s2").then(() => "queued", (e) => String(e.message).slice(0, 70));
+  const lateSwitch = await setPipelineMode(db, art, "team", "smoke-test");
+  expect(!lateSwitch.ok, "the mode switched to team after sections were written");
+  (out.task10 as any).switchAfterWritingRefused = !lateSwitch.ok ? lateSwitch.reason.slice(0, 80) : "NOT REFUSED";
   const reopened = await resolveSection(db, art, "s2", { kind: "reopen", text: "Leo: smoke test reopen" }, "smoke-test");
   expect(reopened.ok, "reopen failed");
   await writer("s2", bad, ["human:directive"]);

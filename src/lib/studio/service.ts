@@ -11,6 +11,7 @@ import { allLocked, applyDeterministic, applyReview, editorRevision, escalateGap
 import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
+import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../team/mode";
 import { STUDIO_AGENT_META, isStudioAgent, studioOutputSchemas, studioSemanticChecks, type StudioAgentKey, type StudioValidationCtx } from "./agents";
 
 export const SYSTEM: Actor = { kind: "system", id: "studio" };
@@ -118,6 +119,8 @@ export const stateOf = (row: any): SectionState => {
 // ---------- queue ----------
 export async function queueStudioRun(db: SupabaseClient, agent: StudioAgentKey, articleId: string, unitKey: string) {
   const L = await load(db, articleId);
+  const wrongPipeline = pipelineGuard(modeOf(L.article), agent);
+  if (wrongPipeline) throw new Error(wrongPipeline);
   const row = L.sections.find((s) => s.section_key === unitKey);
   if (!row) throw new Error(`no unit ${unitKey}`);
   const st = stateOf(row);
@@ -170,11 +173,35 @@ export async function voiceUsable(db: SupabaseClient): Promise<boolean> {
 // ---------- submit ----------
 export type StudioSubmit = { ok: true; note?: string } | { ok: false; errors: string[]; final: boolean; attempt: number };
 
+async function modeError(db: SupabaseClient, run: any): Promise<string | null> {
+  const { data: art } = await db.from("articles").select("pipeline_mode").eq("id", run.subject_id).single();
+  return pipelineGuard(modeOf(art ?? {}), run.agent_key);
+}
+
+/** Switch an article between the classic and team pipelines (Leo). Allowed only before any section is written, or on a team-mode branch; recorded in the audit log. */
+export async function setPipelineMode(db: SupabaseClient, articleId: string, next: unknown, actorId: string): Promise<{ ok: true; mode: PipelineMode; noop: boolean } | { ok: false; reason: string }> {
+  if (!actorId.trim()) return { ok: false, reason: "actor required" };
+  const { data: art } = await db.from("articles").select("id,pipeline_mode,branch_of").eq("id", articleId).single();
+  if (!art) return { ok: false, reason: "no such article" };
+  const { data: secs } = await db.from("article_sections").select("status,current_version_id").eq("article_id", articleId);
+  const { count } = await db.from("proposals").select("id", { count: "exact", head: true }).eq("article_id", articleId);
+  const current = modeOf(art);
+  const rule = modeChangeRule({ current, next, isBranch: !!art.branch_of, sectionsWritten: (secs ?? []).filter((x: any) => x.status !== "NEEDS_WRITE" || x.current_version_id).length, hasProposal: (count ?? 0) > 0 });
+  if (!rule.ok) return rule;
+  if (rule.noop) return { ok: true, mode: current, noop: true };
+  const { error } = await db.from("articles").update({ pipeline_mode: next }).eq("id", articleId);
+  if (error) return { ok: false, reason: error.message };
+  await audit(db, articleId, "pipeline_mode_changed", { from: current, to: next }, actorId);
+  return { ok: true, mode: next as PipelineMode, noop: false };
+}
+
 export async function validateStudio(db: SupabaseClient, runId: string, raw: string): Promise<{ run: any; parsed: any | null; errors: string[]; L: Loaded | null; row: any | null }> {
   const { data: run } = await db.from("agent_runs").select("*").eq("id", runId).single();
   const errors: string[] = [];
   let parsed: any = null; let L: Loaded | null = null; let row: any = null;
   if (!isStudioAgent(run.agent_key)) return { run, parsed, errors: ["not a Content Studio agent run"], L, row };
+  const wrong = await modeError(db, run);
+  if (wrong) return { run, parsed, errors: [wrong], L, row };
   try {
     const r = studioOutputSchemas[run.agent_key as StudioAgentKey].safeParse(JSON.parse(raw));
     if (!r.success) for (const i of r.error.issues) errors.push(`${i.path.join(".") || "(root)"}: ${i.message}`);
@@ -194,6 +221,9 @@ export async function submitStudio(db: SupabaseClient, runId: string, raw: strin
   const { run, parsed, errors, L, row } = await validateStudio(db, runId, raw);
   if (run.status === "SUBMITTED") return { ok: false, errors: ["this run already has an accepted output"], final: true, attempt: run.retries };
   if (run.status === "FAILED") return { ok: false, errors: ["this run already failed; the article is in INTEGRATION_ERROR"], final: true, attempt: run.retries };
+  // A submit for the other pipeline is refused outright: it does not use an attempt and cannot push the article to INTEGRATION_ERROR.
+  const wrong = await modeError(db, run);
+  if (wrong) return { ok: false, errors: [wrong], final: false, attempt: run.retries };
   if (errors.length === 0 && parsed && L && row) {
     await db.from("agent_runs").update({ status: "SUBMITTED", output: parsed, model_version: parsed.model_version, error: null, updated_at: new Date().toISOString() }).eq("id", runId);
     await db.from("audit_events").insert({ actor: `agent:${run.agent_key}`, subject_type: "article", subject_id: run.subject_id, event_type: "agent_run_submitted", accepted: true, detail: { run: runId, unit: run.task_packet.unit_key, decision: parsed.decision } });

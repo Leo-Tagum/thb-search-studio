@@ -9,6 +9,7 @@
 //   npm run studio -- runs                              (lists runs)
 //   npm run studio -- article <article_id>              (sections, statuses, claims, state)
 //   npm run studio -- resolve <article_id> <unit_key> <request_revision|reopen|hold> [directive text]   (Leo: sends a blocked/escalated section back, or reopens a locked one)
+//   npm run studio -- mode <article_id> [classic|team]  (Leo: shows or switches the pipeline; switching is allowed only before any section is written, or on a team branch)
 //   npm run studio -- voice-approve                     (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
 //   npm run studio -- proposal <article_id> <out.json>  (creates the proposal and writes the Approval Room payload)
 //   npm run studio -- sync-approvals <records.json>     (records read from the Approval Room with ArtifactData)
@@ -21,7 +22,8 @@ import { semanticChecks, submitOutput } from "../src/lib/agents/bridge";
 import { outputSchemas } from "../src/lib/agents/schemas";
 import { SupabaseBridgeStore, makeOrchestrator, queueRun, validationContext } from "../src/lib/agents/supabase-deps";
 import { STUDIO_AGENT_KEYS, isStudioAgent, type StudioAgentKey } from "../src/lib/studio/agents";
-import { load, queueStudioRun, resolveSection, stateOf, submitStudio, validateStudio } from "../src/lib/studio/service";
+import { load, queueStudioRun, resolveSection, setPipelineMode, stateOf, submitStudio, validateStudio } from "../src/lib/studio/service";
+import { modeOf } from "../src/lib/team/mode";
 import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studio/proposals";
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 
@@ -115,6 +117,13 @@ if (cmd === "queue") {
   }
   console.log(errors.length ? `WOULD REJECT (${errors.length}); attempts used so far: ${row!.retries}/3` : `WOULD ACCEPT (attempts used so far: ${row!.retries}/3)`);
   for (const e of errors.slice(0, 20)) console.log("  -", e);
+} else if (cmd === "mode") {
+  if (!b) { const { data: art } = await db.from("articles").select("pipeline_mode,branch_of,title").eq("id", a).single(); console.log(`${art?.title}: ${modeOf(art ?? {})}${art?.branch_of ? ` (branch of ${art.branch_of})` : ""}`); }
+  else {
+    const res = await setPipelineMode(db, a, b, "leo");
+    console.log(res.ok ? (res.noop ? `already ${res.mode}` : `article ${a} now runs in ${res.mode} mode`) : `NOT CHANGED: ${res.reason}`);
+    if (!res.ok) process.exitCode = 2;
+  }
 } else if (cmd === "runs") {
   const { data } = await db.from("agent_runs").select("id,agent_key,subject_id,status,retries,created_at,task_packet").order("created_at");
   for (const r of data ?? []) console.log(`${r.id} ${r.agent_key} ${r.status} retries=${r.retries} ${r.task_packet?.unit_key ? `unit=${r.task_packet.unit_key} ` : ""}subject=${r.subject_id}`);

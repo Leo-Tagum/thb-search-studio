@@ -5,7 +5,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { load, stateOf } from "@/lib/studio/service";
 import { unitStrings, type Unit } from "@/lib/studio/schema";
 import { lineDiff } from "@/lib/studio/diff";
-import { sectionAction } from "../actions";
+import { modeAction, sectionAction } from "../actions";
+import { modeChangeRule, modeOf } from "@/lib/team/mode";
 
 const TABS = [["brief", "Brief"], ["draft", "Draft"], ["evidence", "Evidence"], ["critiques", "Agent critiques"], ["seo", "SEO/AEO/GEO"], ["diff", "Diff"], ["approvals", "Approvals"], ["preview", "Preview"]] as const;
 
@@ -34,6 +35,9 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
   const { data: props } = await db.from("proposals").select("*").eq("article_id", id).order("created_at");
   const { data: ver } = L.article.locked_version_id ? await db.from("article_versions").select("*").eq("id", L.article.locked_version_id).single() : { data: null };
   const keyOf = (sid: string) => L.sections.find((s) => s.id === sid)?.section_key;
+  const mode = modeOf(L.article);
+  const otherMode = mode === "classic" ? "team" : "classic";
+  const change = modeChangeRule({ current: mode, next: otherMode, isBranch: !!L.article.branch_of, sectionsWritten: L.sections.filter((s) => s.status !== "NEEDS_WRITE" || s.current_version_id).length, hasProposal: (props ?? []).length > 0 });
   const blockers = L.sections.map((s) => ({ s, st: stateOf(s) })).filter((x) => ["ESCALATED", "BLOCKED_CLAIM", "BLOCKED_PRIVACY"].includes(x.st.status));
   return (
     <main className="space-y-4 text-sm">
@@ -41,6 +45,11 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
       <h1 className="text-xl font-semibold">{L.article.title}</h1>
       {typeof sp.error === "string" && <p className="border border-red-600 p-2">Not done: {sp.error}</p>}
       {typeof sp.done === "string" && <p className="border border-green-700 p-2">Recorded. Section is now {sp.done}.</p>}
+      <form action={modeAction} className="flex flex-wrap items-center gap-2 border p-2">
+        <input type="hidden" name="article" value={id} /><input type="hidden" name="mode" value={otherMode} />
+        <span>Pipeline: <b>{mode}</b>{L.article.branch_of ? " (team branch)" : ""}</span>
+        {change.ok ? <button className="border px-2">Switch to {otherMode} mode</button> : <span className="text-neutral-600">Mode locked: {change.reason}</span>}
+      </form>
       <p>State <b>{L.article.state}</b> · slug {L.article.slug} · keyword &quot;{L.article.primary_keyword}&quot; · version {L.article.version_hash ? L.article.version_hash.slice(0, 12) : "not assembled"} · approved {L.article.approved_hash ? "yes (hash matches)" : "no"}</p>
       {blockers.length > 0 && (
         <div className="border border-red-600 p-2">
