@@ -5,7 +5,7 @@
 //   - the brief is COPIED (opportunity_id null, so no lookup by opportunity can ever find two briefs, and a ROOT_CAUSE_NOTE revision edits the copy);
 //   - the claim ledger is COPIED under the branch's article id (claim keys line up with the sections' claim ids; the row ids are new);
 //   - each locked unit is copied as the branch's first version (same content, same hash), then reopened by Leo's directive;
-//   - the optional findings of the latest review per reviewer on each locked version become declinable should-fix items in the unit's team
+//   - the optional findings of every review of each locked version become declinable should-fix items in the unit's team
 //     envelope (not tickets, so the 10-ticket budget stays free). A count other than the expected one stops everything before any write.
 // Nothing here approves, publishes, locks (beyond the copied locked state it immediately reopens) or writes to WordPress.
 import { randomUUID } from "node:crypto";
@@ -24,18 +24,21 @@ export const BRANCH_DIRECTIVE = "Team comparison revision. Revise this unit for 
 // ---------- findings ----------
 export type SeededFinding = { unit: string; role: CouncilRole; key: string; text: string; claimId: string | null; reviewId: string };
 
-/** The optional findings of the latest review per reviewer (V1/V2/V3 equivalents) on each unit's LOCKED version. Pure. */
+/** Every optional finding in every review of each unit's LOCKED version (a reviewer may review the same locked version more than once),
+ *  deduplicated by reviewer, unit and key (the first review that raised a key keeps it). Pure. */
 export function collectFindings(sections: any[], reviews: any[]): SeededFinding[] {
   const out: SeededFinding[] = [];
+  const seen = new Set<string>();
   for (const s of [...sections].sort((a, b) => a.position - b.position)) {
-    for (const agent of Object.keys(COUNCIL_OF_AGENT)) {
-      const mine = reviews.filter((r) => r.section_id === s.id && r.agent_key === agent && r.version_id === s.locked_version_id)
-        .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)) || String(a.id).localeCompare(String(b.id)));
-      const latest = mine[mine.length - 1];
-      if (!latest) continue;
-      for (const f of (latest.findings ?? []) as any[]) {
+    const mine = reviews.filter((r) => r.section_id === s.id && r.version_id === s.locked_version_id && COUNCIL_OF_AGENT[r.agent_key])
+      .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)) || String(a.id).localeCompare(String(b.id)));
+    for (const r of mine) {
+      for (const f of (r.findings ?? []) as any[]) {
         if (f.severity !== "optional") continue;
-        out.push({ unit: s.section_key, role: COUNCIL_OF_AGENT[agent], key: f.issue_key, text: f.note, claimId: f.claim_id ?? null, reviewId: latest.id });
+        const id = `${s.section_key}|${COUNCIL_OF_AGENT[r.agent_key]}|${f.issue_key}`;
+        if (seen.has(id)) continue;
+        seen.add(id);
+        out.push({ unit: s.section_key, role: COUNCIL_OF_AGENT[r.agent_key], key: f.issue_key, text: f.note, claimId: f.claim_id ?? null, reviewId: r.id });
       }
     }
   }

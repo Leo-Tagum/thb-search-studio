@@ -76,17 +76,24 @@ function original(extra: Record<string, any[]> = {}) {
   };
   return { ...base, ...extra };
 }
-const EXPECT = 6;   // fact:a, seo:a, seo:b, ed:a, ed:b, ed:faq
+const EXPECT = 7;   // fact:a, seo:a, seo:b, ed:early, ed:a, ed:b, ed:faq (both Agent 7 reviews of the locked s1 count)
 const originalIds = (t: Record<string, any[]>) => new Set(Object.values(t).flat().map((r) => r.id));
 
 describe("collectFindings", () => {
   const d = original();
   const f = collectFindings(d.article_sections, d.section_reviews);
-  it("takes only optional findings of the latest review per reviewer on the LOCKED version", () => {
-    expect(f.map((x) => `${x.unit}:${x.role}:${x.key}`).sort()).toEqual(["faq:V3:ed:faq", "s1:V1:fact:a", "s1:V2:seo:a", "s1:V2:seo:b", "s1:V3:ed:a", "s1:V3:ed:b"].sort());
+  it("takes every optional finding of every review of the LOCKED version (the double Agent 7 review counts both), not older versions or required ones", () => {
+    expect(f.map((x) => `${x.unit}:${x.role}:${x.key}`).sort()).toEqual(["faq:V3:ed:faq", "s1:V1:fact:a", "s1:V2:seo:a", "s1:V2:seo:b", "s1:V3:ed:a", "s1:V3:ed:b", "s1:V3:ed:early"].sort());
     expect(f).toHaveLength(EXPECT);
   });
-  it("keeps the source review id of each finding", () => { expect(f.find((x) => x.key === "ed:a")!.reviewId).toBe("r7late"); });
+  it("keeps the source review id of each finding", () => { expect(f.find((x) => x.key === "ed:a")!.reviewId).toBe("r7late"); expect(f.find((x) => x.key === "ed:early")!.reviewId).toBe("r7early"); });
+  it("s6 case: two Agent 7 reviews of one locked version with different findings give all five; a repeated key counts once", () => {
+    const secs = [{ id: "x", position: 1, section_key: "s6", locked_version_id: "v" }];
+    const rv = (id: string, at: string, keys: string[]) => ({ id, section_id: "x", version_id: "v", agent_key: "thb-07-editorial-critic", created_at: at, findings: keys.map((k) => opt(k)) });
+    const two = collectFindings(secs, [rv("a", "1", ["ed:unclear-not-thb-line", "ed:light-filler", "ed:verbatim-voice-line"]), { ...rv("s", "2", ["seo:soft-claim-uncited", "seo:answer-first-opening"]), agent_key: "thb-06-seo-aeo-geo-auditor" }, rv("b", "3", ["ed:no-local-anchor", "ed:echo-of-reference"])]);
+    expect(two).toHaveLength(7);
+    expect(collectFindings(secs, [rv("a", "1", ["ed:x", "ed:y"]), rv("b", "2", ["ed:y", "ed:z"])]).map((v) => v.key)).toEqual(["ed:x", "ed:y", "ed:z"]);
+  });
 });
 
 describe("planBranch", () => {
@@ -113,7 +120,7 @@ describe("planBranch", () => {
     expect(contentHash(u.version.content)).toBe(contentHash(S1));
     expect(u.env.team).toMatchObject({ status: "NEEDS_REVISION", versionHash: contentHash(S1), lockedHash: null, v1Passed: null, pending: [] });
     expect(u.env.team.mustFix).toEqual([{ key: "human:directive", role: "LEO", text: BRANCH_DIRECTIVE, attempts: 0 }]);
-    expect(u.env.team.collected.map((c) => `${c.role}:${c.key}`).sort()).toEqual(["V1:fact:a", "V2:seo:a", "V2:seo:b", "V3:ed:a", "V3:ed:b"]);
+    expect(u.env.team.collected.map((c) => `${c.role}:${c.key}`).sort()).toEqual(["V1:fact:a", "V2:seo:a", "V2:seo:b", "V3:ed:a", "V3:ed:b", "V3:ed:early"]);
     expect(u.env.team.collected.every((c) => c.severity === "should fix" && c.declined === null && c.versionHash === contentHash(S1))).toBe(true);
     expect(u.pointers.locked_version_id).toBe(u.version.id);
   });
