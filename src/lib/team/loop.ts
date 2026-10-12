@@ -3,7 +3,9 @@
 // Decision rules (proposal section 4), all enforced here in code, never by agent agreement:
 //   - V1 must pass the exact material content; only V1 can block; only a V1 pass on a new review clears a V1 item (it cannot be argued away or declined);
 //   - every must-fix from V2/V3 must be closed; should-fix and suggestions never block, they are collected for Leo (so one reviewer cannot deadlock an article);
-//   - a material change (the same signature the classic loop uses) re-enters V1; every new version goes back to V2 and V3;
+//   - V1 re-reviews every version whose text changed, not only material changes (unsourced generalizations such as "most owners" are wording, and the
+//     material signature misses them). The re-review is scoped to the changed sentences to keep cost down; a material change, an open V1 item, or a
+//     writer that sent no text means a full review. Only a byte-identical version (same hash V1 passed) carries the pass. Every new version goes to V2 and V3;
 //   - the lock is set only by recordReview, when V1 passed the current material content and no must-fix is open. No role can lock.
 // Pure functions over a TeamSectionState; persistence lives in the service. Two revision attempts per must-fix, then escalation (REVISION_LIMIT).
 import { REVISION_LIMIT } from "../orchestrator/states";
@@ -17,8 +19,9 @@ export type MustFix = { key: string; role: CouncilRole | "CODE" | "LEO"; text: s
 export type Collected = { key: string; role: CouncilRole; severity: "should fix" | "suggestion"; text: string; versionHash: string; declined: string | null };
 export type TeamSectionState = {
   key: string; status: TeamStatus;
-  versionNo: number; versionHash: string | null; sig: string | null;
-  v1PassedSig: string | null;        // material signature V1 passed; the lock requires it to equal sig
+  versionNo: number; versionHash: string | null; sig: string | null; sentences: string[] | null;
+  v1Passed: { hash: string; sig: string; sentences: string[] | null } | null;   // what V1 passed; the lock requires its hash to equal versionHash
+  v1Scope: V1Scope | null;           // what V1 must look at on the pending review (null when V1 is not pending)
   pending: CouncilRole[];            // council members who still have to review the current version
   mustFix: MustFix[];                // open must-fixes (V1 items, V2/V3 must-fix, deterministic findings, Leo directives)
   collected: Collected[];            // should-fix and suggestions, listed for Leo; never block
@@ -26,24 +29,34 @@ export type TeamSectionState = {
   escalation: { issueKey: string; reason: string } | null;
   blockedBy: string | null;
 };
+export type V1Scope = { kind: "full" } | { kind: "changed"; sentences: string[] };
 export type Outcome = { ok: true; state: TeamSectionState; note?: string } | { ok: false; error: string };
 
-export const newTeamSection = (key: string): TeamSectionState => ({ key, status: "NEEDS_WRITE", versionNo: 0, versionHash: null, sig: null, v1PassedSig: null, pending: [], mustFix: [], collected: [], lockedHash: null, escalation: null, blockedBy: null });
+export const newTeamSection = (key: string): TeamSectionState => ({ key, status: "NEEDS_WRITE", versionNo: 0, versionHash: null, sig: null, sentences: null, v1Passed: null, v1Scope: null, pending: [], mustFix: [], collected: [], lockedHash: null, escalation: null, blockedBy: null });
 const HUMAN_STOPS: TeamStatus[] = ["ESCALATED", "BLOCKED_CLAIM", "BLOCKED_PRIVACY"];
 const fail = (error: string): Outcome => ({ ok: false, error });
+/** Sentences of a unit's plain text, whitespace-normalized, for the changed-sentence scope. */
+export const splitSentences = (text: string): string[] => text.replace(/\s+/g, " ").trim().split(/(?<=[.!?])\s+/).map((x) => x.trim()).filter(Boolean);
 
 /** A new version from the writer (W1). Every new version goes back to V2 and V3; V1 re-reviews when the material content changed or V1 had open items. */
-export function recordVersion(s: TeamSectionState, v: { hash: string; sig: string }): Outcome {
+export function recordVersion(s: TeamSectionState, v: { hash: string; sig: string; text?: string }): Outcome {
   if (s.status === "LOCKED") return fail("section is locked; a locked section changes only through a human edit that clears the lock");
   if (HUMAN_STOPS.includes(s.status)) return fail(`section is ${s.status}; a human must resolve it first`);
   if (s.status !== "NEEDS_WRITE" && s.status !== "NEEDS_REVISION") return fail(`section is ${s.status}, not waiting for the writer`);
-  const revising = s.status === "NEEDS_REVISION";
-  const material = revising && s.v1PassedSig !== null && v.sig !== s.v1PassedSig;
-  const v1Again = v.sig !== s.v1PassedSig || s.mustFix.some((i) => i.role === "V1");
+  const sentences = v.text === undefined ? null : splitSentences(v.text);
+  const base = s.v1Passed;
+  const v1Open = s.mustFix.some((i) => i.role === "V1");
+  const v1Again = base?.hash !== v.hash || v1Open;            // only a byte-identical version carries V1's pass
+  let v1Scope: V1Scope | null = null;
+  if (v1Again) {
+    const changed = base?.sentences && sentences && !v1Open && v.sig === base.sig ? sentences.filter((x) => !base.sentences!.includes(x)) : null;
+    v1Scope = changed && changed.length ? { kind: "changed", sentences: changed } : { kind: "full" };
+  }
   // Deterministic and Leo items are re-evaluated on the new text; council items stay open until their reviewer re-reviews.
   const mustFix = s.mustFix.filter((i) => i.role !== "LEO").map((i) => ({ ...i, attempts: i.attempts + 1 }));
   const pending: CouncilRole[] = v1Again ? ["V1", "V2", "V3"] : ["V2", "V3"];
-  return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, status: "NEEDS_COUNCIL", pending, mustFix, v1PassedSig: v1Again ? null : s.v1PassedSig, blockedBy: null }, note: material ? "material change: back to V1" : undefined };
+  const note = v1Again && base ? (v1Scope!.kind === "changed" ? `V1 re-reviews ${v1Scope!.sentences.length} changed sentence(s)` : "V1 re-reviews the full section") : undefined;
+  return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, sentences, status: "NEEDS_COUNCIL", pending, mustFix, v1Passed: v1Again ? null : base, v1Scope, blockedBy: null }, note };
 }
 
 /** Deterministic findings (checks.ts) run on every new version before any reviewer sees it. Call with [] when the checks are clean. */
@@ -87,12 +100,12 @@ export function recordReview(s: TeamSectionState, r: CouncilReview): Outcome {
   const soft: Collected[] = r.items.filter((i) => i.severity !== "must fix").map((i) => ({ key: i.key, role, severity: i.severity as Collected["severity"], text: i.text, versionHash: r.versionHash, declined: was.get(i.key) ?? null }));
   const collected = [...s.collected.filter((c) => c.role !== role), ...soft];
   const pending = s.pending.filter((p) => p !== role);
-  const v1PassedSig = role === "V1" ? (r.decision === "PASS" ? s.sig : null) : s.v1PassedSig;
-  const next: TeamSectionState = { ...s, pending, mustFix, collected, v1PassedSig };
+  const v1Passed = role === "V1" ? (r.decision === "PASS" ? { hash: s.versionHash!, sig: s.sig!, sentences: s.sentences } : null) : s.v1Passed;
+  const next: TeamSectionState = { ...s, pending, mustFix, collected, v1Passed, v1Scope: role === "V1" ? null : s.v1Scope };
   if (stuck) return { ok: true, state: { ...next, status: "ESCALATED", escalation: { issueKey: stuck.key, reason: `still not resolved after ${stuck.attempts} revision attempts: ${stuck.text}` } }, note: "escalated" };
   if (pending.length) return { ok: true, state: next };
   if (mustFix.length) return { ok: true, state: { ...next, status: "NEEDS_REVISION" } };
-  if (v1PassedSig !== s.sig) return { ok: true, state: { ...next, status: "NEEDS_COUNCIL", pending: ["V1"] }, note: "V1 has not passed this content: back to V1" };
+  if (v1Passed?.hash !== s.versionHash) return { ok: true, state: { ...next, status: "NEEDS_COUNCIL", pending: ["V1"], v1Scope: { kind: "full" } }, note: "V1 has not passed this content: back to V1" };
   return { ok: true, state: { ...next, status: "LOCKED", lockedHash: s.versionHash, pending: [] }, note: "locked" };
 }
 
@@ -111,19 +124,19 @@ export function resolveByHuman(s: TeamSectionState, a: { kind: "request_revision
   if (a.kind === "hold") return { ok: true, state: s, note: "held" };
   const key = s.escalation?.issueKey ?? "human:directive";
   const mustFix = [...s.mustFix.filter((i) => i.key !== key && i.role !== "LEO"), { key, role: "LEO" as const, text: a.issueText, attempts: 0 }];
-  return { ok: true, state: { ...s, mustFix, status: "NEEDS_REVISION", escalation: null, blockedBy: null, v1PassedSig: null, pending: [] } };
+  return { ok: true, state: { ...s, mustFix, status: "NEEDS_REVISION", escalation: null, blockedBy: null, v1Passed: null, v1Scope: null, pending: [] } };
 }
 
 /** An edit to a locked section makes a new version, clears the lock and every earlier pass. The caller invalidates approvals. */
-export function editLocked(s: TeamSectionState, v: { hash: string; sig: string }): Outcome {
+export function editLocked(s: TeamSectionState, v: { hash: string; sig: string; text?: string }): Outcome {
   if (s.status !== "LOCKED") return fail("section is not locked");
-  return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, status: "NEEDS_COUNCIL", pending: ["V1", "V2", "V3"], v1PassedSig: null, lockedHash: null, mustFix: [], collected: [] }, note: "lock cleared; full council review runs again" };
+  return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, sentences: v.text === undefined ? null : splitSentences(v.text), status: "NEEDS_COUNCIL", pending: ["V1", "V2", "V3"], v1Passed: null, v1Scope: { kind: "full" }, lockedHash: null, mustFix: [], collected: [] }, note: "lock cleared; full council review runs again" };
 }
 
 /** A human reopens a locked section without supplying text: it goes back to the writer and through the full council again. */
 export function reopen(s: TeamSectionState, directive: string): Outcome {
   if (s.status !== "LOCKED") return fail("section is not locked");
-  return { ok: true, state: { ...s, status: "NEEDS_REVISION", v1PassedSig: null, lockedHash: null, pending: [], mustFix: [{ key: "human:directive", role: "LEO", text: directive, attempts: 0 }], collected: [] } };
+  return { ok: true, state: { ...s, status: "NEEDS_REVISION", v1Passed: null, v1Scope: null, lockedHash: null, pending: [], mustFix: [{ key: "human:directive", role: "LEO", text: directive, attempts: 0 }], collected: [] } };
 }
 
 /** The writer says the section cannot be written without inventing a fact: an escalation to Leo, never a filled-in gap. */

@@ -30,8 +30,8 @@ describe("team section loop: the happy path", () => {
     expect(s.status).toBe("NEEDS_REVISION");
     expect(s.mustFix.map((i) => i.key)).toEqual(["ed:h1"]);
     s = ok(applyDeterministic(ok(recordVersion(s, v("h2"))), []));
-    expect(s.pending).toEqual(["V2", "V3"]);                    // same material content: V1 pass carries
-    s = review(review(s, pass("V3", s)), pass("V2", s));
+    expect(s.pending).toEqual(["V1", "V2", "V3"]);              // changed hash: V1 passes again, a carried pass is only for an identical version
+    s = review(review(review(s, pass("V1", s)), pass("V3", s)), pass("V2", s));
     expect(s.status).toBe("LOCKED");
     expect(s.lockedHash).toBe("h2");
     expect(s.mustFix).toEqual([]);
@@ -75,15 +75,57 @@ describe("only V1 can block, and its veto cannot be argued away", () => {
   it("an edit after V1 passed re-enters V1 when the material content changed", () => {
     let s = written("h1", "sigA");
     s = review(review(review(s, pass("V1", s)), rev("V2", s, "seo:answer")), pass("V3", s));
-    expect(s.v1PassedSig).toBe("sigA");
+    expect(s.v1Passed?.sig).toBe("sigA");
     s = ok(applyDeterministic(ok(recordVersion(s, v("h2", "sigB"))), []));   // the SEO fix changed a figure
     expect(s.pending).toEqual(["V1", "V2", "V3"]);
-    expect(s.v1PassedSig).toBeNull();
+    expect(s.v1Passed).toBeNull();
+    expect(s.v1Scope).toEqual({ kind: "full" });
     s = review(review(s, pass("V2", s)), pass("V3", s));
     expect(s.status).toBe("NEEDS_COUNCIL");                                   // V2 and V3 alone cannot lock a changed fact
     s = review(s, pass("V1", s));
     expect(s.status).toBe("LOCKED");
-    expect(s.v1PassedSig).toBe("sigB");
+    expect(s.v1Passed?.sig).toBe("sigB");
+  });
+});
+
+describe("V1 re-reviews wording changes, scoped to the changed sentences", () => {
+  const text1 = "Hoarded homes can still sell as-is. A buyer who pays cash can close without repairs. Ask an attorney about your situation.";
+  // V1 passes h1; V2 asks for a SEO fix, so the writer sends a wording-only revision (same material signature).
+  const afterSeoFix = (text2: string) => {
+    let s = ok(applyDeterministic(ok(recordVersion(newTeamSection("s1"), { hash: "h1", sig: "sigA", text: text1 })), []));
+    s = review(review(review(s, pass("V1", s)), rev("V2", s, "seo:answer")), pass("V3", s));
+    return ok(applyDeterministic(ok(recordVersion(s, { hash: "h2", sig: "sigA", text: text2 })), []));
+  };
+  it("a wording-only edit that introduces an unsourced generalization is caught by V1 (the material signature misses it)", () => {
+    let s = afterSeoFix("Hoarded homes can still sell as-is. Most owners never check what a buyer will actually pay. Ask an attorney about your situation.");
+    expect(s.pending).toEqual(["V1", "V2", "V3"]);
+    expect(s.v1Scope).toEqual({ kind: "changed", sentences: ["Most owners never check what a buyer will actually pay."] });
+    s = review(review(s, pass("V2", s)), pass("V3", s));
+    expect(s.status).toBe("NEEDS_COUNCIL");                                   // V2 and V3 cannot lock it
+    s = review(s, rev("V1", s, "fact:unsourced-most-owners"));
+    expect(s.status).toBe("NEEDS_REVISION");
+    expect(s.mustFix[0]).toMatchObject({ key: "fact:unsourced-most-owners", role: "V1" });
+    expect(s.v1Passed).toBeNull();
+  });
+  it("V1's scope is only what changed, and it is a full review after a V1 item, a material change, or when no text is given", () => {
+    const s = afterSeoFix("Hoarded homes can still sell as-is. A buyer who pays cash can close without repairs. Ask an attorney about your own situation.");
+    expect(s.v1Scope).toEqual({ kind: "changed", sentences: ["Ask an attorney about your own situation."] });
+    let m = ok(applyDeterministic(ok(recordVersion(newTeamSection("s1"), { hash: "h1", sig: "sigA", text: text1 })), []));
+    m = review(review(review(m, pass("V1", m)), rev("V2", m, "seo:x")), pass("V3", m));
+    expect(ok(recordVersion(m, { hash: "h2", sig: "sigB", text: text1 + " New fact." })).v1Scope).toEqual({ kind: "full" });
+    expect(ok(recordVersion(m, { hash: "h2", sig: "sigA" })).v1Scope).toEqual({ kind: "full" });
+    let r = ok(applyDeterministic(ok(recordVersion(newTeamSection("s1"), { hash: "h1", sig: "sigA", text: text1 })), []));
+    r = review(review(review(r, rev("V1", r, "fact:c1")), pass("V2", r)), pass("V3", r));
+    expect(ok(recordVersion(r, { hash: "h2", sig: "sigA", text: text1 + " More." })).v1Scope).toEqual({ kind: "full" });
+  });
+  it("a version identical to the one V1 passed carries the pass; V2 and V3 still re-review", () => {
+    let s = ok(applyDeterministic(ok(recordVersion(newTeamSection("s1"), { hash: "h1", sig: "sigA", text: text1 })), []));
+    s = review(review(review(s, pass("V1", s)), rev("V2", s, "seo:x")), pass("V3", s));
+    s = ok(applyDeterministic(ok(recordVersion(s, { hash: "h1", sig: "sigA", text: text1 })), []));
+    expect(s.pending).toEqual(["V2", "V3"]);
+    expect(s.v1Scope).toBeNull();
+    s = review(review(s, pass("V2", s)), pass("V3", s));
+    expect(s.status).toBe("LOCKED");
   });
 });
 
@@ -99,7 +141,7 @@ describe("should-fix and suggestions never block", () => {
     s = review(review(review(s, pass("V1", s)), pass("V3", s, [{ key: "ed:cta", severity: "should fix", text: "softer CTA" }])), rev("V2", s, "seo:x"));
     s = ok(decline(s, "ed:cta", "The CTA follows the approved wording."));
     s = ok(applyDeterministic(ok(recordVersion(s, v("h2"))), []));
-    s = review(review(s, pass("V3", s, [{ key: "ed:cta", severity: "should fix", text: "softer CTA" }])), pass("V2", s));
+    s = review(review(review(s, pass("V1", s)), pass("V3", s, [{ key: "ed:cta", severity: "should fix", text: "softer CTA" }])), pass("V2", s));
     expect(s.status).toBe("LOCKED");
     expect(forLeo(s).open).toEqual([]);
     expect(forLeo(s).declined[0]).toMatchObject({ key: "ed:cta", declined: "The CTA follows the approved wording." });
@@ -141,7 +183,7 @@ describe("no role can lock", () => {
   });
   it("an edit to a locked section clears the lock and every pass", () => {
     const e = ok(editLocked(passAll(written()), v("h2", "sigB")));
-    expect(e).toMatchObject({ status: "NEEDS_COUNCIL", lockedHash: null, v1PassedSig: null, pending: ["V1", "V2", "V3"] });
+    expect(e).toMatchObject({ status: "NEEDS_COUNCIL", lockedHash: null, v1Passed: null, v1Scope: { kind: "full" }, pending: ["V1", "V2", "V3"] });
   });
   it("reopen by a human sends it back through the full council", () => {
     const e = ok(reopen(passAll(written()), "Re-check the probate wording"));
