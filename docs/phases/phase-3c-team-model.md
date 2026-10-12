@@ -87,6 +87,7 @@ Phase 3 accepted as PARTIAL (commit `1cea6ca`, STATUS.md). The hoarder guide is 
 - STRATEGY_CHALLENGE and ARCHITECTURE_REVISION tickets, a split SEO/AEO/GEO council, an API runner (the operator still runs agents).
 - Any WordPress write; any change to the Approval Room or approval sync.
 - Changing the classic pipeline's behavior.
+- A ticket type that targets Review (decided by Leo, 2026-10-10): the loop re-sends every revised draft to Review automatically, so none is needed now. Consider a RECHECK_REQUEST (→ V1) if the comparison run shows Research finding new evidence that Review should re-check.
 
 ## Done when
 - [ ] Classic articles behave exactly as before; the mode switch picks the pipeline per article (tested)
