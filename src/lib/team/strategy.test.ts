@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { newRouter, raiseTicket } from "./router";
-import { briefSchema, resolveRootCause, type Brief } from "./strategy";
+import { briefSchema, resolveRootCause, type ApprovedIdentity, type Brief } from "./strategy";
 
 const row = (r: string) => ({ row: r, status: "answered", answer: `answer for ${r}`, basis: "seller_problem_logic", claim_ids: [] });
 const brief = (): Brief => briefSchema.parse({
@@ -11,15 +11,16 @@ const brief = (): Brief => briefSchema.parse({
   professional_confirmation: ["attorney", "title company"],
   working_title: "Selling a Hoarded House in the Bay Area", target_reader: "an heir or owner of a packed house", answer_first: "You can sell a hoarded house as-is.",
   outline: [{ h2: "Can you sell a hoarded house?", purpose: "Direct answer", claim_ids: [] }, { h2: "What must you disclose?", purpose: "Disclosure", claim_ids: ["clm:1"] }, { h2: "What does cleanup cost?", purpose: "Cost", claim_ids: [] }],
-  fan_out: [], visuals: [], link_plan: [], cta: "Call for a no-pressure look.", open_items: [],
+  fan_out: [], visuals: [], link_plan: [{ to_url: "https://www.twinhomebuyer.com/hoarder-houses/", anchor_intent: "hoarder house sale options" }, { to_url: "https://www.twinhomebuyer.com/sell-my-house-fast/", anchor_intent: "money page next step" }], cta: "Call for a no-pressure look.", open_items: [],
 });
-const approved = { brief: brief(), keyword: "hoarded house" };
+const MONEY = "https://www.twinhomebuyer.com/sell-my-house-fast/";
+const approved: ApprovedIdentity = { brief: brief(), keyword: "hoarded house", slug: "selling-a-hoarded-house", action: "CREATE", targetPage: null, requiredLinks: ["https://www.twinhomebuyer.com/hoarder-houses/"], forbiddenTargetPhrases: ["we buy houses", "cash for houses"], protectedUrls: [MONEY] };
 const ticket = { id: "T1", type: "ROOT_CAUSE_NOTE", to: "S2", unitKey: "s3" };
 const supported = new Set(["clm:1", "clm:2"]);
 const result = (over: (b: Brief) => void, extra: Record<string, unknown> = {}) => {
   const b = brief();
   over(b);
-  return { ticket_id: "T1", root_cause: "The brief gave this section the wrong purpose.", target_keyword: "hoarded house", brief: b, affected_units: [], tickets: [], ...extra };
+  return { ticket_id: "T1", root_cause: "The brief gave this section the wrong purpose.", target_keyword: "hoarded house", slug: "selling-a-hoarded-house", action: "CREATE", target_page: null, brief: b, affected_units: [], tickets: [], ...extra };
 };
 const run = (output: unknown, t = ticket) => resolveRootCause({ ticket: t, approved, output, supportedClaimIds: supported });
 
@@ -75,6 +76,34 @@ describe("a change to the approved brief or target keyword escalates", () => {
     expect(run(result((b) => { b.outline.reverse(); })).kind).toBe("escalate");
     expect(run(result((b) => { b.outline.push({ h2: "A new question?", purpose: "More", claim_ids: [] }); })).kind).toBe("escalate");
     expect(run(result((b) => { b.working_title = "A Different Title"; })).kind).toBe("escalate");
+  });
+  const esc = (o: ReturnType<typeof run>) => (o.kind === "escalate" ? o.changed.join(" | ") : `NOT ESCALATED: ${o.kind}`);
+  it("a changed slug/URL escalates; a trailing slash or case difference does not", () => {
+    expect(esc(run(result(() => {}, { slug: "hoarder-house-sale" })))).toMatch(/slug\/URL "selling-a-hoarded-house" -> "hoarder-house-sale"/);
+    expect(run(result(() => {}, { slug: "/Selling-A-Hoarded-House/" })).kind).toBe("no_brief_change");
+  });
+  it("a changed action or target page escalates", () => {
+    expect(esc(run(result(() => {}, { action: "UPDATE", target_page: "https://www.twinhomebuyer.com/hoarder-houses/" })))).toMatch(/action CREATE -> UPDATE.*target page/);
+    expect(esc(run(result(() => {}, { target_page: "https://www.twinhomebuyer.com/other/" })))).toMatch(/target page/);
+  });
+  it("dropping or replacing the required /hoarder-houses/ link escalates, even by a change that looks harmless", () => {
+    expect(esc(run(result((b) => { b.link_plan = b.link_plan.filter((l) => !l.to_url.includes("hoarder-houses")); }, { affected_units: [{ unit_key: "s3", reason: "link moved" }] })))).toMatch(/required link .*hoarder-houses/);
+    expect(esc(run(result((b) => { b.link_plan[0].to_url = "https://www.twinhomebuyer.com/hoarder-houses-2/"; })))).toMatch(/required link/);
+    expect(run(result((b) => { b.link_plan[0].to_url = "https://www.twinhomebuyer.com/hoarder-houses"; b.link_plan[0].anchor_intent = "options for a packed house"; }, { affected_units: [{ unit_key: "s3", reason: "anchor reworded" }] })).kind).toBe("revise");
+  });
+  it("a brief that starts aiming at a never-target keyword escalates; one that already mentioned it does not", () => {
+    expect(esc(run(result((b) => { b.outline[2].purpose = "Explain why we buy houses for cash"; })))).toMatch(/never-target keyword/);
+    expect(esc(run(result((b) => { b.working_title = "Selling a Hoarded House in the Bay Area"; b.cta = "Cash for houses, fast"; })))).toMatch(/cash for houses/);
+    expect(run(result((b) => { b.open_items = ["Do not target we buy houses terms"]; }, { affected_units: [{ unit_key: "s3", reason: "note added" }] })).kind).toBe("revise");   // open items are not targeting text
+  });
+  it("starting or stopping a reference to a protected / money page escalates", () => {
+    expect(esc(run(result((b) => { b.outline[2].notes = `Send readers to ${MONEY} for a quote.`; })))).toMatch(/protected \/ money page/);
+    expect(esc(run(result((b) => { b.link_plan = b.link_plan.filter((l) => l.to_url !== MONEY); })))).toMatch(/protected \/ money page/);
+    expect(esc(run(result((b) => { b.open_items = [`Edit the copy on ${MONEY}`]; })))).toMatch(/protected \/ money page/);
+  });
+  it("all other fields stay fixable: honest options, warnings, CTA, open items, notes", () => {
+    const o = run(result((b) => { b.cta = "Talk to us when you are ready."; b.real_world_warnings.push({ warning: "Bank liens can surface late in escrow.", claim_ids: [] }); b.outline[1].notes = "lead with the form name"; }, { affected_units: [{ unit_key: "s2", reason: "notes changed" }, { unit_key: "s3", reason: "CTA lives here" }] }));
+    expect(o.kind).toBe("revise");
   });
   it("a case or spacing change is not a change", () => {
     expect(run(result(() => {}, { target_keyword: "  Hoarded  House " })).kind).toBe("no_brief_change");

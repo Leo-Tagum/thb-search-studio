@@ -37,6 +37,12 @@ describe("Research team files (R1, R2, R3)", () => {
     expect(t).toContain("Never competitor sites");
     expect(t).toContain("twinhomebuyer.com");
   });
+  it("R1 knows web quotes are verified against a stored page snapshot", () => {
+    const t = readFileSync(join(dir, "thb-r1-legal-official.md"), "utf8");
+    expect(t).toMatch(/stores the page text as an Evidence Library source/);
+    expect(t).toMatch(/sha256/);
+    expect(t).toMatch(/is refused/);
+  });
   it("R2 reads stored GSC data only: no web tool, no estimates", () => {
     const t = readFileSync(join(dir, "thb-r2-search.md"), "utf8");
     expect(t).toMatch(/Stored data only/);

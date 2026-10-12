@@ -146,7 +146,7 @@ export type ValidationContext = {
   libraryPassages?: Map<string, { source_id: string; text: string }>; // Agent 2: stored text of Evidence Library passages
 };
 
-const norm = (t: string) => t.toLowerCase().replace(/\s+/g, " ").trim();
+export const norm = (t: string) => t.toLowerCase().replace(/\s+/g, " ").trim();
 
 export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: ValidationContext): string[] {
   const errs: string[] = [];
