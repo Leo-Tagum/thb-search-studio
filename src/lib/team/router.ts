@@ -15,6 +15,7 @@ export interface TicketRec {
   id: string; no: number; type: TicketType; from: string[]; to: string; unitKey: string; issue: string; severity: FeedbackCard["severity"];
   evidence: string; fix: string | null; blocking: boolean; status: TicketStatus; round: number; parentId: string | null; versionHash: string;
   trigger: EscalationTrigger | null; resolution: string | null;
+  mergedFrom: string[];     // ids of the original council cards this ticket was merged from (shown on click, so a wrong merge is visible)
 }
 export interface LogRow { seq: number; at: string; ticketId: string | null; role: string; action: LogAction; round: number; versionHash: string; body: string }
 export interface RouterState { ticketBudget: number; roundLimit: number; stopped: boolean; tickets: TicketRec[]; log: LogRow[] }
@@ -47,14 +48,14 @@ const refuse = (s: RouterState, ctx: Ctx, role: string, ticketId: string | null,
 // A system escalation (limit hit). From ORCHESTRATOR, never counted against the budget; carries both positions so Leo can decide.
 const escalate = (s: RouterState, ctx: Ctx, trigger: EscalationTrigger, unitKey: string, issue: string, evidence: string, parent: TicketRec | null): { state: RouterState; ticket: TicketRec } => {
   const no = s.tickets.length + 1;
-  const ticket: TicketRec = { id: `T${no}`, no, type: "HUMAN_ESCALATION", from: ["ORCHESTRATOR"], to: "LEO", unitKey, issue, severity: "must fix", evidence, fix: null, blocking: false, status: "OPEN", round: 1, parentId: parent?.id ?? null, versionHash: ctx.versionHash, trigger, resolution: null };
+  const ticket: TicketRec = { id: `T${no}`, no, type: "HUMAN_ESCALATION", from: ["ORCHESTRATOR"], to: "LEO", unitKey, issue, severity: "must fix", evidence, fix: null, blocking: false, status: "OPEN", round: 1, parentId: parent?.id ?? null, versionHash: ctx.versionHash, trigger, resolution: null, mergedFrom: [] };
   let next: RouterState = { ...s, tickets: [...s.tickets, ticket] };
   if (parent) next = setTicket(next, { ...parent, status: "ESCALATED" });
   next = withLog(next, ctx, { ticketId: ticket.id, role: "ORCHESTRATOR", action: "ESCALATE", round: 1, body: `${trigger}: ${issue}` });
   return { state: next, ticket };
 };
 
-export function raiseTicket(s: RouterState, rawCard: unknown, ctx: Ctx, opts: { trigger?: EscalationTrigger; parentId?: string } = {}): Result {
+export function raiseTicket(s: RouterState, rawCard: unknown, ctx: Ctx, opts: { trigger?: EscalationTrigger; parentId?: string; mergedFrom?: string[] } = {}): Result {
   const sender = Array.isArray((rawCard as FeedbackCard | undefined)?.from) ? (rawCard as FeedbackCard).from.join("+") : "unknown";
   const parsed = parseFeedbackCard(rawCard);
   if (!parsed.success) return refuse(s, ctx, sender, null, 1, `invalid card: ${parsed.error.issues.map((i) => `${i.path.join(".") || "card"}: ${i.message}`).join("; ")}`);
@@ -70,8 +71,8 @@ export function raiseTicket(s: RouterState, rawCard: unknown, ctx: Ctx, opts: { 
     return { ok: false, reason: "ticket budget reached", state: e.state, escalation: e.ticket };
   }
   const no = s.tickets.length + 1;
-  const ticket: TicketRec = { id: `T${no}`, no, type: c.ticket, from: c.from, to: c.to, unitKey: c.section, issue: c.issue, severity: c.severity, evidence: c.evidence, fix: c.fix ?? null, blocking: c.blocking, status: "OPEN", round: 1, parentId: opts.parentId ?? null, versionHash: ctx.versionHash, trigger: isEscalation ? opts.trigger! : null, resolution: null };
-  const next = withLog({ ...s, tickets: [...s.tickets, ticket] }, ctx, { ticketId: ticket.id, role: sender, action: "RAISE", round: 1, body: `${c.ticket} ${sender} -> ${c.to} [${c.section}] ${c.issue}` });
+  const ticket: TicketRec = { id: `T${no}`, no, type: c.ticket, from: c.from, to: c.to, unitKey: c.section, issue: c.issue, severity: c.severity, evidence: c.evidence, fix: c.fix ?? null, blocking: c.blocking, status: "OPEN", round: 1, parentId: opts.parentId ?? null, versionHash: ctx.versionHash, trigger: isEscalation ? opts.trigger! : null, resolution: null, mergedFrom: opts.mergedFrom ?? [] };
+  const next = withLog({ ...s, tickets: [...s.tickets, ticket] }, ctx, { ticketId: ticket.id, role: sender, action: "RAISE", round: 1, body: `${c.ticket} ${sender} -> ${c.to} [${c.section}] ${c.issue}${opts.mergedFrom?.length ? ` (merged from ${opts.mergedFrom.join(", ")})` : ""}` });
   return { ok: true, state: next, ticket };
 }
 

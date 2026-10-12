@@ -119,3 +119,14 @@ describe("escalation to Leo and the log", () => {
     expect(s0.log).toHaveLength(0);
   });
 });
+
+describe("merged council cards keep their links", () => {
+  it("a ticket raised from a merged card carries the original card ids, and the log says so", () => {
+    const r = must(raiseTicket(newRouter(), qc({ from: ["V2", "V3"] }), ctx, { mergedFrom: ["c1", "c2"] }));
+    expect(r.ticket.mergedFrom).toEqual(["c1", "c2"]);
+    expect(r.state.log[0].body).toContain("merged from c1, c2");
+  });
+  it("an unmerged ticket has no links", () => {
+    expect(must(raiseTicket(newRouter(), qc(), ctx)).ticket.mergedFrom).toEqual([]);
+  });
+});
