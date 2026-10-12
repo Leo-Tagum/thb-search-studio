@@ -18,6 +18,7 @@ const oneIssue = text(600).refine((s) => !/[\r\n]/.test(s) && !/(^|\s)(\d+[.)]|[
 export const feedbackCard = z
   .strictObject({
     ticket: z.enum(TICKET_TYPES),
+    key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i).optional(),   // the reviewer's issue key; lets the council merge the same issue raised twice
     from: z.array(role).min(1).max(3).refine((a) => new Set(a).size === a.length, "duplicate roles in FROM"),  // "V2 + V3 (agreed)" is ["V2","V3"]
     to: z.union([role, z.literal("LEO")]),
     section: z.string().trim().min(1).max(60),
