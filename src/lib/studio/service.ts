@@ -12,6 +12,7 @@ import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
 import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../team/mode";
+import { agentLikeActor, resolveActorError } from "./actors";
 import { STUDIO_AGENT_META, isStudioAgent, studioOutputSchemas, studioSemanticChecks, type StudioAgentKey, type StudioValidationCtx } from "./agents";
 
 export const SYSTEM: Actor = { kind: "system", id: "studio" };
@@ -327,10 +328,13 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
 
 // ---------- human actions on sections ----------
 export async function resolveSection(db: SupabaseClient, articleId: string, unitKey: string, action: { kind: "request_revision"; text: string } | { kind: "hold" } | { kind: "reopen"; text: string }, actorId: string) {
+  // Leo's action only: an agent-like actor is refused before anything is read or written.
+  if (agentLikeActor(actorId) || !actorId.trim()) return { ok: false as const, reason: resolveActorError(actorId, null)! };
   const L = await load(db, articleId);
+  const denied = resolveActorError(actorId, modeOf(L.article));
+  if (denied) return { ok: false as const, reason: denied };
   const row = L.sections.find((s) => s.section_key === unitKey);
   if (!row) return { ok: false as const, reason: "no such section" };
-  if (!actorId.trim()) return { ok: false as const, reason: "actor required" };
   const st = stateOf(row);
   const o = action.kind === "reopen" ? reopen(st, action.text) : resolveByHuman(st, action.kind === "hold" ? { kind: "hold" } : { kind: "request_revision", issueText: action.text });
   if (!o.ok) return { ok: false as const, reason: o.error };
