@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { sha256 } from "../studio/hash";
-import { makeSnapshot, memoryStore, officialFetcher, pageText, snapshotIntact, snapshotToLibraryRows, verifyR1Web, type Fetcher } from "./snapshots";
+import { fulfillFetchRequest, makeSnapshot, memoryStore, officialFetcher, pageText, snapshotIntact, snapshotToLibraryRows, verifyR1Web, type Fetcher } from "./snapshots";
 
 const URL1 = "https://www.dre.ca.gov/disclosures";
 const PAGE = `<html><head><title>x</title><style>p{color:red}</style><script>var a = "ignore me";</script></head><body>
@@ -54,66 +54,128 @@ describe("page snapshots", () => {
   });
 });
 
-describe("R1 web claims are checked word for word against a stored snapshot", () => {
-  it("fetches and stores the page, then accepts a verbatim quote and reports the matching passage", async () => {
-    const d = deps();
-    const r = await verifyR1Web(out(), d);
-    expect(r.errors).toEqual([]);
+// Flow: R1 asks for URLs (fetch request) -> code fetches and stores -> R1 answers citing the stored passages by id.
+const store = async (pages: Record<string, string> = { [URL1]: PAGE }, calls: string[] = []) => {
+  const d = deps(pages, calls);
+  const f = await fulfillFetchRequest({ ticket_id: null, fetch_request: Object.keys(pages).map((url) => ({ url, why: "needed for the disclosure claim" })) }, d);
+  return { d, f };
+};
+const pid = (snap: { passages: { passageId: string; text: string }[] }, needle: string) => snap.passages.find((p) => p.text.includes(needle))!.passageId;
+
+describe("R1 fetch request: code fetches, stores and returns passages", () => {
+  it("fetches each requested official URL, stores it, and returns its passage ids", async () => {
+    const { d, f } = await store();
+    expect(f.errors).toEqual([]);
     expect(d.store.all).toHaveLength(1);
-    expect(d.store.all[0]).toMatchObject({ url: URL1, retrievedDate: "2026-10-12" });
-    expect(r.matched.get("clm:1")?.[0]).toMatch(/^snap:/);
+    expect(f.snapshots[0]).toMatchObject({ url: URL1, retrievedDate: "2026-10-12", sha256: d.store.all[0].sha256 });
+    expect(f.snapshots[0].passages[0].passageId).toMatch(/^snap:/);
   });
-  it("the quote check is case and whitespace tolerant, like library quotes, and nothing more", async () => {
-    expect((await verifyR1Web(out([src()], [claim({ quote: "MUST  deliver a real estate transfer disclosure statement to the buyer" })]), deps())).errors).toEqual([]);
-    const paraphrase = await verifyR1Web(out([src()], [claim({ quote: "must give the buyer a transfer disclosure statement" })]), deps());
-    expect(paraphrase.errors.join()).toMatch(/does not appear word for word/);
-    const extended = await verifyR1Web(out([src()], [claim({ quote: QUOTE + " within three days" })]), deps());
-    expect(extended.errors.join()).toMatch(/does not appear word for word/);
-  });
-  it("a web claim without a stored snapshot is refused: the page cannot be fetched", async () => {
-    const r = await verifyR1Web(out(), deps({}));
-    expect(r.errors.join()).toMatch(/no stored snapshot/);
-    expect(r.errors.join()).toMatch(/claim clm:1: a source it rests on has no stored snapshot/);
-    expect(r.matched.size).toBe(0);
-  });
-  it("a supported web claim without a quote is refused, high-risk or not", async () => {
-    expect((await verifyR1Web(out([src()], [claim({ quote: "" })]), deps())).errors.join()).toMatch(/word-for-word quote/);
-    expect((await verifyR1Web(out([src()], [claim({ risk: "low", quote: undefined })]), deps())).errors.join()).toMatch(/needs a word-for-word quote/);
-  });
-  it("an unsupported claim needs no snapshot quote", async () => {
-    expect((await verifyR1Web(out([src()], [claim({ support: "unsupported", quote: undefined, source_ids: [] })]), deps())).errors).toEqual([]);
-  });
-  it("uses a snapshot that is already stored instead of fetching again, and refuses one whose sha256 no longer matches", async () => {
-    const d = deps();
-    await verifyR1Web(out(), d);
+  it("never fetches a non-official URL, and reports it; official ones in the same request still work", async () => {
     const calls: string[] = [];
-    const again = await verifyR1Web(out(), { ...d, fetcher: fakeFetcher({ [URL1]: PAGE }, calls) });
+    const d = deps({ [URL1]: PAGE, "https://www.opendoor.com/x": "<p>x</p>", "https://www.twinhomebuyer.com/y": "<p>y</p>" }, calls);
+    const f = await fulfillFetchRequest({ ticket_id: "T1", fetch_request: [{ url: "https://www.opendoor.com/x", why: "competitor" }, { url: "https://www.twinhomebuyer.com/y", why: "our site" }, { url: URL1, why: "official" }] }, d);
+    expect(f.errors.join()).toMatch(/opendoor.*allowlist/);
+    expect(f.errors.join()).toMatch(/twinhomebuyer/);
+    expect(calls).toEqual([URL1]);
+    expect(f.snapshots.map((s) => s.url)).toEqual([URL1]);
+  });
+  it("reports a page that cannot be fetched, and a malformed or oversized request", async () => {
+    const d = deps({});
+    expect((await fulfillFetchRequest({ ticket_id: null, fetch_request: [{ url: URL1, why: "needed here" }] }, d)).errors.join()).toMatch(/could not be fetched/);
+    expect((await fulfillFetchRequest({ nope: true }, d)).errors.length).toBeGreaterThan(0);
+    expect((await fulfillFetchRequest({ ticket_id: null, fetch_request: [] }, d)).errors.length).toBeGreaterThan(0);
+    const six = Array.from({ length: 6 }, (_, i) => ({ url: `https://www.dre.ca.gov/p${i}`, why: "needed here" }));
+    expect((await fulfillFetchRequest({ ticket_id: null, fetch_request: six }, d)).errors.length).toBeGreaterThan(0);
+    expect((await fulfillFetchRequest({ ticket_id: null, fetch_request: [{ url: URL1, why: "needed here" }], approved: true }, d)).errors.length).toBeGreaterThan(0);   // strict
+  });
+  it("reuses a stored snapshot instead of fetching again, and refuses one whose sha256 no longer matches", async () => {
+    const { d } = await store();
+    const calls: string[] = [];
+    const again = await fulfillFetchRequest({ ticket_id: null, fetch_request: [{ url: URL1, why: "needed again" }] }, { ...d, fetcher: fakeFetcher({ [URL1]: PAGE }, calls) });
     expect(again.errors).toEqual([]);
     expect(calls).toEqual([]);
     const bad = memoryStore();
     const s = makeSnapshot(URL1, "2026-10-12", PAGE);
     await bad.put({ ...s, text: s.text.replace("must deliver", "may skip") });
-    expect((await verifyR1Web(out(), { ...d, store: bad })).errors.join()).toMatch(/does not match its sha256/);
+    expect((await fulfillFetchRequest({ ticket_id: null, fetch_request: [{ url: URL1, why: "needed again" }] }, { ...d, store: bad })).errors.join()).toMatch(/does not match its sha256/);
   });
-  it("a quote that is only in a different source's page is refused", async () => {
-    const other = "https://www.courts.ca.gov/other";
-    const r = await verifyR1Web(out([src(), src({ id: "src:2", url: other })], [claim({ source_ids: ["src:2"] })]), deps({ [URL1]: PAGE, [other]: "<p>Something unrelated about court forms.</p>" }));
-    expect(r.errors.join()).toMatch(/does not appear word for word/);
+});
+
+describe("R1 quotes only from stored passages, cited by id (never from what WebFetch showed)", () => {
+  const answer = async (claimOver: Record<string, unknown> = {}, pages: Record<string, string> = { [URL1]: PAGE }) => {
+    const { d, f } = await store(pages);
+    const id = pid(f.snapshots[0], "must deliver");
+    return { d, f, id, run: (o: Record<string, unknown> = {}) => verifyR1Web(out([src()], [claim({ passage_ids: [id], ...claimOver, ...o })]), { store: d.store }) };
+  };
+  it("accepts a verbatim quote from the cited stored passage and reports the matching passage", async () => {
+    const { run, id } = await answer();
+    const r = await run();
+    expect(r.errors).toEqual([]);
+    expect(r.matched.get("clm:1")).toEqual([id]);
   });
-  it("a claim resting on two web sources is checked against both and needs both stored", async () => {
+  it("the quote check is case and whitespace tolerant, like library quotes, and nothing more", async () => {
+    const { run } = await answer();
+    expect((await run({ quote: "MUST  deliver a real estate transfer disclosure statement to the buyer" })).errors).toEqual([]);
+    expect((await run({ quote: "must give the buyer a transfer disclosure statement" })).errors.join()).toMatch(/does not appear word for word/);
+    expect((await run({ quote: QUOTE + " within three days" })).errors.join()).toMatch(/does not appear word for word/);
+  });
+  it("a quote taken from a WebFetch summary (not on the stored page) is refused, even with a real passage id", async () => {
+    const { run } = await answer();
+    const webFetchSummary = "The page says sellers are required to hand buyers the disclosure form promptly.";
+    expect((await run({ quote: webFetchSummary })).errors.join()).toMatch(/does not appear word for word/);
+  });
+  it("a web claim must cite passage ids: none, unknown ids, and ids from a source it does not cite are refused", async () => {
+    const { run, f } = await answer();
+    expect((await run({ passage_ids: [] })).errors.join()).toMatch(/must cite passage_ids/);
+    expect((await run({ passage_ids: undefined })).errors.join()).toMatch(/must cite passage_ids/);
+    expect((await run({ passage_ids: ["snap:000000000000:1"] })).errors.join()).toMatch(/is not in the stored snapshot of a source this claim cites/);
+    // a second stored page that does contain the words; citing its passage while citing only source src:1 is refused
     const other = "https://www.courts.ca.gov/other";
-    const r = await verifyR1Web(out([src(), src({ id: "src:2", url: other })], [claim({ source_ids: ["src:1", "src:2"] })]), deps({ [URL1]: PAGE }));
+    const { d } = await store({ [URL1]: PAGE, [other]: `<p>${QUOTE}</p>` });
+    const otherId = (await d.store.get(other))!.passages[0].passageId;
+    const r = await verifyR1Web(out([src(), src({ id: "src:2", url: other })], [claim({ source_ids: ["src:1"], passage_ids: [otherId] })]), { store: d.store });
+    expect(r.errors.join()).toMatch(/is not in the stored snapshot of a source this claim cites/);
+    expect(f.errors).toEqual([]);
+  });
+  it("the quote must be in the passages the claim cites, not merely somewhere on the page", async () => {
+    const long = Array.from({ length: 40 }, (_, i) => `<p>Filler paragraph number ${i} about unrelated forms and fees that goes on for a while to force several passages.</p>`).join("") + `<p>${QUOTE}.</p>`;
+    const { d, f } = await store({ [URL1]: long });
+    const first = f.snapshots[0].passages[0].passageId;
+    const last = pid(f.snapshots[0], "must deliver");
+    expect(first).not.toBe(last);
+    expect((await verifyR1Web(out([src()], [claim({ passage_ids: [first] })]), { store: d.store })).errors.join()).toMatch(/does not appear word for word/);
+    expect((await verifyR1Web(out([src()], [claim({ passage_ids: [last] })]), { store: d.store })).errors).toEqual([]);
+  });
+  it("a web claim without a stored snapshot is refused, and nothing is fetched at this step", async () => {
+    const r = await verifyR1Web(out([src()], [claim({ passage_ids: ["snap:abc:1"] })]), { store: memoryStore() });
+    expect(r.errors.join()).toMatch(/no stored snapshot/);
+    expect(r.errors.join()).toMatch(/claim clm:1: a source it rests on has no stored snapshot/);
+    expect(r.matched.size).toBe(0);
+  });
+  it("a supported web claim without a quote is refused, high-risk or not", async () => {
+    const { run } = await answer();
+    expect((await run({ quote: "" })).errors.join()).toMatch(/word-for-word quote/);
+    expect((await run({ risk: "low", quote: undefined })).errors.join()).toMatch(/needs a word-for-word quote/);
+  });
+  it("an unsupported claim needs no snapshot quote", async () => {
+    const { d } = await store();
+    expect((await verifyR1Web(out([src()], [claim({ support: "unsupported", quote: undefined, source_ids: [] })]), { store: d.store })).errors).toEqual([]);
+  });
+  it("refuses a source whose stored snapshot no longer matches its sha256", async () => {
+    const bad = memoryStore();
+    const s = makeSnapshot(URL1, "2026-10-12", PAGE);
+    await bad.put({ ...s, text: s.text.replace("must deliver", "may skip") });
+    expect((await verifyR1Web(out(), { store: bad })).errors.join()).toMatch(/does not match its sha256/);
+  });
+  it("a claim resting on two web sources needs both stored", async () => {
+    const { d } = await store();
+    const r = await verifyR1Web(out([src(), src({ id: "src:2", url: "https://www.courts.ca.gov/other" })], [claim({ source_ids: ["src:1", "src:2"], passage_ids: [(await d.store.get(URL1))!.passages[0].passageId] })]), { store: d.store });
     expect(r.errors.join()).toMatch(/source src:2: no stored snapshot/);
   });
-  it("the allowlist and legal-quote rules run first and nothing is fetched for a non-official source", async () => {
-    const calls: string[] = [];
-    const r = await verifyR1Web(out([src({ url: "https://www.opendoor.com/blog/x" })]), deps({ "https://www.opendoor.com/blog/x": "<p>x</p>" }, calls));
+  it("the allowlist and legal-quote rules run first, and library sources are left to the library quote check", async () => {
+    const r = await verifyR1Web(out([src({ url: "https://www.opendoor.com/blog/x" })]), { store: memoryStore() });
     expect(r.errors.join()).toMatch(/not on the official-source allowlist/);
-    expect(calls).toEqual([]);
-  });
-  it("library sources are left to the library quote check", async () => {
-    const r = await verifyR1Web(out([{ id: "src:1", kind: "library", library_source_id: "lib-1" }], [claim()]), deps({}));
-    expect(r.errors).toEqual([]);
+    expect((await verifyR1Web(out([{ id: "src:1", kind: "library", library_source_id: "lib-1" }], [claim()]), { store: memoryStore() })).errors).toEqual([]);
   });
 });
 

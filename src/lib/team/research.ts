@@ -4,7 +4,7 @@
 import { officialUrl } from "../agents/official-sources";
 
 type Src = { id?: string; kind?: string; url?: string | null };
-type Claim = { id?: string; support?: string; risk?: string; quote?: string | null; source_ids?: string[] };
+type Claim = { id?: string; support?: string; risk?: string; quote?: string | null; passage_ids?: string[]; source_ids?: string[] };
 export type ResearchOutput = { result?: { sources?: Src[]; claims?: Claim[] } };
 
 const QUOTE_MAX = 400;

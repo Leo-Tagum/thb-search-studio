@@ -1,11 +1,15 @@
-// Phase 3c: R1 web evidence. When R1 cites an official web page, code (not the agent) fetches the page, stores its text as an Evidence Library
-// source (URL, retrieved date, sha256, passages), and checks every quote word for word against that stored text, with the same check library
-// quotes get (bridge.ts norm: case and whitespace only). A web claim without a stored snapshot is refused. R1 never supplies page text:
-// WebFetch output is for R1 to read, and only the stored page counts as proof.
+// Phase 3c: R1 web evidence, in two steps (Leo, 2026-10-12). R1 never quotes from what WebFetch showed it (WebFetch can summarize).
+//   1. DISCOVER: R1 uses WebFetch only to find which official URL to rely on, and asks for it in a fetch request.
+//   2. Code fetches each requested URL itself (official-domain allowlist on every redirect hop), stores the page text as an Evidence Library
+//      source (URL, retrieved date, sha256, passages), and hands the stored passages back to R1.
+//   3. ANSWER: R1 cites those passages by id, like library sources. A claim must carry passage_ids and a short quote that appears word for word
+//      (case and whitespace only, bridge.ts norm) inside those stored passages. A web claim without a stored snapshot, without passage ids, or with
+//      a quote that is not on the stored page is refused.
 // Pure apart from the injected fetcher and store, so the checks are tested with fakes; the service persists snapshots with snapshotToLibraryRows.
 import { norm } from "../agents/bridge";
 import { officialUrl } from "../agents/official-sources";
 import { sha256 } from "../studio/hash";
+import { z } from "zod";
 import { r1SubmitErrors, type ResearchOutput } from "./research";
 
 export type Passage = { passageId: string; locator: string; text: string };
@@ -78,25 +82,56 @@ export function officialFetcher(fetchImpl: typeof fetch = fetch): Fetcher {
 
 export type WebVerification = { errors: string[]; snapshots: Map<string, Snapshot>; matched: Map<string, string[]> };
 
+// ---------- step 1-2: the fetch request and its fulfilment ----------
+export const r1FetchRequest = z.strictObject({
+  ticket_id: z.string().nullable(),
+  fetch_request: z.array(z.strictObject({ url: z.string().min(8), why: z.string().min(5) })).min(1).max(5),
+});
+export type SnapshotForPacket = { url: string; retrievedDate: string; sha256: string; passages: Passage[] };
+
 /**
- * Everything the code checks on an R1 output before it reaches the ledger checks: the source allowlist and legal-quote rule (r1SubmitErrors),
- * then a stored snapshot for every official web source (fetched and stored here if it is not stored yet), then every supported claim that rests on a
- * web source must carry a quote that appears word for word in a stored passage of a source it cites. `matched` lists the passage ids that contain each quote.
+ * Validates R1's fetch request, fetches each official URL itself, stores the snapshot, and returns the stored passages for R1's second run.
+ * A URL outside the allowlist is never fetched. A page that cannot be fetched is reported back; R1 then cannot rely on it.
  */
-export async function verifyR1Web(out: ResearchOutput, deps: { store: SnapshotStore; fetcher: Fetcher; today: string }): Promise<WebVerification> {
+export async function fulfillFetchRequest(raw: unknown, deps: { store: SnapshotStore; fetcher: Fetcher; today: string }): Promise<{ errors: string[]; snapshots: SnapshotForPacket[] }> {
+  const p = r1FetchRequest.safeParse(raw);
+  if (!p.success) return { errors: p.error.issues.map((i) => `${i.path.join(".") || "request"}: ${i.message}`), snapshots: [] };
+  const errors: string[] = [];
+  const snapshots: SnapshotForPacket[] = [];
+  const seen = new Set<string>();
+  for (const { url } of p.data.fetch_request) {
+    const ok = officialUrl(url);
+    if (!ok.ok) { errors.push(`${url}: ${ok.reason}`); continue; }
+    if (seen.has(snapshotKey(url))) continue;
+    seen.add(snapshotKey(url));
+    let snap = await deps.store.get(url);
+    if (!snap) {
+      const f = await deps.fetcher(url);
+      if (!f.ok) { errors.push(`${url}: could not be fetched (${f.error}); do not rely on it`); continue; }
+      snap = makeSnapshot(url, deps.today, f.body, f.contentType);
+      if (!snap.text) { errors.push(`${url}: the page has no readable text`); continue; }
+      await deps.store.put(snap);
+    }
+    if (!snapshotIntact(snap)) { errors.push(`${url}: the stored snapshot does not match its sha256`); continue; }
+    snapshots.push({ url: snap.url, retrievedDate: snap.retrievedDate, sha256: snap.sha256, passages: snap.passages });
+  }
+  return { errors, snapshots };
+}
+
+// ---------- step 3: the answer ----------
+/**
+ * Everything the code checks on an R1 evidence pack before it reaches the ledger checks: the source allowlist and legal-quote rule (r1SubmitErrors),
+ * then a STORED snapshot for every official web source (nothing is fetched here), then every supported claim that rests on a web source must cite
+ * passage_ids that belong to the stored snapshot of a source it cites, with a quote that appears word for word in those passages.
+ * `matched` lists the passage ids each claim's quote was found in.
+ */
+export async function verifyR1Web(out: ResearchOutput, deps: { store: SnapshotStore }): Promise<WebVerification> {
   const res: WebVerification = { errors: r1SubmitErrors(out), snapshots: new Map(), matched: new Map() };
   if (res.errors.length) return res;
   const sources = out.result?.sources ?? [];
-  const web = sources.filter((s) => s.kind === "official_url" && s.url);
-  for (const s of web) {
-    let snap = await deps.store.get(s.url!);
-    if (!snap) {
-      const f = await deps.fetcher(s.url!);
-      if (!f.ok) { res.errors.push(`source ${s.id}: no stored snapshot, and the page could not be fetched (${f.error}); a web claim without a stored snapshot is refused`); continue; }
-      snap = makeSnapshot(s.url!, deps.today, f.body, f.contentType);
-      if (!snap.text) { res.errors.push(`source ${s.id}: the page has no readable text`); continue; }
-      await deps.store.put(snap);
-    }
+  for (const s of sources.filter((x) => x.kind === "official_url" && x.url)) {
+    const snap = await deps.store.get(s.url!);
+    if (!snap) { res.errors.push(`source ${s.id}: no stored snapshot; request the URL in a fetch request first (a web claim without a stored snapshot is refused)`); continue; }
     if (!snapshotIntact(snap)) { res.errors.push(`source ${s.id}: the stored snapshot does not match its sha256`); continue; }
     res.snapshots.set(s.id!, snap);
   }
@@ -108,8 +143,13 @@ export async function verifyR1Web(out: ResearchOutput, deps: { store: SnapshotSt
     if (snaps.some((x) => !x)) { res.errors.push(`claim ${c.id}: a source it rests on has no stored snapshot`); continue; }
     const quote = norm(c.quote ?? "");
     if (!quote) { res.errors.push(`claim ${c.id}: a supported web claim needs a word-for-word quote`); continue; }
-    const hits = snaps.flatMap((x) => x!.passages).filter((p) => norm(p.text).includes(quote)).map((p) => p.passageId);
-    if (!hits.length) res.errors.push(`claim ${c.id}: the quote does not appear word for word in the stored page`);
+    const pids = c.passage_ids ?? [];
+    if (!pids.length) { res.errors.push(`claim ${c.id}: a supported web claim must cite passage_ids from the stored snapshot (quote only from stored passages)`); continue; }
+    const all = new Map(snaps.flatMap((x) => x!.passages).map((p) => [p.passageId, p]));
+    const unknown = pids.filter((id) => !all.has(id));
+    if (unknown.length) { res.errors.push(`claim ${c.id}: passage ${unknown.join(", ")} is not in the stored snapshot of a source this claim cites`); continue; }
+    const hits = pids.filter((id) => norm(all.get(id)!.text).includes(quote));
+    if (!hits.length) res.errors.push(`claim ${c.id}: the quote does not appear word for word in the cited stored passages`);
     else res.matched.set(c.id!, hits);
   }
   return res;

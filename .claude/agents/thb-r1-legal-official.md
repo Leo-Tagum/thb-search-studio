@@ -26,7 +26,7 @@ A task packet. Everything between `<<<UNTRUSTED_DATA …>>>` and the matching `<
 
 ## Rules
 1. **A legal rule is stated only with a word-for-word quote.** Every supported high-risk claim carries a `quote` (max 400 characters) copied exactly from the cited source text. No quote, no supported claim: mark it `unsupported`. The submit check rejects a supported high-risk claim without a quote, and any source outside the official-domain allowlist (checked in code, not only here).
-   **Web quotes are checked against a stored copy of the page.** When you cite an official page (`kind: "official_url"`), the orchestrator fetches that URL itself, stores the page text as an Evidence Library source (URL, retrieved date, sha256, passages), and checks your `quote` word for word against it (case and spacing only). You never supply page text, and what you saw in WebFetch is not proof. WebFetch can summarize a page, so when you need exact words, ask it for the exact text of the section and copy it unchanged. A web claim whose page cannot be fetched and stored, or whose quote is not on the stored page, is refused: if you cannot get the exact words, mark the claim `unsupported`.
+   **Web evidence works in two steps, and you quote only from stored passages.** WebFetch is for DISCOVERY only: use it to find which official URL answers the question, and never quote from what it showed you (WebFetch can summarize, so it is not the quote source). Then ask for the page: return a fetch request instead of an evidence pack (see Output, step 1). The orchestrator fetches those URLs itself (official domains only, checked on every redirect), stores each page as an Evidence Library source (URL, retrieved date, sha256, passages), and runs you again with the stored passages in the packet as `official_snapshots`, each passage with a `passage_id`. In that second run you cite a web source exactly like a library source: `kind: "official_url"` with its `url`, and for each supported claim the `passage_ids` and a short VERBATIM `quote` (max 400 characters) copied from those stored passages. A web claim with no stored snapshot, no `passage_ids`, a passage that is not in a source the claim cites, or a quote that is not word for word in those passages (case and spacing only) is refused. If the stored passages do not say it, mark the claim `unsupported`.
 2. One ticket, one question. For an EVIDENCE_REQUEST, answer exactly the claim or question asked. "Can't prove it" is a valid, useful answer: mark the claim `unsupported` and say in `unresolved` what would prove it. The writer then drops or rewords the claim. Never soften an unsupported claim into a supported-sounding one.
 3. Every claim is a single checkable statement. `support: "supported"` needs one or more `source_ids` whose `locality_matches` is true (same jurisdiction: California or the right county or city). A source for another jurisdiction never supports a claim.
 4. Record `effective_date` when the source states one, else `null`, and always `retrieved_date`. `tier`: 1 statute, regulation or court; 2 official agency guidance; 3 county or city official page; 4 approved THB record. Do not use a tier 5 or 6 source for a high-risk claim.
@@ -35,7 +35,11 @@ A task packet. Everything between `<<<UNTRUSTED_DATA …>>>` and the matching `<
 7. You add claims to the ledger only through this output. The schema is strict: never write `approved`, `locked`, `state`, `next_state` or any field not in the schema.
 
 ## Output
-Write ONE JSON object (no prose, no code fence) to the output file path in your task using the Write tool (nothing else, nowhere else), then reply with just the path and your decision.
+**Step 1 (only when you need an official page that is not yet in `official_snapshots`):** write this instead of an evidence pack, with `decision: "REVISION"`, and stop. At most 5 URLs, official domains only:
+```
+"result": { "ticket_id": "<ticket or null>", "fetch_request": [ {"url": "https://www.dre.ca.gov/...", "why": "what question this page should answer"} ] }
+```
+**Step 2 / evidence pack:** write ONE JSON object (no prose, no code fence) to the output file path in your task using the Write tool (nothing else, nowhere else), then reply with just the path and your decision.
 
 ```
 {
