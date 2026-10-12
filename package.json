@@ -27,6 +27,7 @@
     "fetch:bodies": "tsx --env-file=.env.local scripts/fetch-post-bodies.mts",
     "audit:blog": "tsx --env-file=.env.local scripts/run-blog-audit.mts",
     "smoke:studio": "tsx --env-file=.env.local scripts/studio-smoke.mts",
+    "smoke:team-view": "tsx --env-file=.env.local scripts/team-view-smoke.mts",
     "voice:build": "tsx --env-file=.env.local scripts/build-voice-reference.mts",
     "verify:phase3": "tsx --env-file=.env.local scripts/phase3-verify.mts",
     "room:build": "tsx scripts/build-approval-room.mts"

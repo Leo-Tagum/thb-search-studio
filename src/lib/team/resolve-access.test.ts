@@ -110,9 +110,11 @@ describe("the only call sites are Leo's: the UI action and the operator CLI", ()
       expect(text, f).not.toMatch(/resolveSection/);
     }
   });
-  it("the UI entry point is a server action behind the Studio page, and the section action is the only thing that calls it", () => {
+  it("the UI entry points are server actions behind the Studio page, and every call acts as ACTOR (leo)", () => {
     const actions = readFileSync("src/app/studio/actions.ts", "utf8");
     expect(actions.startsWith('"use server"')).toBe(true);
-    expect(actions.match(/resolveSection\(/g)?.length).toBe(1);
+    const calls = [...actions.matchAll(/resolveSection\([^;]*;/g)].map((m) => m[0]);
+    expect(calls.length).toBeGreaterThanOrEqual(1);
+    for (const c of calls) expect(c, c).toMatch(/, ACTOR\)/);                    // every call acts as the constant operator "leo"
   });
 });

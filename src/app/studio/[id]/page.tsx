@@ -6,9 +6,11 @@ import { load, stateOf } from "@/lib/studio/service";
 import { unitStrings, type Unit } from "@/lib/studio/schema";
 import { lineDiff } from "@/lib/studio/diff";
 import { modeAction, sectionAction } from "../actions";
+import { loadTeamView } from "@/lib/team/store";
+import { StuckInbox, TeamTab } from "./team-panel";
 import { modeChangeRule, modeOf } from "@/lib/team/mode";
 
-const TABS = [["brief", "Brief"], ["draft", "Draft"], ["evidence", "Evidence"], ["critiques", "Agent critiques"], ["seo", "SEO/AEO/GEO"], ["diff", "Diff"], ["approvals", "Approvals"], ["preview", "Preview"]] as const;
+const TABS = [["brief", "Brief"], ["draft", "Draft"], ["evidence", "Evidence"], ["critiques", "Agent critiques"], ["seo", "SEO/AEO/GEO"], ["diff", "Diff"], ["approvals", "Approvals"], ["preview", "Preview"], ["team", "Team"]] as const;
 
 function Actions({ article, unit, status }: { article: string; unit: string; status: string }) {
   const kinds = status === "LOCKED" ? [["reopen", "Reopen for revision"]] : ["ESCALATED", "BLOCKED_CLAIM", "BLOCKED_PRIVACY"].includes(status) ? [["request_revision", "Send back to writer with this directive"], ["hold", "Hold"]] : [];
@@ -36,6 +38,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
   const { data: ver } = L.article.locked_version_id ? await db.from("article_versions").select("*").eq("id", L.article.locked_version_id).single() : { data: null };
   const keyOf = (sid: string) => L.sections.find((s) => s.id === sid)?.section_key;
   const mode = modeOf(L.article);
+  const teamView = mode === "team" ? await loadTeamView(db, id) : null;
   const otherMode = mode === "classic" ? "team" : "classic";
   const change = modeChangeRule({ current: mode, next: otherMode, isBranch: !!L.article.branch_of, sectionsWritten: L.sections.filter((s) => s.status !== "NEEDS_WRITE" || s.current_version_id).length, hasProposal: (props ?? []).length > 0 });
   const blockers = L.sections.map((s) => ({ s, st: stateOf(s) })).filter((x) => ["ESCALATED", "BLOCKED_CLAIM", "BLOCKED_PRIVACY"].includes(x.st.status));
@@ -58,6 +61,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
         </div>
       )}
       {(esc ?? []).filter((e) => e.issue_key.startsWith("article:")).length > 0 && <div className="border border-red-600 p-2"><b>Article checks failed</b><ul className="list-disc pl-5">{(esc ?? []).filter((e) => e.issue_key.startsWith("article:")).map((e) => <li key={e.id}>{e.reason}</li>)}</ul></div>}
+      {teamView && <StuckInbox article={id} items={teamView.stuck} />}
       <nav className="flex gap-3">{TABS.map(([k, label]) => <Link key={k} href={`/studio/${id}?tab=${k}`} className={k === tab ? "font-semibold underline" : "underline-offset-2 hover:underline"}>{label}</Link>)}</nav>
 
       {tab === "brief" && (
@@ -134,6 +138,8 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
           {!(props ?? []).length && <p>No proposal yet (the article must be in HUMAN_REVIEW).</p>}
         </div>
       )}
+
+      {tab === "team" && (mode === "team" ? <TeamTab view={teamView} /> : <p>This article runs in classic mode. The Team tab appears for team-mode articles.</p>)}
 
       {tab === "preview" && (
         ver ? <iframe title="Preview" sandbox="" srcDoc={ver.body.html} className="h-[80vh] w-full border" /> : <p>The preview appears when every section is locked and the article is assembled.</p>
