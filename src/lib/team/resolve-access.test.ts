@@ -166,7 +166,13 @@ describe("the only call sites are Leo's: the UI action and the operator CLI", ()
   const files = [...walk("src"), ...walk("scripts")].filter((f) => /\.(ts|tsx|mts)$/.test(f)).map((f) => f.replace(/\\/g, "/"));
   const callers = files.filter((f) => !f.endsWith(".test.ts") && f !== "src/lib/studio/service.ts" && /resolveSection\s*\(/.test(readFileSync(f, "utf8")));
   it("resolveSection( is called only from the Studio UI action, the CLI and the fixture-only smoke scripts", () => {
-    expect(callers.sort()).toEqual(["scripts/studio-smoke.mts", "scripts/studio.mts", "scripts/team-smoke.mts", "src/app/studio/actions.ts"]);
+    expect(callers.sort()).toEqual(["scripts/studio-smoke.mts", "scripts/studio.mts", "scripts/team-smoke.mts", "src/app/studio/actions.ts", "src/lib/studio/branch.ts"]);
+  });
+  it("branch.ts (the classic revision baseline) calls it with the caller's actor, after refusing agent-like actors before any read or write", () => {
+    const t = readFileSync("src/lib/studio/branch.ts", "utf8");
+    expect(t).toMatch(/resolveSection\(db, plan\.articleId, key, \{ kind: "reopen", text: classicDirective\(key, plan\.findings\) \}, opts\.actor\)/);
+    expect(t.indexOf("agentLikeActor(opts.actor)")).toBeGreaterThan(-1);
+    expect(t.indexOf("agentLikeActor(opts.actor)")).toBeLessThan(t.indexOf("resolveSection(db, plan.articleId"));
   });
   it("the UI action and the CLI both act as leo; the smoke acts as smoke-test (on its fixture article only)", () => {
     expect(readFileSync("src/app/studio/actions.ts", "utf8")).toMatch(/const ACTOR = "leo"/);

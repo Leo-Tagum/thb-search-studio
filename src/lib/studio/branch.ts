@@ -11,7 +11,7 @@
 import { randomUUID } from "node:crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { agentLikeActor, resolveActorError } from "./actors";
-import { auditArticle, orchestratorFor, SYSTEM } from "./service";
+import { auditArticle, orchestratorFor, resolveSection, SYSTEM } from "./service";
 import { contentHash, sha256, stableStringify } from "./hash";
 import { unitText } from "./schema";
 import { saveEnvelope, type Envelope } from "./team-envelope";
@@ -19,6 +19,12 @@ import { newTeamSection, reopen, splitSentences, type Collected, type CouncilRol
 import { snapshotKey } from "../team/snapshots";
 
 export const COUNCIL_OF_AGENT: Record<string, CouncilRole> = { "thb-05-fact-privacy-auditor": "V1", "thb-06-seo-aeo-geo-auditor": "V2", "thb-07-editorial-critic": "V3" };
+/** The directive a classic revision baseline sends to the writer for one unit: that unit's baseline findings, as the classic loop carries them (open issues of the human directive). */
+export function classicDirective(unit: string, findings: SeededFinding[]): string {
+  const mine = findings.filter((f) => f.unit === unit);
+  const list = mine.map((f, i) => `${i + 1}. [${f.role} ${f.key}] ${f.text}`).join("\n");
+  return `Classic revision baseline. Revise this unit to address these review findings, or leave one unchanged when fixing it would need a fact the ledger does not hold. Keep every verified claim and the approved identity (keyword, H2, slug) unchanged. Findings:\n${list}`;
+}
 export const BRANCH_DIRECTIVE = "Team comparison revision. Revise this unit for the corrections listed for you: fix each one, or decline it with a reason. Keep every verified claim and the approved identity (keyword, H2, slug) unchanged. Change nothing else.";
 
 // ---------- findings ----------
@@ -86,10 +92,11 @@ export type OriginalRows = { article: any; brief: any; sections: any[]; versions
 export type BranchPlan = {
   articleId: string; briefId: string; findings: SeededFinding[];
   article: Record<string, unknown>; brief: Record<string, unknown>; claims: Record<string, unknown>[];
-  units: { section: Record<string, unknown>; version: Record<string, unknown>; pointers: { current_version_id: string; locked_version_id: string }; env: Envelope; findings: number }[];
+  mode: "team" | "classic";
+  units: { section: Record<string, unknown>; version: Record<string, unknown>; pointers: { current_version_id: string; locked_version_id: string }; env: Envelope | null; findings: number }[];
 };
 
-export function planBranch(o: OriginalRows, ids: { uuid: () => string } = { uuid: randomUUID }): BranchPlan {
+export function planBranch(o: OriginalRows, ids: { uuid: () => string } = { uuid: randomUUID }, mode: "team" | "classic" = "team"): BranchPlan {
   const articleId = ids.uuid(), briefId = ids.uuid();
   const findings = collectFindings(o.sections, o.reviews);
   const sorted = [...o.sections].sort((a, b) => a.position - b.position);
@@ -97,6 +104,15 @@ export function planBranch(o: OriginalRows, ids: { uuid: () => string } = { uuid
     const v = o.versions.find((x) => x.id === s.locked_version_id);
     if (!v) throw new Error(`unit ${s.section_key} has no locked version to copy`);
     const sid = ids.uuid(), vid = ids.uuid();
+    const versionRow = { id: vid, section_id: sid, version_no: v.version_no, content: v.content, content_hash: v.content_hash, material_sig: v.material_sig, reason: `branch copy of version ${v.id} (article ${o.article.id})`, created_by: "branch-copy", agent_run_id: null };
+    if (mode === "classic") {
+      // The classic loop keeps its state in the same columns as the original: copy the locked row (status, lock, classic envelope) and remap the version pointers.
+      const mapped = (p: string | null) => (p && p === v.id ? vid : null);
+      return {
+        section: { id: sid, article_id: articleId, position: s.position, heading: s.heading, body: s.body, section_key: s.section_key, brief_h2: s.brief_h2, claim_ids: s.claim_ids, status: s.status, locked: !!s.locked, issues: s.issues, fact_passed_version_id: mapped(s.fact_passed_version_id), seo_passed_version_id: mapped(s.seo_passed_version_id) },
+        version: versionRow, pointers: { current_version_id: vid, locked_version_id: vid }, env: null, findings: findings.filter((f) => f.unit === s.section_key).length,
+      };
+    }
     const text = unitText(v.content);
     const locked: TeamSectionState = { ...newTeamSection(s.section_key), status: "LOCKED", versionNo: v.version_no, versionHash: v.content_hash, sig: v.material_sig, sentences: splitSentences(text), lockedHash: v.content_hash };
     const re = reopen(locked, BRANCH_DIRECTIVE);
@@ -105,7 +121,7 @@ export function planBranch(o: OriginalRows, ids: { uuid: () => string } = { uuid
     const collected: Collected[] = mine.map((f) => ({ key: f.key, role: f.role, severity: "should fix", text: f.text, versionHash: v.content_hash, declined: null }));
     return {
       section: { id: sid, article_id: articleId, position: s.position, heading: s.heading, body: s.body, section_key: s.section_key, brief_h2: s.brief_h2, claim_ids: s.claim_ids, status: "NEEDS_REVISION", locked: false },
-      version: { id: vid, section_id: sid, version_no: v.version_no, content: v.content, content_hash: v.content_hash, material_sig: v.material_sig, reason: `branch copy of version ${v.id} (article ${o.article.id})`, created_by: "branch-copy", agent_run_id: null },
+      version: versionRow,
       pointers: { current_version_id: vid, locked_version_id: vid },
       env: { team: { ...re.state, collected }, councilCards: {}, waitingOn: [] } as Envelope, findings: mine.length,
     };
@@ -113,19 +129,19 @@ export function planBranch(o: OriginalRows, ids: { uuid: () => string } = { uuid
   const briefCols: Record<string, unknown> = { ...o.brief }; delete briefCols.id; delete briefCols.created_at;
   const claims = o.claims.map((c) => { const cols: Record<string, unknown> = { ...c }; delete cols.id; return { ...cols, article_id: articleId }; });
   return {
-    articleId, briefId, findings, units, claims,
+    articleId, briefId, findings, units, claims, mode,
     brief: { ...briefCols, id: briefId, opportunity_id: null },
-    article: { id: articleId, opportunity_id: o.article.opportunity_id, title: o.article.title, slug: o.article.slug, primary_keyword: o.article.primary_keyword, brief_id: briefId, state: "BRIEF_APPROVED", pipeline_mode: "team", branch_of: o.article.id, is_fixture: false },
+    article: { id: articleId, opportunity_id: o.article.opportunity_id, title: o.article.title, slug: o.article.slug, primary_keyword: o.article.primary_keyword, brief_id: briefId, state: "BRIEF_APPROVED", pipeline_mode: mode, branch_of: o.article.id, is_fixture: false },
   };
 }
 
 // ---------- isolation proof (the branch references nothing of the original's) ----------
 export type IsolationReport = { ok: boolean; problems: string[]; counts: Record<string, number> };
-export function checkIsolation(b: { branch: any; original: any; branchBrief: any; originalBrief: any; branchSections: any[]; originalSections: any[]; branchVersions: any[]; originalVersions: any[]; branchClaims: any[]; originalClaims: any[] }): IsolationReport {
+export function checkIsolation(b: { expectedMode?: "team" | "classic"; branch: any; original: any; branchBrief: any; originalBrief: any; branchSections: any[]; originalSections: any[]; branchVersions: any[]; originalVersions: any[]; branchClaims: any[]; originalClaims: any[] }): IsolationReport {
   const problems: string[] = [];
   const origClaimIds = new Set(b.originalClaims.map((c) => c.id)), branchKeys = new Set(b.branchClaims.map((c) => c.claim_key));
   if (b.branch.branch_of !== b.original.id) problems.push("branch_of does not point at the original");
-  if (b.branch.pipeline_mode !== "team" || b.branch.is_fixture !== false) problems.push("branch must be pipeline_mode team and is_fixture false");
+  if (b.branch.pipeline_mode !== (b.expectedMode ?? "team") || b.branch.is_fixture !== false) problems.push(`branch must be pipeline_mode ${b.expectedMode ?? "team"} and is_fixture false`);
   if (b.branch.brief_id === b.original.brief_id || b.branchBrief?.id === b.originalBrief?.id) problems.push("the branch shares the original's brief row");
   if (b.branchBrief?.opportunity_id != null) problems.push("the branch brief carries an opportunity_id (a lookup by opportunity could find it)");
   if (b.branchClaims.some((c) => c.article_id !== b.branch.id)) problems.push("a branch claim is attached to another article");
@@ -149,13 +165,13 @@ export function checkIsolation(b: { branch: any; original: any; branchBrief: any
   if (b.branch.locked_version_id) problems.push("the branch article already has a locked article version");
   return { ok: problems.length === 0, problems, counts: { claims: b.branchClaims.length, sections: b.branchSections.length, versions: b.branchVersions.length } };
 }
-async function isolationFor(db: SupabaseClient, branchId: string, originalId: string): Promise<IsolationReport> {
+async function isolationFor(db: SupabaseClient, branchId: string, originalId: string, expectedMode: "team" | "classic" = "team"): Promise<IsolationReport> {
   const one = async (t: string, id: string) => (await db.from(t).select("*").eq("id", id).single()).data;
   const branch = await one("articles", branchId), original = await one("articles", originalId);
   const [bs, os] = [await fetchAll(db, "article_sections", (q) => q.eq("article_id", branchId)), await fetchAll(db, "article_sections", (q) => q.eq("article_id", originalId))];
   const vers = async (secs: any[]) => (secs.length ? fetchAll(db, "section_versions", (q) => q.in("section_id", secs.map((s) => s.id))) : []);
   return checkIsolation({
-    branch, original, branchBrief: await one("briefs", branch.brief_id), originalBrief: await one("briefs", original.brief_id),
+    expectedMode, branch, original, branchBrief: await one("briefs", branch.brief_id), originalBrief: await one("briefs", original.brief_id),
     branchSections: bs, originalSections: os, branchVersions: await vers(bs), originalVersions: await vers(os),
     branchClaims: await fetchAll(db, "claims", (q) => q.eq("article_id", branchId)), originalClaims: await fetchAll(db, "claims", (q) => q.eq("article_id", originalId)),
   });
@@ -171,7 +187,8 @@ export type BranchResult =
 const errText = (e: any): string => (e instanceof Error ? e.message : e?.message ?? JSON.stringify(e));
 const countBy = (f: SeededFinding[]) => f.reduce<Record<string, number>>((m, x) => ({ ...m, [x.unit]: (m[x.unit] ?? 0) + 1 }), {});
 
-export async function branchArticle(db: SupabaseClient, originalId: string, opts: { actor: string; expectedFindings: number; dryRun?: boolean }): Promise<BranchResult> {
+export async function branchArticle(db: SupabaseClient, originalId: string, opts: { actor: string; expectedFindings: number; dryRun?: boolean; mode?: "team" | "classic" }): Promise<BranchResult> {
+  const mode = opts.mode ?? "team";
   if (agentLikeActor(opts.actor) || !opts.actor.trim()) return { ok: false, reason: resolveActorError(opts.actor, null)! };   // before any read or write
   const article = (await db.from("articles").select("*").eq("id", originalId).single()).data;
   if (!article) return { ok: false, reason: "no such article" };
@@ -190,7 +207,7 @@ export async function branchArticle(db: SupabaseClient, originalId: string, opts
   const reviews = await fetchAll(db, "section_reviews", (q) => q.in("section_id", sids));
   const claims = await fetchAll(db, "claims", (q) => q.eq("article_id", originalId));
 
-  const plan = planBranch({ article, brief, sections, versions, reviews, claims });
+  const plan = planBranch({ article, brief, sections, versions, reviews, claims }, undefined, mode);
   const byUnit = countBy(plan.findings);
   if (plan.findings.length !== opts.expectedFindings) return { ok: false, reason: `expected exactly ${opts.expectedFindings} optional findings, found ${plan.findings.length}; nothing was written`, findingsFound: plan.findings.length, byUnit };
   const before = await fingerprint(db, originalId);
@@ -204,11 +221,19 @@ export async function branchArticle(db: SupabaseClient, originalId: string, opts
     await w(db.from("section_versions").insert(plan.units.map((u) => u.version)));
     for (const u of plan.units) await w(db.from("article_sections").update(u.pointers).eq("id", u.section.id as string));
     if (plan.claims.length) await w(db.from("claims").insert(plan.claims));
-    for (const u of plan.units) await saveEnvelope(db, { id: u.section.id }, u.env);
-    const t = await orchestratorFor(db).transition("article", plan.articleId, "DRAFTING", SYSTEM, { reason: "team branch created; drafting resumes from the copied units" });
+    for (const u of plan.units) if (u.env) await saveEnvelope(db, { id: u.section.id }, u.env);
+    const t = await orchestratorFor(db).transition("article", plan.articleId, "DRAFTING", SYSTEM, { reason: `${mode} branch created; drafting resumes from the copied units` });
     if (!t.ok) throw new Error(t.reason);
+    if (mode === "classic") {
+      // The classic revision baseline: reopen every unit through Leo's own reopen (audited) with that unit's findings as the directive.
+      for (const u of plan.units) {
+        const key = u.section.section_key as string;
+        const r = await resolveSection(db, plan.articleId, key, { kind: "reopen", text: classicDirective(key, plan.findings) }, opts.actor);
+        if (!r.ok) throw new Error(`reopen ${key}: ${r.reason}`);
+      }
+    }
     await auditArticle(db, plan.articleId, "branch_created", {
-      original: originalId, branch_of_version: article.version_hash ?? null, units: plan.units.length, claims: plan.claims.length, findings: plan.findings.length,
+      original: originalId, mode, branch_of_version: article.version_hash ?? null, units: plan.units.length, claims: plan.claims.length, findings: plan.findings.length,
       seeded: plan.findings.map((f) => ({ unit: f.unit, role: f.role, key: f.key, review: f.reviewId, claim: f.claimId })),
     }, opts.actor);
   } catch (e) {
@@ -216,7 +241,7 @@ export async function branchArticle(db: SupabaseClient, originalId: string, opts
     return { ok: false, reason: `branch creation failed (${errText(e)}); partial rows removed (${typeof rolled === "string" ? rolled : "ok"}); the original was only read` };
   }
   const after = await fingerprint(db, originalId);
-  return { ok: true, dryRun: false, branchId: plan.articleId, findings: plan.findings.length, byUnit, before, after, changed: fingerprintDiff(before, after), isolation: await isolationFor(db, plan.articleId, originalId) };
+  return { ok: true, dryRun: false, branchId: plan.articleId, findings: plan.findings.length, byUnit, before, after, changed: fingerprintDiff(before, after), isolation: await isolationFor(db, plan.articleId, originalId, mode) };
 }
 
 // ---------- delete (rollback) ----------

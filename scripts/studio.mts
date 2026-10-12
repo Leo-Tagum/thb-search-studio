@@ -21,7 +21,7 @@
 //   npm run studio -- team-budget <branch_id> <n> <reason...>   (Leo: raises the ticket budget of ONE team branch above the default of 10; recorded as an exception)
 //   npm run studio -- team-answer <article_id> <T-id> <text...>  (Leo: answers an escalation, e.g. T11, and closes it)
 //   npm run studio -- mode <article_id> [classic|team]  (Leo: shows or switches the pipeline; switching is allowed only before any section is written, or on a team branch)
-//   npm run studio -- branch <article_id> <expected_findings> [--dry-run]   (Leo: creates the team-mode BRANCH of a classic article for the comparison; reads the original only)
+//   npm run studio -- branch <article_id> <expected_findings> [--classic] [--dry-run]   (Leo: creates a BRANCH of a classic article for a comparison, team mode by default, or a classic revision baseline with --classic; reads the original only)
 //   npm run studio -- fingerprint <article_id>          (read-only fingerprint of an article and everything attached to it)
 //   npm run studio -- branch-delete <branch_id> --yes   (Leo: removes one branch and what it created; refuses anything that is not a branch)
 //   npm run studio -- voice-approve                    (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
@@ -194,7 +194,7 @@ if (cmd === "queue") {
     if (!res.ok) process.exitCode = 2;
   }
 } else if (cmd === "branch") {
-  const res = await branchArticle(db, a, { actor: "leo", expectedFindings: Number(b), dryRun: process.argv.includes("--dry-run") });
+  const res = await branchArticle(db, a, { actor: "leo", expectedFindings: Number(b), dryRun: process.argv.includes("--dry-run"), mode: process.argv.includes("--classic") ? "classic" : "team" });
   if (!res.ok) { console.log(`STOPPED: ${res.reason}${res.byUnit ? `\n  findings per unit: ${JSON.stringify(res.byUnit)}` : ""}`); process.exitCode = 2; }
   else if (res.dryRun) console.log(`DRY RUN ok: ${res.findings} findings ${JSON.stringify(res.byUnit)}; would copy ${res.units} units and ${res.claims} claims.\noriginal fingerprint ${res.fingerprint.total}\n${JSON.stringify(res.fingerprint.parts)}`);
   else {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { BRANCH_DIRECTIVE, branchArticle, branchDelete, checkIsolation, collectFindings, fingerprint, planBranch } from "./branch";
+import { BRANCH_DIRECTIVE, branchArticle, classicDirective, branchDelete, checkIsolation, collectFindings, fingerprint, planBranch } from "./branch";
 import { contentHash } from "./hash";
 import { snapshotKey } from "../team/snapshots";
 import { memDb } from "./memdb.testlib";
@@ -16,7 +16,7 @@ const opt = (k: string, note = `note ${k}`) => ({ issue_key: k, severity: "optio
 function original(extra: Record<string, any[]> = {}) {
   const base: Record<string, any[]> = {
     articles: [{ id: ids.art, opportunity_id: ids.opp, title: "Hoarder guide", slug: "hoarded-house", primary_keyword: "hoarded house", brief_id: ids.brief, state: "HUMAN_REVIEW", pipeline_mode: "classic", branch_of: null, is_fixture: false, version_hash: "4db42fea93cc-full", approved_hash: null, locked_version_id: "av1", revision_count: 0 }],
-    briefs: [{ id: ids.brief, opportunity_id: ids.opp, outline: { working_title: "Hoarder guide", outline: [{ h2: "Can I sell a hoarded house?", claim_ids: ["clm:1"] }] }, evidence_packet: { claims: [] }, outline_history: [], source_ids: [], notes: "n", created_at: "2026-10-10" }],
+    briefs: [{ id: ids.brief, opportunity_id: ids.opp, outline: { working_title: "Hoarder guide", link_plan: [], outline: [{ h2: "Can I sell a hoarded house?", claim_ids: ["clm:1"] }] }, evidence_packet: { claims: [] }, outline_history: [], source_ids: [], notes: "n", created_at: "2026-10-10" }],
     article_sections: [
       { id: ids.s1, article_id: ids.art, position: 1, heading: "Can I sell a hoarded house?", body: null, locked: true, section_key: "s1", status: "LOCKED", current_version_id: ids.v1, locked_version_id: ids.v1, issues: { issues: [], meta: { versionNo: 2, versionHash: contentHash(S1), lockedHash: contentHash(S1) } }, brief_h2: "Can I sell a hoarded house?", claim_ids: ["clm:1"] },
       { id: ids.faq, article_id: ids.art, position: 2, heading: "Frequently Asked Questions", body: null, locked: true, section_key: "faq", status: "LOCKED", current_version_id: ids.vf, locked_version_id: ids.vf, issues: { issues: [], meta: { versionNo: 1 } }, brief_h2: "Frequently Asked Questions", claim_ids: [] },
@@ -84,10 +84,10 @@ describe("planBranch", () => {
     const u = plan.units.find((x) => x.section.section_key === "s1")!;
     expect(u.version).toMatchObject({ content_hash: contentHash(S1), version_no: 2, created_by: "branch-copy", agent_run_id: null });
     expect(contentHash(u.version.content)).toBe(contentHash(S1));
-    expect(u.env.team).toMatchObject({ status: "NEEDS_REVISION", versionHash: contentHash(S1), lockedHash: null, v1Passed: null, pending: [] });
-    expect(u.env.team.mustFix).toEqual([{ key: "human:directive", role: "LEO", text: BRANCH_DIRECTIVE, attempts: 0 }]);
-    expect(u.env.team.collected.map((c) => `${c.role}:${c.key}`).sort()).toEqual(["V1:fact:a", "V2:seo:a", "V2:seo:b", "V3:ed:a", "V3:ed:b", "V3:ed:early"]);
-    expect(u.env.team.collected.every((c) => c.severity === "should fix" && c.declined === null && c.versionHash === contentHash(S1))).toBe(true);
+    expect(u.env!.team).toMatchObject({ status: "NEEDS_REVISION", versionHash: contentHash(S1), lockedHash: null, v1Passed: null, pending: [] });
+    expect(u.env!.team.mustFix).toEqual([{ key: "human:directive", role: "LEO", text: BRANCH_DIRECTIVE, attempts: 0 }]);
+    expect(u.env!.team.collected.map((c) => `${c.role}:${c.key}`).sort()).toEqual(["V1:fact:a", "V2:seo:a", "V2:seo:b", "V3:ed:a", "V3:ed:b", "V3:ed:early"]);
+    expect(u.env!.team.collected.every((c) => c.severity === "should fix" && c.declined === null && c.versionHash === contentHash(S1))).toBe(true);
     expect(u.pointers.locked_version_id).toBe(u.version.id);
   });
   it("seeds findings in envelopes and creates no tickets", () => { expect(plan).not.toHaveProperty("tickets"); expect(plan.units.reduce((n, u) => n + u.findings, 0)).toBe(EXPECT); });
@@ -227,6 +227,49 @@ describe("branchDelete (rollback)", () => {
     expect(m.t.evidence_passages.map((p) => p.id)).toEqual(["p2"]);
     expect((r as any).summary).toMatch(/removed 1/);
     expect(snapshotKey(U("free"))).toBeTruthy();
+  });
+});
+
+
+describe("classic revision baseline (mode classic)", () => {
+  const d = original();
+  const plan = planBranch({ article: d.articles[0], brief: d.briefs[0], sections: d.article_sections, versions: d.section_versions, reviews: d.section_reviews, claims: d.claims }, undefined, "classic");
+  it("makes a classic real branch whose units are copies of the locked rows with remapped pointers and no team envelope", () => {
+    expect(plan.article).toMatchObject({ pipeline_mode: "classic", is_fixture: false, branch_of: ids.art });
+    for (const u of plan.units) {
+      expect(u.env).toBeNull();
+      expect(u.section).toMatchObject({ status: "LOCKED", locked: true });
+      expect(u.section.issues).toEqual(d.article_sections.find((s) => s.section_key === u.section.section_key)!.issues);
+      expect(u.section.fact_passed_version_id).toBeNull();            // the original rows carry none here; a pointer is remapped only when it is the locked version
+      expect(u.pointers.locked_version_id).toBe(u.version.id);
+    }
+  });
+  it("classicDirective lists exactly that unit's findings with reviewer and key", () => {
+    const f = collectFindings(d.article_sections, d.section_reviews);
+    const text = classicDirective("s1", f);
+    expect(text).toMatch(/^Classic revision baseline./);
+    expect(text).toContain("[V1 fact:a] note fact:a"); expect(text).toContain("[V3 ed:early] note ed:early");
+    expect(text).not.toContain("ed:faq");
+  });
+  it("branchArticle in classic mode creates the branch, reopens every unit as leo with its findings as the directive, never writes to the original", async () => {
+    const m = memDb(original()); const own = originalIds(m.t); const before = await fingerprint(m.db, ids.art);
+    const r = await branchArticle(m.db, ids.art, { actor: "leo", expectedFindings: EXPECT, mode: "classic" });
+    expect(r.ok).toBe(true); if (!r.ok || r.dryRun) throw new Error("unreachable");
+    expect(r.after.total).toBe(before.total); expect(r.changed).toEqual([]); expect(r.isolation).toMatchObject({ ok: true, problems: [] });
+    for (const w of m.log) for (const row of w.rows) { expect(own.has(row.id), w.op + " " + w.table).toBe(false); expect(row.article_id === ids.art || row.subject_id === ids.art).toBe(false); }
+    expect(m.t.articles.find((a) => a.id === r.branchId)).toMatchObject({ pipeline_mode: "classic", state: "DRAFTING", branch_of: ids.art, is_fixture: false });
+    const secs = m.t.article_sections.filter((s) => s.article_id === r.branchId);
+    expect(secs.map((s) => s.status)).toEqual(["NEEDS_REVISION", "NEEDS_REVISION"]);
+    const s1 = secs.find((s) => s.section_key === "s1")!;
+    expect(s1.issues.issues).toHaveLength(1);
+    expect(s1.issues.issues[0]).toMatchObject({ key: "human:directive", attempts: 0 });
+    expect(s1.issues.issues[0].text).toContain("[V2 seo:a]");
+    expect(m.t.audit_events.some((e) => e.subject_id === r.branchId && e.event_type === "section_reopen" && e.actor === "leo")).toBe(true);
+    expect(m.t.tickets).toEqual([]); expect(m.t.team_runs).toEqual([]);
+  });
+  it("an agent actor is refused before any write", async () => {
+    const m = memDb(original()); const r = await branchArticle(m.db, ids.art, { actor: "V1", expectedFindings: EXPECT, mode: "classic" });
+    expect(r.ok).toBe(false); expect(m.log).toEqual([]);
   });
 });
 
