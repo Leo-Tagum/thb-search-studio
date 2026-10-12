@@ -1,0 +1,62 @@
+[
+ {
+  "card": 1,
+  "sentence": "Living in the house alone does not give you that authority.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "Item 4 states a legal conclusion with no ledger claim: \"Living in the house alone does not give you that authority.\" The brief only supports that a sale can stall when the person living in the house is not the person with authority. Soften to what the brief supports."
+ },
+ {
+  "card": 2,
+  "sentence": "Trash or signs of pests are another, and they match conditions the statute lists.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "Bullet 1: \"Trash or signs of pests are another, and they match conditions the statute lists.\" The statute (clm:1, clm:2) lists an accumulation that constitutes fire, health or safety hazards, and infestation as determined by a health officer. Trash or signs of pests are not the same thing, so 'match' turns a conditional listing decided by an official into a flat equivalence. Change 'they match conditions the statute lists' to wording such as 'they can resemble conditions the statute lists, and whether a home meets them is for the official to decide'."
+ },
+ {
+  "card": 3,
+  "sentence": "Most families are not looking for judgment.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "The sentence \"Most families are not looking for judgment.\" is a generalization about families that no ledger claim or stored source supports. Reword to what the text can stand on, for example speaking to this reader only (\"You are probably looking for time and a clear next step.\") or drop it."
+ },
+ {
+  "card": 4,
+  "sentence": "The real question is usually whether the house or the paperwork is the bigger risk to the sale.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "\"The real question is usually whether the house or the paperwork is the bigger risk to the sale.\" and \"Some of it comes from the house. A lot of it comes from the paperwork and the people.\" are generalizations about how sales stall in general. No ledger claim or source passage supports them (the brief only lists these as things that can stall a sale, with no frequency or proportion). Reword to say these are things that can stall a sale, with no 'usually' and no 'a lot of it'."
+ },
+ {
+  "card": 5,
+  "sentence": "The real question is usually not which route is best.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "Sentence 'The real question is usually not which route is best.' states a generalization about what sellers ask, with no support. Remove 'usually' or reword to 'The real question is which route fits your situation.'"
+ },
+ {
+  "card": 6,
+  "sentence": "Most people in this spot are not avoiding the problem.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "\"Most people in this spot are not avoiding the problem.\" is a claim about what most people do or feel; no ledger claim or source supports it. Reword to a non-statistical statement or drop."
+ },
+ {
+  "card": 7,
+  "sentence": "Spending first can commit you to a plan the right person never agreed to.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "Flagged sentence 'Spending first can commit you to a plan the right person never agreed to.' No ledger claim or stored passage supports it, and wording alone cannot prove it. Replace 'never agreed to' with a plain conditional, for example 'did not agree to'. Everything else in the unit was checked: no statement of law, figure, date, price, count or brand fact is made without support; privacy and legal qualification are fine."
+ },
+ {
+  "card": 8,
+  "sentence": "Only someone with legal authority to sign.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "FAQ item 4 (Who can sell the house...) states law with no cited claim: 'Only someone with legal authority to sign' and 'Living in the house alone does not give you that authority.' The second sentence is a legal conclusion stated as certain; no ledger claim supports it (the brief only says the sale can stall when the occupant is not the person with authority). The list 'owner, a trustee, an executor or administrator, or several heirs who agree' is likewise uncited. Reword to non-certain wording, for example that a sale can stall when the person living in the house is not the person with authority to sign, and that who has authority is a question for an attorney or title company."
+ },
+ {
+  "card": 9,
+  "sentence": "Whoever has legal authority to sign, such as an owner, trustee, executor, administrator, surviving spouse or several heirs acting together.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "Item 4 lists 'an owner, trustee, executor, administrator, surviving spouse or several heirs acting together' as who has authority to sign. No ledger claim supports this uncited statement of probate and trust law, and the brief says the guide states no specific probate or trust rules. Remove the list and say only that who holds authority is for an attorney or title company to confirm."
+ },
+ {
+  "card": 10,
+  "sentence": "A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign.",
+  "v1_ruling": "MUST FIX (V1 required finding)",
+  "v1_reason": "\"A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign.\" Flagged generalization, no ledger support. Reword to a plain hypothetical, e.g. finding out halfway through that the person selling could not sign."
+ }
+]

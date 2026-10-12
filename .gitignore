@@ -23,3 +23,6 @@ _scratch/
 # local Claude Code permissions (machine-specific)
 .claude/settings.local.json
 .vitest/
+
+# private audit keys (not committed)
+docs/phases/_private/

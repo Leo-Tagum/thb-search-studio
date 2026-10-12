@@ -1,0 +1,83 @@
+[
+ {
+  "unit": "faq",
+  "time": "19:34:40",
+  "role": "V1",
+  "decision": "REVISION",
+  "key": "fact:faq:hedge_not_always",
+  "severity": "required",
+  "note": "FAQ item 2 answer opens 'Not always.' on a 'Do I have to clean out' question. No ledger claim supports it, and it implies a legal duty that sometimes exists. Reword so it answers from the seller's practical choice instead of an implied legal rule."
+ },
+ {
+  "unit": "faq",
+  "time": "19:37:29",
+  "role": "V3",
+  "decision": "PASS",
+  "key": "ed:faq-clean-out-opening",
+  "severity": "optional",
+  "note": "Item 2 opens 'That is your choice,' which reads a little flat. The voice reference answers this kind of question with 'Not always.' or 'It depends on...'. Suggested opening: 'Not always. It depends on your time, your money, who has authority to sell and which route you pick.' Keep the rest as is."
+ },
+ {
+  "unit": "faq",
+  "time": "19:40:12",
+  "role": "V3",
+  "decision": "REVISION",
+  "key": "ed:faq-cleanout-no-direct-answer",
+  "severity": "required",
+  "note": "Item 2 ('Do I have to clean out a house before selling it?') opens 'It depends on your time, money, who has authority...' and never answers the question the homeowner is asking. Lead with the honest short answer in Juan's rhythm ('Not always.'), then give the reasons. Keep every fact as is; wording only, no as-is or no-cleanout claim."
+ },
+ {
+  "unit": "faq",
+  "time": "19:42:53",
+  "role": "V1",
+  "decision": "REVISION",
+  "key": "fact:faq:item2:not-always",
+  "severity": "required",
+  "note": "Item 2 answer still opens 'Not always.' (the writer's note says it was dropped, but it is in the current text). It implies a duty to clean out in some cases, and no ledger claim supports that. Remove the words 'Not always.' and open with 'It depends on your time, money, who has authority to sell and the route you pick.'"
+ },
+ {
+  "unit": "s2",
+  "time": "18:35:48",
+  "role": "V3",
+  "decision": "REVISION",
+  "key": "ed:flat-opening-repeats-itself",
+  "severity": "required",
+  "note": "The section opens with a flat rule-style paragraph ('The person who holds title, or who has the legal authority to sell for the owner, has to sign. Depending on the situation, that might be an owner, a trustee...') and only then reaches Juan's voice ('Before cleanout, before price... I ask one question'). The same points are then made again three times: the title question, 'It is really the foundation of the sale', and the 'Start with who holds title' h3. The disclaimer is also repeated ('do not read that list as a rule for your house', 'I am not going to tell you which rules apply', and the closing note). Fix: open on the seller's situation (a house full, a parent or relative living in it, the family unsure who decides), then 'the first question I ask is who actually holds title', and keep the list of who may sign in the authority h3 only. Delete 'It sounds like paperwork. It is really the foundation of the sale.' and say the disclaimer once, in the authority h3 or the closing note. Wording only; do not change the list of roles or any fact."
+ },
+ {
+  "unit": "s2",
+  "time": "18:38:40",
+  "role": "V2",
+  "decision": "REVISION",
+  "key": "seo:direct-answer-missing",
+  "severity": "required",
+  "note": "The H2 asks 'Who has to sign, and who else is affected?' but the opening paragraph (The house is full. A parent or relative may still live there... the first question I ask is who actually holds title.) sets a scene and does not answer. The answer (the person who holds title or has legal authority to sell for the owner signs; co-owners, heirs, occupants and others may also be affected) only appears two H3s down. Replace or lead the opening with a one or two sentence answer, for example: 'The person who holds title, or who has legal authority to sell for the owner, has to sign. Co-owners, heirs, anyone living in the home and others may also be affected, so find out who holds title first.' Then keep the scene-setting and the qualification that the list is not a rule for your house."
+ },
+ {
+  "unit": "s4",
+  "time": "18:53:04",
+  "role": "V2",
+  "decision": "PASS",
+  "key": "seo:answer-lead-wording",
+  "severity": "optional",
+  "note": "The first paragraph leads with 'California's seller disclosure rules (Civil Code 1102) apply, with an exception...'. It would quote better if the first clause answered the H2 directly, for example 'You make the required disclosures on the Real Estate Transfer Disclosure Statement form.' Then state the applicability and exception. Same claims (clm:5, clm:6), no new facts."
+ },
+ {
+  "unit": "s4",
+  "time": "18:53:10",
+  "role": "V3",
+  "decision": "REVISION",
+  "key": "ed:s4-statute-first-opening",
+  "severity": "required",
+  "note": "The section opens with 'California's seller disclosure rules (Civil Code 1102) apply, with an exception...'. That is a statute summary, not the question in the seller's head ('Do I have to tell a buyer about all this?'). Name the worry first in one plain sentence, then give the same cited rule. Keep clm:5/6 wording and the exception unchanged."
+ },
+ {
+  "unit": "s4",
+  "time": "19:09:48",
+  "role": "V2",
+  "decision": "REVISION",
+  "key": "seo:answer-not-first",
+  "severity": "required",
+  "note": "The H2 asks what you have to disclose, but the first paragraph (four sentences, 'With a full house, the worry is easy to name... what I would do about the rest.') gives no answer. The answer first appears in the second paragraph. Put a one or two sentence direct answer first, for example that in California a sale of single-family residential property is disclosed on the Real Estate Transfer Disclosure Statement form, the rules have an exception, and a waiver is void, then keep the empathy line after it. Use only clm:5, clm:6, clm:7 wording."
+ }
+]

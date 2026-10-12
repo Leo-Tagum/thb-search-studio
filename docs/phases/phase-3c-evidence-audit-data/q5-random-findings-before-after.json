@@ -1,0 +1,62 @@
+[
+ {
+  "n": 1,
+  "unit": "s1",
+  "reviewer": "V1",
+  "finding": "Soft population claims with no source: 'Most people in this spot are not avoiding the problem' and 'Most owners want to know how fast the house can be emptied'. They are voice, not law or figures, so they do not block. The writer may soften them (for example 'Many people') if convenient.",
+  "verdict": "addressed",
+  "checker_reason": "Both 'Most people' and 'Most owners' claims were real in the classic text; the final removes the first and recasts the second as a non-population statement.",
+  "checker_quote": "How fast the house can be emptied is the question that feels urgent.",
+  "before": "Most owners want to know how fast the house can be emptied. The real question is usually what situation you are actually in. I'd want five things answered first:",
+  "after": "How fast the house can be emptied is the question that feels urgent. The one that decides things is what situation you are in. I'd want these answered first, because each one changes what you can do:",
+  "quote_found_in_team_text": true
+ },
+ {
+  "n": 3,
+  "unit": "s1",
+  "reviewer": "V2",
+  "finding": "The H2 says 'packed or hoarded house' rather than the exact phrase 'hoarded house'. This reads naturally and the exact keyword is in the title and capsule, so no change is needed. The one-question-H2 keyword placement can be met by this H2 or a later one.",
+  "verdict": "declined",
+  "checker_reason": "The H2 variant was visible in the classic and is unchanged in the final; the finding itself said no change needed and the writer note keeps it with a reason.",
+  "checker_quote": "## What should you know first about a packed or hoarded house before you sell?",
+  "before": "## What should you know first about a packed or hoarded house before you sell?",
+  "after": "## What should you know first about a packed or hoarded house before you sell?",
+  "quote_found_in_team_text": true
+ },
+ {
+  "n": 4,
+  "unit": "s1",
+  "reviewer": "V3",
+  "finding": "The last body paragraph repeats the capsule's disclosure sentence almost word for word ('For a transfer by sale of single-family residential property, California's disclosure article applies, except as provided in Civil Code Section 1102.2. Any waiver of its requirements is void.'). If the capsule is shown next to the body, the repeat reads as padding. Consider a shorter body line such as 'The disclosure rules in the capsule above do not change with your answers. Plan to disclose, not to skip it.' Keep every legal wording unchanged.",
+  "verdict": "addressed",
+  "checker_reason": "The classic body repeated the capsule's disclosure sentence nearly verbatim; the final body paragraph now points back to the capsule instead of repeating it.",
+  "checker_quote": "The disclosure rules in the capsule above do not change with your answers.",
+  "before": "One thing does not depend on your answers. For a transfer by sale of single-family residential property, California's disclosure article applies, except as provided in Civil Code Section 1102.2. Any waiver of its requirements is void. Plan to disclose, not to skip it. What goes on the form is a question for your agent or attorney, and a later section covers it.",
+  "after": "The disclosure rules in the capsule above do not change with your answers. A sale of single-family residential property uses the Real Estate Transfer Disclosure Statement form, so plan to disclose, not to skip it. What goes on the form is a question for your agent or attorney, and a later section covers it.",
+  "quote_found_in_team_text": true
+ },
+ {
+  "n": 27,
+  "unit": "s5",
+  "reviewer": "V2",
+  "finding": "The first sentence says the disclosure rules 'apply to your sale' without the single-family exception. The qualifier ('except as the law provides') appears in the later paragraph, so a quoted opening could read as broader than clm:6. Consider adding 'if your sale is covered' to the first sentence. This does not block.",
+  "verdict": "addressed",
+  "checker_reason": "The issue was real in classic (opening said rules 'apply to your sale' without the exception); the final opening now adds the coverage qualifier.",
+  "checker_quote": "if your sale is covered by them",
+  "before": "Clearing the house does not turn the disclosure paperwork into something optional. The disclosure rules apply to a sale of single-family residential property, except as the law provides. The disclosures are made on a copy of the Real Estate Transfer Disclosure Statement form. A waiver of the requirements is void as against public policy. So do not treat a cleanout as a way to avoid the form, and do not agree with anyone to skip it.",
+  "after": "Clearing the house out is your choice, and it does not change the disclosure rules if your sale is covered by them. The harder question is whether you can start at all. When every room is full, the first step can feel out of reach. That does not mean the house cannot be sold.",
+  "quote_found_in_team_text": true
+ },
+ {
+  "n": 36,
+  "unit": "s6",
+  "reviewer": "V3",
+  "finding": "'Getting these answers early usually creates more options, not fewer.' is nearly word for word the voice reference line v10. It is fine on Juan's own site, but consider varying it so the section does not read as lifted.",
+  "verdict": "addressed",
+  "checker_reason": "The echo of voice reference v10 is gone; the closing line is reworded and no longer near word for word.",
+  "checker_quote": "Asking these questions early can keep more of your options open.",
+  "before": "This is less a route than a step before any route. An attorney can speak to authority, probate and disclosure questions. A title company can speak to liens and title. A CPA can speak to taxes. The city or county can tell you whether any enforcement action exists on the property. Getting these answers early usually creates more options, not fewer.",
+  "after": "This is less a route than a step before any route. An attorney can speak to authority, probate and disclosure questions. A title company can speak to liens and title. A CPA can speak to taxes. The city or county can tell you whether any enforcement action exists on the property. Asking these questions early can keep more of your options open.",
+  "quote_found_in_team_text": true
+ }
+]

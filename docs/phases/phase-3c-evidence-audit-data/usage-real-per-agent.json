@@ -1,0 +1,5782 @@
+[
+{
+"session": "f341c740",
+"agent": "a070c2202ce55b031",
+"type": "thb-04-section-writer",
+"desc": "Revise s5 (SEO issue)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:57:46.894Z",
+"last": "2026-10-10T23:58:02.595Z",
+"input": 6,
+"cache_create": 24223,
+"cache_read": 37131,
+"output": 268,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a0bc42de145492a8d",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:56:04.122Z",
+"last": "2026-10-10T23:56:24.056Z",
+"input": 6,
+"cache_create": 24141,
+"cache_read": 35187,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a1a4a086da87064ba",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:54:14.619Z",
+"last": "2026-10-10T23:54:27.814Z",
+"input": 6,
+"cache_create": 19225,
+"cache_read": 30029,
+"output": 271,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a1c2110c87e4e8855",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:57:47.025Z",
+"last": "2026-10-10T23:58:03.944Z",
+"input": 6,
+"cache_create": 19031,
+"cache_read": 29637,
+"output": 271,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a1e4de17cac7658df",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.900Z",
+"last": "2026-10-10T23:52:27.344Z",
+"input": 6,
+"cache_create": 20081,
+"cache_read": 31136,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a248f187619fc0238",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:56:04.112Z",
+"last": "2026-10-10T23:56:24.447Z",
+"input": 6,
+"cache_create": 24174,
+"cache_read": 35287,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a2d3a7e33b09ee415",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:44:22.017Z",
+"last": "2026-10-10T23:44:33.307Z",
+"input": 6,
+"cache_create": 20930,
+"cache_read": 28698,
+"output": 48,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a2fffe6bc64dee595",
+"type": "thb-04-section-writer",
+"desc": "Write section s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:42:00.454Z",
+"last": "2026-10-10T23:42:18.151Z",
+"input": 6,
+"cache_create": 26694,
+"cache_read": 30652,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a3067d94c13850eab",
+"type": "thb-04-section-writer",
+"desc": "Write section s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 10
+},
+"efforts": {
+"medium/medium": 10
+},
+"first": "2026-10-10T23:42:00.305Z",
+"last": "2026-10-10T23:44:40.018Z",
+"input": 14,
+"cache_create": 28937,
+"cache_read": 112890,
+"output": 461,
+"calls": 6
+},
+{
+"session": "f341c740",
+"agent": "a30f88bf624138296",
+"type": "thb-04-section-writer",
+"desc": "Revise s1 (fact issue)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:54:14.469Z",
+"last": "2026-10-10T23:54:31.310Z",
+"input": 6,
+"cache_create": 27081,
+"cache_read": 34219,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a31418def7adeb112",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:54:14.741Z",
+"last": "2026-10-10T23:54:31.173Z",
+"input": 6,
+"cache_create": 18631,
+"cache_read": 28952,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a362cb9d91711b8a6",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.617Z",
+"last": "2026-10-10T23:52:21.011Z",
+"input": 6,
+"cache_create": 19040,
+"cache_read": 31084,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a3c09be778187645b",
+"type": "thb-04-section-writer",
+"desc": "Write section s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-10T23:42:01.855Z",
+"last": "2026-10-10T23:42:20.186Z",
+"input": 6,
+"cache_create": 26812,
+"cache_read": 30658,
+"output": 248,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a3f89310b7d3b4af5",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:56:04.216Z",
+"last": "2026-10-10T23:56:21.354Z",
+"input": 6,
+"cache_create": 19173,
+"cache_read": 29435,
+"output": 268,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a443cfac40daa86f6",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:59:01.942Z",
+"last": "2026-10-10T23:59:22.133Z",
+"input": 6,
+"cache_create": 24186,
+"cache_read": 35251,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a47d2f6abee58430a",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:56:03.911Z",
+"last": "2026-10-10T23:56:20.428Z",
+"input": 6,
+"cache_create": 19747,
+"cache_read": 30986,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a48fe7ddcc603daf8",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:59:01.908Z",
+"last": "2026-10-10T23:59:15.812Z",
+"input": 6,
+"cache_create": 19200,
+"cache_read": 29738,
+"output": 271,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a4fa20447ec3c9369",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:49:07.607Z",
+"last": "2026-10-10T23:49:24.080Z",
+"input": 6,
+"cache_create": 21262,
+"cache_read": 28047,
+"output": 268,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a5670d5fe045e1ed9",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:59:01.533Z",
+"last": "2026-10-10T23:59:21.439Z",
+"input": 6,
+"cache_create": 24030,
+"cache_read": 34925,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a56fb7a8f26dd5b73",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 7
+},
+"efforts": {
+"medium/medium": 7
+},
+"first": "2026-10-10T23:44:21.951Z",
+"last": "2026-10-10T23:44:53.353Z",
+"input": 10,
+"cache_create": 20438,
+"cache_read": 49711,
+"output": 286,
+"calls": 4
+},
+{
+"session": "f341c740",
+"agent": "a583efc425e052a68",
+"type": "thb-04-section-writer",
+"desc": "Rewrite s7 (no quotes)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-10T23:49:07.600Z",
+"last": "2026-10-10T23:49:22.952Z",
+"input": 6,
+"cache_create": 24436,
+"cache_read": 36986,
+"output": 255,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a6b262182364e7ebc",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:56:04.108Z",
+"last": "2026-10-10T23:56:21.241Z",
+"input": 6,
+"cache_create": 19837,
+"cache_read": 31302,
+"output": 44,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a6c4e0cf541c795ab",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review FAQ",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.658Z",
+"last": "2026-10-10T23:52:25.142Z",
+"input": 6,
+"cache_create": 25793,
+"cache_read": 32996,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a6f9e052515cf2c58",
+"type": "thb-04-section-writer",
+"desc": "Write FAQ unit",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:42:00.172Z",
+"last": "2026-10-10T23:42:18.854Z",
+"input": 6,
+"cache_create": 27212,
+"cache_read": 31181,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a71e54ca56e6c196d",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:57:47.112Z",
+"last": "2026-10-10T23:58:02.247Z",
+"input": 6,
+"cache_create": 19026,
+"cache_read": 29331,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a7ab9d81a268ed6d2",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:54:15.430Z",
+"last": "2026-10-10T23:54:29.812Z",
+"input": 6,
+"cache_create": 19034,
+"cache_read": 29614,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a7aecd2f14c93e718",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:49:07.570Z",
+"last": "2026-10-10T23:49:25.507Z",
+"input": 6,
+"cache_create": 21462,
+"cache_read": 28760,
+"output": 43,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a7b0d7abce1fd900f",
+"type": "thb-04-section-writer",
+"desc": "Write section s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:42:00.257Z",
+"last": "2026-10-10T23:42:18.371Z",
+"input": 6,
+"cache_create": 26452,
+"cache_read": 30605,
+"output": 265,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a8e5ce300da595c4e",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.654Z",
+"last": "2026-10-10T23:52:21.124Z",
+"input": 6,
+"cache_create": 18336,
+"cache_read": 30409,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a8f4b6ae39766b3e3",
+"type": "thb-04-section-writer",
+"desc": "Revise s2 (SEO issue)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.612Z",
+"last": "2026-10-10T23:52:25.366Z",
+"input": 6,
+"cache_create": 24639,
+"cache_read": 36853,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a8fcca66d77f3467e",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:59:02.034Z",
+"last": "2026-10-10T23:59:17.164Z",
+"input": 6,
+"cache_create": 23603,
+"cache_read": 35226,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a96a31101449f1ff3",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:54:14.862Z",
+"last": "2026-10-10T23:54:27.631Z",
+"input": 6,
+"cache_create": 21236,
+"cache_read": 28815,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a9fa5d9562924a5d7",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.836Z",
+"last": "2026-10-10T23:52:29.637Z",
+"input": 6,
+"cache_create": 19771,
+"cache_read": 30766,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "a9fedcdf4b063f12d",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-11T00:00:55.123Z",
+"last": "2026-10-11T00:01:09.704Z",
+"input": 6,
+"cache_create": 23780,
+"cache_read": 35565,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "aa3d3e657e73d31d3",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-11T00:00:07.940Z",
+"last": "2026-10-11T00:00:23.004Z",
+"input": 6,
+"cache_create": 23340,
+"cache_read": 35033,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "aa7dcaee20d84e8f3",
+"type": "thb-04-section-writer",
+"desc": "Write section s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:42:00.116Z",
+"last": "2026-10-10T23:42:15.188Z",
+"input": 6,
+"cache_create": 26148,
+"cache_read": 30661,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "aab31edf0765b8935",
+"type": "thb-04-section-writer",
+"desc": "Rewrite s4 (no quotes)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:49:07.152Z",
+"last": "2026-10-10T23:49:19.550Z",
+"input": 6,
+"cache_create": 23046,
+"cache_read": 36275,
+"output": 273,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "aab47546080ece78e",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.532Z",
+"last": "2026-10-10T23:52:24.921Z",
+"input": 6,
+"cache_create": 25046,
+"cache_read": 32281,
+"output": 271,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "aabb541a703b788ed",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:57:47.021Z",
+"last": "2026-10-10T23:58:02.670Z",
+"input": 6,
+"cache_create": 19319,
+"cache_read": 29657,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "ab0b9a5bba5bfa8f3",
+"type": "thb-04-section-writer",
+"desc": "Revise s7 (editorial issue)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-11T00:00:08.017Z",
+"last": "2026-10-11T00:00:23.942Z",
+"input": 6,
+"cache_create": 24570,
+"cache_read": 37345,
+"output": 43,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "ab371e882c3b1dbeb",
+"type": "thb-04-section-writer",
+"desc": "Write section s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:42:00.459Z",
+"last": "2026-10-10T23:42:15.028Z",
+"input": 6,
+"cache_create": 26012,
+"cache_read": 30604,
+"output": 265,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "abb42bcc66699f558",
+"type": "thb-04-section-writer",
+"desc": "Rewrite s1 (no quotes)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:49:07.146Z",
+"last": "2026-10-10T23:49:22.191Z",
+"input": 6,
+"cache_create": 23914,
+"cache_read": 36629,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "abbe7d3770148bc3f",
+"type": "thb-04-section-writer",
+"desc": "Write section s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-10T23:42:00.474Z",
+"last": "2026-10-10T23:42:21.015Z",
+"input": 6,
+"cache_create": 26941,
+"cache_read": 30623,
+"output": 250,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "ac02dca452914b8b6",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review FAQ",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:44:22.100Z",
+"last": "2026-10-10T23:44:44.105Z",
+"input": 6,
+"cache_create": 22570,
+"cache_read": 28715,
+"output": 269,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "ac53856add4ecf571",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:56:04.137Z",
+"last": "2026-10-10T23:56:28.398Z",
+"input": 6,
+"cache_create": 25189,
+"cache_read": 35200,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "acb75a38b33b5a0de",
+"type": "thb-04-section-writer",
+"desc": "Revise s3 after fact review",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:49:07.199Z",
+"last": "2026-10-10T23:49:22.780Z",
+"input": 6,
+"cache_create": 24656,
+"cache_read": 37137,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "acde2985f5e729d90",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:44:21.812Z",
+"last": "2026-10-10T23:44:42.081Z",
+"input": 6,
+"cache_create": 22426,
+"cache_read": 28715,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "ae1c6f30cbd3d05e0",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Fact review s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.649Z",
+"last": "2026-10-10T23:52:25.614Z",
+"input": 6,
+"cache_create": 19921,
+"cache_read": 31283,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "ae4104f079eb3390c",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:49:07.420Z",
+"last": "2026-10-10T23:49:20.942Z",
+"input": 6,
+"cache_create": 20133,
+"cache_read": 27350,
+"output": 273,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "ae7f29d124bfb11a2",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review FAQ",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:49:07.483Z",
+"last": "2026-10-10T23:49:24.503Z",
+"input": 6,
+"cache_create": 21284,
+"cache_read": 28074,
+"output": 268,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "ae91c8fee9723f11d",
+"type": "thb-04-section-writer",
+"desc": "Rewrite s6 (no quotes)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:49:07.354Z",
+"last": "2026-10-10T23:49:22.567Z",
+"input": 6,
+"cache_create": 24426,
+"cache_read": 36949,
+"output": 272,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "aeae6e9edd19ddbd6",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "SEO review s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:54:14.484Z",
+"last": "2026-10-10T23:54:29.270Z",
+"input": 6,
+"cache_create": 19196,
+"cache_read": 29602,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "aebdc898735f180b1",
+"type": "thb-07-editorial-critic",
+"desc": "Editorial review s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:56:04.154Z",
+"last": "2026-10-10T23:56:20.676Z",
+"input": 6,
+"cache_create": 22863,
+"cache_read": 34530,
+"output": 270,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "af07fefcd04289f34",
+"type": "thb-04-section-writer",
+"desc": "Revise s7 (fact issues)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:54:14.571Z",
+"last": "2026-10-10T23:54:29.701Z",
+"input": 6,
+"cache_create": 27289,
+"cache_read": 34580,
+"output": 266,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "af66b5867377a05d7",
+"type": "thb-04-section-writer",
+"desc": "Revise s5 (fact issue)",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:52:08.522Z",
+"last": "2026-10-10T23:52:24.230Z",
+"input": 6,
+"cache_create": 24071,
+"cache_read": 36591,
+"output": 269,
+"calls": 3
+},
+{
+"session": "f341c740",
+"agent": "afee9c3b63c519f14",
+"type": "thb-04-section-writer",
+"desc": "Write section s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T23:42:00.261Z",
+"last": "2026-10-10T23:42:18.302Z",
+"input": 6,
+"cache_create": 26740,
+"cache_read": 30669,
+"output": 270,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a00caaac923f984f5",
+"type": "general-purpose",
+"desc": "Blind judge r1 s2",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:30:17.868Z",
+"last": "2026-10-12T20:30:40.384Z",
+"input": 8,
+"cache_create": 46541,
+"cache_read": 125062,
+"output": 533,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a01264b81f655db23",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial faq r5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:45:16.536Z",
+"last": "2026-10-12T19:45:37.882Z",
+"input": 6,
+"cache_create": 20844,
+"cache_read": 34775,
+"output": 190,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a03857673083978d0",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial faq r7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:52:07.433Z",
+"last": "2026-10-12T19:52:28.761Z",
+"input": 6,
+"cache_create": 20757,
+"cache_read": 34769,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a05e58f4f980d4f6d",
+"type": "thb-w1-writer",
+"desc": "W1 writer faq round 3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:37:47.886Z",
+"last": "2026-10-12T19:38:03.906Z",
+"input": 4,
+"cache_create": 19172,
+"cache_read": 12888,
+"output": 162,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a061e70c45a84d557",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:15:23.995Z",
+"last": "2026-10-12T19:15:46.545Z",
+"input": 6,
+"cache_create": 20895,
+"cache_read": 34664,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a06a659a8c99500ee",
+"type": "thb-04-section-writer",
+"desc": "Classic writer s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:20:23.362Z",
+"last": "2026-10-12T20:20:41.633Z",
+"input": 6,
+"cache_create": 27969,
+"cache_read": 35088,
+"output": 276,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a07056ecefc971477",
+"type": "general-purpose",
+"desc": "Blind judge r2 faq",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:31:42.199Z",
+"last": "2026-10-12T20:31:59.227Z",
+"input": 6,
+"cache_create": 21806,
+"cache_read": 101645,
+"output": 493,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a077be879a90694ff",
+"type": "thb-w1-writer",
+"desc": "W1 writer faq round 5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:43:33.153Z",
+"last": "2026-10-12T19:43:50.880Z",
+"input": 6,
+"cache_create": 21573,
+"cache_read": 37608,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a085846676e7b4a5a",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.721Z",
+"last": "2026-10-12T20:33:54.040Z",
+"input": 6,
+"cache_create": 21002,
+"cache_read": 26151,
+"output": 188,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a08ff6016d3dfef77",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s2 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:40:17.400Z",
+"last": "2026-10-12T18:40:30.317Z",
+"input": 6,
+"cache_create": 15841,
+"cache_read": 29972,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a0992330e7dfeac94",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:30.960Z",
+"last": "2026-10-12T20:26:46.020Z",
+"input": 4,
+"cache_create": 19946,
+"cache_read": 7314,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a0a0a8f095eaf592e",
+"type": "general-purpose",
+"desc": "Assess findings unit s2",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:08:25.084Z",
+"last": "2026-10-12T20:08:34.176Z",
+"input": 4,
+"cache_create": 18972,
+"cache_read": 57557,
+"output": 22,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a0a153f1cae9920ac",
+"type": "general-purpose",
+"desc": "Blind judge unit s1",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:06:29.430Z",
+"last": "2026-10-12T20:06:46.269Z",
+"input": 6,
+"cache_create": 45712,
+"cache_read": 78621,
+"output": 493,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a0bc5aa56d4f533de",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:33:03.434Z",
+"last": "2026-10-12T19:33:35.404Z",
+"input": 6,
+"cache_create": 18469,
+"cache_read": 32448,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a0bd60de27b0ae8fd",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial faq r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:36:47.993Z",
+"last": "2026-10-12T19:37:09.520Z",
+"input": 6,
+"cache_create": 20926,
+"cache_read": 34796,
+"output": 190,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a0c34f768f47b3146",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:22:29.489Z",
+"last": "2026-10-12T20:22:46.332Z",
+"input": 6,
+"cache_create": 22132,
+"cache_read": 29185,
+"output": 279,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a0d2f0684b524a101",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:34:44.169Z",
+"last": "2026-10-12T18:34:57.246Z",
+"input": 6,
+"cache_create": 15512,
+"cache_read": 29621,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a0d48e4087b16d3b8",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.779Z",
+"last": "2026-10-12T20:34:00.328Z",
+"input": 6,
+"cache_create": 22740,
+"cache_read": 26990,
+"output": 188,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a0dabc33545f99b47",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:05.963Z",
+"last": "2026-10-12T20:16:15.247Z",
+"input": 4,
+"cache_create": 19238,
+"cache_read": 7440,
+"output": 163,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a12f148e0a1108537",
+"type": "thb-04-section-writer",
+"desc": "Classic writer faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:20:23.725Z",
+"last": "2026-10-12T20:20:39.558Z",
+"input": 6,
+"cache_create": 21041,
+"cache_read": 34087,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a15274a1fd256aaeb",
+"type": "thb-w1-writer",
+"desc": "W1 writer s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 7
+},
+"efforts": {
+"medium/medium": 7
+},
+"first": "2026-10-12T19:22:55.304Z",
+"last": "2026-10-12T19:23:28.531Z",
+"input": 8,
+"cache_create": 28862,
+"cache_read": 74062,
+"output": 46,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a157d094870b0252f",
+"type": "general-purpose",
+"desc": "Blind judge r2 s4",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:31:42.130Z",
+"last": "2026-10-12T20:31:57.578Z",
+"input": 6,
+"cache_create": 21439,
+"cache_read": 101564,
+"output": 492,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a161ffde030f22bcb",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:16:30.387Z",
+"last": "2026-10-12T19:16:50.552Z",
+"input": 6,
+"cache_create": 24273,
+"cache_read": 34279,
+"output": 277,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a16ed6a8eaf0554d8",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:24:23.325Z",
+"last": "2026-10-12T19:24:43.780Z",
+"input": 6,
+"cache_create": 16485,
+"cache_read": 29515,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a185e645585d29091",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.783Z",
+"last": "2026-10-12T20:33:56.628Z",
+"input": 6,
+"cache_create": 22081,
+"cache_read": 26988,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a189bd59f85965010",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:22:28.853Z",
+"last": "2026-10-12T20:22:40.107Z",
+"input": 6,
+"cache_create": 17874,
+"cache_read": 25700,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a19b22c2366c273ff",
+"type": "general-purpose",
+"desc": "Blind judge unit s7",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:07:10.665Z",
+"last": "2026-10-12T20:07:28.263Z",
+"input": 6,
+"cache_create": 22718,
+"cache_read": 102545,
+"output": 491,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a1a1ef8678023ff47",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:22:29.223Z",
+"last": "2026-10-12T20:22:43.675Z",
+"input": 4,
+"cache_create": 20464,
+"cache_read": 7295,
+"output": 252,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a1a24ba8a8652e90b",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy faq r7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:51:11.318Z",
+"last": "2026-10-12T19:51:34.210Z",
+"input": 6,
+"cache_create": 19199,
+"cache_read": 34615,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a1a551022abb90bf8",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s4 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:54:50.693Z",
+"last": "2026-10-12T18:55:07.919Z",
+"input": 6,
+"cache_create": 15306,
+"cache_read": 28816,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a1bf09bf3ded5e62f",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s2 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:40:37.800Z",
+"last": "2026-10-12T18:40:56.772Z",
+"input": 6,
+"cache_create": 20694,
+"cache_read": 34959,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a2106e7a1dcb988f8",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:31.036Z",
+"last": "2026-10-12T20:26:44.356Z",
+"input": 6,
+"cache_create": 21477,
+"cache_read": 29132,
+"output": 190,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a2328ec20bba54ac5",
+"type": "general-purpose",
+"desc": "Blind judge r2 s3",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:31:42.173Z",
+"last": "2026-10-12T20:32:02.127Z",
+"input": 8,
+"cache_create": 22606,
+"cache_read": 147843,
+"output": 500,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a2515e15246c41ac1",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy faq r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:38:31.592Z",
+"last": "2026-10-12T19:38:51.605Z",
+"input": 4,
+"cache_create": 15157,
+"cache_read": 12834,
+"output": 20,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a271eaf5b4a268e5c",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:22:29.102Z",
+"last": "2026-10-12T20:22:43.446Z",
+"input": 6,
+"cache_create": 22296,
+"cache_read": 29716,
+"output": 46,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a275340696866d26f",
+"type": "thb-w1-writer",
+"desc": "W1 writer faq round 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:35:07.033Z",
+"last": "2026-10-12T19:35:23.350Z",
+"input": 6,
+"cache_create": 22006,
+"cache_read": 38102,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a27afb24e97ba2d8e",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.886Z",
+"last": "2026-10-12T20:34:00.086Z",
+"input": 6,
+"cache_create": 22571,
+"cache_read": 26911,
+"output": 188,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a2a56798efdcd960e",
+"type": "thb-w1-writer",
+"desc": "W1 writer s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:29:01.550Z",
+"last": "2026-10-12T19:29:15.068Z",
+"input": 4,
+"cache_create": 23151,
+"cache_read": 12902,
+"output": 251,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a2ea5042979b7cd24",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s4 r5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:11:19.348Z",
+"last": "2026-10-12T19:11:35.474Z",
+"input": 6,
+"cache_create": 16287,
+"cache_read": 32673,
+"output": 44,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a2f5f58b924169630",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:05.966Z",
+"last": "2026-10-12T20:16:28.022Z",
+"input": 6,
+"cache_create": 22476,
+"cache_read": 27121,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a30ecf088908fc64e",
+"type": "thb-w1-writer",
+"desc": "W1 writer s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:32:45.466Z",
+"last": "2026-10-12T18:33:09.758Z",
+"input": 6,
+"cache_create": 23618,
+"cache_read": 38614,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a3226ffbdab33a0fd",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:18:28.844Z",
+"last": "2026-10-12T19:18:44.016Z",
+"input": 6,
+"cache_create": 15865,
+"cache_read": 29599,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a32737c5dfed9ad14",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO faq r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:36:23.834Z",
+"last": "2026-10-12T19:36:40.131Z",
+"input": 6,
+"cache_create": 15836,
+"cache_read": 29397,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a328cef98e28816ae",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s4 retry",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:56:02.509Z",
+"last": "2026-10-12T18:56:13.109Z",
+"input": 4,
+"cache_create": 13687,
+"cache_read": 12943,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a352915bf684101cf",
+"type": "thb-04-section-writer",
+"desc": "Classic writer s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:20:23.318Z",
+"last": "2026-10-12T20:20:39.047Z",
+"input": 6,
+"cache_create": 26512,
+"cache_read": 34145,
+"output": 274,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a3577102ddb55fd49",
+"type": "thb-w1-writer",
+"desc": "W1 writer s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:13:49.913Z",
+"last": "2026-10-12T19:14:09.330Z",
+"input": 6,
+"cache_create": 26564,
+"cache_read": 42266,
+"output": 280,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a3588dc9411b559cb",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s2 retry",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T18:42:38.031Z",
+"last": "2026-10-12T18:43:09.044Z",
+"input": 10,
+"cache_create": 24022,
+"cache_read": 87558,
+"output": 397,
+"calls": 5
+},
+{
+"session": "955319e9",
+"agent": "a35f40d0cf193eb46",
+"type": "general-purpose",
+"desc": "Blind judge r1 faq",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:30:17.927Z",
+"last": "2026-10-12T20:30:44.241Z",
+"input": 8,
+"cache_create": 46698,
+"cache_read": 123418,
+"output": 502,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a36b5521363075b2a",
+"type": "general-purpose",
+"desc": "Blind judge r2 s8",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:31:42.219Z",
+"last": "2026-10-12T20:32:01.741Z",
+"input": 8,
+"cache_create": 22737,
+"cache_read": 146228,
+"output": 504,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a37cfcf4a73348cb5",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:45:52.935Z",
+"last": "2026-10-12T18:46:05.299Z",
+"input": 4,
+"cache_create": 16898,
+"cache_read": 8093,
+"output": 163,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a391a06f6e403e5cc",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:05.913Z",
+"last": "2026-10-12T20:16:29.658Z",
+"input": 6,
+"cache_create": 22881,
+"cache_read": 26980,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a394ba168f31dc83f",
+"type": "general-purpose",
+"desc": "Blind judge r1 s5",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:30:17.988Z",
+"last": "2026-10-12T20:30:45.465Z",
+"input": 8,
+"cache_create": 47360,
+"cache_read": 124328,
+"output": 500,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a3af22b5f57370080",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:24:32.478Z",
+"last": "2026-10-12T20:24:49.278Z",
+"input": 6,
+"cache_create": 16529,
+"cache_read": 23391,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a3b4bc259859719e9",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s4 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:58:58.779Z",
+"last": "2026-10-12T18:59:11.731Z",
+"input": 4,
+"cache_create": 13221,
+"cache_read": 10984,
+"output": 163,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a3c259bc15cec5e58",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s4 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:59:18.956Z",
+"last": "2026-10-12T18:59:47.665Z",
+"input": 6,
+"cache_create": 20970,
+"cache_read": 34078,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a40d2e598a4ad3806",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s1 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:30:24.843Z",
+"last": "2026-10-12T18:30:42.741Z",
+"input": 6,
+"cache_create": 16043,
+"cache_read": 29216,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a4115f34f6892535b",
+"type": "thb-w1-writer",
+"desc": "W1 writer s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:50:24.853Z",
+"last": "2026-10-12T18:50:39.804Z",
+"input": 4,
+"cache_create": 19418,
+"cache_read": 12955,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a425dbeeda3f6649b",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.815Z",
+"last": "2026-10-12T20:33:48.317Z",
+"input": 6,
+"cache_create": 20529,
+"cache_read": 26647,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a455d74d2ee706580",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:24:32.386Z",
+"last": "2026-10-12T20:24:45.075Z",
+"input": 6,
+"cache_create": 16992,
+"cache_read": 24110,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a458aa9c50830fc8b",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:13:05.168Z",
+"last": "2026-10-12T19:13:25.783Z",
+"input": 6,
+"cache_create": 25832,
+"cache_read": 32280,
+"output": 45,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a46964d7e0284e4d8",
+"type": "general-purpose",
+"desc": "Assess findings unit s8",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 3
+},
+"efforts": {
+"medium/medium": 3
+},
+"first": "2026-10-12T20:08:26.333Z",
+"last": "2026-10-12T20:08:32.972Z",
+"input": 6,
+"cache_create": 17944,
+"cache_read": 98299,
+"output": 194,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a47695af870fe17ec",
+"type": "thb-w1-writer",
+"desc": "W1 writer s4 round 5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:10:28.930Z",
+"last": "2026-10-12T19:10:47.267Z",
+"input": 6,
+"cache_create": 21571,
+"cache_read": 37451,
+"output": 189,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a479007b325eccc0e",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:46:12.495Z",
+"last": "2026-10-12T18:46:23.759Z",
+"input": 4,
+"cache_create": 18303,
+"cache_read": 11726,
+"output": 168,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a481620398ff47814",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:52:00.291Z",
+"last": "2026-10-12T18:52:14.609Z",
+"input": 6,
+"cache_create": 14737,
+"cache_read": 28755,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a4a297b5496bfefff",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:52:21.665Z",
+"last": "2026-10-12T18:52:45.389Z",
+"input": 6,
+"cache_create": 20369,
+"cache_read": 34150,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a4bb2ddcbb83f41c6",
+"type": "general-purpose",
+"desc": "Blind judge unit s2",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:06:29.746Z",
+"last": "2026-10-12T20:06:45.164Z",
+"input": 6,
+"cache_create": 46070,
+"cache_read": 78886,
+"output": 489,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a4fbacff1aee8a752",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:05.831Z",
+"last": "2026-10-12T20:16:18.546Z",
+"input": 4,
+"cache_create": 18877,
+"cache_read": 7440,
+"output": 162,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a508b3b5b02fe6dc1",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s4 r5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:11:43.867Z",
+"last": "2026-10-12T19:11:54.753Z",
+"input": 4,
+"cache_create": 14464,
+"cache_read": 10914,
+"output": 168,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a509dfe49d001c7a6",
+"type": "thb-w1-writer",
+"desc": "W1 writer s7 round 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:25:40.546Z",
+"last": "2026-10-12T19:26:00.968Z",
+"input": 6,
+"cache_create": 26269,
+"cache_read": 41743,
+"output": 275,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a520d2e0412cb1e30",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:24:32.488Z",
+"last": "2026-10-12T20:24:49.658Z",
+"input": 6,
+"cache_create": 17409,
+"cache_read": 24137,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a53d4958e7ecbef7c",
+"type": "thb-w1-writer",
+"desc": "W1 writer faq round 4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:40:41.090Z",
+"last": "2026-10-12T19:40:59.837Z",
+"input": 6,
+"cache_create": 21928,
+"cache_read": 37738,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a540cd64ac2ec03d3",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:30:19.758Z",
+"last": "2026-10-12T19:30:36.696Z",
+"input": 4,
+"cache_create": 17574,
+"cache_read": 11656,
+"output": 163,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a55388f893dcd5771",
+"type": "general-purpose",
+"desc": "Check sample of new items",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:08:25.560Z",
+"last": "2026-10-12T20:08:47.291Z",
+"input": 6,
+"cache_create": 35944,
+"cache_read": 114352,
+"output": 189,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a56486ba4237875ef",
+"type": "thb-w1-writer",
+"desc": "W1 writer s2 retry",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:33:32.575Z",
+"last": "2026-10-12T18:33:49.197Z",
+"input": 6,
+"cache_create": 25196,
+"cache_read": 41140,
+"output": 343,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a57993442c52130cc",
+"type": "thb-w1-writer",
+"desc": "W1 writer s4 round 4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:07:34.439Z",
+"last": "2026-10-12T19:07:53.922Z",
+"input": 6,
+"cache_create": 30131,
+"cache_read": 35198,
+"output": 275,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a5aa5324ea5439ad2",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:18:51.732Z",
+"last": "2026-10-12T19:19:14.863Z",
+"input": 4,
+"cache_create": 18507,
+"cache_read": 11656,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a5bf702deeca09582",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s1 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:30:49.975Z",
+"last": "2026-10-12T18:31:04.385Z",
+"input": 6,
+"cache_create": 19595,
+"cache_read": 34570,
+"output": 190,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a5bf8aba4ad77c4e4",
+"type": "general-purpose",
+"desc": "Blind judge unit s4",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 13
+},
+"efforts": {
+"medium/medium": 13
+},
+"first": "2026-10-12T20:07:10.516Z",
+"last": "2026-10-12T20:07:41.929Z",
+"input": 16,
+"cache_create": 24109,
+"cache_read": 333435,
+"output": 823,
+"calls": 8
+},
+{
+"session": "955319e9",
+"agent": "a5d234bafe0249cb4",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:32:05.014Z",
+"last": "2026-10-12T18:32:22.550Z",
+"input": 6,
+"cache_create": 25880,
+"cache_read": 32700,
+"output": 299,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a5f04ac7ef3af96c0",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s4 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:58:42.662Z",
+"last": "2026-10-12T18:58:50.614Z",
+"input": 4,
+"cache_create": 13729,
+"cache_read": 12890,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a60b1ff538aad1156",
+"type": "general-purpose",
+"desc": "Blind judge r1 s7",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 13
+},
+"efforts": {
+"medium/medium": 13
+},
+"first": "2026-10-12T20:30:17.934Z",
+"last": "2026-10-12T20:30:47.989Z",
+"input": 16,
+"cache_create": 48456,
+"cache_read": 315008,
+"output": 554,
+"calls": 8
+},
+{
+"session": "955319e9",
+"agent": "a61896663dc4cca4b",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:34:20.238Z",
+"last": "2026-10-12T18:34:36.136Z",
+"input": 6,
+"cache_create": 16141,
+"cache_read": 32498,
+"output": 189,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a63ac30dc39f00f9d",
+"type": "thb-w1-writer",
+"desc": "W1 writer s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:25:54.836Z",
+"last": "2026-10-12T18:26:17.374Z",
+"input": 4,
+"cache_create": 27919,
+"cache_read": 9043,
+"output": 249,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a6460662a0c46e1ef",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:51:41.566Z",
+"last": "2026-10-12T18:51:51.676Z",
+"input": 4,
+"cache_create": 13343,
+"cache_read": 12816,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a646f67137a632823",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:15:00.345Z",
+"last": "2026-10-12T19:15:16.543Z",
+"input": 6,
+"cache_create": 15758,
+"cache_read": 29265,
+"output": 190,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a65b9f905ee33fc62",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:31.085Z",
+"last": "2026-10-12T20:26:42.388Z",
+"input": 4,
+"cache_create": 20374,
+"cache_read": 7314,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a68e9c39815ac0eda",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s3 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:48:35.937Z",
+"last": "2026-10-12T18:48:54.123Z",
+"input": 6,
+"cache_create": 20440,
+"cache_read": 34889,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a6909c097c285ac9e",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:23:56.525Z",
+"last": "2026-10-12T19:24:15.349Z",
+"input": 4,
+"cache_create": 14238,
+"cache_read": 12820,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a697a5b44418fbeef",
+"type": "thb-04-section-writer",
+"desc": "Classic writer s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:20:23.493Z",
+"last": "2026-10-12T20:20:37.694Z",
+"input": 4,
+"cache_create": 21273,
+"cache_read": 7897,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a6ab8806777407510",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:24:32.580Z",
+"last": "2026-10-12T20:24:42.173Z",
+"input": 4,
+"cache_create": 14900,
+"cache_read": 6863,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a6fd46ebcce2fccde",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:22:29.365Z",
+"last": "2026-10-12T20:22:42.424Z",
+"input": 6,
+"cache_create": 22069,
+"cache_read": 29636,
+"output": 274,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a6ff11c86b5e2ae20",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:25:07.446Z",
+"last": "2026-10-12T18:25:26.273Z",
+"input": 6,
+"cache_create": 27174,
+"cache_read": 30680,
+"output": 273,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a7003d3e486a3f2a6",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:22:28.928Z",
+"last": "2026-10-12T20:22:41.952Z",
+"input": 6,
+"cache_create": 21642,
+"cache_read": 29203,
+"output": 274,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a703f56c6e54cbf59",
+"type": "thb-w1-writer",
+"desc": "W1 writer faq round 8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:50:22.287Z",
+"last": "2026-10-12T19:50:43.075Z",
+"input": 6,
+"cache_create": 22228,
+"cache_read": 37881,
+"output": 169,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a712271c4a8ffe85a",
+"type": "thb-w1-writer",
+"desc": "W1 writer s2 round 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 7
+},
+"efforts": {
+"medium/medium": 7
+},
+"first": "2026-10-12T18:36:17.341Z",
+"last": "2026-10-12T18:36:48.246Z",
+"input": 8,
+"cache_create": 28147,
+"cache_read": 73186,
+"output": 287,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a7151a8dc46595057",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:22:13.380Z",
+"last": "2026-10-12T19:22:32.676Z",
+"input": 6,
+"cache_create": 25989,
+"cache_read": 32527,
+"output": 277,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a73963fa2d32adc4c",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:30.967Z",
+"last": "2026-10-12T20:26:45.957Z",
+"input": 6,
+"cache_create": 15443,
+"cache_read": 25937,
+"output": 43,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a73e70b2fb42cc0b3",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s4 retry 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:56:42.228Z",
+"last": "2026-10-12T18:56:56.151Z",
+"input": 6,
+"cache_create": 17222,
+"cache_read": 33944,
+"output": 356,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a75a699c7c4fb9cd6",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy faq r6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:47:13.642Z",
+"last": "2026-10-12T19:47:40.663Z",
+"input": 6,
+"cache_create": 19527,
+"cache_read": 34067,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a763f1afdd48d9e01",
+"type": "general-purpose",
+"desc": "Assess findings unit s7",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:08:25.142Z",
+"last": "2026-10-12T20:08:32.390Z",
+"input": 6,
+"cache_create": 18888,
+"cache_read": 99186,
+"output": 48,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a76f945b5f0ca4296",
+"type": "thb-04-section-writer",
+"desc": "Classic writer faq pass 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:22:29.114Z",
+"last": "2026-10-12T20:22:44.054Z",
+"input": 6,
+"cache_create": 20272,
+"cache_read": 33329,
+"output": 188,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a7884698d2dcf146f",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial faq r4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:42:20.602Z",
+"last": "2026-10-12T19:42:42.252Z",
+"input": 6,
+"cache_create": 20816,
+"cache_read": 34781,
+"output": 190,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a791925c9267321f7",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy faq r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:35:54.448Z",
+"last": "2026-10-12T19:36:16.197Z",
+"input": 4,
+"cache_create": 14797,
+"cache_read": 12834,
+"output": 163,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a7939253910242c57",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s3 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:47:52.910Z",
+"last": "2026-10-12T18:48:05.653Z",
+"input": 6,
+"cache_create": 15709,
+"cache_read": 32524,
+"output": 189,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a7ab962ff56a7c584",
+"type": "general-purpose",
+"desc": "Blind judge r2 s1",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:31:42.046Z",
+"last": "2026-10-12T20:32:02.123Z",
+"input": 8,
+"cache_create": 22611,
+"cache_read": 147761,
+"output": 499,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a7b065aea1caa0f40",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO faq r5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:44:49.846Z",
+"last": "2026-10-12T19:45:08.997Z",
+"input": 4,
+"cache_create": 13993,
+"cache_read": 10912,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a7c8f608c4fa94413",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.724Z",
+"last": "2026-10-12T20:33:47.476Z",
+"input": 4,
+"cache_create": 19449,
+"cache_read": 7411,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a7cec3af2619c0922",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:28:21.690Z",
+"last": "2026-10-12T19:28:38.107Z",
+"input": 6,
+"cache_create": 24902,
+"cache_read": 31739,
+"output": 280,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a7e6f6a08e3ea2f3a",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:30.995Z",
+"last": "2026-10-12T20:26:45.117Z",
+"input": 4,
+"cache_create": 20410,
+"cache_read": 7314,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a7eb4bfc0dc58c4f3",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:26:51.950Z",
+"last": "2026-10-12T18:27:07.626Z",
+"input": 6,
+"cache_create": 19357,
+"cache_read": 28185,
+"output": 184,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a80fcd0a908ad7fdc",
+"type": "thb-w1-writer",
+"desc": "W1 writer s4 retry",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:50:59.608Z",
+"last": "2026-10-12T18:51:13.262Z",
+"input": 6,
+"cache_create": 23022,
+"cache_read": 39735,
+"output": 345,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a8128ee072c3bd4d8",
+"type": "thb-w1-writer",
+"desc": "W1 writer s4 round 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:53:40.981Z",
+"last": "2026-10-12T18:53:56.679Z",
+"input": 6,
+"cache_create": 24309,
+"cache_read": 40747,
+"output": 275,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a82f9256c0a1abbee",
+"type": "general-purpose",
+"desc": "Assess findings unit s6",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:08:25.132Z",
+"last": "2026-10-12T20:08:33.280Z",
+"input": 4,
+"cache_create": 18952,
+"cache_read": 57557,
+"output": 161,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a840d4384293ca17b",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial faq r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:39:27.653Z",
+"last": "2026-10-12T19:39:50.665Z",
+"input": 6,
+"cache_create": 21003,
+"cache_read": 34788,
+"output": 190,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a843afcd434aa84b8",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s6 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:20:38.284Z",
+"last": "2026-10-12T19:20:48.438Z",
+"input": 4,
+"cache_create": 14578,
+"cache_read": 12820,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a8539333276738d4f",
+"type": "general-purpose",
+"desc": "Blind judge r1 s8",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:30:17.942Z",
+"last": "2026-10-12T20:30:43.855Z",
+"input": 8,
+"cache_create": 46583,
+"cache_read": 123026,
+"output": 500,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a85e55fc3cc6e720d",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:05.856Z",
+"last": "2026-10-12T20:16:17.547Z",
+"input": 6,
+"cache_create": 20034,
+"cache_read": 26187,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a85e6c10cff688369",
+"type": "general-purpose",
+"desc": "Blind judge unit s5",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:07:10.508Z",
+"last": "2026-10-12T20:07:25.530Z",
+"input": 6,
+"cache_create": 22091,
+"cache_read": 102129,
+"output": 489,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a87981dfd7bd4c3e3",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s2 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:37:21.077Z",
+"last": "2026-10-12T18:37:31.080Z",
+"input": 4,
+"cache_create": 14421,
+"cache_read": 12816,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a882a5dee08acb54c",
+"type": "general-purpose",
+"desc": "Blind judge r1 s3",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:30:17.849Z",
+"last": "2026-10-12T20:30:42.974Z",
+"input": 8,
+"cache_create": 47099,
+"cache_read": 124328,
+"output": 500,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "a88adf1faa6ca96d1",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s7 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:26:55.919Z",
+"last": "2026-10-12T19:27:10.513Z",
+"input": 6,
+"cache_create": 15572,
+"cache_read": 29517,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a89083f70aa84b1be",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s3 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:48:13.035Z",
+"last": "2026-10-12T18:48:27.809Z",
+"input": 4,
+"cache_create": 14030,
+"cache_read": 10984,
+"output": 168,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a89fcc578c27c2b25",
+"type": "general-purpose",
+"desc": "Blind judge unit s6",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:07:10.532Z",
+"last": "2026-10-12T20:07:27.989Z",
+"input": 6,
+"cache_create": 22686,
+"cache_read": 102568,
+"output": 489,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a8a91ecd2b1cf8f23",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s1 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:30:05.223Z",
+"last": "2026-10-12T18:30:17.919Z",
+"input": 4,
+"cache_create": 13826,
+"cache_read": 12800,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a8c9b238598e12567",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s4 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:54:24.839Z",
+"last": "2026-10-12T18:54:42.660Z",
+"input": 4,
+"cache_create": 13560,
+"cache_read": 12816,
+"output": 168,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a8d8b382a07a3d102",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO faq r4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:41:57.205Z",
+"last": "2026-10-12T19:42:13.517Z",
+"input": 6,
+"cache_create": 15840,
+"cache_read": 29389,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a9034ed2c357d6fd7",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.752Z",
+"last": "2026-10-12T20:33:55.422Z",
+"input": 4,
+"cache_create": 19215,
+"cache_read": 7411,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a90a2b8eea52ae41b",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:22:29.220Z",
+"last": "2026-10-12T20:22:45.187Z",
+"input": 6,
+"cache_create": 21526,
+"cache_read": 28712,
+"output": 275,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a91394b9b84272139",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:05.905Z",
+"last": "2026-10-12T20:16:23.446Z",
+"input": 4,
+"cache_create": 19497,
+"cache_read": 7440,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a9328f84ad658d16f",
+"type": "thb-w1-writer",
+"desc": "W1 writer s3 round 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:47:09.754Z",
+"last": "2026-10-12T18:47:24.902Z",
+"input": 6,
+"cache_create": 20961,
+"cache_read": 37200,
+"output": 189,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a94cb8e3bc8152f85",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:27:40.478Z",
+"last": "2026-10-12T18:28:06.172Z",
+"input": 6,
+"cache_create": 24547,
+"cache_read": 31308,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a9652dd2131981411",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s2 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:38:06.750Z",
+"last": "2026-10-12T18:38:24.516Z",
+"input": 6,
+"cache_create": 20149,
+"cache_read": 34811,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a96700fafd38dfcb2",
+"type": "thb-04-section-writer",
+"desc": "Classic writer s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:20:24.019Z",
+"last": "2026-10-12T20:20:38.809Z",
+"input": 6,
+"cache_create": 26371,
+"cache_read": 34178,
+"output": 279,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a9703584bca3540ed",
+"type": "general-purpose",
+"desc": "Blind judge r2 s2",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 10
+},
+"efforts": {
+"medium/medium": 10
+},
+"first": "2026-10-12T20:31:42.071Z",
+"last": "2026-10-12T20:32:10.058Z",
+"input": 10,
+"cache_create": 25586,
+"cache_read": 195354,
+"output": 504,
+"calls": 5
+},
+{
+"session": "955319e9",
+"agent": "a994f7a855b967cb3",
+"type": "general-purpose",
+"desc": "Assess findings unit s3",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 3
+},
+"efforts": {
+"medium/medium": 3
+},
+"first": "2026-10-12T20:08:24.967Z",
+"last": "2026-10-12T20:08:31.459Z",
+"input": 4,
+"cache_create": 18692,
+"cache_read": 57557,
+"output": 170,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "a9adfd15460e53efb",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO faq r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:38:59.419Z",
+"last": "2026-10-12T19:39:20.620Z",
+"input": 6,
+"cache_create": 16582,
+"cache_read": 29395,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a9b91d7bbef5c1f63",
+"type": "thb-w1-writer",
+"desc": "W1 writer s4 round 3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:57:46.762Z",
+"last": "2026-10-12T18:58:03.825Z",
+"input": 6,
+"cache_create": 24561,
+"cache_read": 40913,
+"output": 46,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a9d4875626ae22137",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:43:45.346Z",
+"last": "2026-10-12T18:44:06.980Z",
+"input": 6,
+"cache_create": 26098,
+"cache_read": 32573,
+"output": 280,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a9e071cfe531dd372",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:22:29.018Z",
+"last": "2026-10-12T20:22:39.664Z",
+"input": 6,
+"cache_create": 16860,
+"cache_read": 24863,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "a9e3f6e4a58aba788",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:05.639Z",
+"last": "2026-10-12T20:16:19.829Z",
+"input": 6,
+"cache_create": 21139,
+"cache_read": 27024,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa0d3eb3d68c09e38",
+"type": "thb-w1-writer",
+"desc": "W1 writer s6 round 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:19:50.447Z",
+"last": "2026-10-12T19:20:09.568Z",
+"input": 6,
+"cache_create": 26616,
+"cache_read": 41998,
+"output": 277,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa2436b4a11b1a0e9",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s7 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:26:32.334Z",
+"last": "2026-10-12T19:26:48.662Z",
+"input": 4,
+"cache_create": 14637,
+"cache_read": 12820,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "aa28538cea7906818",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:35:04.266Z",
+"last": "2026-10-12T18:35:27.216Z",
+"input": 6,
+"cache_create": 21086,
+"cache_read": 34980,
+"output": 188,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa3aed3c944154b4a",
+"type": "thb-w1-writer",
+"desc": "W1 writer s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:17:13.802Z",
+"last": "2026-10-12T19:17:36.455Z",
+"input": 6,
+"cache_create": 27584,
+"cache_read": 42800,
+"output": 275,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa493c8a6dd443008",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:24:32.549Z",
+"last": "2026-10-12T20:24:45.369Z",
+"input": 6,
+"cache_create": 16777,
+"cache_read": 24064,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa53722cd7bd78740",
+"type": "thb-04-section-writer",
+"desc": "Classic writer s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:20:22.995Z",
+"last": "2026-10-12T20:20:43.416Z",
+"input": 6,
+"cache_create": 28206,
+"cache_read": 35038,
+"output": 425,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa548c91faa91634b",
+"type": "general-purpose",
+"desc": "Blind judge r1 s6",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:30:17.966Z",
+"last": "2026-10-12T20:30:34.819Z",
+"input": 6,
+"cache_create": 46165,
+"cache_read": 78968,
+"output": 497,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa6c33f8744f6c237",
+"type": "thb-w1-writer",
+"desc": "W1 writer faq round 6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:46:28.963Z",
+"last": "2026-10-12T19:46:44.854Z",
+"input": 4,
+"cache_create": 19640,
+"cache_read": 12888,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "aa6c48961a487c395",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy faq r5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:44:20.189Z",
+"last": "2026-10-12T19:44:41.994Z",
+"input": 4,
+"cache_create": 15486,
+"cache_read": 12834,
+"output": 163,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "aa749a6daaa5564e8",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:34:08.157Z",
+"last": "2026-10-12T19:34:29.886Z",
+"input": 6,
+"cache_create": 20788,
+"cache_read": 34842,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa7d031c799cb5857",
+"type": "general-purpose",
+"desc": "Blind judge unit faq",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:07:10.553Z",
+"last": "2026-10-12T20:07:26.509Z",
+"input": 6,
+"cache_create": 21615,
+"cache_read": 101677,
+"output": 489,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aa9534bb3696b46d0",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:24:32.419Z",
+"last": "2026-10-12T20:24:48.926Z",
+"input": 6,
+"cache_create": 16919,
+"cache_read": 23967,
+"output": 48,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aac099fd43a9fc35f",
+"type": "thb-w1-writer",
+"desc": "W1 writer s1 round 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:28:57.548Z",
+"last": "2026-10-12T18:29:26.690Z",
+"input": 6,
+"cache_create": 26844,
+"cache_read": 41527,
+"output": 279,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aafa36e38057fef00",
+"type": "general-purpose",
+"desc": "Assess findings unit s5",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 3
+},
+"efforts": {
+"medium/medium": 3
+},
+"first": "2026-10-12T20:08:25.237Z",
+"last": "2026-10-12T20:08:30.070Z",
+"input": 4,
+"cache_create": 17669,
+"cache_read": 57557,
+"output": 170,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "ab247a8067700af64",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.904Z",
+"last": "2026-10-12T20:33:49.176Z",
+"input": 4,
+"cache_create": 18776,
+"cache_read": 7411,
+"output": 168,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "ab38c7826e83f325f",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:05.875Z",
+"last": "2026-10-12T20:16:37.182Z",
+"input": 6,
+"cache_create": 23306,
+"cache_read": 26927,
+"output": 188,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ab4ca26b505bfc54d",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:29:59.820Z",
+"last": "2026-10-12T19:30:12.361Z",
+"input": 6,
+"cache_create": 14595,
+"cache_read": 28670,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ab4f33c0a8826d420",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s4 r4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:08:46.078Z",
+"last": "2026-10-12T19:09:04.072Z",
+"input": 4,
+"cache_create": 16458,
+"cache_read": 8023,
+"output": 168,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "ab525b3cd864df3b7",
+"type": "general-purpose",
+"desc": "Assess findings unit faq",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:08:25.578Z",
+"last": "2026-10-12T20:08:37.132Z",
+"input": 6,
+"cache_create": 21820,
+"cache_read": 101503,
+"output": 183,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ab577870c2d3f11d6",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:33:42.338Z",
+"last": "2026-10-12T19:34:00.577Z",
+"input": 6,
+"cache_create": 16153,
+"cache_read": 29439,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ab87a00c5c4ec2f8f",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s4 r4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:08:25.806Z",
+"last": "2026-10-12T19:08:38.554Z",
+"input": 6,
+"cache_create": 19212,
+"cache_read": 28478,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "abcb037e64c5d326d",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:24:32.495Z",
+"last": "2026-10-12T20:24:43.577Z",
+"input": 4,
+"cache_create": 15445,
+"cache_read": 6863,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "abe2de223cd3dc386",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:31.074Z",
+"last": "2026-10-12T20:26:46.061Z",
+"input": 4,
+"cache_create": 19652,
+"cache_read": 7314,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "abec5b053c6b40a42",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:27:14.940Z",
+"last": "2026-10-12T18:27:33.151Z",
+"input": 6,
+"cache_create": 18696,
+"cache_read": 26311,
+"output": 183,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ac007c04ce857f00b",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:45:25.987Z",
+"last": "2026-10-12T18:45:45.676Z",
+"input": 6,
+"cache_create": 20370,
+"cache_read": 28454,
+"output": 188,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ac17ffa5c753d7b47",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s4 r5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:12:02.129Z",
+"last": "2026-10-12T19:12:18.742Z",
+"input": 6,
+"cache_create": 19755,
+"cache_read": 34415,
+"output": 1851,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ac285354b4a7329fc",
+"type": "general-purpose",
+"desc": "Assess findings unit s4",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:08:25.108Z",
+"last": "2026-10-12T20:08:34.419Z",
+"input": 6,
+"cache_create": 19972,
+"cache_read": 99979,
+"output": 181,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ac3b30c813c7923ba",
+"type": "thb-04-section-writer",
+"desc": "Classic writer s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:20:23.972Z",
+"last": "2026-10-12T20:20:40.513Z",
+"input": 6,
+"cache_create": 27215,
+"cache_read": 34637,
+"output": 277,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ac5ff8efab34948ca",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO faq r7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:51:41.702Z",
+"last": "2026-10-12T19:52:00.308Z",
+"input": 6,
+"cache_create": 16420,
+"cache_read": 29616,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ac73e8d99199b2613",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic-revised s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:33:35.713Z",
+"last": "2026-10-12T20:33:47.356Z",
+"input": 4,
+"cache_create": 19318,
+"cache_read": 7411,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "ac93b4460c3f3d9cd",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s4 r4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:09:11.719Z",
+"last": "2026-10-12T19:09:32.410Z",
+"input": 6,
+"cache_create": 23585,
+"cache_read": 31097,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ac93df7d28525712b",
+"type": "general-purpose",
+"desc": "Extract all W1 declines",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:08:26.619Z",
+"last": "2026-10-12T20:08:55.339Z",
+"input": 6,
+"cache_create": 31596,
+"cache_read": 107710,
+"output": 185,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ac956c8de36cd160e",
+"type": "thb-w1-writer",
+"desc": "W1 writer s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:44:31.531Z",
+"last": "2026-10-12T18:44:56.083Z",
+"input": 6,
+"cache_create": 27875,
+"cache_read": 42978,
+"output": 275,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "acb1a5519ecbb2310",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:27:58.665Z",
+"last": "2026-10-12T20:28:11.973Z",
+"input": 6,
+"cache_create": 19369,
+"cache_read": 31467,
+"output": 1234,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "accaf3cb14453d186",
+"type": "thb-w1-writer",
+"desc": "W1 writer s2 round 3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:39:12.754Z",
+"last": "2026-10-12T18:39:30.694Z",
+"input": 6,
+"cache_create": 25468,
+"cache_read": 41336,
+"output": 277,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "acd1ea9a04d00b115",
+"type": "general-purpose",
+"desc": "Blind judge r1 s4",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:30:17.714Z",
+"last": "2026-10-12T20:30:36.403Z",
+"input": 8,
+"cache_create": 45448,
+"cache_read": 123201,
+"output": 531,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "ace4ee310f61bf480",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial faq r6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:48:12.245Z",
+"last": "2026-10-12T19:48:31.470Z",
+"input": 6,
+"cache_create": 20432,
+"cache_read": 34799,
+"output": 190,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ad142877f30f59aa0",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T18:49:42.521Z",
+"last": "2026-10-12T18:50:01.292Z",
+"input": 6,
+"cache_create": 25241,
+"cache_read": 31920,
+"output": 275,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ad2cf7c300c9683be",
+"type": "general-purpose",
+"desc": "Blind judge r1 s1",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:30:17.836Z",
+"last": "2026-10-12T20:30:33.804Z",
+"input": 6,
+"cache_create": 45571,
+"cache_read": 78508,
+"output": 492,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ad45ccdce6d78d0ee",
+"type": "general-purpose",
+"desc": "Assess findings unit s1",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:08:25.049Z",
+"last": "2026-10-12T20:08:35.472Z",
+"input": 6,
+"cache_create": 20074,
+"cache_read": 99888,
+"output": 180,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ad7edaaafb3ea024d",
+"type": "thb-w1-writer",
+"desc": "W1 writer faq round 7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:49:22.563Z",
+"last": "2026-10-12T19:49:40.040Z",
+"input": 6,
+"cache_create": 22071,
+"cache_read": 38193,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ad7f62dd03c488905",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s7 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:27:17.905Z",
+"last": "2026-10-12T19:27:36.104Z",
+"input": 4,
+"cache_create": 18415,
+"cache_read": 11656,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "ad8706b240e218c15",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:14:40.082Z",
+"last": "2026-10-12T19:14:52.799Z",
+"input": 4,
+"cache_create": 13992,
+"cache_read": 12820,
+"output": 168,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "ad9d5340331ce1e02",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s2 r3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:39:58.508Z",
+"last": "2026-10-12T18:40:10.241Z",
+"input": 4,
+"cache_create": 14686,
+"cache_read": 12816,
+"output": 162,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "adb41ab45c4ee2143",
+"type": "general-purpose",
+"desc": "Blind judge unit s3",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-12T20:06:29.773Z",
+"last": "2026-10-12T20:06:49.370Z",
+"input": 8,
+"cache_create": 46310,
+"cache_read": 124536,
+"output": 493,
+"calls": 4
+},
+{
+"session": "955319e9",
+"agent": "ade0b48669ac7340c",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s6 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:20:55.869Z",
+"last": "2026-10-12T19:21:08.956Z",
+"input": 6,
+"cache_create": 15503,
+"cache_read": 29527,
+"output": 187,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "adf3c6adae8234096",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s4 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:55:15.546Z",
+"last": "2026-10-12T18:55:35.836Z",
+"input": 6,
+"cache_create": 19946,
+"cache_read": 34217,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ae165e22671673ff4",
+"type": "general-purpose",
+"desc": "Blind judge r2 s6",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:31:42.281Z",
+"last": "2026-10-12T20:31:57.007Z",
+"input": 6,
+"cache_create": 22328,
+"cache_read": 102513,
+"output": 510,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ae3d4f19cf37df728",
+"type": "thb-04-section-writer",
+"desc": "Classic writer s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:20:23.916Z",
+"last": "2026-10-12T20:20:42.311Z",
+"input": 6,
+"cache_create": 27713,
+"cache_read": 34875,
+"output": 276,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "ae5e92d69bada2ba5",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:31.350Z",
+"last": "2026-10-12T20:26:42.174Z",
+"input": 4,
+"cache_create": 19599,
+"cache_read": 7314,
+"output": 24,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "ae62a00c8652e8b89",
+"type": "general-purpose",
+"desc": "Blind judge r2 s5",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 12
+},
+"efforts": {
+"medium/medium": 12
+},
+"first": "2026-10-12T20:31:42.228Z",
+"last": "2026-10-12T20:32:08.804Z",
+"input": 12,
+"cache_create": 23834,
+"cache_read": 241767,
+"output": 550,
+"calls": 6
+},
+{
+"session": "955319e9",
+"agent": "ae6c9c5df4afe9924",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy faq r4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:41:30.162Z",
+"last": "2026-10-12T19:41:47.982Z",
+"input": 4,
+"cache_create": 15387,
+"cache_read": 12834,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "aea7f49128c34594c",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s5 retry",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:30.872Z",
+"last": "2026-10-12T20:26:44.552Z",
+"input": 6,
+"cache_create": 15276,
+"cache_read": 25969,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aeb560091557f8742",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s6 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:21:16.390Z",
+"last": "2026-10-12T19:21:30.087Z",
+"input": 6,
+"cache_create": 19987,
+"cache_read": 34922,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aeb886a8695e0497f",
+"type": "thb-w2-cowriter",
+"desc": "W2 co-writer faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T19:31:19.293Z",
+"last": "2026-10-12T19:31:41.390Z",
+"input": 6,
+"cache_create": 24421,
+"cache_read": 34256,
+"output": 274,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aeba0f8b8c9384fe7",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s8",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:29:44.960Z",
+"last": "2026-10-12T19:29:52.864Z",
+"input": 4,
+"cache_create": 13402,
+"cache_read": 12820,
+"output": 164,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "aecfe389d8e5ad082",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:27:58.745Z",
+"last": "2026-10-12T20:28:10.501Z",
+"input": 4,
+"cache_create": 17938,
+"cache_read": 9521,
+"output": 166,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "aed132f93f00fde3d",
+"type": "thb-04-section-writer",
+"desc": "Classic writer s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:20:22.792Z",
+"last": "2026-10-12T20:20:40.547Z",
+"input": 6,
+"cache_create": 28087,
+"cache_read": 35240,
+"output": 276,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aed547e50c6bc0738",
+"type": "thb-05-fact-privacy-auditor",
+"desc": "Classic Agent 5 faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T20:24:35.054Z",
+"last": "2026-10-12T20:24:55.538Z",
+"input": 6,
+"cache_create": 20398,
+"cache_read": 31170,
+"output": 275,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "aef497614fd418dfa",
+"type": "thb-v3-editorial",
+"desc": "V3 editorial s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:24:51.001Z",
+"last": "2026-10-12T19:25:05.271Z",
+"input": 4,
+"cache_create": 18416,
+"cache_read": 11656,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "af10806a9e933a9df",
+"type": "thb-06-seo-aeo-geo-auditor",
+"desc": "Classic Agent 6 s1",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:24:32.332Z",
+"last": "2026-10-12T20:24:49.107Z",
+"input": 6,
+"cache_create": 16817,
+"cache_read": 23684,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "af12f4390601f8300",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO s2 r2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T18:37:38.872Z",
+"last": "2026-10-12T18:37:59.248Z",
+"input": 6,
+"cache_create": 16383,
+"cache_read": 29460,
+"output": 192,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "af4a5b8ebed04c190",
+"type": "thb-w1-writer",
+"desc": "W1 writer faq",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:32:05.675Z",
+"last": "2026-10-12T19:32:33.433Z",
+"input": 6,
+"cache_create": 24526,
+"cache_read": 39015,
+"output": 186,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "af63c4dcebb781ed3",
+"type": "general-purpose",
+"desc": "Blind judge unit s8",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 6
+},
+"efforts": {
+"medium/medium": 6
+},
+"first": "2026-10-12T20:07:10.631Z",
+"last": "2026-10-12T20:07:27.441Z",
+"input": 6,
+"cache_create": 21482,
+"cache_read": 101454,
+"output": 488,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "af7dac14c54f6b22a",
+"type": "thb-07-editorial-critic",
+"desc": "Classic Agent 7 s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:26:31.026Z",
+"last": "2026-10-12T20:26:46.334Z",
+"input": 6,
+"cache_create": 21816,
+"cache_read": 29230,
+"output": 191,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "af83cfcb9d996759a",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 on classic s7",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T20:16:06.082Z",
+"last": "2026-10-12T20:16:32.676Z",
+"input": 6,
+"cache_create": 22797,
+"cache_read": 27012,
+"output": 188,
+"calls": 3
+},
+{
+"session": "955319e9",
+"agent": "af8f7ad9dcbb50f9c",
+"type": "thb-v2-seo-aeo-geo",
+"desc": "V2 SEO/AEO/GEO faq r6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:47:47.817Z",
+"last": "2026-10-12T19:48:04.049Z",
+"input": 4,
+"cache_create": 14264,
+"cache_read": 10912,
+"output": 167,
+"calls": 2
+},
+{
+"session": "955319e9",
+"agent": "af9722618550eafe6",
+"type": "general-purpose",
+"desc": "Blind judge r2 s7",
+"model_req": "sonnet",
+"models": {
+"claude-sonnet-5-5": 13
+},
+"efforts": {
+"medium/medium": 13
+},
+"first": "2026-10-12T20:31:42.187Z",
+"last": "2026-10-12T20:32:15.585Z",
+"input": 16,
+"cache_create": 25364,
+"cache_read": 340477,
+"output": 564,
+"calls": 8
+},
+{
+"session": "955319e9",
+"agent": "afac20a4793954efc",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 fact/privacy s6",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 4
+},
+"efforts": {
+"medium/medium": 4
+},
+"first": "2026-10-12T19:18:05.825Z",
+"last": "2026-10-12T19:18:20.883Z",
+"input": 4,
+"cache_create": 14419,
+"cache_read": 12820,
+"output": 164,
+"calls": 2
+},
+{
+"session": "3af375f8",
+"agent": "a11e218787f14b9f6",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 review unit s4",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T21:59:18.329Z",
+"last": "2026-10-12T21:59:39.203Z",
+"input": 6,
+"cache_create": 24893,
+"cache_read": 29681,
+"output": 280,
+"calls": 3
+},
+{
+"session": "3af375f8",
+"agent": "a444bf415faaf9422",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 review unit s2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T21:59:18.781Z",
+"last": "2026-10-12T21:59:32.928Z",
+"input": 6,
+"cache_create": 23806,
+"cache_read": 29657,
+"output": 276,
+"calls": 3
+},
+{
+"session": "3af375f8",
+"agent": "ae2a5d6714097e4d5",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 review unit s5",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T21:59:18.772Z",
+"last": "2026-10-12T21:59:42.995Z",
+"input": 6,
+"cache_create": 25640,
+"cache_read": 29841,
+"output": 278,
+"calls": 3
+},
+{
+"session": "3af375f8",
+"agent": "af78fe7f51d233c39",
+"type": "thb-v1-fact-privacy",
+"desc": "V1 review unit s3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-12T21:59:18.625Z",
+"last": "2026-10-12T21:59:42.898Z",
+"input": 6,
+"cache_create": 25732,
+"cache_read": 29893,
+"output": 278,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a1847d569397425da",
+"type": "general-purpose",
+"desc": "Agent 1: gap services",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.890Z",
+"last": "2026-10-10T20:31:22.447Z",
+"input": 6,
+"cache_create": 43373,
+"cache_read": 75227,
+"output": 299,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a20180725e078e925",
+"type": "general-purpose",
+"desc": "Agent 1: for cash CA",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.849Z",
+"last": "2026-10-10T20:31:28.414Z",
+"input": 6,
+"cache_create": 45528,
+"cache_read": 76530,
+"output": 295,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a21bb3668ec0150aa",
+"type": "general-purpose",
+"desc": "Agent 1: gap SF bay typo",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:04.032Z",
+"last": "2026-10-10T20:31:24.976Z",
+"input": 6,
+"cache_create": 20434,
+"cache_read": 98977,
+"output": 296,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a48f8205750418ec7",
+"type": "general-purpose",
+"desc": "Agent 1: Concord",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.757Z",
+"last": "2026-10-10T20:31:23.704Z",
+"input": 6,
+"cache_create": 43918,
+"cache_read": 75553,
+"output": 303,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a4ca078574134254a",
+"type": "general-purpose",
+"desc": "Agent 1: gap SF bay",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:04.064Z",
+"last": "2026-10-10T20:31:25.139Z",
+"input": 6,
+"cache_create": 20897,
+"cache_read": 99480,
+"output": 296,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a5e8e011b02c3bfb1",
+"type": "general-purpose",
+"desc": "Agent 1: San Jose",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.993Z",
+"last": "2026-10-10T20:31:28.882Z",
+"input": 6,
+"cache_create": 45269,
+"cache_read": 76094,
+"output": 301,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a6b9fa73f2de4a1dc",
+"type": "general-purpose",
+"desc": "Agent 1: hoarder fast",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.939Z",
+"last": "2026-10-10T20:31:21.734Z",
+"input": 6,
+"cache_create": 42818,
+"cache_read": 74701,
+"output": 296,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a6d4c67de7ac4a6ed",
+"type": "thb-03-content-architect",
+"desc": "Agent 3: hoarder brief",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-10T21:09:38.634Z",
+"last": "2026-10-10T21:10:34.952Z",
+"input": 8,
+"cache_create": 34375,
+"cache_read": 53723,
+"output": 565,
+"calls": 4
+},
+{
+"session": "772f0142",
+"agent": "a6ddf852850755b6a",
+"type": "general-purpose",
+"desc": "Agent 1: cash buyers CA",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.702Z",
+"last": "2026-10-10T20:31:25.096Z",
+"input": 6,
+"cache_create": 45387,
+"cache_read": 76791,
+"output": 293,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a6e6f620bfe71946e",
+"type": "thb-02-research-evidence",
+"desc": "Agent 2: hoarder evidence",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 21
+},
+"efforts": {
+"medium/medium": 21
+},
+"first": "2026-10-10T20:44:22.291Z",
+"last": "2026-10-10T20:46:55.279Z",
+"input": 22,
+"cache_create": 23877,
+"cache_read": 144257,
+"output": 464,
+"calls": 10
+},
+{
+"session": "772f0142",
+"agent": "a83717cee52799356",
+"type": "thb-02-research-evidence",
+"desc": "Agent 2: hoarder evidence v3",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T21:08:34.679Z",
+"last": "2026-10-10T21:09:07.238Z",
+"input": 6,
+"cache_create": 27903,
+"cache_read": 26190,
+"output": 207,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a8e935c4ab4353a3a",
+"type": "general-purpose",
+"desc": "Agent 1: cash home buyers",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.883Z",
+"last": "2026-10-10T20:31:30.840Z",
+"input": 6,
+"cache_create": 48369,
+"cache_read": 79144,
+"output": 295,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a95b2ad5893aa4558",
+"type": "general-purpose",
+"desc": "Agent 1: we buy houses CA",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.752Z",
+"last": "2026-10-10T20:31:27.737Z",
+"input": 6,
+"cache_create": 45475,
+"cache_read": 76472,
+"output": 298,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "a9c7a830bbcf1be72",
+"type": "general-purpose",
+"desc": "Agent 1: cash buyers CA 2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.675Z",
+"last": "2026-10-10T20:31:27.402Z",
+"input": 6,
+"cache_create": 45160,
+"cache_read": 76134,
+"output": 296,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "aa6ba7eeb3e110e9b",
+"type": "general-purpose",
+"desc": "Agent 1: sell fast SF",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.864Z",
+"last": "2026-10-10T20:31:29.954Z",
+"input": 6,
+"cache_create": 45481,
+"cache_read": 76247,
+"output": 298,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "ad359c978b7319322",
+"type": "general-purpose",
+"desc": "Agent 1: sell fast SJ",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.804Z",
+"last": "2026-10-10T20:31:25.399Z",
+"input": 6,
+"cache_create": 45135,
+"cache_read": 76335,
+"output": 301,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "ae125ff243f175ecf",
+"type": "general-purpose",
+"desc": "Agent 1: hoarder house",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.809Z",
+"last": "2026-10-10T20:31:21.143Z",
+"input": 6,
+"cache_create": 42919,
+"cache_read": 74854,
+"output": 301,
+"calls": 3
+},
+{
+"session": "772f0142",
+"agent": "aea6938170b6f2e45",
+"type": "thb-02-research-evidence",
+"desc": "Agent 2: hoarder evidence v2",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 13
+},
+"efforts": {
+"medium/medium": 13
+},
+"first": "2026-10-10T20:58:07.396Z",
+"last": "2026-10-10T21:00:23.954Z",
+"input": 20,
+"cache_create": 34051,
+"cache_read": 161095,
+"output": 1264,
+"calls": 8
+},
+{
+"session": "772f0142",
+"agent": "af60bac7b35e73ed7",
+"type": "thb-03-content-architect",
+"desc": "Agent 3: informational guide brief",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 8
+},
+"efforts": {
+"medium/medium": 8
+},
+"first": "2026-10-10T21:17:00.453Z",
+"last": "2026-10-10T21:17:56.164Z",
+"input": 8,
+"cache_create": 41666,
+"cache_read": 78274,
+"output": 626,
+"calls": 4
+},
+{
+"session": "772f0142",
+"agent": "afa0357dcc863d64b",
+"type": "general-purpose",
+"desc": "Agent 1: SF overlap",
+"model_req": null,
+"models": {
+"claude-sonnet-5-5": 5
+},
+"efforts": {
+"medium/medium": 5
+},
+"first": "2026-10-10T20:31:03.718Z",
+"last": "2026-10-10T20:31:30.321Z",
+"input": 6,
+"cache_create": 46704,
+"cache_read": 77216,
+"output": 44,
+"calls": 3
+}
+]
