@@ -8,7 +8,7 @@ import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studi
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 import { sha256 } from "../src/lib/studio/hash";
 import type { Unit } from "../src/lib/studio/schema";
-import type { StudioAgentKey } from "../src/lib/studio/agents";
+import { STUDIO_AGENT_META, type StudioAgentKey } from "../src/lib/studio/agents";
 import type { RoomRecord } from "../src/lib/studio/approvals";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
@@ -53,7 +53,7 @@ async function step(agent: StudioAgentKey, unit: string, build: (ctx: { hash: st
   const hash = run!.task_packet.unit_hash as string | null;
   const cur = hash ? (await db.from("section_versions").select("content").eq("content_hash", hash).limit(1).single()).data?.content : null;
   const cited: string[] = cur ? (cur.kind === "faq" ? [...new Set(cur.items.flatMap((i: any) => i.claim_ids))] : cur.claim_ids) as string[] : [];
-  const res = await submitStudio(db, runId, JSON.stringify(build({ hash, cited })));
+  const res = await submitStudio(db, runId, JSON.stringify({ ...build({ hash, cited }), agent_prompt_version: STUDIO_AGENT_META[agent].promptVersion }));
   if (res.ok !== expectOk) fail(`${agent} ${unit}: ${res.ok ? "accepted" : "rejected: " + res.errors.join(" | ")}`);
   return res;
 }

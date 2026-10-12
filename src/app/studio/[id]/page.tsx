@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { load, stateOf } from "@/lib/studio/service";
+import { declinesOfRow } from "@/lib/studio/declines-view";
 import { unitStrings, type Unit } from "@/lib/studio/schema";
 import { lineDiff } from "@/lib/studio/diff";
 import { modeAction, sectionAction } from "../actions";
@@ -84,6 +85,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
               <section key={s.id} className="border p-3">
                 <h2 className="font-semibold">{st.key}: {s.brief_h2} <span className="font-normal">— {st.status}{st.versionNo ? ` · v${st.versionNo}` : ""}{st.status === "LOCKED" ? " (locked)" : ""}</span></h2>
                 {st.issues.length > 0 && <ul className="list-disc pl-5 text-xs">{st.issues.map((i) => <li key={i.key}>open issue <b>{i.key}</b> (revision attempts {i.attempts} of 2): {i.text}</li>)}</ul>}
+                {(() => { const dl = declinesOfRow(s); return dl.declined.length > 0 ? <div className="mt-1 text-xs"><b>Declined by the writer (for Leo)</b><ul className="list-disc pl-5">{dl.declined.map((d) => <li key={d.key}><b>{d.key}</b> (raised {d.raised}x): {d.text} <i>Writer&apos;s reason: {d.reason}</i></li>)}</ul></div> : null; })()}
                 {cur ? <div className="mt-2 space-y-1 whitespace-pre-wrap">{unitStrings(cur.content as Unit).slice((cur.content as Unit).kind === "faq" ? 0 : 1).map((t, i) => <p key={i}>{t}</p>)}</div> : <p className="text-xs">Not written yet.</p>}
                 <Actions article={id} unit={st.key} status={st.status} />
               </section>

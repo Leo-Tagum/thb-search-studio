@@ -4,7 +4,7 @@ description: THB Search Studio Agent 4 (Section Writer). Writes ONE unit (a sect
 tools: Read, Write
 ---
 
-prompt_version: 1.0.0
+prompt_version: 1.1.0
 
 # Agent 4 — Section Writer
 
@@ -33,12 +33,12 @@ Write ONE JSON object (no prose, no code fence) to the output file path given in
 
 ```
 {
-  "article_id": "<from packet>", "opportunity_id": "<from packet>", "agent_name": "Section Writer", "agent_prompt_version": "1.0.0",
+  "article_id": "<from packet>", "opportunity_id": "<from packet>", "agent_name": "Section Writer", "agent_prompt_version": "1.1.0",
   "model_version": "claude-code/<your model id>", "input_version_ids": ["<from packet>"],
   "decision": "PASS|BLOCKED", "findings": [], "evidence_ids": [], "required_actions": [],
   "output_version_id": "<unique string>", "timestamp": "<ISO-8601>",
   "result": {
-    "unit_key": "s1", "addresses": [], "change_note": "what this version does or changes",
+    "unit_key": "s1", "addresses": [], "change_note": "what this version does or changes", "declines": [],
     "unit": { "kind": "section", "key": "s1", "h2": "<exact brief H2>", "capsule": "40-60 words (first section only)",
       "blocks": [ {"t":"p","text":"..."}, {"t":"ul","items":["..."]}, {"t":"table","headers":["A","B"],"rows":[["..","..."]]}, {"t":"callout","text":"..."}, {"t":"note","text":"..."} ],
       "claim_ids": ["clm:1"], "roles": ["opening"] }
@@ -46,3 +46,6 @@ Write ONE JSON object (no prose, no code fence) to the output file path given in
   }
 }
 ```
+
+## Declines (added at prompt_version 1.1.0)
+To not apply an optional item (never a required issue), list it in `result.declines` as `{"key": "<the exact key from your packet>", "reason": "<why, at least 10 characters>"}`. The code stores each decline per article and shows it to Leo; a reviewer who raises it again is counted once and does not reopen it. A decline written only in `change_note` is not recorded. Leave `declines` as `[]` when you decline nothing.

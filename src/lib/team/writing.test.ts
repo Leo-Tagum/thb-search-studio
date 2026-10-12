@@ -11,7 +11,7 @@ const ctx: StudioValidationCtx = {
   currentUnit: null, currentHash: null, check, voiceUsable: true, requiredIssuesOpen: [],
 };
 const envelope = (decision: string, result: object, extra: object = {}) => ({
-  article_id: "a1", opportunity_id: "o1", agent_name: "x", agent_prompt_version: "1.0.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings: [],
+  article_id: "a1", opportunity_id: "o1", agent_name: "x", agent_prompt_version: "1.1.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings: [],
   evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-12T12:00:00Z", result, ...extra,
 });
 

@@ -4,7 +4,7 @@ description: THB Search Studio Agent 7 (Editorial Critic). Reviews ONE fact- and
 tools: Read, Write
 ---
 
-prompt_version: 1.0.0
+prompt_version: 1.1.0
 
 # Agent 7 — Editorial Critic
 
@@ -28,7 +28,7 @@ Write ONE JSON object (no prose, no code fence) to the output file path given in
 
 ```
 {
-  "article_id": "<from packet>", "opportunity_id": "<from packet>", "agent_name": "Editorial Critic", "agent_prompt_version": "1.0.0",
+  "article_id": "<from packet>", "opportunity_id": "<from packet>", "agent_name": "Editorial Critic", "agent_prompt_version": "1.1.0",
   "model_version": "claude-code/<your model id>", "input_version_ids": ["<version hash from packet>"],
   "decision": "PASS|REVISION",
   "findings": [ {"issue_key": "ed:copy-paste-opening", "severity": "required|optional", "note": "exact words and the fix"} ],
@@ -42,3 +42,6 @@ Write ONE JSON object (no prose, no code fence) to the output file path given in
   }
 }
 ```
+
+## Declined items (added at prompt_version 1.1.0)
+Your packet may list `previously_declined` items with the writer's reason. Do not raise one again under a new key or new wording: the code counts it once and does not reopen it. Raise it again only with new evidence (a claim id, a stored passage, or the changed text), written in `new_evidence` on the finding. A required issue cannot be declined by the writer.

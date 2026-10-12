@@ -7,6 +7,7 @@
 //   npm run studio -- submit <run_id> <file>            (validates; malformed output retries, then INTEGRATION_ERROR)
 //   npm run studio -- check <run_id> <file>             (dry run: validates without saving or using an attempt)
 //   npm run studio -- runs                              (lists runs)
+//   npm run studio -- declines <article_id>             (Leo's list: every writer decline with its reason and how many times it was raised, and the open optional items)
 //   npm run studio -- article <article_id>              (sections, statuses, claims, state)
 //   npm run studio -- resolve <article_id> <unit_key> <request_revision|reopen|hold> [directive text]   (Leo: sends a blocked/escalated section back, or reopens a locked one)
 //   Team mode (Phase 3c; the article must run in team mode, see "mode"):
@@ -37,6 +38,7 @@ import { outputSchemas } from "../src/lib/agents/schemas";
 import { SupabaseBridgeStore, makeOrchestrator, queueRun, validationContext } from "../src/lib/agents/supabase-deps";
 import { STUDIO_AGENT_KEYS, isStudioAgent, type StudioAgentKey } from "../src/lib/studio/agents";
 import { load, queueStudioRun, resolveSection, setPipelineMode, stateOf, submitStudio, validateStudio } from "../src/lib/studio/service";
+import { declinesOfRow } from "../src/lib/studio/declines-view";
 import { branchArticle, branchDelete, fingerprint } from "../src/lib/studio/branch";
 import { modeOf } from "../src/lib/team/mode";
 import { checkTeam, dumpTeamQueued, queueNextTeam, queueTeamRun, submitTeam, submitTeamDir, teamPlan } from "../src/lib/studio/team-service";
@@ -211,6 +213,16 @@ if (cmd === "queue") {
 } else if (cmd === "runs") {
   const { data } = await db.from("agent_runs").select("id,agent_key,subject_id,status,retries,created_at,task_packet").order("created_at");
   for (const r of data ?? []) console.log(`${r.id} ${r.agent_key} ${r.status} retries=${r.retries} ${r.task_packet?.unit_key ? `unit=${r.task_packet.unit_key} ` : ""}subject=${r.subject_id}`);
+} else if (cmd === "declines") {
+  const L = await load(db, a);
+  let n = 0;
+  for (const s of L.sections) {
+    const d = declinesOfRow(s);
+    for (const x of d.declined) { n++; console.log(`${s.section_key}  DECLINED ${x.key} (raised ${x.raised}x, by ${x.role}): ${x.text}
+      writer's reason: ${x.reason}`); }
+    for (const x of d.open) console.log(`${s.section_key}  open ${x.key} (${x.role}, ${x.severity}): ${x.text}`);
+  }
+  console.log(`${n} decline(s) in total`);
 } else if (cmd === "article") {
   const L = await load(db, a);
   console.log(`${L.article.title}\n  slug ${L.article.slug} · state ${L.article.state} · version ${L.article.version_hash?.slice(0, 12) || "none"} · approved ${L.article.approved_hash?.slice(0, 12) || "no"}`);

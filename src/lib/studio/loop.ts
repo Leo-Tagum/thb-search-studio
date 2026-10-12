@@ -5,6 +5,7 @@
 // then escalation to a human. A change to a material claim (statute, figure, date, claim ids) re-enters fact review.
 import { REVISION_LIMIT } from "../orchestrator/states";
 import type { Finding } from "./checks";
+import { declinesForLeo, mergeReview, recordWriterDeclines, type Collected, type DeclineRecord } from "./declines";
 
 export type Stage = "fact" | "seo" | "editorial";
 export type SectionStatus =
@@ -20,10 +21,12 @@ export type SectionState = {
   lockedHash: string | null;
   escalation: { issueKey: string; reason: string } | null;
   blockedBy: string | null;
+  collected?: Collected[];           // optional findings (should-fix, suggestions) of the reviewers, for Leo; never block (Phase 3d)
+  declines?: DeclineRecord[];        // the writer's declines: stored by code, never replaced by a reviewer's list, kept across versions and reopen
 };
 export type Outcome = { ok: true; state: SectionState; note?: string } | { ok: false; error: string };
 
-export const newSection = (key: string): SectionState => ({ key, status: "NEEDS_WRITE", versionNo: 0, versionHash: null, sig: null, factPassedSig: null, resumeStage: null, issues: [], lockedHash: null, escalation: null, blockedBy: null });
+export const newSection = (key: string): SectionState => ({ key, status: "NEEDS_WRITE", versionNo: 0, versionHash: null, sig: null, factPassedSig: null, resumeStage: null, issues: [], lockedHash: null, escalation: null, blockedBy: null, collected: [], declines: [] });
 const STAGE_STATUS: Record<Stage, SectionStatus> = { fact: "NEEDS_FACT", seo: "NEEDS_SEO", editorial: "NEEDS_EDITORIAL" };
 const AGENT_STAGE: Record<5 | 6 | 7, Stage> = { 5: "fact", 6: "seo", 7: "editorial" };
 const STAGE_AGENT = (st: SectionStatus): 5 | 6 | 7 | null => (st === "NEEDS_FACT" ? 5 : st === "NEEDS_SEO" ? 6 : st === "NEEDS_EDITORIAL" ? 7 : null);
@@ -60,12 +63,17 @@ export function applyDeterministic(s: SectionState, findings: Finding[]): Outcom
   return withIssues({ ...s, issues: s.issues.filter((i) => !i.key.startsWith("det:")) }, "fact", findings.map((f) => ({ key: `det:${f.code}`, text: f.detail })));
 }
 
-export type Review = { agent: 5 | 6 | 7; versionHash: string; decision: "PASS" | "REVISION" | "BLOCKED"; issues: { key: string; text: string }[]; blockKind?: "BLOCKED_CLAIM" | "BLOCKED_PRIVACY" };
+export type Review = { agent: 5 | 6 | 7; versionHash: string; decision: "PASS" | "REVISION" | "BLOCKED"; issues: { key: string; text: string }[]; blockKind?: "BLOCKED_CLAIM" | "BLOCKED_PRIVACY"; optional?: { key: string; text: string; newEvidence?: string | null }[] };
 
 export function applyReview(s: SectionState, r: Review): Outcome {
   if (STAGE_AGENT(s.status) !== r.agent) return { ok: false, error: `Agent ${r.agent} cannot review a section that is ${s.status}` };
   if (r.versionHash !== s.versionHash) return { ok: false, error: "the review is for an older version of this section" };
   const stage = AGENT_STAGE[r.agent];
+  // Optional findings go through the declines store: one the writer already declined counts once and is not reopened, unless the reviewer cites new evidence.
+  if (r.optional) {
+    const m = mergeReview(s.declines ?? [], s.collected ?? [], `A${r.agent}`, r.optional.map((o) => ({ key: o.key, severity: "should fix" as const, text: o.text, newEvidence: o.newEvidence })), r.versionHash);
+    s = { ...s, collected: m.collected, declines: m.declines };
+  }
   if (r.decision === "BLOCKED") return { ok: true, state: { ...s, status: r.blockKind ?? "BLOCKED_CLAIM", blockedBy: r.issues.map((i) => i.text).join("; ") || `Agent ${r.agent} blocked` } };
   if (r.decision === "REVISION") {
     if (r.issues.length === 0) return { ok: false, error: "a REVISION needs at least one required issue" };
@@ -86,6 +94,14 @@ export function editorRevision(s: SectionState, v: { hash: string; sig: string }
   const material = v.sig !== s.factPassedSig;
   return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, status: material ? "NEEDS_FACT" : "NEEDS_SEO", resumeStage: material ? "fact" : "seo" }, note: material ? "material change by the editor: back to fact review" : "wording-only change: SEO and editorial review run again" };
 }
+
+/** The writer declines optional findings with a reason (stored in `declines`, listed for Leo). A required issue cannot be declined. */
+export function declineOptional(s: SectionState, list: { key: string; reason: string }[]): Outcome {
+  const r = recordWriterDeclines(s.declines ?? [], s.collected ?? [], list, { mustFixKeys: s.issues.map((i) => i.key) });
+  if (!r.ok) return { ok: false, error: r.errors.join("; ") };
+  return { ok: true, state: { ...s, declines: r.declines, collected: r.collected } };
+}
+export const forLeo = (s: SectionState) => declinesForLeo(s.declines ?? [], s.collected ?? []);
 
 /** Human resolves an escalation or a block: sends the section back to the writer with a fresh attempt count on the stuck issue. */
 export function resolveByHuman(s: SectionState, a: { kind: "request_revision"; issueText: string } | { kind: "hold" }): Outcome {

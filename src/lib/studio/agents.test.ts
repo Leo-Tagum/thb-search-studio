@@ -2,7 +2,7 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { scoreIssues, STUDIO_AGENT_KEYS, STUDIO_AGENT_META, studioOutputSchemas, studioSemanticChecks, type StudioValidationCtx } from "./agents";
+import { scoreIssues, STUDIO_AGENT_KEYS, STUDIO_AGENT_META, type StudioAgentKey, studioOutputSchemas, studioSemanticChecks, type StudioValidationCtx } from "./agents";
 import type { CheckCtx, LedgerClaim } from "./checks";
 import type { Section } from "./schema";
 
@@ -113,7 +113,7 @@ describe("subagent files and the no-write guarantees", () => {
   for (const [k, phrase] of Object.entries(PROHIBITED)) {
     it(`${k}: exists, versioned, quotes its Prohibited action, no web tool`, () => {
       const text = readFileSync(join(dir, `${k}.md`), "utf8");
-      expect(text).toMatch(/prompt_version: 1\.0\.0/);
+      expect(text).toContain(`prompt_version: ${STUDIO_AGENT_META[k as StudioAgentKey].promptVersion}`);
       expect(text).toContain(`**Prohibited action: ${phrase}.**`);
       expect(text.split(/\r?\n/).find((l) => l.startsWith("tools:"))).toBe("tools: Read, Write");
       expect(text).toContain("editorial-standards");

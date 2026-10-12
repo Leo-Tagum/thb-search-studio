@@ -10,10 +10,10 @@ export type StudioAgentKey = (typeof STUDIO_AGENT_KEYS)[number];
 export const isStudioAgent = (k: string): k is StudioAgentKey => (STUDIO_AGENT_KEYS as readonly string[]).includes(k);
 
 export const STUDIO_AGENT_META: Record<StudioAgentKey, { n: 4 | 5 | 6 | 7; name: string; promptVersion: string; decisions: readonly string[] }> = {
-  "thb-04-section-writer": { n: 4, name: "Section Writer", promptVersion: "1.0.0", decisions: ["PASS", "BLOCKED"] },
+  "thb-04-section-writer": { n: 4, name: "Section Writer", promptVersion: "1.1.0", decisions: ["PASS", "BLOCKED"] },
   "thb-05-fact-privacy-auditor": { n: 5, name: "Fact & Privacy Auditor", promptVersion: "1.0.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
-  "thb-06-seo-aeo-geo-auditor": { n: 6, name: "SEO/AEO/GEO Auditor", promptVersion: "1.0.0", decisions: ["PASS", "REVISION"] },
-  "thb-07-editorial-critic": { n: 7, name: "Editorial Critic", promptVersion: "1.0.0", decisions: ["PASS", "REVISION"] },
+  "thb-06-seo-aeo-geo-auditor": { n: 6, name: "SEO/AEO/GEO Auditor", promptVersion: "1.1.0", decisions: ["PASS", "REVISION"] },
+  "thb-07-editorial-critic": { n: 7, name: "Editorial Critic", promptVersion: "1.1.0", decisions: ["PASS", "REVISION"] },
 };
 
 const issue = z.strictObject({ issue_key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i), severity: z.enum(["required", "optional"]), note: z.string().min(5), claim_id: z.string().nullish(), new_evidence: z.string().trim().min(5).max(1000).optional() });  // new_evidence: only to raise again an item the writer already declined  // a null claim_id means "no claim"

@@ -7,7 +7,7 @@ import { SupabaseRepo } from "../orchestrator/supabase-repo";
 import { MAX_ATTEMPTS, wrapUntrusted } from "../agents/bridge";
 import { checkArticle, checkUnit, type CheckCtx, type LedgerClaim } from "./checks";
 import { contentHash, sha256 } from "./hash";
-import { allLocked, applyDeterministic, applyReview, editorRevision, escalateGap, recordVersion, reopen, resolveByHuman, type SectionState } from "./loop";
+import { allLocked, applyDeterministic, applyReview, declineOptional, editorRevision, escalateGap, recordVersion, reopen, resolveByHuman, type SectionState } from "./loop";
 import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
@@ -109,15 +109,15 @@ export async function load(db: SupabaseClient, articleId: string): Promise<Loade
 }
 
 // State columns kept inside the issues jsonb envelope, so no extra migration is needed for each loop field.
-type Envelope = { issues: SectionState["issues"]; meta: { versionNo: number; versionHash: string | null; sig: string | null; factPassedSig: string | null; resumeStage: string | null; lockedHash: string | null; escalation: SectionState["escalation"]; blockedBy: string | null } };
+type Envelope = { issues: SectionState["issues"]; meta: { versionNo: number; versionHash: string | null; sig: string | null; factPassedSig: string | null; resumeStage: string | null; lockedHash: string | null; escalation: SectionState["escalation"]; blockedBy: string | null; collected?: SectionState["collected"]; declines?: SectionState["declines"] } };
 const toRow = (s: SectionState): Record<string, unknown> => ({
   status: s.status, locked: s.status === "LOCKED",
-  issues: { issues: s.issues, meta: { versionNo: s.versionNo, versionHash: s.versionHash, sig: s.sig, factPassedSig: s.factPassedSig, resumeStage: s.resumeStage, lockedHash: s.lockedHash, escalation: s.escalation, blockedBy: s.blockedBy } } satisfies Envelope,
+  issues: { issues: s.issues, meta: { versionNo: s.versionNo, versionHash: s.versionHash, sig: s.sig, factPassedSig: s.factPassedSig, resumeStage: s.resumeStage, lockedHash: s.lockedHash, escalation: s.escalation, blockedBy: s.blockedBy, collected: s.collected ?? [], declines: s.declines ?? [] } } satisfies Envelope,
 });
 export const stateOf = (row: any): SectionState => {
   const env = (row.issues ?? {}) as Partial<Envelope>;
   const m = env.meta;
-  return { key: row.section_key, status: row.status, versionNo: m?.versionNo ?? 0, versionHash: m?.versionHash ?? null, sig: m?.sig ?? null, factPassedSig: m?.factPassedSig ?? null, resumeStage: (m?.resumeStage as any) ?? null, issues: env.issues ?? [], lockedHash: m?.lockedHash ?? null, escalation: m?.escalation ?? null, blockedBy: m?.blockedBy ?? null };
+  return { key: row.section_key, status: row.status, versionNo: m?.versionNo ?? 0, versionHash: m?.versionHash ?? null, sig: m?.sig ?? null, factPassedSig: m?.factPassedSig ?? null, resumeStage: (m?.resumeStage as any) ?? null, issues: env.issues ?? [], lockedHash: m?.lockedHash ?? null, escalation: m?.escalation ?? null, blockedBy: m?.blockedBy ?? null, collected: m?.collected ?? [], declines: m?.declines ?? [] };
 };
 
 // ---------- queue ----------
@@ -150,6 +150,8 @@ export async function queueStudioRun(db: SupabaseClient, agent: StudioAgentKey, 
     pending_juan_blocked: "hours/24h, closing time, ownership/founder/title, contractor license, address vs service area, Equity Track, $32M+, 100% on time, East Oakland roots; and any statement that THB buys as-is or without a cleanout. Never write a rating or review count.",
     current_version: cur ? { version_hash: cur.content_hash, unit: cur.content } : null,
     open_issues: st.issues,
+    ...(agent === "thb-04-section-writer" ? { declined_so_far: (st.declines ?? []).map((d) => ({ key: d.key, reason: d.reason, raised: d.raised })), open_optional_items: (st.collected ?? []).filter((c) => !c.declined).map((c) => ({ key: c.key, from: c.role, severity: c.severity, issue: c.text })), declines_rule: "To not apply an optional item (never a required issue), list it in result.declines as {key, reason} with the exact key from open_optional_items. The code stores it and shows it to Leo." } : {}),
+    ...(agent === "thb-06-seo-aeo-geo-auditor" || agent === "thb-07-editorial-critic" ? { previously_declined: (st.declines ?? []).map((d) => ({ key: d.key, issue: d.text, writer_reason: d.reason, raised: d.raised })), declines_rule: "The writer declined these items and the code recorded them. Do not raise one again under a new key or new wording: it is counted once and not reopened. To raise it again, put what is new (a claim id, a stored passage, or the changed text) in new_evidence on the finding." } : {}),
     editorial_rules: "docs/references/editorial-standards.md",
   };
   if (agent === "thb-04-section-writer" || agent === "thb-07-editorial-critic") data.voice_reference = { status: vr?.provisional_by ? `provisionally approved by ${vr.provisional_by}; Juan confirms with the first article` : vr?.status, excerpts: safeJson(vr?.fact_value) };
@@ -215,7 +217,7 @@ export async function validateStudio(db: SupabaseClient, runId: string, raw: str
       L = await load(db, run.subject_id);
       row = L.sections.find((s) => s.section_key === run.task_packet.unit_key);
       const cur = row?.current_version_id ? (await db.from("section_versions").select("*").eq("id", row.current_version_id).single()).data : null;
-      const ctx: StudioValidationCtx = { packet: run.task_packet, currentUnit: cur?.content ?? null, currentHash: cur?.content_hash ?? null, check: L.check, voiceUsable: await voiceUsable(db), requiredIssuesOpen: stateOf(row).issues.map((i) => i.key).filter((k) => !k.startsWith("det:")) };
+      const ctx: StudioValidationCtx = { packet: run.task_packet, currentUnit: cur?.content ?? null, currentHash: cur?.content_hash ?? null, check: L.check, voiceUsable: await voiceUsable(db), requiredIssuesOpen: stateOf(row).issues.map((i) => i.key).filter((k) => !k.startsWith("det:")), declinableKeys: (stateOf(row).collected ?? []).map((c) => c.key) };
       errors.push(...studioSemanticChecks(run.agent_key as StudioAgentKey, parsed, ctx));
     }
   } catch (e) { errors.push(`not valid JSON: ${e instanceof Error ? e.message : String(e)}`); }
@@ -289,6 +291,13 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
     const d = applyDeterministic(next, findings);
     if (!d.ok) throw new Error(d.error);
     next = d.state;
+    const declined: { key: string; reason: string }[] = r.declines ?? [];
+    if (declined.length) {
+      const dm = declineOptional(next, declined);
+      if (!dm.ok) throw new Error(dm.error);
+      next = dm.state;
+      await audit(db, articleId, "writer_declines", { unit: u.key, declines: declined });
+    }
     await saveSection(db, row.id, next, { current_version_id: v.id, body: JSON.stringify(u) });
     await audit(db, articleId, "section_version", { unit: u.key, version: next.versionNo, hash: v.hash, status: next.status, deterministic_findings: findings.map((f) => `${f.code}: ${f.detail}`), note: o.note });
     if (next.status === "BLOCKED_CLAIM" || next.status === "BLOCKED_PRIVACY") await blockArticle(db, articleId, next.status, { unit: u.key, blockedBy: next.blockedBy });
@@ -296,7 +305,8 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
     note = `section ${u.key} is now ${next.status}`;
   } else {
     const dec = out.decision as "PASS" | "REVISION" | "BLOCKED";
-    const review = applyReview(st, { agent: STUDIO_AGENT_META[agent].n as 5 | 6 | 7, versionHash: r.version_hash, decision: dec, issues: issuesOf(), blockKind: r.block_kind });
+    const optional = (out.findings as any[]).filter((f) => f.severity === "optional").map((f) => ({ key: f.issue_key as string, text: f.note as string, newEvidence: f.new_evidence as string | undefined }));
+    const review = applyReview(st, { agent: STUDIO_AGENT_META[agent].n as 5 | 6 | 7, versionHash: r.version_hash, decision: dec, issues: issuesOf(), blockKind: r.block_kind, optional });
     if (!review.ok) throw new Error(review.error);
     let next = review.state;
     let versionId: string | null = row.current_version_id;
@@ -304,7 +314,7 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
       // The editor's replacement is a new version. Anything material sends it back to Agent 5; it can never lock a changed fact.
       const u = r.revised_unit as Unit;
       const v = await newVersion(db, row, u, agent, run.id, "editorial focused revision");
-      const e = editorRevision({ ...st, status: "NEEDS_EDITORIAL" }, { hash: v.hash, sig: v.sig });
+      const e = editorRevision({ ...st, collected: next.collected, declines: next.declines, status: "NEEDS_EDITORIAL" }, { hash: v.hash, sig: v.sig });
       if (!e.ok) throw new Error(e.error);
       next = e.state; versionId = v.id; note = e.note;
       const findings = checkUnit(u, L.check);
