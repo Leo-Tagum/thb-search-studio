@@ -1,0 +1,38 @@
+{
+ "s1": {
+  "A": "classic",
+  "B": "team"
+ },
+ "s2": {
+  "A": "classic",
+  "B": "team"
+ },
+ "s3": {
+  "A": "classic",
+  "B": "team"
+ },
+ "s4": {
+  "A": "classic",
+  "B": "team"
+ },
+ "s5": {
+  "A": "team",
+  "B": "classic"
+ },
+ "s6": {
+  "A": "team",
+  "B": "classic"
+ },
+ "s7": {
+  "A": "team",
+  "B": "classic"
+ },
+ "s8": {
+  "A": "team",
+  "B": "classic"
+ },
+ "faq": {
+  "A": "classic",
+  "B": "team"
+ }
+}

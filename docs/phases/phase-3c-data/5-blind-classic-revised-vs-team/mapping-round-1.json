@@ -1,0 +1,38 @@
+{
+ "s1": {
+  "A": "classic-revised",
+  "B": "team"
+ },
+ "s2": {
+  "A": "classic-revised",
+  "B": "team"
+ },
+ "s3": {
+  "A": "team",
+  "B": "classic-revised"
+ },
+ "s4": {
+  "A": "team",
+  "B": "classic-revised"
+ },
+ "s5": {
+  "A": "classic-revised",
+  "B": "team"
+ },
+ "s6": {
+  "A": "team",
+  "B": "classic-revised"
+ },
+ "s7": {
+  "A": "classic-revised",
+  "B": "team"
+ },
+ "s8": {
+  "A": "classic-revised",
+  "B": "team"
+ },
+ "faq": {
+  "A": "classic-revised",
+  "B": "team"
+ }
+}

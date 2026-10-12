@@ -1,0 +1,47 @@
+{
+ "s1": {
+  "c2_version_no": 4,
+  "c2_hash": "39c0cae5bb58",
+  "team_hash": "0fd473397c9f"
+ },
+ "s2": {
+  "c2_version_no": 3,
+  "c2_hash": "a9fc0b3bc47a",
+  "team_hash": "d64abb118044"
+ },
+ "s3": {
+  "c2_version_no": 3,
+  "c2_hash": "db2209b17508",
+  "team_hash": "d439cd25f77f"
+ },
+ "s4": {
+  "c2_version_no": 3,
+  "c2_hash": "d19ee304a1f0",
+  "team_hash": "fc107447b128"
+ },
+ "s5": {
+  "c2_version_no": 4,
+  "c2_hash": "e8d58083ae9a",
+  "team_hash": "ec9934974636"
+ },
+ "s6": {
+  "c2_version_no": 4,
+  "c2_hash": "ea44cab5d3bb",
+  "team_hash": "523fb170857a"
+ },
+ "s7": {
+  "c2_version_no": 5,
+  "c2_hash": "d5b0d54c69fa",
+  "team_hash": "42c4d1512246"
+ },
+ "s8": {
+  "c2_version_no": 2,
+  "c2_hash": "39dac2424e88",
+  "team_hash": "d3d6b0420495"
+ },
+ "faq": {
+  "c2_version_no": 3,
+  "c2_hash": "b30a408c09e1",
+  "team_hash": "f5375602dd86"
+ }
+}

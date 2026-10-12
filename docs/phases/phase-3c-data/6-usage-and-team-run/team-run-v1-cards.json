@@ -1,0 +1,201 @@
+{
+ "reviews": 25,
+ "rows": [
+  {
+   "unit": "s1",
+   "severity": "suggestion",
+   "key": "fact:s1:many-people:unsupported-generalization",
+   "issue": "\"Many people in this spot are not avoiding the problem\" has no supporting claim.",
+   "fix": "Soften to \"Being stuck here does not mean you are avoiding the problem.\""
+  },
+  {
+   "unit": "s2",
+   "severity": "must fix",
+   "key": "fact:hedge:a7df148da563:reword",
+   "issue": "Flagged generalization 'never' in the callout has no supporting claim or passage.",
+   "fix": "Reword to 'a plan the right person did not agree to'."
+  },
+  {
+   "unit": "s2",
+   "severity": "hedge:reword",
+   "key": "hedge:a7df148da563",
+   "issue": "No claim or passage supports it; say 'did not agree to' instead of 'never agreed to'.",
+   "fix": null
+  },
+  {
+   "unit": "s2",
+   "severity": "suggestion",
+   "key": "fact:s2:first-person-practice",
+   "issue": "First-person 'the first question I ask' implies a personal practice not backed by an approved brand fact.",
+   "fix": "Use 'the first question to ask is who actually holds title.'"
+  },
+  {
+   "unit": "s3",
+   "severity": "must fix",
+   "key": "fact:s3:pests-trash-match:overstated",
+   "issue": "Bullet says trash or signs of pests 'match conditions the statute lists', stating a flat equivalence the statute does not.",
+   "fix": "Say they 'can resemble conditions the statute lists, and whether a home meets them is for the official to decide'."
+  },
+  {
+   "unit": "s4",
+   "severity": "must fix",
+   "key": "fact:clm:7:overstated",
+   "issue": "\"staying quiet about the clutter ... That route is closed\" states a flat legal rule beyond clm:6 (exception) and clm:7 (waiver void) and implies the clutter is a required form item.",
+   "fix": "Say only that the requirements apply with an exception to a sale of single-family residential property and that any waiver of them is void as against public policy; drop the clutter-specific claim or make it conditional on the requirements applying to your sale."
+  },
+  {
+   "unit": "s4",
+   "severity": "should fix",
+   "key": "fact:s4:not-whether-to-disclose:soften",
+   "issue": "\"not whether to disclose\" implies disclosure is always required despite the 1102.2 exception.",
+   "fix": "Say the useful question is how to handle disclosure accurately, with help."
+  },
+  {
+   "unit": "s5",
+   "severity": "suggestion",
+   "key": "fact:s5:choice-wording",
+   "issue": "'Clearing the house out is your choice' is stated flat; a local enforcement notice could make cleanup not optional.",
+   "fix": "Soften to 'Clearing the house out is usually your decision as the seller, though a local notice could change that.'"
+  },
+  {
+   "unit": "s6",
+   "severity": "must fix",
+   "key": "fact:hedge:dafd66381556:reword",
+   "issue": "Flagged generalization 'None of them is wrong for everyone' is unsupported by any claim or passage.",
+   "fix": "Each route below fits some situations and not others, and several have nothing to do with Twin Home Buyer."
+  },
+  {
+   "unit": "s6",
+   "severity": "hedge:reword",
+   "key": "hedge:dafd66381556",
+   "issue": "Wording alone cannot prove the generalization and no claim supports it. Say instead: 'Each route below fits some situations and not others, and several have nothing to do with Twin Home Buyer.'",
+   "fix": null
+  },
+  {
+   "unit": "s7",
+   "severity": "must fix",
+   "key": "fact:clm:5:overstated",
+   "issue": "Transfer Disclosure Statement and void-waiver sentences are stated flat, without the single-family residential scope and exception.",
+   "fix": "Say that on a sale of single-family residential property (with an exception) the disclosures are made on the Real Estate Transfer Disclosure Statement form; cite clm:6; keep the confirm-with-agent-or-attorney line."
+  },
+  {
+   "unit": "s7",
+   "severity": "should fix",
+   "key": "fact:uncited:paperwork-share",
+   "issue": "\"A lot of it comes from the paperwork and the people\" is an unsupported frequency claim.",
+   "fix": "Reword to say a sale can stall when authority, heirs or liens are unresolved, or drop the sentence."
+  },
+  {
+   "unit": "s7",
+   "severity": "suggestion",
+   "key": "fact:s7:who-decides:soft",
+   "issue": "'It is the health officer or the fire official' names deciders that clm:1 (junk/debris) does not name.",
+   "fix": "Say 'the local authority, such as a health officer or fire official, decides'."
+  },
+  {
+   "unit": "faq",
+   "severity": "must fix",
+   "key": "fact:faq:authority_legal_conclusion",
+   "issue": "Item 4 states uncited legal conclusions as certain ('Living in the house alone does not give you that authority'; 'Only someone with legal authority to sign'; list of who may sign).",
+   "fix": "Say a sale can stall when the person living in the house is not the person with authority to sign, and that who holds authority is a question for an attorney or title company. Drop the certain statement and the uncited list."
+  },
+  {
+   "unit": "faq",
+   "severity": "must fix",
+   "key": "fact:faq:hedge_not_always",
+   "issue": "Item 2 opens 'Not always.', an unsupported generalization that implies a legal duty to clean out in some cases.",
+   "fix": "Open with 'That is your choice, and it depends on your time, your money, who has authority to sell and which route you pick.'"
+  },
+  {
+   "unit": "faq",
+   "severity": "hedge:reword",
+   "key": "hedge:4a926ce9f475",
+   "issue": "'Not always.' has no ledger claim or stored passage behind it and implies a legal duty that sometimes exists. Answer from the seller's practical options without an implied legal rule.",
+   "fix": null
+  },
+  {
+   "unit": "faq",
+   "severity": "must fix",
+   "key": "fact:faq:item2:uncited-legal-conclusion",
+   "issue": "Item 2 says 'That is your choice' to 'Do I have to clean out...?', an uncited legal conclusion stated as certain with no professional-confirmation language.",
+   "fix": "Reword so it does not state a legal rule: say the decision depends on time, money, authority and route, that a city or county notice could change things, and to confirm with an attorney or the city or county."
+  },
+  {
+   "unit": "faq",
+   "severity": "suggestion",
+   "key": "fact:faq:item1:generally-yes",
+   "issue": "Item 1 opens 'Generally yes' on disclosing the condition, which goes slightly past clm:5-7 (they cover applicability, form and void waiver, not what must be disclosed).",
+   "fix": "Open with 'The disclosure article generally applies to a sale of single-family residential property, with an exception.'"
+  },
+  {
+   "unit": "faq",
+   "severity": "must fix",
+   "key": "fact:faq:item2:not-always",
+   "issue": "Item 2 answer still opens 'Not always.', an unsupported generalization implying a legal duty to clean out sometimes.",
+   "fix": "Delete 'Not always.' and open with 'It depends on your time, money, who has authority to sell and the route you pick.'"
+  },
+  {
+   "unit": "faq",
+   "severity": "hedge:reword",
+   "key": "hedge:4a926ce9f475",
+   "issue": "No ledger claim or stored passage supports 'Not always.'; it implies a duty to clean out in some cases. Open with 'It depends on your time, money, who has authority to sell and the route you pick.'",
+   "fix": null
+  },
+  {
+   "unit": "faq",
+   "severity": "must fix",
+   "key": "fact:clm:6:overstated",
+   "issue": "Item 1 opens with a flat 'Yes' to disclosing the condition of a packed house; clm:6 only says the article applies to single-family residential sales, with an exception.",
+   "fix": "Open with: 'California's disclosure article applies to a sale of single-family residential property, with an exception.' Keep the form, void-waiver and ask-an-agent-or-attorney sentences. Do not say what the condition disclosure must contain."
+  },
+  {
+   "unit": "faq",
+   "severity": "must fix",
+   "key": "fact:faq:item2:not-always",
+   "issue": "Item 2 opens 'Not always.', which implies a legal duty to clean out in some cases that nothing in the ledger supports.",
+   "fix": "Delete 'Not always.' and open with 'It depends on your time, money, who has authority to sell and the route you pick.'"
+  },
+  {
+   "unit": "faq",
+   "severity": "must fix",
+   "key": "fact:faq:item4:uncited-signer-list",
+   "issue": "Item 4 lists who has authority to sign (owner, trustee, executor, administrator, surviving spouse, several heirs), a statement of probate and trust law no claim supports.",
+   "fix": "Remove the list; say that a sale can stall when the person living in the house is not the person with authority, and an attorney or title company can confirm who holds it."
+  },
+  {
+   "unit": "faq",
+   "severity": "suggestion",
+   "key": "fact:faq:item3:no-hoarding-statement",
+   "issue": "Item 3 says 'The statute does not mention hoarding.' No ledger claim states this; it comes only from the brief's open items.",
+   "fix": "Keep only if Leo confirms the statement; otherwise say 'Whether a particular home meets them is for the local authority.'"
+  },
+  {
+   "unit": "faq",
+   "severity": "should fix",
+   "key": "legal:faq:item6:settle-first",
+   "issue": "Item 6 says 'Settle authority, title and tax first.' with no professional named.",
+   "fix": "Add 'with an attorney, title company or CPA' after 'Settle authority, title and tax first'."
+  },
+  {
+   "unit": "faq",
+   "severity": "hedge:drop",
+   "key": "hedge:4a926ce9f475",
+   "issue": "'Not always.' implies a cleanout duty in some cases; no ledger claim or passage supports it. Delete it and open item 2 with the 'It depends on...' sentence.",
+   "fix": null
+  },
+  {
+   "unit": "faq",
+   "severity": "suggestion",
+   "key": "fact:faq:item6:direct-sale-wording",
+   "issue": "Item 6 says 'Sell directly to skip cleanout and showings'. It stays general and does not say Twin Home Buyer does this, so it is not a blocker. Keep it general and never tie it to THB.",
+   "fix": "Optional: 'Sell directly if you want to avoid cleanout and showings, and accept a price that reflects condition.'"
+  },
+  {
+   "unit": "faq",
+   "severity": "suggestion",
+   "key": "fact:faq:item2:confirm-line",
+   "issue": "Item 2 mentions authority and city or county notices but has no confirm-with-a-professional line. Items 3, 4 and 6 carry that language, so this passes.",
+   "fix": "Optional: end with 'Check with an attorney or the city or county.'"
+  }
+ ]
+}

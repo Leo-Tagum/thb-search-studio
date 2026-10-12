@@ -1,0 +1,74 @@
+{
+  "article_id": "e2b915e3-af97-4ea6-8979-4861ec729027",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["99ef28431e524e359192aa80770852a0d769e6f10b2bf331cf1c53726cb8d917"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:faq:authority-flat-legal:unsupported",
+      "severity": "required",
+      "note": "Item 'Who can sell the house if the owner cannot or will not?' states as flat law: \"Only someone with legal authority to sign.\" and \"Living in the house does not give that authority.\" No ledger claim supports a statement about who has authority to sell or what living in a house confers. The list (owner, trustee, executor or administrator, several heirs who agree) is also uncited. Rewrite as a careful, non-conclusive statement, for example that the person living in the house may not be the person with authority, and that who can sign depends on how title is held and must be confirmed with an attorney or title company.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:faq:not-always:unruled-hedge",
+      "severity": "required",
+      "note": "Hedge ruling: reword. \"Not always.\" implies there are cases where a seller must clean out, and no ledger claim or stored passage supports either a duty or the absence of one. Open the answer with wording the evidence supports, such as that the choice depends on time, money, authority and route, without implying a legal cleanout rule either way.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:6", "clm:7"],
+  "required_actions": [
+    "Reword the authority answer: remove \"Only someone with legal authority to sign.\" and \"Living in the house does not give that authority.\" as flat statements; keep the confirm-with-attorney-or-title-company line.",
+    "Replace the opening \"Not always.\" in the cleanout answer with wording that does not imply a legal cleanout rule."
+  ],
+  "output_version_id": "v1-faq-99ef2843-review1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "99ef28431e524e359192aa80770852a0d769e6f10b2bf331cf1c53726cb8d917",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Junk and debris that are fire, health or safety hazards, 'can make a building substandard', local authority decides; no hoarding claim."},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Cited with clm:1; the answer says no more than the ledger."},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Cited with clm:1; the answer says no more than the ledger."},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Cited with clm:1; the answer says no more than the ledger."},
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "Disclosures made on the Real Estate Transfer Disclosure Statement form."},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Single-family residential sale, 'with an exception', matches 1102(a)."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "Waiver void as against public policy, matches 1102(c)."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "hedge_rulings": [
+      {"key": "hedge:4a926ce9f475", "ruling": "reword", "note": "\"Not always.\" has no ledger or passage support; say the choice depends on time, money, authority and route, without implying a legal cleanout rule."}
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:authority-flat-legal:unsupported",
+        "section": "faq",
+        "issue": "Authority answer states law flatly with no ledger claim: \"Only someone with legal authority to sign.\" and \"Living in the house does not give that authority.\"",
+        "severity": "must fix",
+        "evidence": "No ledger claim covers authority to sell; editorial-standards section 5 (legal qualification); rule 2 (uncited statement of law)",
+        "fix": "Say the person living in the house may not be the person with authority to sign, that who can sign depends on how title is held, and to confirm with an attorney or title company.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:not-always:unruled-hedge",
+        "section": "faq",
+        "issue": "Flagged sentence \"Not always.\" implies a conditional legal cleanout duty with no support.",
+        "severity": "must fix",
+        "evidence": "hedge:4a926ce9f475 ruled reword; no ledger claim or stored passage on a cleanout duty",
+        "fix": "Open with: it depends on your time, your money, who has authority to sell and which route you pick; no legal cleanout rule implied.",
+        "blocking": false
+      }
+    ]
+  }
+}

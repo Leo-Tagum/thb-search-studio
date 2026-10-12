@@ -1,0 +1,67 @@
+{
+ "classic": {
+  "runs": 56,
+  "estTokens": 494858,
+  "estIn": 459473,
+  "estOut": 35386,
+  "per": {
+   "thb-04-section-writer": {
+    "runs": 20,
+    "inC": 734542,
+    "outC": 74582
+   },
+   "thb-05-fact-privacy-auditor": {
+    "runs": 13,
+    "inC": 355911,
+    "outC": 23641
+   },
+   "thb-06-seo-aeo-geo-auditor": {
+    "runs": 12,
+    "inC": 326715,
+    "outC": 20287
+   },
+   "thb-07-editorial-critic": {
+    "runs": 11,
+    "inC": 420722,
+    "outC": 23032
+   }
+  },
+  "firstMs": 1791675650095,
+  "lastMs": 1791676878583
+ },
+ "team": {
+  "runs": 110,
+  "estTokens": 1036937,
+  "estIn": 954408,
+  "estOut": 82530,
+  "per": {
+   "thb-v3-editorial": {
+    "runs": 25,
+    "inC": 965834,
+    "outC": 79580
+   },
+   "thb-w1-writer": {
+    "runs": 26,
+    "inC": 1089974,
+    "outC": 110285
+   },
+   "thb-v2-seo-aeo-geo": {
+    "runs": 25,
+    "inC": 692238,
+    "outC": 57531
+   },
+   "thb-v1-fact-privacy": {
+    "runs": 25,
+    "inC": 722507,
+    "outC": 59388
+   },
+   "thb-w2-cowriter": {
+    "runs": 9,
+    "inC": 347077,
+    "outC": 23335
+   }
+  },
+  "firstMs": 1791829497256,
+  "lastMs": 1791834767233
+ }
+}

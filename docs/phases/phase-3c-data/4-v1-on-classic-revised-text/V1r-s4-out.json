@@ -1,0 +1,33 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["d19ee304a1f0ac66a955b21de9a2abbf228f781a0c29c90c41ed54d235a109e6"],
+  "decision": "PASS",
+  "findings": [
+    {"issue_key": "fact:s4:unsupported_generalization", "severity": "optional", "note": "\"Many owners think the clutter has to be explained away, or that it might be better not to mention it at all.\" and \"this is often the question that makes people freeze\" are claims about what owners think or do that no ledger claim supports. Not a legal claim, but consider softening to the reader's own situation (for example \"you may wonder whether...\")."},
+    {"issue_key": "fact:s4:hiding_vs_waiver", "severity": "optional", "note": "\"Do not plan around skipping or hiding disclosure. The waiver rule means that route is not open.\" clm:7 covers waiver of the requirements only; it does not by itself speak to hiding a condition. Consider tying the sentence to waiver only."}
+  ],
+  "evidence_ids": ["clm:5", "clm:6", "clm:7"],
+  "required_actions": [],
+  "output_version_id": "v1-s4-d19ee304-review-1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s4",
+    "version_hash": "d19ee304a1f0ac66a955b21de9a2abbf228f781a0c29c90c41ed54d235a109e6",
+    "claim_checks": [
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "\"The disclosures those rules require are made on a copy of the Real Estate Transfer Disclosure Statement form\" matches 1102.6(a) as ledgered."},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "\"apply, with an exception, to a transfer by sale of single-family residential property\" matches 1102(a); exception kept as an exception and sent to a professional."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "\"Any waiver of the requirements of these disclosure rules is void as against public policy\" matches 1102(c)."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s4:unsupported_generalization", "section": "s4", "issue": "\"Many owners think the clutter has to be explained away...\" and \"this is often the question that makes people freeze\" are unsupported generalizations.", "severity": "should fix", "evidence": "No ledger claim supports statements about what owners think; editorial rule 2 (uncited claims)", "fix": "Reword to the reader's situation, e.g. \"You may wonder whether the clutter has to be explained or left out.\"", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s4:hiding_vs_waiver", "section": "s4", "issue": "\"The waiver rule means that route is not open\" extends clm:7 (waiver void) to hiding disclosure.", "severity": "suggestion", "evidence": "clm:7", "fix": "Say that skipping disclosure by agreement (a waiver) is void, and point to the agent or attorney for the rest.", "blocking": false}
+    ]
+  }
+}

@@ -1,0 +1,326 @@
+{
+ "out": [
+  {
+   "unit": "s1",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 5,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:s1:generalization:most-people",
+     "issue": "Unsupported generalization: \"Most people in this spot are not avoiding the problem.\"",
+     "fix": "Reword without 'most people', for example 'Feeling stuck here is not the same as avoiding the problem.' Or drop."
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:s1:generalization:most-owners",
+     "issue": "Unsupported generalization: \"Most owners want to know how fast the house can be emptied.\"",
+     "fix": "Say 'You may be wondering how fast the house can be emptied.' Or drop."
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:s1:generalization:usually-options",
+     "issue": "Unsupported outcome generalization: \"Getting clear early usually creates more options, not fewer.\"",
+     "fix": "Say 'Getting clear early helps you pick a route.' Or drop."
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:s1:generalization:usually-question",
+     "issue": "Unsupported generalization: \"The real question is usually what situation you are actually in.\"",
+     "fix": "Say 'The better question is what situation you are actually in.'"
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:s1:generalization:nobody-judged",
+     "issue": "Unsupported frequency and absolute: \"A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.\"",
+     "fix": "Say 'A packed house can be a family matter before it is a real estate matter, and the person living there deserves respect.'"
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:a25f75c8df62",
+     "ruling": "reword",
+     "note": "No ledger claim or passage supports what most people do; state it as possibility or drop."
+    },
+    {
+     "key": "hedge:2ef3c1c171ab",
+     "ruling": "reword",
+     "note": "'often' and 'nobody' are unsupported; say it can be a family matter and the occupant deserves respect."
+    },
+    {
+     "key": "hedge:de986bc437c2",
+     "ruling": "reword",
+     "note": "No support that early clarity usually creates more options; say it helps you choose a route."
+    },
+    {
+     "key": "hedge:6ee71dbb7ac0",
+     "ruling": "reword",
+     "note": "No support for what most owners want; say 'you may be wondering how fast the house can be emptied'."
+    },
+    {
+     "key": "hedge:30615f336ccd",
+     "ruling": "reword",
+     "note": "No support for 'usually'; state the question directly without a frequency claim."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 6,
+   "quotes_found": 5,
+   "mustN": 5,
+   "optN": 0
+  },
+  {
+   "unit": "s2",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 6,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:hedge:44c9f7832c5c:reword",
+     "issue": "Callout sentence \"Getting clarity early usually creates more options, not fewer.\" is an unsupported outcome generalization.",
+     "fix": "Delete the sentence or reword to advice only, with no outcome claim."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:44c9f7832c5c",
+     "ruling": "reword",
+     "note": "No ledger claim or source supports that early clarity usually creates more options. Keep the advice (settle title and signer before spending on cleanout or talking price) and drop the outcome claim."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 1,
+   "quotes_found": 1,
+   "mustN": 1,
+   "optN": 0
+  },
+  {
+   "unit": "s3",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 7,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:s3:unsupported_generalization:nobody",
+     "issue": "Unsupported generalization: \"Plenty of homes hold a lot of belongings and nobody from the city ever looks twice.\"",
+     "fix": "Drop the sentence, or say only that a full house is not by itself a condition the statute lists."
+    },
+    {
+     "sev": "should fix",
+     "key": "fact:s3:spoiled_material:scope",
+     "issue": "\"spoiled material\" in \"Trash, spoiled material or signs of pests are another, and they are the kind of thing the statute talks about\" is not a listed condition.",
+     "fix": "Use the ledger terms: junk, debris, garbage, infestation, combustible waste."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:d53c4af01b7f",
+     "ruling": "drop",
+     "note": "No ledger claim or stored source supports how often cities ignore full houses."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 3,
+   "quotes_found": 3,
+   "mustN": 1,
+   "optN": 1
+  },
+  {
+   "unit": "s4",
+   "decision": "PASS",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 7,
+   "cards": [],
+   "hedge": [],
+   "bad_claims": [],
+   "quotes": 0,
+   "quotes_found": 0,
+   "mustN": 0,
+   "optN": 0
+  },
+  {
+   "unit": "s5",
+   "decision": "PASS",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 7,
+   "cards": [],
+   "hedge": [],
+   "bad_claims": [],
+   "quotes": 0,
+   "quotes_found": 0,
+   "mustN": 0,
+   "optN": 0
+  },
+  {
+   "unit": "s6",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 9,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:hedge:1cd8d866ff31:unsupported",
+     "issue": "'Getting these answers early usually creates more options, not fewer.' is an unsupported generalization and outcome claim.",
+     "fix": "Drop it, or say only that checking early lets you choose a route with the facts in hand."
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:hedge:a1a2dca21c13:unsupported",
+     "issue": "'The real question is usually not which route is best.' generalizes about sellers without support.",
+     "fix": "The real question is which route fits your situation."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:a1a2dca21c13",
+     "ruling": "reword",
+     "note": "No claim supports 'usually'. Say 'The real question is which route fits your situation.'"
+    },
+    {
+     "key": "hedge:c7e68260e007",
+     "ruling": "proven",
+     "note": "Structural statement about the unit's own five options, four of which are not Twin Home Buyer (brief honest_options); not a claim about owners."
+    },
+    {
+     "key": "hedge:1cd8d866ff31",
+     "ruling": "drop",
+     "note": "Nothing supports that early answers usually create more options. Drop, or say only that early answers let you choose with facts."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 3,
+   "quotes_found": 2,
+   "mustN": 2,
+   "optN": 0
+  },
+  {
+   "unit": "s7",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 11,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:clm:5:overstated",
+     "issue": "\"The disclosures are made on the Real Estate Transfer Disclosure Statement form.\" omits the single-family residential scope, reading as a flat rule.",
+     "fix": "Say that on a sale of single-family residential property, the disclosures the statute requires are made on the form; cite clm:6 and keep the waiver sentence tied to the same requirements."
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:hedge:938a4991ef2c:drop",
+     "issue": "\"Most owners want to know what could actually stop this sale.\" is an unsupported generalization.",
+     "fix": "Remove the generalization, for example \"Here is what can stop this sale.\""
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:938a4991ef2c",
+     "ruling": "drop",
+     "note": "No ledger claim or stored passage supports a statement about most owners."
+    }
+   ],
+   "bad_claims": [
+    {
+     "claim_id": "clm:5",
+     "verdict": "overstated",
+     "note": "States the form requirement flatly without the single-family residential scope of the article (clm:6)."
+    }
+   ],
+   "quotes": 2,
+   "quotes_found": 2,
+   "mustN": 2,
+   "optN": 0
+  },
+  {
+   "unit": "s8",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 13,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:s8:usually-outcome-claim",
+     "issue": "\"Getting clarity early usually creates more options, not fewer.\" is an unsupported outcome generalization.",
+     "fix": "Drop the sentence, or end the paragraph after 'with real information.'"
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:s8:nobody-generalization",
+     "issue": "\"...finding out halfway through that nobody checked who could sign.\" is an unsupported generalization.",
+     "fix": "Reword to: finding out halfway through that the person selling could not sign."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:8d8256f677da",
+     "ruling": "reword",
+     "note": "No claim or passage supports 'nobody'. Say instead: finding out halfway through that the person selling could not sign."
+    },
+    {
+     "key": "hedge:44c9f7832c5c",
+     "ruling": "drop",
+     "note": "Nothing supports 'usually creates more options'; drop the sentence."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 3,
+   "quotes_found": 3,
+   "mustN": 2,
+   "optN": 0
+  },
+  {
+   "unit": "faq",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": false,
+   "must": 15,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:faq:authority-flat-legal:unsupported",
+     "issue": "Authority answer states law flatly with no ledger claim: \"Only someone with legal authority to sign.\" and \"Living in the house does not give that authority.\"",
+     "fix": "Say the person living in the house may not be the person with authority to sign, that who can sign depends on how title is held, and to confirm with an attorney or title company."
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:faq:not-always:unruled-hedge",
+     "issue": "Flagged sentence \"Not always.\" implies a conditional legal cleanout duty with no support.",
+     "fix": "Open with: it depends on your time, your money, who has authority to sell and which route you pick; no legal cleanout rule implied."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:4a926ce9f475",
+     "ruling": "reword",
+     "note": "\"Not always.\" has no ledger or passage support; say the choice depends on time, money, authority and route, without implying a legal cleanout rule."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 2,
+   "quotes_found": 2,
+   "mustN": 2,
+   "optN": 0
+  }
+ ],
+ "must": 15,
+ "opt": 1,
+ "hedgeRule": {
+  "proven": 1,
+  "reword": 9,
+  "drop": 4
+ },
+ "claimBad": 1,
+ "quotesOk": 18,
+ "quotesTotal": 20
+}

@@ -1,0 +1,55 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:faq:authority-occupancy:unsupported",
+      "severity": "required",
+      "note": "Item 4 states a legal conclusion with no ledger claim: \"Living in the house alone does not give you that authority.\" The brief only supports that a sale can stall when the person living in the house is not the person with authority. Soften to what the brief supports.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:6", "clm:7"],
+  "required_actions": [
+    "In the FAQ item 'Who can sell the house if the owner cannot or will not?', replace \"Living in the house alone does not give you that authority.\" with wording such as \"The person living in the house is not always the person with authority to sign.\" Keep the attorney or title company confirmation sentence."
+  ],
+  "output_version_id": "v1-faq-review-classic-revised-test-faq-1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Item 3: 'conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards' matches clm:1; local authority qualifier kept."},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Cited in item 3; the text asserts nothing beyond the general conditions list and local authority determination."},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Cited in item 3; the text asserts nothing beyond the general conditions list."},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Cited in item 3; the text asserts nothing beyond the general conditions list."},
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "Item 1: disclosures made on the Real Estate Transfer Disclosure Statement form matches clm:5."},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Item 1: 'single-family residential property ... with an exception' matches clm:6."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "Items 1 and 5: waiver void as against public policy matches clm:7; item 5 limits it to 'a sale the disclosure article covers'."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:4a926ce9f475", "ruling": "proven", "note": "'Not always.' is a qualifier, not a legal claim; it is supported by the brief's honest_options (keep_it, fix_it, sell_directly), which show cleanout is not required in every route. No ledger claim is needed."}
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:authority-occupancy:unsupported",
+        "section": "faq",
+        "issue": "Uncited legal conclusion: \"Living in the house alone does not give you that authority.\"",
+        "severity": "must fix",
+        "evidence": "No ledger claim; brief seller_situation_map 'authority' row only says a sale can stall when the occupant is not the person with authority. Editorial standards section 5.",
+        "fix": "Use \"The person living in the house is not always the person with authority to sign.\" and keep the attorney or title company confirmation.",
+        "blocking": false
+      }
+    ]
+  }
+}

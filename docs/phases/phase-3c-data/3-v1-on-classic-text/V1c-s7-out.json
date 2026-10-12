@@ -1,0 +1,73 @@
+{
+  "article_id": "e2b915e3-af97-4ea6-8979-4861ec729027",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["9bf5c65ce459243f880ff94a48bdcc7c2a2e798e40395688080b60aba5627546"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:clm:5:overstated",
+      "severity": "required",
+      "note": "\"The disclosures are made on the Real Estate Transfer Disclosure Statement form.\" The ledger claim says the disclosures required by the article are made on the form, and the article applies to a transfer by sale of single-family residential property (clm:6, with the 1102.2 exception). The sentence drops that scope and reads as a flat rule for every sale. Same scope gap in \"any waiver of the requirements is void as against public policy\". Add the single-family residential scope (and cite clm:6) or tie the wording to the disclosures the statute requires.",
+      "claim_id": "clm:5"
+    },
+    {
+      "issue_key": "fact:hedge:938a4991ef2c:drop",
+      "severity": "required",
+      "note": "\"Most owners want to know what could actually stop this sale.\" No ledger claim or stored passage supports a statement about most owners. Drop or rewrite without the generalization, for example by addressing the reader directly (\"You probably want to know...\" is also an assumption; prefer \"Here is what can stop this sale.\").",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:7"],
+  "required_actions": [
+    "Rewrite the sentence \"Most owners want to know what could actually stop this sale.\" without the generalization.",
+    "Scope the Transfer Disclosure Statement sentence and the waiver sentence to the sale of single-family residential property (cite clm:6 if the scope is added)."
+  ],
+  "output_version_id": "v1-classic-s7-r1-9bf5c65c",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s7",
+    "version_hash": "9bf5c65ce459243f880ff94a48bdcc7c2a2e798e40395688080b60aba5627546",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Junk, debris, garbage hazard wording matches H&S 17920.3(j) as one of the conditions that can make a building substandard; the text hedges with \"can\"."},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Infestation \"as determined by a health officer\" preserved."},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Garbage and rubbish storage and removal facilities, as determined by a health officer, preserved."},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Fire chief or deputy opinion preserved; wording matches the ledger."},
+      {"claim_id": "clm:5", "verdict": "overstated", "note": "States the form requirement flatly without the single-family residential scope of the article (clm:6)."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "\"any waiver of the requirements ... is void as against public policy\" matches 1102(c); scope noted under clm:5."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:938a4991ef2c", "ruling": "drop", "note": "No ledger claim or stored passage supports a statement about most owners."}
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:clm:5:overstated",
+        "section": "s7",
+        "issue": "\"The disclosures are made on the Real Estate Transfer Disclosure Statement form.\" omits the single-family residential scope, reading as a flat rule.",
+        "severity": "must fix",
+        "evidence": "clm:5, clm:6",
+        "fix": "Say that on a sale of single-family residential property, the disclosures the statute requires are made on the form; cite clm:6 and keep the waiver sentence tied to the same requirements.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:hedge:938a4991ef2c:drop",
+        "section": "s7",
+        "issue": "\"Most owners want to know what could actually stop this sale.\" is an unsupported generalization.",
+        "severity": "must fix",
+        "evidence": "hedge:938a4991ef2c; no ledger claim supports it",
+        "fix": "Remove the generalization, for example \"Here is what can stop this sale.\"",
+        "blocking": false
+      }
+    ]
+  }
+}

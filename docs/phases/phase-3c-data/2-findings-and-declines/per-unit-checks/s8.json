@@ -1,0 +1,51 @@
+{
+ "unit": "s8",
+ "findings": [
+  {
+   "n": 39,
+   "role": "V1",
+   "key": "fact:s8:usually_generalization",
+   "text": "'Getting clarity early usually creates more options, not fewer.' is a soft general statement, not a legal, figure or outcome promise. Consider softening or cutting, but it does not block."
+  },
+  {
+   "n": 40,
+   "role": "V2",
+   "key": "seo:s8-answer-not-named-first",
+   "text": "The H2 asks who to check with, but the opening paragraph (\"I'd get a few answers before you pick a route...\") does not name anyone; the list that answers it follows immediately. Optionally add a short clause such as 'an attorney, title company, CPA, insurance professional and your city or county' to the first sentence so the answer stands alone when quoted."
+  },
+  {
+   "n": 41,
+   "role": "V2",
+   "key": "seo:s8-generalization",
+   "text": "\"Getting clarity early usually creates more options, not fewer.\" is a general claim with no ledger claim. It is not a consequential legal or factual statement, so it does not block. Consider softening or dropping it."
+  },
+  {
+   "n": 42,
+   "role": "V3",
+   "key": "ed:verbatim-voice-line",
+   "text": "The sentence 'Getting clarity early usually creates more options, not fewer.' is word for word the voice reference excerpt v10. It is on-voice and makes no fact claim, but Leo may want it reworded so it is not a repeat of the live site. Not required."
+  },
+  {
+   "n": 43,
+   "role": "V3",
+   "key": "ed:local-context-thin",
+   "text": "The section has no Bay Area or Northern California wording. Absence is acceptable for a professional-confirmation list ('city or county' is the local hook), and no local fact may be invented, so this is advisory only."
+  }
+ ],
+ "classic_text": "## Who should you check with before you decide?\n\nI'd get a few answers before you pick a route. Not all of them, and not all at once. But the people below can each settle a question that this guide can only point at. A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign.\n\n- **Real estate attorney:** who has authority to sell, any probate or trust questions, and what has to be disclosed on the Transfer Disclosure Statement.\n- **Listing agent:** how the disclosure form is completed for your specific home, if you are thinking about listing.\n- **Title company:** liens, title issues and who has to sign.\n- **CPA:** the tax consequences of selling.\n- **Insurance professional:** what coverage looks like on a vacant or hazardous property.\n- **City or county building, health or fire department:** whether any enforcement notice or local rule applies to the property.\n\nIf a notice has already been posted or a letter has come, start with the city or county. It is better to know what is open before you choose a path than to hear about it from a buyer.\n\n[note] Confirm legal, tax, title, code and insurance points with the right professional for your situation. This guide explains the questions to ask. It does not replace the answers.\n\nOnce you know who can sign, what is owed and what the city or county says, you can compare keeping it, clearing it, listing it and selling directly with real information. Getting clarity early usually creates more options, not fewer.\n\nIf a direct sale is one of the routes you want to talk through, the next step is the [packed and hoarded house page](https://www.twinhomebuyer.com/hoarder-houses/). Read it, then decide. There is no rush attached to it.",
+ "team_final_text": "## Who should you check with before you decide?\n\nBefore you pick a route, check with an attorney, a title company, a CPA, an insurance professional and your city or county. Each can settle a question this guide can only point at. You do not need all of them at once.\n\n- **Real estate attorney:** who has authority to sell, any probate or trust questions, and what has to be disclosed on the Transfer Disclosure Statement.\n- **Listing agent:** how the disclosure form is completed for your specific home, if you are thinking about listing.\n- **Title company:** liens, title issues and who has to sign.\n- **CPA:** the tax consequences of selling.\n- **Insurance professional:** what coverage looks like on a vacant or hazardous property.\n- **City or county building, health or fire department:** whether any enforcement notice or local rule applies to the property.\n\nWhere to start depends on your situation. If the home was a parent's or relative's, start with the attorney or the title company, because who can sign comes first. If a notice has been posted or a letter has come, start with the city or county. If you are thinking about listing, talk to a listing agent about the disclosure form.\n\n[note] Confirm legal, tax, title, code and insurance points with the right professional for your situation. This guide explains what to ask, not what the answer is for your house.\n\nOnce you know who can sign, what is owed and what the city or county says, you can compare keeping it, clearing it, listing it and selling directly with real information.\n\nIf a direct sale is one of the routes you want to talk through, the next step is the [packed and hoarded house page](https://www.twinhomebuyer.com/hoarder-houses/).",
+ "w1_change_notes": [
+  {
+   "pass": 18,
+   "addresses": [
+    "human:directive",
+    "fact:s8:usually_generalization",
+    "seo:s8-answer-not-named-first",
+    "seo:s8-generalization",
+    "ed:verbatim-voice-line",
+    "ed:local-context-thin"
+   ],
+   "change_note": "Revision. fact:s8:usually_generalization, seo:s8-generalization, ed:verbatim-voice-line: removed the usually sentence (a copy of voice excerpt v10) and replaced it with a plain, specific line with no generalization. seo:s8-answer-not-named-first: the first sentence now names an attorney, title company, CPA, insurance professional and the city or county. W2 w2:order-by-situation used: added a short where-to-start pointer (inherited home, open notice, thinking of listing) with no new facts. W2 w2:cta-reassurance used: dropped the no-rush line; the hand-off ends on the plain next step. W2 w2:closing-echo used: same fix as the usually sentence. W2 w2:note-overlap used: trimmed the opening so it no longer repeats the note; also removed the nobody-checked-who-could-sign line. W2 w2:concrete-question not used: example questions would add content beyond the brief's professional list and risk implying facts about what each professional will say; the list keeps each topic. ed:local-context-thin declined: advisory only, and no local fact may be added; your city or county is the local hook. Claims unchanged (none cited); H2, key and roles unchanged."
+  }
+ ]
+}

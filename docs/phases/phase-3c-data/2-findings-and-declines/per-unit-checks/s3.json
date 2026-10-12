@@ -1,0 +1,86 @@
+{
+ "unit": "s3",
+ "findings": [
+  {
+   "n": 13,
+   "role": "V1",
+   "key": "fact:s3:household-label:optional",
+   "text": "'It describes conditions, and it does not label any kind of household' is a mild statement about statute contents beyond the cited claims. It is consistent with the brief's 'statute does not mention hoarding' instruction; consider trimming to that."
+  },
+  {
+   "n": 14,
+   "role": "V1",
+   "key": "fact:s3:spoiled-material:optional",
+   "text": "'spoiled material' in the first bullet is not one of the ledger conditions; the bullet only says it is 'the kind of thing the statute talks about'. Consider 'trash or signs of pests'."
+  },
+  {
+   "n": 15,
+   "role": "V2",
+   "key": "seo:circular-sentence",
+   "text": "In \"I'd read a few of them before you decide anything, because they show the conditions the statute lists\", the reason repeats itself. Consider a clearer reason, such as: they show what a local official can look at."
+  },
+  {
+   "n": 16,
+   "role": "V2",
+   "key": "seo:unsupported-aside",
+   "text": "\"nobody from the city ever looks twice\" is a loose generalization with no ledger claim. It is not a consequential fact, so it does not block. Consider softening it to \"many homes hold a lot of belongings without any code issue\"."
+  },
+  {
+   "n": 17,
+   "role": "V2",
+   "key": "seo:h3-not-question",
+   "text": "The h3 \"What this means in practice\" is not phrased as a seller question. This is acceptable for an h3, and the keyword is not required in this non-first section."
+  },
+  {
+   "n": 18,
+   "role": "V3",
+   "key": "ed:circular-because-clause",
+   "text": "In paragraph 2, 'I'd read a few of them before you decide anything, because they show the conditions the statute lists' is circular. Consider: 'I'd read them before you decide anything, so you know what the city or county can actually look at.' Wording only, no new fact."
+  },
+  {
+   "n": 19,
+   "role": "V3",
+   "key": "ed:unsupported-generalisation",
+   "text": "'Plenty of homes hold a lot of belongings and nobody from the city ever looks twice' reads as an unsourced observation of how often the city acts. Consider softening to 'A full house is not automatically a code problem.' and cutting the rest."
+  },
+  {
+   "n": 20,
+   "role": "V3",
+   "key": "ed:bullet-beyond-statute",
+   "text": "Bullet 1 mentions 'spoiled material', which is not in the listed conditions. 'The kind of thing the statute talks about' hedges it, but the writer or fact auditor may want to tighten it to the listed conditions (junk, debris, garbage, pests)."
+  },
+  {
+   "n": 21,
+   "role": "V3",
+   "key": "ed:echo-of-voice-reference",
+   "text": "'None of this means the house can't sell. It means you want to know where it stands before you choose a path.' is very close to voice excerpt v8. This is fine for tone, but consider varying it so other sections do not repeat the same line."
+  }
+ ],
+ "classic_text": "## What conditions can turn a cluttered house into a code or safety problem?\n\nA full house is not automatically a code problem. Plenty of homes hold a lot of belongings and nobody from the city ever looks twice. But clutter can change character when it becomes trash, pests or fuel for a fire. That is where the law starts to care.\n\nCalifornia's Health and Safety Code, section 17920.3, lists conditions that can make a building substandard. I'd read a few of them before you decide anything, because they show the conditions the statute lists. The statute does not mention hoarding. It describes conditions, and it does not label any kind of household.\n\nCondition in the statute | What the statute says | Who decides\nJunk, debris and garbage | Premises where an accumulation of junk, debris, garbage and similar materials constitutes fire, health or safety hazards are among the listed conditions that can make a building substandard. | The local enforcement authority\nInsects, vermin or rodents | Infestation of insects, vermin or rodents, as determined by a health officer, is listed as a condition of inadequate sanitation. | A health officer\nGarbage and rubbish facilities | Lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer, is listed as a condition of inadequate sanitation. | A health officer\nCombustible waste or vegetation | Combustible waste or vegetation that, in the opinion of the fire chief or the chief's deputy, is in a condition to cause a fire or explosion or provide ready fuel to spread fire is listed. | The fire chief or the chief's deputy\n\nLook at the last column. Whether a particular house meets any of these is not for you, me or a buyer to say. The local enforcement authority makes that call, and in several of these conditions the statute names a health officer or a fire official.\n\n### What this means in practice\n\n- A pile of belongings is one thing. Trash, spoiled material or signs of pests are another, and they are the kind of thing the statute talks about.\n- Blocked rooms and hidden damage are practical concerns of their own. A buyer's inspection may find problems behind the clutter, so you will want to know about them first.\n- If a notice or violation already exists, you want to find out about it before you pick a route, not in the middle of a sale.\n\nNone of this means the house can't sell. It means you want to know where it stands before you choose a path. If you want background on code violations and enforcement in the Oakland area, [this guide on Oakland code violations](https://www.twinhomebuyer.com/oakland-code-violations-2026/) is a place to start. Local rules differ by city and county, so treat it as background and not as the rule for your address.\n\n[note] This is a plain-language reading of a state statute, not legal advice. Confirm with your city or county building, health or fire department whether any notice, violation or local rule applies to your property. An attorney can help if you receive a notice.",
+ "team_final_text": "## What conditions can turn a cluttered house into a code or safety problem?\n\nA full house is not automatically a code problem. But clutter can change character when it becomes trash, pests or fuel for a fire. The state statute lists conditions like those, and an official decides whether a home meets them.\n\nCalifornia's Health and Safety Code, section 17920.3, lists conditions that can make a building substandard. I'd read them before you decide anything, so you know what the city or county can actually look at. The statute does not mention hoarding.\n\nWhat it looks like | What the statute says | Who decides\nJunk, debris and garbage piling up | An accumulation of junk, debris, garbage and similar materials that constitutes fire, health or safety hazards is among the listed conditions that can make a building substandard. | The local enforcement authority\nInsects, vermin or rodents | Infestation of insects, vermin or rodents, as determined by a health officer, is listed as a condition of inadequate sanitation. | A health officer\nNo adequate way to store and remove garbage | Lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer, is listed as a condition of inadequate sanitation. | A health officer\nCombustible waste or vegetation | Listed when, in the opinion of the fire chief or the chief's deputy, it is in a condition to cause a fire or explosion or provide ready fuel to spread fire. | The fire chief or the chief's deputy\n\nLook at the last column. Whether a particular house meets any of these is not for you, me or a buyer to say. The local enforcement authority makes that call, and for several of these conditions the statute names a health officer or a fire official.\n\n### What should you check before you pick a route?\n\n- A pile of belongings is one thing. Trash or signs of pests are another, and they can resemble conditions the statute lists. Whether a home meets them is for the official to decide.\n- Blocked rooms and hidden damage are practical concerns of their own. A buyer's inspection may find problems behind the clutter, so you will want to know about them first.\n- Whether a notice or violation already exists on the property. Find that out before you choose how to sell, not in the middle of a sale.\n\nIf your house is near Oakland, [this guide on Oakland code violations](https://www.twinhomebuyer.com/oakland-code-violations-2026/) gives background on code violations and enforcement there. Treat it as secondary to checking with your own city or county, because local rules differ. What you must tell a buyer is a separate question, and the next section covers it.\n\n[note] This is a plain-language reading of a state statute, not legal advice. Confirm with your city or county building, health or fire department whether any notice, violation or local rule applies to your property. An attorney can help if you receive a notice.",
+ "w1_change_notes": [
+  {
+   "pass": 6,
+   "addresses": [
+    "human:directive",
+    "fact:s3:household-label:optional",
+    "fact:s3:spoiled-material:optional",
+    "seo:circular-sentence",
+    "seo:unsupported-aside",
+    "seo:h3-not-question",
+    "ed:circular-because-clause",
+    "ed:unsupported-generalisation",
+    "ed:bullet-beyond-statute",
+    "ed:echo-of-voice-reference"
+   ],
+   "change_note": "Targeted revision, claims and claim_ids unchanged. Opening: cut the nobody-looks-twice aside and the that-is-where-the-law-starts-to-care line; now frames the conditions as ones the statute lists and an official judges. Paragraph 2: circular reason replaced with a real one (what the city or county can look at); household-label sentence trimmed to the statute does not mention hoarding. Table: first column now carries the plain picture, middle column shortened, same ledger wording. H3 rephrased as a seller question. Bullet 1 tightened to listed conditions (spoiled material dropped). Echo of voice excerpt v8 removed; the two confirm-locally messages merged into the note, and the section ends on one concrete action (find out whether any notice exists) with a pointer to the disclosure section. Oakland link now says it is for readers near Oakland and secondary to checking their own city or county. Not used: none declined. W2 table-density, opening-overreach, circular-reason, oakland-scope and closing-next-step were all used."
+  },
+  {
+   "pass": 7,
+   "addresses": [
+    "fact:s3:pests-trash-match:overstated"
+   ],
+   "change_note": "Targeted fix for T6: the first bullet now says trash or signs of pests can resemble conditions the statute lists and that whether a home meets them is for the official to decide, instead of saying they match. Nothing else changed; claim_ids unchanged. Declined suggestion seo:first-person-voice (V2): the first-person asides are advice phrasing the voice rules call for, and it is only a suggestion; no change made."
+  }
+ ]
+}

@@ -1,0 +1,47 @@
+{
+  "article_id": "e2b915e3-af97-4ea6-8979-4861ec729027",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["d0da1a8a0e2b263475dc2bb9deb620257f0b8c5e898afbff110a6e18583d22ab"],
+  "decision": "REVISION",
+  "findings": [
+    {"issue_key": "fact:s1:generalization:most-people", "severity": "required", "note": "\"Most people in this spot are not avoiding the problem.\" is a claim about what most people do or feel; no ledger claim or source supports it. Reword to a non-statistical statement or drop.", "claim_id": null},
+    {"issue_key": "fact:s1:generalization:most-owners", "severity": "required", "note": "\"Most owners want to know how fast the house can be emptied.\" is an unsupported claim about most owners. Reword (for example, an owner may ask how fast the house can be emptied) or drop.", "claim_id": null},
+    {"issue_key": "fact:s1:generalization:usually-options", "severity": "required", "note": "\"Getting clear early usually creates more options, not fewer.\" is an unsupported outcome generalization. Reword to what is supported, for example that getting clear early helps you choose a route, or drop.", "claim_id": null},
+    {"issue_key": "fact:s1:generalization:usually-question", "severity": "required", "note": "\"The real question is usually what situation you are actually in.\" is an unsupported generalization. Reword without 'usually', for example 'The better question is what situation you are in.'", "claim_id": null},
+    {"issue_key": "fact:s1:generalization:nobody-judged", "severity": "required", "note": "\"A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.\" asserts a frequency ('often') and an absolute ('nobody') with no support. Reword, for example 'A packed house can be a family matter before it is a real estate matter, and the person living there deserves respect.'", "claim_id": null}
+  ],
+  "evidence_ids": ["clm:6", "clm:7"],
+  "required_actions": [
+    "Reword or drop the five flagged generalization sentences quoted in the findings.",
+    "Keep the clm:6 and clm:7 wording and the confirm-with-a-professional note unchanged."
+  ],
+  "output_version_id": "v1-s1-classic-test-r1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s1",
+    "version_hash": "d0da1a8a0e2b263475dc2bb9deb620257f0b8c5e898afbff110a6e18583d22ab",
+    "claim_checks": [
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Text keeps the 'except as provided in Civil Code Section 1102.2' exception and limits scope to a transfer by sale of single-family residential property."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "'Any waiver of its requirements is void' matches 1102(c); no extra condition or scope added."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:a25f75c8df62", "ruling": "reword", "note": "No ledger claim or passage supports what most people do; state it as possibility or drop."},
+      {"key": "hedge:2ef3c1c171ab", "ruling": "reword", "note": "'often' and 'nobody' are unsupported; say it can be a family matter and the occupant deserves respect."},
+      {"key": "hedge:de986bc437c2", "ruling": "reword", "note": "No support that early clarity usually creates more options; say it helps you choose a route."},
+      {"key": "hedge:6ee71dbb7ac0", "ruling": "reword", "note": "No support for what most owners want; say 'you may be wondering how fast the house can be emptied'."},
+      {"key": "hedge:30615f336ccd", "ruling": "reword", "note": "No support for 'usually'; state the question directly without a frequency claim."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s1:generalization:most-people", "section": "s1", "issue": "Unsupported generalization: \"Most people in this spot are not avoiding the problem.\"", "severity": "must fix", "evidence": "hedge:a25f75c8df62; no ledger claim supports it", "fix": "Reword without 'most people', for example 'Feeling stuck here is not the same as avoiding the problem.' Or drop.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s1:generalization:most-owners", "section": "s1", "issue": "Unsupported generalization: \"Most owners want to know how fast the house can be emptied.\"", "severity": "must fix", "evidence": "hedge:6ee71dbb7ac0; no ledger claim supports it", "fix": "Say 'You may be wondering how fast the house can be emptied.' Or drop.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s1:generalization:usually-options", "section": "s1", "issue": "Unsupported outcome generalization: \"Getting clear early usually creates more options, not fewer.\"", "severity": "must fix", "evidence": "hedge:de986bc437c2; no ledger claim supports it", "fix": "Say 'Getting clear early helps you pick a route.' Or drop.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s1:generalization:usually-question", "section": "s1", "issue": "Unsupported generalization: \"The real question is usually what situation you are actually in.\"", "severity": "must fix", "evidence": "hedge:30615f336ccd; no ledger claim supports it", "fix": "Say 'The better question is what situation you are actually in.'", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s1:generalization:nobody-judged", "section": "s1", "issue": "Unsupported frequency and absolute: \"A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.\"", "severity": "must fix", "evidence": "hedge:2ef3c1c171ab; no ledger claim supports it", "fix": "Say 'A packed house can be a family matter before it is a real estate matter, and the person living there deserves respect.'", "blocking": false}
+    ]
+  }
+}

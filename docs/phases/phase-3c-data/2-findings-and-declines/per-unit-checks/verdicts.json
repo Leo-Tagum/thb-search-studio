@@ -1,0 +1,416 @@
+{
+ "per": {
+  "s1": {
+   "addressed": 4,
+   "partly": 0,
+   "not_addressed": 0,
+   "declined": 3
+  },
+  "s2": {
+   "addressed": 4,
+   "partly": 1,
+   "not_addressed": 0,
+   "declined": 0
+  },
+  "s3": {
+   "addressed": 9,
+   "partly": 0,
+   "not_addressed": 0,
+   "declined": 0
+  },
+  "s4": {
+   "addressed": 3,
+   "partly": 1,
+   "not_addressed": 0,
+   "declined": 0
+  },
+  "s5": {
+   "addressed": 3,
+   "partly": 0,
+   "not_addressed": 0,
+   "declined": 1
+  },
+  "s6": {
+   "addressed": 6,
+   "partly": 0,
+   "not_addressed": 0,
+   "declined": 1
+  },
+  "s7": {
+   "addressed": 1,
+   "partly": 0,
+   "not_addressed": 0,
+   "declined": 1
+  },
+  "s8": {
+   "addressed": 4,
+   "partly": 0,
+   "not_addressed": 0,
+   "declined": 1
+  },
+  "faq": {
+   "addressed": 5,
+   "partly": 0,
+   "not_addressed": 0,
+   "declined": 2
+  }
+ },
+ "tot": {
+  "addressed": 39,
+  "partly": 2,
+  "not_addressed": 0,
+  "declined": 9
+ },
+ "all": [
+  {
+   "n": 1,
+   "verdict": "addressed",
+   "reason": "Both 'Most people' and 'Most owners' claims were real in the classic text; the final removes the first and recasts the second as a non-population statement.",
+   "quote": "How fast the house can be emptied is the question that feels urgent.",
+   "unit": "s1"
+  },
+  {
+   "n": 2,
+   "verdict": "declined",
+   "reason": "The unbacked general answer-first opener was real in the classic; the final keeps 'You can sell a hoarded house in California.' and the writer note explicitly leaves it as the brief's own framing, not a legal fact.",
+   "quote": "You can sell a hoarded house in California.",
+   "unit": "s1"
+  },
+  {
+   "n": 3,
+   "verdict": "declined",
+   "reason": "The H2 variant was visible in the classic and is unchanged in the final; the finding itself said no change needed and the writer note keeps it with a reason.",
+   "quote": "## What should you know first about a packed or hoarded house before you sell?",
+   "unit": "s1"
+  },
+  {
+   "n": 4,
+   "verdict": "addressed",
+   "reason": "The classic body repeated the capsule's disclosure sentence nearly verbatim; the final body paragraph now points back to the capsule instead of repeating it.",
+   "quote": "The disclosure rules in the capsule above do not change with your answers.",
+   "unit": "s1"
+  },
+  {
+   "n": 5,
+   "verdict": "addressed",
+   "reason": "The stock 'Here is the good news.' opener was in the classic and is gone from the final.",
+   "quote": "",
+   "unit": "s1"
+  },
+  {
+   "n": 6,
+   "verdict": "addressed",
+   "reason": "'Most owners want to know...' was in the classic; the final no longer asserts a population generalization.",
+   "quote": "How fast the house can be emptied is the question that feels urgent.",
+   "unit": "s1"
+  },
+  {
+   "n": 7,
+   "verdict": "declined",
+   "reason": "The section had no Bay Area cue in the classic and still has none; the writer note explicitly does not add one because the opening may not state local rules and a later section carries local context.",
+   "quote": "",
+   "unit": "s1"
+  },
+  {
+   "n": 8,
+   "verdict": "addressed",
+   "reason": "Already fine in the classic text; the final text still opens with the direct answer about who has to sign.",
+   "quote": "The person who holds title, or who has legal authority to sell for the owner, has to sign.",
+   "unit": "s2"
+  },
+  {
+   "n": 9,
+   "verdict": "addressed",
+   "reason": "Both internal links are present once each in the final text, as in the classic; no change was needed.",
+   "quote": "[this guide on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/)",
+   "unit": "s2"
+  },
+  {
+   "n": 10,
+   "verdict": "partly",
+   "reason": "Real in the classic (three occupant-not-on-title statements, signer list restated). Final keeps the occupant point once ('When the person living in the house is not the person with authority...'), drops the table row and the repeated signer list, but now repeats the opening 'holds title, or has legal authority to sell... has to sign' sentence nearly verbatim in the authority subsection.",
+   "quote": "The person who holds title, or who has the legal authority to sell for the owner, has to sign. Depending on the situation, that could be an owner, a trustee...",
+   "unit": "s2"
+  },
+  {
+   "n": 11,
+   "verdict": "addressed",
+   "reason": "Real in the classic. Both lifted lines are gone; the families-need-time sentence is replaced and the callout is rewritten.",
+   "quote": "Spending first can commit you to a plan the right person did not agree to.",
+   "unit": "s2"
+  },
+  {
+   "n": 12,
+   "verdict": "addressed",
+   "reason": "Real in the classic. The 'whole sale' overstatement is removed entirely; the paragraph now just states the first question.",
+   "quote": "Before cleanout and before price, the first question I ask is who actually holds title.",
+   "unit": "s2"
+  },
+  {
+   "n": 13,
+   "verdict": "addressed",
+   "reason": "Real in classic ('it does not label any kind of household'); the final text keeps only 'The statute does not mention hoarding.'",
+   "quote": "The statute does not mention hoarding.",
+   "unit": "s3"
+  },
+  {
+   "n": 14,
+   "verdict": "addressed",
+   "reason": "Real in classic bullet 1; 'spoiled material' is gone from the final bullet.",
+   "quote": "Trash or signs of pests are another, and they can resemble conditions the statute lists.",
+   "unit": "s3"
+  },
+  {
+   "n": 15,
+   "verdict": "addressed",
+   "reason": "Circular 'because' clause was real in classic; replaced with a real reason.",
+   "quote": "so you know what the city or county can actually look at",
+   "unit": "s3"
+  },
+  {
+   "n": 16,
+   "verdict": "addressed",
+   "reason": "Real in classic; 'nobody from the city ever looks twice' is cut from the final opening.",
+   "quote": "A full house is not automatically a code problem.",
+   "unit": "s3"
+  },
+  {
+   "n": 17,
+   "verdict": "addressed",
+   "reason": "The finding was only an acceptable-as-is note, not a defect; the h3 is nonetheless now a seller question.",
+   "quote": "### What should you check before you pick a route?",
+   "unit": "s3"
+  },
+  {
+   "n": 18,
+   "verdict": "addressed",
+   "reason": "Circular 'because they show the conditions the statute lists' was real in classic and is replaced with the suggested wording.",
+   "quote": "I'd read them before you decide anything, so you know what the city or county can actually look at.",
+   "unit": "s3"
+  },
+  {
+   "n": 19,
+   "verdict": "addressed",
+   "reason": "Real in classic; the 'Plenty of homes... nobody from the city ever looks twice' sentence is removed, leaving only the suggested short sentence.",
+   "quote": "A full house is not automatically a code problem.",
+   "unit": "s3"
+  },
+  {
+   "n": 20,
+   "verdict": "addressed",
+   "reason": "Real in classic; the bullet now says 'trash or signs of pests' and stays tied to listed conditions.",
+   "quote": "Trash or signs of pests are another, and they can resemble conditions the statute lists.",
+   "unit": "s3"
+  },
+  {
+   "n": 21,
+   "verdict": "addressed",
+   "reason": "Real in classic; the near-copy of voice excerpt v8 ('None of this means the house can't sell...') is removed from the final text.",
+   "quote": "What you must tell a buyer is a separate question, and the next section covers it.",
+   "unit": "s3"
+  },
+  {
+   "n": 22,
+   "verdict": "addressed",
+   "reason": "Real in classic (answer in paragraph 2 after three empathy sentences); the final opens with one worry sentence and the direct answer follows in the same first paragraph.",
+   "quote": "When you sell single-family residential property in California, the disclosures are made on the Real Estate Transfer Disclosure Statement form, the rules have an exception, and a waiver of them is void.",
+   "unit": "s4"
+  },
+  {
+   "n": 23,
+   "verdict": "addressed",
+   "reason": "Real in classic ('the article'); the final names the law with its Civil Code cite in each bullet so each stands alone.",
+   "quote": "California's seller disclosure law (Civil Code 1102 and following) applies, except as provided in Section 1102.2",
+   "unit": "s4"
+  },
+  {
+   "n": 24,
+   "verdict": "partly",
+   "reason": "Classic had the buyer-says-no-need illustration of clm:7 (low-severity, fact auditor's call); the writer says it was removed, but the final still carries a rephrased version of the same illustration.",
+   "quote": "You cannot get out of the requirements by agreeing with a buyer to skip them.",
+   "unit": "s4"
+  },
+  {
+   "n": 25,
+   "verdict": "addressed",
+   "reason": "Real in classic ('The part I want you to remember is this one'); that line is gone and the final has no equivalent lead-in filler.",
+   "quote": "The waiver point matters most when the house is hard to face.",
+   "unit": "s4"
+  },
+  {
+   "n": 26,
+   "verdict": "addressed",
+   "reason": "Finding was a resolved/positive note (direct answer present in classic); the final text keeps the direct-answer opening.",
+   "quote": "Clearing the house out is your choice, and it does not change the disclosure rules if your sale is covered by them.",
+   "unit": "s5"
+  },
+  {
+   "n": 27,
+   "verdict": "addressed",
+   "reason": "The issue was real in classic (opening said rules 'apply to your sale' without the exception); the final opening now adds the coverage qualifier.",
+   "quote": "if your sale is covered by them",
+   "unit": "s5"
+  },
+  {
+   "n": 28,
+   "verdict": "declined",
+   "reason": "Issue was real (no Northern California or Bay Area anchor in classic) and the final text still has none; the writer note explicitly declines it because no ledger or approved source supports a local fact. The finding itself called this acceptable.",
+   "quote": "ed:no-local-anchor declined: no ledger or approved source supports a local fact",
+   "unit": "s5"
+  },
+  {
+   "n": 29,
+   "verdict": "addressed",
+   "reason": "Classic had the vague 'either path'; the final text replaces it with the suggested wording.",
+   "quote": "before you spend money on a cleanout or on a sale",
+   "unit": "s5"
+  },
+  {
+   "n": 30,
+   "verdict": "addressed",
+   "reason": "The classic text already read 'most of them have nothing to do with Twin Home Buyer', so the 'one of them' problem was not visible there; the final text also avoids it.",
+   "quote": "several have nothing to do with Twin Home Buyer",
+   "unit": "s6"
+  },
+  {
+   "n": 31,
+   "verdict": "addressed",
+   "reason": "Both filler lines are gone: the 'choosing with facts' sentence is removed and 'problems do not fix themselves' became a plain statement of cost.",
+   "quote": "The cost is that the house keeps needing attention while you wait.",
+   "unit": "s6"
+  },
+  {
+   "n": 32,
+   "verdict": "addressed",
+   "reason": "The near-verbatim voice line is replaced with fresh wording.",
+   "quote": "Asking these questions early can keep more of your options open.",
+   "unit": "s6"
+  },
+  {
+   "n": 33,
+   "verdict": "addressed",
+   "reason": "The 'usually creates more options' generalization is replaced by a softer 'can keep' claim.",
+   "quote": "can keep more of your options open",
+   "unit": "s6"
+  },
+  {
+   "n": 34,
+   "verdict": "addressed",
+   "reason": "The opening now names the deciding factors (time, money, who decides) instead of the vague 'which route fits' line.",
+   "quote": "What decides it is how much time you have, how much money can go into the house, and who has the right to decide.",
+   "unit": "s6"
+  },
+  {
+   "n": 35,
+   "verdict": "declined",
+   "reason": "Real in classic and still absent from the final text (no Bay Area reference); the writer's note explicitly declines it because it would need a ledger claim not held for this section.",
+   "quote": "Declined ed:no-local-anchor: a Bay Area reference would need a ledger claim",
+   "unit": "s6"
+  },
+  {
+   "n": 36,
+   "verdict": "addressed",
+   "reason": "The echo of voice reference v10 is gone; the closing line is reworded and no longer near word for word.",
+   "quote": "Asking these questions early can keep more of your options open.",
+   "unit": "s6"
+  },
+  {
+   "n": 37,
+   "verdict": "declined",
+   "reason": "Real in classic (one Oakland link only) and still true in the final text; the writer's note says ed:local-thin was left unchanged because the brief states no local rules and no facts may be added, which matches the finding's own advice.",
+   "quote": "For background on how this works near Oakland, see [Oakland code violations](https://www.twinhomebuyer.com/oakland-code-violations-2026/).",
+   "unit": "s7"
+  },
+  {
+   "n": 38,
+   "verdict": "addressed",
+   "reason": "The classic opening was the generic 'Most owners want to know...'; the final opening names the seller's worry about house versus paperwork directly and drops the generic line.",
+   "quote": "You may be worried that the house itself will sink this sale. It can slow things down. So can the paperwork and the people involved.",
+   "unit": "s7"
+  },
+  {
+   "n": 39,
+   "verdict": "addressed",
+   "reason": "The soft 'usually' sentence was real in the classic text and has been removed from the closing paragraph.",
+   "quote": "you can compare keeping it, clearing it, listing it and selling directly with real information.",
+   "unit": "s8"
+  },
+  {
+   "n": 40,
+   "verdict": "addressed",
+   "reason": "The issue was real in the classic opening; the first sentence now names the professionals so the answer stands alone.",
+   "quote": "Before you pick a route, check with an attorney, a title company, a CPA, an insurance professional and your city or county.",
+   "unit": "s8"
+  },
+  {
+   "n": 41,
+   "verdict": "addressed",
+   "reason": "The generalization was present in the classic closing and is gone from the final text.",
+   "quote": "compare keeping it, clearing it, listing it and selling directly with real information.",
+   "unit": "s8"
+  },
+  {
+   "n": 42,
+   "verdict": "addressed",
+   "reason": "The verbatim voice-reference sentence was in the classic text and has been removed, so no repeat of the live site remains.",
+   "quote": "with real information.",
+   "unit": "s8"
+  },
+  {
+   "n": 43,
+   "verdict": "declined",
+   "reason": "The final text still has no Bay Area or Northern California wording; the writer note explicitly declines it as advisory and says no local fact may be added, with 'city or county' as the hook.",
+   "quote": "your city or county",
+   "unit": "s8"
+  },
+  {
+   "n": 44,
+   "verdict": "addressed",
+   "reason": "Real in classic (flat 'Living in the house does not give that authority'); final removes it and frames it as a stall risk.",
+   "quote": "A sale can stall when the person living in the house is not that person.",
+   "unit": "faq"
+  },
+  {
+   "n": 45,
+   "verdict": "addressed",
+   "reason": "Real in classic (flat 'No.'); final scopes the answer to sales the rules cover.",
+   "quote": "No, not for a sale the disclosure rules cover.",
+   "unit": "faq"
+  },
+  {
+   "n": 46,
+   "verdict": "declined",
+   "reason": "Real in classic; final still opens with the applicability-with-exception wording, not a plain 'Generally yes'. Change notes (passes 22 and 24) say the yes opener was dropped because a fact finding judged it overstated against clm:6.",
+   "quote": "California's disclosure article applies to a sale of single-family residential property, with an exception.",
+   "unit": "faq"
+  },
+  {
+   "n": 47,
+   "verdict": "addressed",
+   "reason": "Real in classic (no direct first answer); final now opens with a direct answer that the city or county can look at it, then the statute detail.",
+   "quote": "It can look at the property.",
+   "unit": "faq"
+  },
+  {
+   "n": 48,
+   "verdict": "addressed",
+   "reason": "Real in classic ('can cause disputes later'); the sentence is gone from the final item 5.",
+   "quote": "Talk it through with your attorney before you sign anything.",
+   "unit": "faq"
+  },
+  {
+   "n": 49,
+   "verdict": "declined",
+   "reason": "Real (no local touch in classic or final); writer notes decline adding one because no local fact is in the ledger, and the finding itself accepted this.",
+   "quote": "",
+   "unit": "faq"
+  },
+  {
+   "n": 50,
+   "verdict": "addressed",
+   "reason": "Real in classic (four fragments, no lead line); final item 6 opens with a plain lead line and ties each route to a situation, though it remains list-like.",
+   "quote": "It depends on what you need most.",
+   "unit": "faq"
+  }
+ ]
+}

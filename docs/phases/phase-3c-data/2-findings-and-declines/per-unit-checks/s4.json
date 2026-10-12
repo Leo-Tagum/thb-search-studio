@@ -1,0 +1,89 @@
+{
+ "unit": "s4",
+ "findings": [
+  {
+   "n": 22,
+   "role": "V2",
+   "key": "seo:answer-after-lead-in",
+   "text": "The direct answer ('California's disclosure article applies, with an exception, to a transfer by sale of single-family residential property...') starts in the second paragraph, after three empathy sentences. Consider moving that sentence up so the H2's answer is in the first sentences. Not blocking: the lead-in is short and the answer follows immediately."
+  },
+  {
+   "n": 23,
+   "role": "V2",
+   "key": "seo:quote-self-contained",
+   "text": "'the article' and 'the requirements of the article' will not stand alone if quoted. Naming it once as 'California's disclosure rules for home sellers (Civil Code 1102)' would make the passage self-contained, provided the fact auditor accepts the wording against clm:5, clm:6 and clm:7."
+  },
+  {
+   "n": 24,
+   "role": "V2",
+   "key": "seo:buyer-says-no-need",
+   "text": "'A buyer saying they do not need the paperwork does not change it' is an illustration of clm:7 (waiver void), not a separate ledger claim. Fine for SEO; the fact auditor owns whether it overreaches."
+  },
+  {
+   "n": 25,
+   "role": "V3",
+   "key": "ed:filler-remember-this",
+   "text": "\"The part I want you to remember is this one.\" is mild lead-in filler. Optional tighter wording: \"This is the part that matters most.\" Wording only; no fact changes."
+  }
+ ],
+ "classic_text": "## What do you have to disclose when you sell a house in California?\n\nWhen the house is full, this is often the question that makes people freeze. They think the clutter has to be explained away, or that it might be better not to mention it at all. Let me separate what the law says from what I can't tell you.\n\nHere is what the law says. California's disclosure article applies, with an exception, to a transfer by sale of single-family residential property. The disclosures the article requires are made on a copy of the Real Estate Transfer Disclosure Statement form.\n\nThe part I want you to remember is this one. Any waiver of the requirements of the article is void as against public policy. In plain words, you can't make the disclosure requirement go away by agreement. A buyer saying they do not need the paperwork does not change it.\n\n### What this means for a packed house\n\n- Do not plan around skipping or hiding disclosure. The waiver rule means that route is not open.\n- The exception matters. Whether your sale falls inside it, or whether your property counts as single-family residential, is a question for a professional, not a guess.\n- This guide does not go through what the form asks. What belongs on it for your house is for your agent or attorney to walk through with you.\n\nClutter makes this harder because you may not know what is behind it. That is one reason people look at cleanout and inspection before listing. I cover that choice in the next section.\n\n[note] Confirm with a real estate attorney or your listing agent: whether the disclosure requirement and its exception apply to your sale, and what goes on the Transfer Disclosure Statement for your specific house.",
+ "team_final_text": "## What do you have to disclose when you sell a house in California?\n\nWith a full house, the worry is that you do not know what you have to tell a buyer about its state, and telling them feels like it could hurt the sale. When you sell single-family residential property in California, the disclosures are made on the Real Estate Transfer Disclosure Statement form, the rules have an exception, and a waiver of them is void. Here is what that means, and what I would do about the rest.\n\n- California's seller disclosure law (Civil Code 1102 and following) applies, except as provided in Section 1102.2, to a transfer by sale of single-family residential property.\n- Under Civil Code 1102.6(a), the disclosures that law requires are made on a copy of the Real Estate Transfer Disclosure Statement form.\n- Under Civil Code 1102(c), any waiver of the requirements of California's seller disclosure law is void as against public policy.\n\n### What this means for a packed house\n\nThe waiver point matters most when the house is hard to face. You cannot get out of the requirements by agreeing with a buyer to skip them. So the useful question is not whether to disclose. It is how to do it accurately, with help.\n\n- The rules have an exception. Whether your sale falls inside it, or whether your property counts as single-family residential, is a question to settle with a professional.\n- This guide does not go through what the form asks. What belongs on it for your house is for your agent or attorney to walk through with you.\n- Clutter can hide conditions you do not know about yet. That is one reason to think about cleanout and an inspection before you list. The next section covers that choice.\n\n### What I would do first\n\n1. Write down what you actually know about the house: rooms you cannot get into, damage you have seen, anything a neighbor or official has mentioned.\n2. Take that list to a real estate attorney or a listing agent before you talk price with anyone.\n3. Ask them to tell you whether the rules and the exception apply to your sale, and to go through the form with you for your specific house.\n4. Decide on cleanout, listing or a direct sale after that, not before.\n\n[note] Not sure who to call? Start with a real estate attorney for the legal questions, or your listing agent for how the form is filled out.",
+ "w1_change_notes": [
+  {
+   "pass": 8,
+   "addresses": [
+    "human:directive",
+    "seo:answer-after-lead-in",
+    "seo:quote-self-contained",
+    "seo:buyer-says-no-need",
+    "ed:filler-remember-this"
+   ],
+   "change_note": "Targeted revision. Moved the direct answer to the opening sentences (seo:answer-after-lead-in; also W2 answer-buried). Named the law once as California's seller disclosure rules (Civil Code 1102) so the passage stands alone (seo:quote-self-contained; W2 jargon, partly). Removed the buyer-says-no-need illustration (seo:buyer-says-no-need; W2 buyer-example). Replaced the remember-this filler (ed:filler-remember-this). Stated the waiver point once and let the bullets carry other points (W2 waiver-repeated). Dropped the unsourced often-people-freeze generalization. Claims and claim_ids unchanged (clm:5, clm:6, clm:7); no new facts, no figures. Not used from W2: money-risk-link beyond a plain statement that the waiver rule closes the skip-disclosure route, because tying disclosure to cost or delay would need claims the ledger does not hold; cta-owner only partly, the note says which professional to ask, and what to bring is left out because it is not supported by the brief. The directive's identity (H2, keyword, slug) is unchanged."
+  },
+  {
+   "pass": 9,
+   "addresses": [
+    "ed:s4-statute-first-opening",
+    "ed:s4-matters-most-filler"
+   ],
+   "change_note": "T7: section now opens with the seller's worry (what you have to tell a buyer about the state of the house), then the Civil Code 1102 and Transfer Disclosure Statement sentences with unchanged meaning. T8: removed the matters-most emphasis and the In plain words filler; replaced with a direct line that staying quiet about clutter is tempting and that a waiver is void, so that route is closed (clm:7 meaning unchanged). Claims and claim_ids unchanged. Suggestion seo:answer-lead-wording: the opening now leads toward the answer, with the form sentence directly after. Suggestion ed:s4-no-what-goes-wrong: not used, because saying why skipping disclosure hurts the seller needs a consequence fact the ledger does not hold. No tickets raised for it."
+  },
+  {
+   "pass": 10,
+   "addresses": [
+    "fact:clm:7:overstated",
+    "ed:repeated-no-hiding",
+    "seo:answer-after-empathy-opener",
+    "seo:quotable-sentence-self-contained",
+    "ed:repeated-confirm-with-pro",
+    "ed:opening-generic"
+   ],
+   "change_note": "Must-fix fact:clm:7:overstated: removed the flat claim that staying quiet about clutter is closed and any link between the clutter and a required form item. The section now says only what clm:5, clm:6 and clm:7 say: the requirements apply with an exception to a sale of single-family residential property, disclosures are made on the Real Estate Transfer Disclosure Statement form, and a waiver is void as against public policy. Also took the should-fix and suggestions: the no-hiding point is now stated once; the direct answer comes first and the filler opener is gone; the two bullets that said route closed or not open are replaced by self-contained sentences; the ask-a-professional point is made once in the note, with the bullet kept as a plain statement of the open question. No claim or claim_ids change."
+  },
+  {
+   "pass": 11,
+   "addresses": [
+    "ed:statute-first-opening",
+    "ed:copy-paste-rule-recital",
+    "ed:no-juan-stance-or-next-step",
+    "ed:homeowner-thinking-q9",
+    "seo:waiver-sentence-opener",
+    "seo:first-person-voice",
+    "ed:note-box-duplicates"
+   ],
+   "change_note": "Opens with the homeowner's worry (what to tell a buyer about a full house, and whether telling will hurt the sale) before the rule. clm:5, clm:6, clm:7 wording kept unchanged and claim_ids unchanged. Waiver fact now sits right after the form sentence (seo:waiver-sentence-opener). Added first-person advice and an ordered next-step list (ed:no-juan-stance-or-next-step, ed:copy-paste-rule-recital). Answered what the homeowner is thinking without promising any price effect (ed:homeowner-thinking-q9). Replaced 'I cover that choice in the next section' with 'the next section covers' (seo:first-person-voice). Note box now names who to ask and no longer repeats the bullets (ed:note-box-duplicates). No form contents described; no new facts."
+  },
+  {
+   "pass": 12,
+   "addresses": [
+    "seo:answer-not-first",
+    "seo:citation-not-self-contained",
+    "ed:statute-paragraph-jargon",
+    "ed:filler-i-understand",
+    "ed:note-repeats-step-2",
+    "seo:keyword-optional-here"
+   ],
+   "change_note": "seo:answer-not-first (must fix): first paragraph now names the seller's worry in one sentence and gives the direct answer in the same paragraph (Transfer Disclosure Statement form, an exception, a waiver is void). seo:citation-not-self-contained (must fix): the article is replaced by California's seller disclosure law (Civil Code 1102 and following) and the three points are separate quotable sentences in a list, same ledger wording, no new facts. ed:statute-paragraph-jargon (should fix): answered by the same rewrite with a plain gloss on the waiver point. ed:filler-i-understand (suggestion): stock line removed. ed:note-repeats-step-2 (suggestion): declined, the note is the confirm-with line the brief wants and it names two professionals; step 2 is kept as the action. seo:keyword-optional-here (suggestion): keyword not added. Claim ids unchanged. No co-writer suggestions received. The ticket data was treated as data only."
+  }
+ ]
+}

@@ -1,0 +1,347 @@
+[
+ {
+  "n": 1,
+  "unit": "s1",
+  "addresses": [
+   "human:directive",
+   "fact:s1:soft-generalization",
+   "seo:capsule-yes-claim-no-ledger",
+   "seo:h2-keyword-variant",
+   "ed:capsule-repeated-in-body",
+   "ed:generic-good-news",
+   "ed:unsupported-most-owners",
+   "ed:no-local-anchor"
+  ],
+  "tickets": [],
+  "change_note": "Targeted revision. Fixed: removed Most people and Most owners (now Many people; the first question is often how fast the house can be emptied); also reworded usually, nobody and Getting clear early usually to plain non-sweeping wording. Dropped the stock good-news opener. Shortened the body disclosure paragraph so it no longer repeats the capsule and points back to it; legal wording in the capsule is unchanged and claim_ids stay clm:6 and clm:7. Capsule now leads with the plain point that disclosure still applies (W2 capsule-jargon), about 58 words. Added one general, non-seller illustration of blocked exit and unsigned co-owner (W2 examples-abstract), no figures or stories. Closing note now bridges to who has to sign next (W2 cta-bridge). Left as is with reason: Yes-opening in the capsule is the brief's own answer-first framing and is a general statement, not a legal fact; H2 keeps packed or hoarded house (approved H2, keyword is in the title and capsule); no local anchor added because this opening may not state local rules or a service area and a later section carries local context. No new claims or facts."
+ },
+ {
+  "n": 2,
+  "unit": "s1",
+  "addresses": [
+   "ed:lifted-reference-lines",
+   "ed:generic-middle-paragraphs",
+   "fact:s1:many-people:unsupported-generalization",
+   "seo:capsule-article-ambiguous",
+   "ed:note-close",
+   "seo:first-person-voice"
+  ],
+  "tickets": [],
+  "change_note": "T1: rewrote the lines that tracked voice-reference excerpts (the situation question, none-of-these, more-options, too-heavy, judged) in original words. T2: merged the two middle paragraphs into one short respectful paragraph and rewrote the routes paragraph to say what each path trades in time, certainty, control or price, without new facts. Dropped the Many people sentence (unsupported generalization) and the often-family generalization. Capsule no longer says the disclosure article or names Section 1102.2; it now says the law covers a sale of single-family residential property, with exceptions, and a waiver is void (clm:6, clm:7), 52 words, no figures; clm:5 is now cited for the Transfer Disclosure Statement mention in the body. Replaced the word five with these, and cut repeated use of the word route. The first-person line now explains why I'd want these answered (each changes what you can do). Not used: the Bay Area anchor suggestion (ed:local-context-absent), because the ledger and brief give no local fact for this opening and the standards allow local context only when true and useful; no co-writer suggestions were received."
+ },
+ {
+  "n": 3,
+  "unit": "s2",
+  "addresses": [
+   "human:directive",
+   "ed:repeated-authority-point",
+   "ed:verbatim-site-lines",
+   "ed:overstated-whole-sale"
+  ],
+  "tickets": [],
+  "change_note": "Answers human:directive (Leo team comparison revision): fixed the three V3 should-fix corrections listed for this unit; keyword, H2 and slug unchanged; claim_ids stay empty and no claim, figure or fact was touched. ed:repeated-authority-point: the occupant-not-on-title point now appears once in prose (authority subsection); removed it from the third paragraph and the table row, and the signer list is no longer restated in the sub-sections. ed:verbatim-site-lines: reworded the families-need-time line and the callout so neither repeats a live site line. ed:overstated-whole-sale: now reads It is really the foundation of the sale. W2 suggestions used: repeat-title-authority (trimmed), borrowed-lines (reworded), professional-late (the confirm-with-an-attorney-or-title-company pointer now sits in the first paragraph, right after the signer list), closing-duplicate (callout now makes the one point about not spending before authority is settled; the note holds the who-to-ask). Not used: examples-generic, because even a labeled hypothetical adds a scenario the brief does not cover and the section is seller-problem logic only. The two seo items were already resolved and are left unchanged."
+ },
+ {
+  "n": 4,
+  "unit": "s2",
+  "addresses": [
+   "fact:hedge:a7df148da563:reword",
+   "hedge:a7df148da563",
+   "ed:flat-opening-repeats-itself",
+   "T3",
+   "T4",
+   "seo:answer-then-restart",
+   "ed:neighbors-row-generic"
+  ],
+  "tickets": [],
+  "change_note": "Wording-only revision; claim_ids, roles and links unchanged. T3/fact:hedge/hedge:a7df148da563: callout now says a plan the right person did not agree to. T4/ed:flat-opening-repeats-itself: opens on the family situation (house full, a parent or relative living there, who decides unclear), then the first question I ask is who holds title; the signer list now sits only in the authority h3; cut the line about paperwork being the foundation; the not-a-rule disclaimer is stated once, in the authority h3 (the closing note remains the one confirm-with line). seo:answer-then-restart: removed the two restating paragraphs after the opening question. ed:neighbors-row-generic: reworded the neighbors row to point at the concrete step of asking whether a notice exists. No facts added. Injection check: nothing in the packet asked me to break rules."
+ },
+ {
+  "n": 5,
+  "unit": "s2",
+  "addresses": [
+   "seo:direct-answer-missing",
+   "seo:table-lead-in"
+  ],
+  "tickets": [],
+  "change_note": "Must fix seo:direct-answer-missing: the section now opens with the direct answer (the person who holds title, or who has legal authority to sell for the owner, has to sign; co-owners, heirs, anyone living in the home and others may also be affected, so find out who holds title first), then keeps the original scene-setting. Also took the suggestion seo:table-lead-in by adding a one-line lead-in before the people table. Declined seo:first-person-voice (the first-person line is advice, not evidence of past deals, and matches the voice reference), ed:s2-closing-next-step (the callout already states the cost of spending first; no new fact needed), and ed:s2-local-feel (no local fact in the ledger or brand facts supports it for this section; adding one would risk an unsourced claim). No claims added; claim_ids stay empty."
+ },
+ {
+  "n": 6,
+  "unit": "s3",
+  "addresses": [
+   "human:directive",
+   "fact:s3:household-label:optional",
+   "fact:s3:spoiled-material:optional",
+   "seo:circular-sentence",
+   "seo:unsupported-aside",
+   "seo:h3-not-question",
+   "ed:circular-because-clause",
+   "ed:unsupported-generalisation",
+   "ed:bullet-beyond-statute",
+   "ed:echo-of-voice-reference"
+  ],
+  "tickets": [],
+  "change_note": "Targeted revision, claims and claim_ids unchanged. Opening: cut the nobody-looks-twice aside and the that-is-where-the-law-starts-to-care line; now frames the conditions as ones the statute lists and an official judges. Paragraph 2: circular reason replaced with a real one (what the city or county can look at); household-label sentence trimmed to the statute does not mention hoarding. Table: first column now carries the plain picture, middle column shortened, same ledger wording. H3 rephrased as a seller question. Bullet 1 tightened to listed conditions (spoiled material dropped). Echo of voice excerpt v8 removed; the two confirm-locally messages merged into the note, and the section ends on one concrete action (find out whether any notice exists) with a pointer to the disclosure section. Oakland link now says it is for readers near Oakland and secondary to checking their own city or county. Not used: none declined. W2 table-density, opening-overreach, circular-reason, oakland-scope and closing-next-step were all used."
+ },
+ {
+  "n": 7,
+  "unit": "s3",
+  "addresses": [
+   "fact:s3:pests-trash-match:overstated"
+  ],
+  "tickets": [],
+  "change_note": "Targeted fix for T6: the first bullet now says trash or signs of pests can resemble conditions the statute lists and that whether a home meets them is for the official to decide, instead of saying they match. Nothing else changed; claim_ids unchanged. Declined suggestion seo:first-person-voice (V2): the first-person asides are advice phrasing the voice rules call for, and it is only a suggestion; no change made."
+ },
+ {
+  "n": 8,
+  "unit": "s4",
+  "addresses": [
+   "human:directive",
+   "seo:answer-after-lead-in",
+   "seo:quote-self-contained",
+   "seo:buyer-says-no-need",
+   "ed:filler-remember-this"
+  ],
+  "tickets": [],
+  "change_note": "Targeted revision. Moved the direct answer to the opening sentences (seo:answer-after-lead-in; also W2 answer-buried). Named the law once as California's seller disclosure rules (Civil Code 1102) so the passage stands alone (seo:quote-self-contained; W2 jargon, partly). Removed the buyer-says-no-need illustration (seo:buyer-says-no-need; W2 buyer-example). Replaced the remember-this filler (ed:filler-remember-this). Stated the waiver point once and let the bullets carry other points (W2 waiver-repeated). Dropped the unsourced often-people-freeze generalization. Claims and claim_ids unchanged (clm:5, clm:6, clm:7); no new facts, no figures. Not used from W2: money-risk-link beyond a plain statement that the waiver rule closes the skip-disclosure route, because tying disclosure to cost or delay would need claims the ledger does not hold; cta-owner only partly, the note says which professional to ask, and what to bring is left out because it is not supported by the brief. The directive's identity (H2, keyword, slug) is unchanged."
+ },
+ {
+  "n": 9,
+  "unit": "s4",
+  "addresses": [
+   "ed:s4-statute-first-opening",
+   "ed:s4-matters-most-filler"
+  ],
+  "tickets": [],
+  "change_note": "T7: section now opens with the seller's worry (what you have to tell a buyer about the state of the house), then the Civil Code 1102 and Transfer Disclosure Statement sentences with unchanged meaning. T8: removed the matters-most emphasis and the In plain words filler; replaced with a direct line that staying quiet about clutter is tempting and that a waiver is void, so that route is closed (clm:7 meaning unchanged). Claims and claim_ids unchanged. Suggestion seo:answer-lead-wording: the opening now leads toward the answer, with the form sentence directly after. Suggestion ed:s4-no-what-goes-wrong: not used, because saying why skipping disclosure hurts the seller needs a consequence fact the ledger does not hold. No tickets raised for it."
+ },
+ {
+  "n": 10,
+  "unit": "s4",
+  "addresses": [
+   "fact:clm:7:overstated",
+   "ed:repeated-no-hiding",
+   "seo:answer-after-empathy-opener",
+   "seo:quotable-sentence-self-contained",
+   "ed:repeated-confirm-with-pro",
+   "ed:opening-generic"
+  ],
+  "tickets": [],
+  "change_note": "Must-fix fact:clm:7:overstated: removed the flat claim that staying quiet about clutter is closed and any link between the clutter and a required form item. The section now says only what clm:5, clm:6 and clm:7 say: the requirements apply with an exception to a sale of single-family residential property, disclosures are made on the Real Estate Transfer Disclosure Statement form, and a waiver is void as against public policy. Also took the should-fix and suggestions: the no-hiding point is now stated once; the direct answer comes first and the filler opener is gone; the two bullets that said route closed or not open are replaced by self-contained sentences; the ask-a-professional point is made once in the note, with the bullet kept as a plain statement of the open question. No claim or claim_ids change."
+ },
+ {
+  "n": 11,
+  "unit": "s4",
+  "addresses": [
+   "ed:statute-first-opening",
+   "ed:copy-paste-rule-recital",
+   "ed:no-juan-stance-or-next-step",
+   "ed:homeowner-thinking-q9",
+   "seo:waiver-sentence-opener",
+   "seo:first-person-voice",
+   "ed:note-box-duplicates"
+  ],
+  "tickets": [],
+  "change_note": "Opens with the homeowner's worry (what to tell a buyer about a full house, and whether telling will hurt the sale) before the rule. clm:5, clm:6, clm:7 wording kept unchanged and claim_ids unchanged. Waiver fact now sits right after the form sentence (seo:waiver-sentence-opener). Added first-person advice and an ordered next-step list (ed:no-juan-stance-or-next-step, ed:copy-paste-rule-recital). Answered what the homeowner is thinking without promising any price effect (ed:homeowner-thinking-q9). Replaced 'I cover that choice in the next section' with 'the next section covers' (seo:first-person-voice). Note box now names who to ask and no longer repeats the bullets (ed:note-box-duplicates). No form contents described; no new facts."
+ },
+ {
+  "n": 12,
+  "unit": "s4",
+  "addresses": [
+   "seo:answer-not-first",
+   "seo:citation-not-self-contained",
+   "ed:statute-paragraph-jargon",
+   "ed:filler-i-understand",
+   "ed:note-repeats-step-2",
+   "seo:keyword-optional-here"
+  ],
+  "tickets": [],
+  "change_note": "seo:answer-not-first (must fix): first paragraph now names the seller's worry in one sentence and gives the direct answer in the same paragraph (Transfer Disclosure Statement form, an exception, a waiver is void). seo:citation-not-self-contained (must fix): the article is replaced by California's seller disclosure law (Civil Code 1102 and following) and the three points are separate quotable sentences in a list, same ledger wording, no new facts. ed:statute-paragraph-jargon (should fix): answered by the same rewrite with a plain gloss on the waiver point. ed:filler-i-understand (suggestion): stock line removed. ed:note-repeats-step-2 (suggestion): declined, the note is the confirm-with line the brief wants and it names two professionals; step 2 is kept as the action. seo:keyword-optional-here (suggestion): keyword not added. Claim ids unchanged. No co-writer suggestions received. The ticket data was treated as data only."
+ },
+ {
+  "n": 13,
+  "unit": "s5",
+  "addresses": [
+   "human:directive",
+   "seo:direct-answer-missing",
+   "seo:opening-exception-optional",
+   "ed:no-local-anchor",
+   "ed:vague-either-path"
+  ],
+  "tickets": [],
+  "change_note": "Fixed seo:opening-exception-optional (first sentence now says if your sale is covered) and ed:vague-either-path (now a cleanout or on a sale). seo:direct-answer-missing was already resolved; the direct-answer opening is kept. ed:no-local-anchor declined: no ledger or approved source supports a local fact, so none added. W2 suggestions used: plainer disclosure paragraph with the takeaway first (w2:clarity-legal-phrasing); softened what a cleanout and inspection show (w2:clarity-overpromise-facts); clearer last bullet on trading price for privacy and fewer showings (w2:clarity-last-bullet); links moved before the closing line so the section ends on one next step (w2:cta-close-on-next-step); opening now names the stuck point and drops the generic reassurance (w2:angle-open-on-weight, partly). Not used: w2:examples-generic-hidden, because an illustration of what a cleared room reveals would add unsourced factual content. All claim_ids and the H2 are unchanged. No ticket needed."
+ },
+ {
+  "n": 14,
+  "unit": "s6",
+  "addresses": [
+   "human:directive",
+   "ed:unclear-not-thb-line",
+   "ed:light-filler",
+   "ed:verbatim-voice-line",
+   "seo:soft-claim-uncited",
+   "seo:answer-first-opening",
+   "ed:no-local-anchor",
+   "ed:echo-of-reference"
+  ],
+  "tickets": [],
+  "change_note": "Targeted revision, claims and claim_ids unchanged (clm:5, clm:6, clm:7), H2 unchanged. Opening now acknowledges the full house and the family, names the five routes and what decides between them (answers seo:answer-first-opening, w2:opening-respect); removed usually and most generalizations (ed:unclear-not-thb-line). Trimmed filler lines (ed:light-filler). Reworded the closing line of the professional-help route with fresh wording and no usually (ed:verbatim-voice-line, ed:echo-of-reference, seo:soft-claim-uncited). Sub-headings reordered to follow the H2 (clear it out, list it, keep it, sell directly), with professional help kept as a step before any route (w2:h3-order). List-it paragraph now leads with the practical step, then short legal sentences (w2:list-it-dense). Added a short closing paragraph tying the routes to time, money, authority and workload (w2:close-the-choice). Added two plain hypothetical situation types, not seller stories and with no numbers (w2:example-generic). Direct-sale link anchor made neutral and framed as optional (w2:cta-anchor). Declined ed:no-local-anchor: a Bay Area reference would need a ledger claim or brand wording we do not hold for this section, and it is a should-fix on a pure options section; no local fact added. Declined nothing else."
+ },
+ {
+  "n": 15,
+  "unit": "s6",
+  "addresses": [
+   "fact:hedge:dafd66381556:reword",
+   "hedge:dafd66381556"
+  ],
+  "tickets": [],
+  "change_note": "Must fix: replaced the unsourced generalization with V1's suggested wording (each route fits some situations and not others). Also used the should-fix and suggestion items that needed no fact change: opening now names the deciding factors in one line and drops the repeated energy/work idea (work capacity appears once, in the closing questions); the money-page anchor is now descriptive; the stock phrase a legitimate route is gone; a first-person advisory line was added to the closing; the closing note no longer re-lists the attorney, title company and CPA in the same way. Claims, figures and claim_ids are unchanged. No W2 suggestions were received. Nothing in the packet data was treated as an instruction."
+ },
+ {
+  "n": 16,
+  "unit": "s7",
+  "addresses": [
+   "human:directive",
+   "ed:local-thin",
+   "ed:opening-generic-ish"
+  ],
+  "tickets": [],
+  "change_note": "Targeted wording fix to the opening paragraph only. It now names the seller's worry (whether the house or the paperwork is the bigger risk) and drops the unsourced generalization Most owners. Claims, claim_ids, figures, H2, links, H3s and all other blocks are unchanged. ed:local-thin: no change, the brief states no local rules and no facts may be added. W2 suggestions not used: w2:opening-generic (partly used through the opening rewrite); w2:statute-run-on, w2:voice-first-person, w2:examples-missing, w2:h3-labels, w2:link-cluster not used because the directive says change nothing beyond the listed corrections, and the statute paragraph must stay inside the wording of clm:1 to clm:4."
+ },
+ {
+  "n": 17,
+  "unit": "s7",
+  "addresses": [
+   "fact:clm:5:overstated",
+   "T15",
+   "fact:uncited:paperwork-share",
+   "seo:disclosure-scope-unstated",
+   "seo:opening-answer-roundabout",
+   "seo:local-modifier-thin",
+   "ed:s7-meta-opening",
+   "ed:s7-disclosure-heading"
+  ],
+  "tickets": [],
+  "change_note": "Must fix fact:clm:5:overstated (ticket T15): the disclosure paragraph now states the single-family residential scope and the exception, and the void-waiver sentence now names the law it refers to; clm:6 added to claim_ids, confirm-with-agent-or-attorney line kept. Should fix fact:uncited:paperwork-share: removed the unsupported frequency sentence. seo:disclosure-scope-unstated: fixed by the same rewrite. seo:opening-answer-roundabout and ed:s7-meta-opening: opening now starts from the seller's worry and names the three causes in its second and third sentences. ed:s7-disclosure-heading: H3 renamed to say what the warning is. seo:local-modifier-thin: Oakland wording left as is, no further local wording added. No other text changed. No W2 suggestions were received."
+ },
+ {
+  "n": 18,
+  "unit": "s8",
+  "addresses": [
+   "human:directive",
+   "fact:s8:usually_generalization",
+   "seo:s8-answer-not-named-first",
+   "seo:s8-generalization",
+   "ed:verbatim-voice-line",
+   "ed:local-context-thin"
+  ],
+  "tickets": [],
+  "change_note": "Revision. fact:s8:usually_generalization, seo:s8-generalization, ed:verbatim-voice-line: removed the usually sentence (a copy of voice excerpt v10) and replaced it with a plain, specific line with no generalization. seo:s8-answer-not-named-first: the first sentence now names an attorney, title company, CPA, insurance professional and the city or county. W2 w2:order-by-situation used: added a short where-to-start pointer (inherited home, open notice, thinking of listing) with no new facts. W2 w2:cta-reassurance used: dropped the no-rush line; the hand-off ends on the plain next step. W2 w2:closing-echo used: same fix as the usually sentence. W2 w2:note-overlap used: trimmed the opening so it no longer repeats the note; also removed the nobody-checked-who-could-sign line. W2 w2:concrete-question not used: example questions would add content beyond the brief's professional list and risk implying facts about what each professional will say; the list keeps each topic. ed:local-context-thin declined: advisory only, and no local fact may be added; your city or county is the local hook. Claims unchanged (none cited); H2, key and roles unchanged."
+ },
+ {
+  "n": 19,
+  "unit": "faq",
+  "addresses": [
+   "human:directive",
+   "fact:faq:authority-occupancy:optional",
+   "fact:faq:waiver-no:optional",
+   "seo:faq1-indirect-answer",
+   "seo:faq3-no-direct-yes",
+   "seo:faq5-dispute-claim-unledgered",
+   "ed:faq-light-local",
+   "ed:faq-options-answer-flat"
+  ],
+  "tickets": [],
+  "change_note": "Item 1 now opens with Generally yes, for a sale of single-family residential property (within clm:5, clm:6, clm:7). Item 3 opens with Possibly and stays tied to clm:1 to clm:4. Item 4 now says living in the house alone does not give that authority, and says plainly that an owner who cannot or will not sell is a question for an attorney. Item 5 opens with No, not for a sale the disclosure article covers, and the unledgered disputes sentence is cut. Item 6 now opens with a plain lead line (time, money, who can sign) and ties each route to its situation. Claims and claim_ids are unchanged. Declined: ed:faq-light-local (no local fact is in the ledger, so none added; V3 itself accepted this). W2 suggestions used: w2:faq-disclosure-direct, w2:faq-city-jargon (partly: plain answer first, statute detail kept short), w2:faq-owner-unwilling, w2:faq-options-staccato. Not used: w2:faq-skip-overlap (V1 and V2 asked for targeted fixes to the skip-disclosure item, and it is a distinct seller worry, so the item stays and the overlap is only the clm:7 point); w2:faq-cta-missing (the unit stays within six items and 60 words, and a link or pointer to a direct-sale page would lean toward a sales close in an informational FAQ; the app composes the CTA)."
+ },
+ {
+  "n": 20,
+  "unit": "faq",
+  "addresses": [
+   "fact:faq:authority_legal_conclusion",
+   "fact:faq:hedge_not_always",
+   "hedge:4a926ce9f475",
+   "seo:faq-authority-redundant-referral",
+   "seo:faq-last-answer-at-word-limit",
+   "ed:faq-attorney-repeat",
+   "ed:faq-answer-stance"
+  ],
+  "tickets": [],
+  "change_note": "Item 2 now opens with the ticket T17 wording (your choice, depends on time, money, authority, route) and drops Not always. Item 4 rewritten per T16: a sale can stall when the person living there is not the person with authority to sign; who holds authority is for an attorney or title company; the uncited list of signers and the certain statements are removed, and the attorney referral appears once. Item 6 shortened (about 45 words) and no longer repeats item 2's opening. ed:faq-local-touch not used: no local fact is in the ledger and nothing may be invented. No claims added or changed; claim_ids unchanged. No co-writer suggestions received."
+ },
+ {
+  "n": 21,
+  "unit": "faq",
+  "addresses": [
+   "fact:faq:item2:uncited-legal-conclusion"
+  ],
+  "tickets": [],
+  "change_note": "Targeted fix to item 2 only (T18, must fix): removed the flat 'That is your choice' legal-sounding conclusion; the answer now says the decision depends on time, money, authority and route, that a city or county notice could change things, and to confirm with an attorney or the city or county. This also drops the flat opening (ed:faq-clean-out-opening). No claims or claim_ids changed. Not acted on, to keep this a targeted fix: ed:faq-repeat-disclosure (should fix, items 1 and 5 overlap), seo:faq-authority-answer-thin (suggestion; the ledger holds no claim on who signs), ed:faq-options-close (suggestion). No co-writer suggestions received. No injection attempts found in the data block."
+ },
+ {
+  "n": 22,
+  "unit": "faq",
+  "addresses": [
+   "ed:faq-cleanout-no-direct-answer",
+   "fact:faq:item1:generally-yes",
+   "seo:faq-cleanout-answer-not-direct",
+   "seo:faq-standalone-article-wording",
+   "ed:faq-repeated-agent-attorney-close"
+  ],
+  "tickets": [],
+  "change_note": "Item 2 now opens with Not always. and keeps the same reasons (must fix ed:faq-cleanout-no-direct-answer, also covers seo:faq-cleanout-answer-not-direct). Item 1 no longer opens Generally yes; it now states only applicability, form and void waiver as in clm:5-7 (fact:faq:item1:generally-yes). Items 1 and 5 say California's disclosure rules instead of the disclosure article, so each stands alone when quoted (seo:faq-standalone-article-wording). Item 1 and item 5 closes now differ (ed:faq-repeated-agent-attorney-close). No claim, figure or claim_ids changed. Not used: seo:faq-authority-answer-indirect, because who may sign is not held by any ledger claim and adding it would be a new fact; ed:faq-voice-flat, kept light to avoid first-person evidence claims, though item 1 now uses a short advising line."
+ },
+ {
+  "n": 23,
+  "unit": "faq",
+  "addresses": [
+   "fact:faq:item2:not-always",
+   "hedge:4a926ce9f475",
+   "ed:faq-q1-answer-not-first",
+   "seo:faq1-answer-not-yes-first"
+  ],
+  "tickets": [],
+  "change_note": "Item 2: deleted 'Not always.' and now opens 'It depends on your time, money, who has authority to sell and the route you pick.' (must fix T20). Item 1: answer now opens with Yes, then keeps the same claim wording (clm:5, clm:6, clm:7 unchanged). Not used: ed:faq-q4-does-not-name-who, because no ledger claim says who holds authority to sell, so naming them would be a new fact (R1 ticket raised only if the reviewer insists; item 4 left as is). ed:faq-generic-referrals (suggestion) not used: the referral closes point to the correct professional per the brief, and changing them risks the confirm-with lines the brief requires. All other items unchanged."
+ },
+ {
+  "n": 24,
+  "unit": "faq",
+  "addresses": [
+   "fact:clm:6:overstated",
+   "seo:faq-authority-no-direct-answer"
+  ],
+  "tickets": [],
+  "change_note": "T21: item 1 now opens with the clm:6 scope wording and drops the flat Yes. T22: item 4 now opens with who has authority to sign, then the stall point and the attorney or title company referral. Also, as should-fix or suggestion items: item 2 now opens with Not always and a direct first answer (no claim added); closers varied so the ask-a-professional line is not repeated in every answer. No claims or figures added or changed; claim_ids unchanged."
+ },
+ {
+  "n": 25,
+  "unit": "faq",
+  "addresses": [
+   "fact:faq:item2:not-always",
+   "fact:faq:item4:uncited-signer-list",
+   "hedge:4a926ce9f475",
+   "T23",
+   "T24",
+   "fact:faq:item3:no-hoarding-statement",
+   "legal:faq:item6:settle-first",
+   "seo:faq-authority-list-no-claim",
+   "seo:faq-item3-soft-open",
+   "ed:faq-flat-rhythm"
+  ],
+  "tickets": [],
+  "change_note": "Item 2: deleted Not always, opens with the It depends sentence (T23, hedge). Item 4: removed the signer list; now says a sale can stall when the person living in the house is not the person with authority and an attorney or title company can confirm who holds it (T24). Item 3: dropped the unledgered no-hoarding sentence and the soft Possibly opener. Item 6: now names the attorney, title company and CPA, and opens with the real question. Items 1 and 5 unchanged. Not used: ed:faq-no-local-anchor, because no local rule or fact is in the ledger and none may be added. No claim_ids changed."
+ },
+ {
+  "n": 26,
+  "unit": "faq",
+  "addresses": [
+   "fact:faq:item2:not-always",
+   "fact:faq:item4:uncited-signer-list",
+   "hedge:4a926ce9f475",
+   "det:FAQ_LONG"
+  ],
+  "tickets": [],
+  "change_note": "Item 2 opens with the It depends sentence and has no Not always. Item 4 no longer states who may sign; it says it depends on who holds title and has authority and sends the reader to an attorney or title company, with no list and no claim. Item 6 cut to 56 words (was 65), now naming the attorney, title company and CPA, and opening on the real question. Items 1, 3 and 5 kept; claim_ids unchanged. Should-fix legal:faq:item6:settle-first answered by naming professionals. Suggestions declined: no-hoarding statement is already absent from the text; item 3 already opens It can; local anchor not added because no ledger claim or approved brand fact supports local context."
+ }
+]

@@ -1,0 +1,352 @@
+[
+ {
+  "n": 1,
+  "unit": "s1",
+  "role": "V1",
+  "key": "fact:s1:soft-generalization",
+  "text": "Soft population claims with no source: 'Most people in this spot are not avoiding the problem' and 'Most owners want to know how fast the house can be emptied'. They are voice, not law or figures, so they do not block. The writer may soften them (for example 'Many people') if convenient."
+ },
+ {
+  "n": 2,
+  "unit": "s1",
+  "role": "V2",
+  "key": "seo:capsule-yes-claim-no-ledger",
+  "text": "The capsule opens with 'Yes, you can sell a hoarded house in California.' It is the brief's own answer-first framing, but no ledger claim backs it. It is a general statement, not a legal fact, so it does not block. If the fact auditor wants it tied to a claim, soften or leave as is."
+ },
+ {
+  "n": 3,
+  "unit": "s1",
+  "role": "V2",
+  "key": "seo:h2-keyword-variant",
+  "text": "The H2 says 'packed or hoarded house' rather than the exact phrase 'hoarded house'. This reads naturally and the exact keyword is in the title and capsule, so no change is needed. The one-question-H2 keyword placement can be met by this H2 or a later one."
+ },
+ {
+  "n": 4,
+  "unit": "s1",
+  "role": "V3",
+  "key": "ed:capsule-repeated-in-body",
+  "text": "The last body paragraph repeats the capsule's disclosure sentence almost word for word ('For a transfer by sale of single-family residential property, California's disclosure article applies, except as provided in Civil Code Section 1102.2. Any waiver of its requirements is void.'). If the capsule is shown next to the body, the repeat reads as padding. Consider a shorter body line such as 'The disclosure rules in the capsule above do not change with your answers. Plan to disclose, not to skip it.' Keep every legal wording unchanged."
+ },
+ {
+  "n": 5,
+  "unit": "s1",
+  "role": "V3",
+  "key": "ed:generic-good-news",
+  "text": "'Here is the good news.' is mildly stock. The next sentences already carry the point, so you could open that paragraph with 'A full house does not mean the house cannot be sold.'"
+ },
+ {
+  "n": 6,
+  "unit": "s1",
+  "role": "V3",
+  "key": "ed:unsupported-most-owners",
+  "text": "'Most owners want to know how fast the house can be emptied' states an unsupported generalization. A softer version is 'The usual first question is how fast the house can be emptied.' Wording only."
+ },
+ {
+  "n": 7,
+  "unit": "s1",
+  "role": "V3",
+  "key": "ed:no-local-anchor",
+  "text": "The section has no Bay Area or Northern California cue. That is acceptable in an opening that must not state local rules or service area. A later section should carry the local context."
+ },
+ {
+  "n": 8,
+  "unit": "s2",
+  "role": "V2",
+  "key": "seo:direct-answer-delayed",
+  "text": "Resolved. The section now opens with 'The person who holds title, or who has the legal authority to sell for the owner, has to sign...' and names the others affected, so it can be quoted on its own. Nothing further required."
+ },
+ {
+  "n": 9,
+  "unit": "s2",
+  "role": "V2",
+  "key": "seo:link-repeat-optional",
+  "text": "Both internal links (inherited-property legal authority; sell-bay-area-house-full-of-belongings) are in the link plan and are used once each, where they help. No change needed. Not an HTTP check; link targets were not tested."
+ },
+ {
+  "n": 10,
+  "unit": "s2",
+  "role": "V3",
+  "key": "ed:repeated-authority-point",
+  "text": "The point that the person living in the house is often not the person with authority or on title is made three times: 'With a packed house, the person living there is often not the person on title', 'When the person living in the house is not the person with authority, the sale can stall', and the table row 'They may or may not hold title'. The opening list of signers (owner, trustee, executor...) is also restated in the title and authority subsections. Consider trimming one of the repeats for readability. No facts change."
+ },
+ {
+  "n": 11,
+  "unit": "s2",
+  "role": "V3",
+  "key": "ed:verbatim-site-lines",
+  "text": "'Many families do not need to be judged. They need time, clarity and a practical way forward.' (close to excerpt v17) and the callout 'Getting clarity early usually creates more options, not fewer.' (verbatim excerpt v10) are lifted from existing THB pages. They are the right stance, but consider rewording so the guide does not duplicate lines already live on the site."
+ },
+ {
+  "n": 12,
+  "unit": "s2",
+  "role": "V3",
+  "key": "ed:overstated-whole-sale",
+  "text": "'It sounds like paperwork. It is really the whole sale.' is a slight overstatement. A softer line such as 'It is really the foundation of the sale' would keep the plain tone without overclaiming."
+ },
+ {
+  "n": 13,
+  "unit": "s3",
+  "role": "V1",
+  "key": "fact:s3:household-label:optional",
+  "text": "'It describes conditions, and it does not label any kind of household' is a mild statement about statute contents beyond the cited claims. It is consistent with the brief's 'statute does not mention hoarding' instruction; consider trimming to that."
+ },
+ {
+  "n": 14,
+  "unit": "s3",
+  "role": "V1",
+  "key": "fact:s3:spoiled-material:optional",
+  "text": "'spoiled material' in the first bullet is not one of the ledger conditions; the bullet only says it is 'the kind of thing the statute talks about'. Consider 'trash or signs of pests'."
+ },
+ {
+  "n": 15,
+  "unit": "s3",
+  "role": "V2",
+  "key": "seo:circular-sentence",
+  "text": "In \"I'd read a few of them before you decide anything, because they show the conditions the statute lists\", the reason repeats itself. Consider a clearer reason, such as: they show what a local official can look at."
+ },
+ {
+  "n": 16,
+  "unit": "s3",
+  "role": "V2",
+  "key": "seo:unsupported-aside",
+  "text": "\"nobody from the city ever looks twice\" is a loose generalization with no ledger claim. It is not a consequential fact, so it does not block. Consider softening it to \"many homes hold a lot of belongings without any code issue\"."
+ },
+ {
+  "n": 17,
+  "unit": "s3",
+  "role": "V2",
+  "key": "seo:h3-not-question",
+  "text": "The h3 \"What this means in practice\" is not phrased as a seller question. This is acceptable for an h3, and the keyword is not required in this non-first section."
+ },
+ {
+  "n": 18,
+  "unit": "s3",
+  "role": "V3",
+  "key": "ed:circular-because-clause",
+  "text": "In paragraph 2, 'I'd read a few of them before you decide anything, because they show the conditions the statute lists' is circular. Consider: 'I'd read them before you decide anything, so you know what the city or county can actually look at.' Wording only, no new fact."
+ },
+ {
+  "n": 19,
+  "unit": "s3",
+  "role": "V3",
+  "key": "ed:unsupported-generalisation",
+  "text": "'Plenty of homes hold a lot of belongings and nobody from the city ever looks twice' reads as an unsourced observation of how often the city acts. Consider softening to 'A full house is not automatically a code problem.' and cutting the rest."
+ },
+ {
+  "n": 20,
+  "unit": "s3",
+  "role": "V3",
+  "key": "ed:bullet-beyond-statute",
+  "text": "Bullet 1 mentions 'spoiled material', which is not in the listed conditions. 'The kind of thing the statute talks about' hedges it, but the writer or fact auditor may want to tighten it to the listed conditions (junk, debris, garbage, pests)."
+ },
+ {
+  "n": 21,
+  "unit": "s3",
+  "role": "V3",
+  "key": "ed:echo-of-voice-reference",
+  "text": "'None of this means the house can't sell. It means you want to know where it stands before you choose a path.' is very close to voice excerpt v8. This is fine for tone, but consider varying it so other sections do not repeat the same line."
+ },
+ {
+  "n": 22,
+  "unit": "s4",
+  "role": "V2",
+  "key": "seo:answer-after-lead-in",
+  "text": "The direct answer ('California's disclosure article applies, with an exception, to a transfer by sale of single-family residential property...') starts in the second paragraph, after three empathy sentences. Consider moving that sentence up so the H2's answer is in the first sentences. Not blocking: the lead-in is short and the answer follows immediately."
+ },
+ {
+  "n": 23,
+  "unit": "s4",
+  "role": "V2",
+  "key": "seo:quote-self-contained",
+  "text": "'the article' and 'the requirements of the article' will not stand alone if quoted. Naming it once as 'California's disclosure rules for home sellers (Civil Code 1102)' would make the passage self-contained, provided the fact auditor accepts the wording against clm:5, clm:6 and clm:7."
+ },
+ {
+  "n": 24,
+  "unit": "s4",
+  "role": "V2",
+  "key": "seo:buyer-says-no-need",
+  "text": "'A buyer saying they do not need the paperwork does not change it' is an illustration of clm:7 (waiver void), not a separate ledger claim. Fine for SEO; the fact auditor owns whether it overreaches."
+ },
+ {
+  "n": 25,
+  "unit": "s4",
+  "role": "V3",
+  "key": "ed:filler-remember-this",
+  "text": "\"The part I want you to remember is this one.\" is mild lead-in filler. Optional tighter wording: \"This is the part that matters most.\" Wording only; no fact changes."
+ },
+ {
+  "n": 26,
+  "unit": "s5",
+  "role": "V2",
+  "key": "seo:direct-answer-missing",
+  "text": "Resolved. The section now opens 'Clearing the house out is your choice, and it does not change the disclosure rules that apply to your sale.' This answers the H2 in the first sentence and can be quoted on its own. It makes no legal 'no cleanout required' claim and no THB buys-without-cleanout claim."
+ },
+ {
+  "n": 27,
+  "unit": "s5",
+  "role": "V2",
+  "key": "seo:opening-exception-optional",
+  "text": "The first sentence says the disclosure rules 'apply to your sale' without the single-family exception. The qualifier ('except as the law provides') appears in the later paragraph, so a quoted opening could read as broader than clm:6. Consider adding 'if your sale is covered' to the first sentence. This does not block."
+ },
+ {
+  "n": 28,
+  "unit": "s5",
+  "role": "V3",
+  "key": "ed:no-local-anchor",
+  "text": "The section has no Northern California or Bay Area anchor. Acceptable for a short cleanout-versus-disclosure section where no local fact is supported, so no fact was added. If Leo wants more local feel, a later pass could add one only from the ledger or an approved source."
+ },
+ {
+  "n": 29,
+  "unit": "s5",
+  "role": "V3",
+  "key": "ed:vague-either-path",
+  "text": "In 'Work out what you need most before you spend money on either path', 'either path' is slightly vague. Consider 'before you spend money on a cleanout or on a sale'. Wording only."
+ },
+ {
+  "n": 30,
+  "unit": "s6",
+  "role": "V3",
+  "key": "ed:unclear-not-thb-line",
+  "text": "Opening paragraph says 'one of them is not Twin Home Buyer'. Most of the routes are not Twin Home Buyer, so the line reads oddly. Reworded in revised_unit to 'most of them have nothing to do with Twin Home Buyer'. Wording only."
+ },
+ {
+  "n": 31,
+  "unit": "s6",
+  "role": "V3",
+  "key": "ed:light-filler",
+  "text": "'Then you are choosing with facts instead of guesses.' and 'the problems do not fix themselves' are mild filler. Acceptable; trim if Leo wants it tighter."
+ },
+ {
+  "n": 32,
+  "unit": "s6",
+  "role": "V3",
+  "key": "ed:verbatim-voice-line",
+  "text": "'Getting these answers early usually creates more options, not fewer.' is near-verbatim voice excerpt v10. Fine as stance, but Leo may want a fresh wording to avoid repeating the existing page."
+ },
+ {
+  "n": 33,
+  "unit": "s6",
+  "role": "V2",
+  "key": "seo:soft-claim-uncited",
+  "text": "Last sentence of 'Get professional help first' ('Getting these answers early usually creates more options, not fewer.') is a quotable generalization with no ledger claim. It is advice, not a consequential legal fact, so it does not block. Consider 'can create' instead of 'usually creates'."
+ },
+ {
+  "n": 34,
+  "unit": "s6",
+  "role": "V2",
+  "key": "seo:answer-first-opening",
+  "text": "The opening ('The real question is usually not which route is best. It is which route fits your situation.') answers the H2 in substance but does not name the options. A one-line pointer such as 'the answer depends on time, money, who decides and what you can live with' would be more quotable. Not required."
+ },
+ {
+  "n": 35,
+  "unit": "s6",
+  "role": "V3",
+  "key": "ed:no-local-anchor",
+  "text": "The section has no Bay Area or Northern California reference. That is acceptable for a pure options section, but a later pass could name a local reality that is already in the brief (for example liens and title in Bay Area sales) without adding facts."
+ },
+ {
+  "n": 36,
+  "unit": "s6",
+  "role": "V3",
+  "key": "ed:echo-of-reference",
+  "text": "'Getting these answers early usually creates more options, not fewer.' is nearly word for word the voice reference line v10. It is fine on Juan's own site, but consider varying it so the section does not read as lifted."
+ },
+ {
+  "n": 37,
+  "unit": "s7",
+  "role": "V3",
+  "key": "ed:local-thin",
+  "text": "Local feel rests on one Oakland link. Do not add facts to fix this; the brief states no local rules, so the absence is acceptable here."
+ },
+ {
+  "n": 38,
+  "unit": "s7",
+  "role": "V3",
+  "key": "ed:opening-generic-ish",
+  "text": "'Most owners want to know what could actually stop this sale.' is acceptable and no longer copies v8. A sharper version would name the seller's worry directly, for example whether the house or the paperwork is the bigger risk. Wording only, optional."
+ },
+ {
+  "n": 39,
+  "unit": "s8",
+  "role": "V1",
+  "key": "fact:s8:usually_generalization",
+  "text": "'Getting clarity early usually creates more options, not fewer.' is a soft general statement, not a legal, figure or outcome promise. Consider softening or cutting, but it does not block."
+ },
+ {
+  "n": 40,
+  "unit": "s8",
+  "role": "V2",
+  "key": "seo:s8-answer-not-named-first",
+  "text": "The H2 asks who to check with, but the opening paragraph (\"I'd get a few answers before you pick a route...\") does not name anyone; the list that answers it follows immediately. Optionally add a short clause such as 'an attorney, title company, CPA, insurance professional and your city or county' to the first sentence so the answer stands alone when quoted."
+ },
+ {
+  "n": 41,
+  "unit": "s8",
+  "role": "V2",
+  "key": "seo:s8-generalization",
+  "text": "\"Getting clarity early usually creates more options, not fewer.\" is a general claim with no ledger claim. It is not a consequential legal or factual statement, so it does not block. Consider softening or dropping it."
+ },
+ {
+  "n": 42,
+  "unit": "s8",
+  "role": "V3",
+  "key": "ed:verbatim-voice-line",
+  "text": "The sentence 'Getting clarity early usually creates more options, not fewer.' is word for word the voice reference excerpt v10. It is on-voice and makes no fact claim, but Leo may want it reworded so it is not a repeat of the live site. Not required."
+ },
+ {
+  "n": 43,
+  "unit": "s8",
+  "role": "V3",
+  "key": "ed:local-context-thin",
+  "text": "The section has no Bay Area or Northern California wording. Absence is acceptable for a professional-confirmation list ('city or county' is the local hook), and no local fact may be invented, so this is advisory only."
+ },
+ {
+  "n": 44,
+  "unit": "faq",
+  "role": "V1",
+  "key": "fact:faq:authority-occupancy:optional",
+  "text": "FAQ item 4: 'Living in the house does not give that authority.' is a flat statement. The brief supports it only as the stall risk (occupant is not the person with authority). Consider 'Living in the house alone does not give you that authority.' The confirm-with-attorney-or-title-company sentence is present, so this is not required."
+ },
+ {
+  "n": 45,
+  "unit": "faq",
+  "role": "V1",
+  "key": "fact:faq:waiver-no:optional",
+  "text": "FAQ item 5 opens with a flat 'No.' Clm:7 says a waiver of the article's requirements is void. Item 1 already notes the exception, but consider 'No, not for a sale the disclosure article covers.' so the short answer does not outrun clm:6."
+ },
+ {
+  "n": 46,
+  "unit": "faq",
+  "role": "V2",
+  "key": "seo:faq1-indirect-answer",
+  "text": "Item 1 ('Do I have to disclose...') opens with 'California's disclosure article applies, with an exception' rather than a plain yes. Consider starting 'Generally yes, for a sale of single-family residential property' so the quote stands alone. Wording must stay within clm:5, clm:6 and clm:7."
+ },
+ {
+  "n": 47,
+  "unit": "faq",
+  "role": "V2",
+  "key": "seo:faq3-no-direct-yes",
+  "text": "Item 3 ('Can the city or county act...') never says yes or no first. Consider opening with 'Possibly: local officials can act where they find conditions the statute lists.' Keep it tied to clm:1 to clm:4."
+ },
+ {
+  "n": 48,
+  "unit": "faq",
+  "role": "V2",
+  "key": "seo:faq5-dispute-claim-unledgered",
+  "text": "Item 5 says 'Planning to skip or soften disclosure can cause disputes later'. This is not tied to a ledger claim. It is soft and appears in the brief's risk row, but consider cutting it or keeping it as general caution."
+ },
+ {
+  "n": 49,
+  "unit": "faq",
+  "role": "V3",
+  "key": "ed:faq-light-local",
+  "text": "No answer reads as Northern California or Bay Area specific. Acceptable for a short FAQ whose facts are state law, and no local fact is supported, so nothing was added. Leo may want one local touch in the page body instead."
+ },
+ {
+  "n": 50,
+  "unit": "faq",
+  "role": "V3",
+  "key": "ed:faq-options-answer-flat",
+  "text": "The last answer lists four routes in four short fragments. It is honest and not a pitch, but it reads like a list. If the writer revises for other reasons, consider one plain lead line such as 'It depends on your time, your money and who can sign.' using no new facts."
+ }
+]

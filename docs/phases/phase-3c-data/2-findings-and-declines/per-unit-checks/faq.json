@@ -1,0 +1,140 @@
+{
+ "unit": "faq",
+ "findings": [
+  {
+   "n": 44,
+   "role": "V1",
+   "key": "fact:faq:authority-occupancy:optional",
+   "text": "FAQ item 4: 'Living in the house does not give that authority.' is a flat statement. The brief supports it only as the stall risk (occupant is not the person with authority). Consider 'Living in the house alone does not give you that authority.' The confirm-with-attorney-or-title-company sentence is present, so this is not required."
+  },
+  {
+   "n": 45,
+   "role": "V1",
+   "key": "fact:faq:waiver-no:optional",
+   "text": "FAQ item 5 opens with a flat 'No.' Clm:7 says a waiver of the article's requirements is void. Item 1 already notes the exception, but consider 'No, not for a sale the disclosure article covers.' so the short answer does not outrun clm:6."
+  },
+  {
+   "n": 46,
+   "role": "V2",
+   "key": "seo:faq1-indirect-answer",
+   "text": "Item 1 ('Do I have to disclose...') opens with 'California's disclosure article applies, with an exception' rather than a plain yes. Consider starting 'Generally yes, for a sale of single-family residential property' so the quote stands alone. Wording must stay within clm:5, clm:6 and clm:7."
+  },
+  {
+   "n": 47,
+   "role": "V2",
+   "key": "seo:faq3-no-direct-yes",
+   "text": "Item 3 ('Can the city or county act...') never says yes or no first. Consider opening with 'Possibly: local officials can act where they find conditions the statute lists.' Keep it tied to clm:1 to clm:4."
+  },
+  {
+   "n": 48,
+   "role": "V2",
+   "key": "seo:faq5-dispute-claim-unledgered",
+   "text": "Item 5 says 'Planning to skip or soften disclosure can cause disputes later'. This is not tied to a ledger claim. It is soft and appears in the brief's risk row, but consider cutting it or keeping it as general caution."
+  },
+  {
+   "n": 49,
+   "role": "V3",
+   "key": "ed:faq-light-local",
+   "text": "No answer reads as Northern California or Bay Area specific. Acceptable for a short FAQ whose facts are state law, and no local fact is supported, so nothing was added. Leo may want one local touch in the page body instead."
+  },
+  {
+   "n": 50,
+   "role": "V3",
+   "key": "ed:faq-options-answer-flat",
+   "text": "The last answer lists four routes in four short fragments. It is honest and not a pitch, but it reads like a list. If the writer revises for other reasons, consider one plain lead line such as 'It depends on your time, your money and who can sign.' using no new facts."
+  }
+ ],
+ "classic_text": "Q1. Do I have to disclose the condition of a packed or hoarded house when I sell in California?\nA1. For a sale of single-family residential property, California's disclosure article applies, with an exception. The disclosures are made on the Real Estate Transfer Disclosure Statement form, and any waiver of the requirements is void. Go through the form with an agent or attorney before you list.\n\nQ2. Do I have to clean out a house before selling it?\nA2. Not always. It depends on your time, your money, who has authority to sell and which route you pick. Clearing it out shows the real condition before you list. A direct sale is the other route, and a direct buyer prices in the condition.\n\nQ3. Can the city or county act on a packed or hoarded house?\nA3. State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards. Whether a home meets them is for the local authority. The statute does not mention hoarding. Ask the city or county whether any notice is open.\n\nQ4. Who can sell the house if the owner cannot or will not?\nA4. Only someone with legal authority to sign. That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house does not give that authority. Confirm who can sign with an attorney or title company before you plan anything else.\n\nQ5. Can I agree with the buyer to skip disclosure?\nA5. No. Under the California statute, any waiver of the disclosure requirements is void as against public policy. Planning to skip or soften disclosure can cause disputes later. Work through the form with an agent or attorney instead.\n\nQ6. What are my realistic options for a packed or hoarded house?\nA6. Keep it while you sort out care and decisions. Clear it out, then list it with an agent. Get professional help first on authority, title and tax. Or sell directly if you want to avoid cleanout and showings and accept that the price reflects the condition.",
+ "team_final_text": "Q1. Do I have to disclose the condition of a packed or hoarded house when I sell in California?\nA1. California's disclosure article applies to a sale of single-family residential property, with an exception. The disclosures are made on the Real Estate Transfer Disclosure Statement form, and any waiver of the requirements is void. Ask an agent or attorney how to complete it for your house.\n\nQ2. Do I have to clean out a house before selling it?\nA2. It depends on your time, your money, who has authority to sell and the route you pick. Clearing out shows the real condition before you list. A direct buyer prices in the condition. A city or county notice could also change your options.\n\nQ3. Can the city or county act on a packed or hoarded house?\nA3. It can look at the property. State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards. Whether a home meets them is for the local authority. Ask the city or county whether any notice is open.\n\nQ4. Who can sell the house if the owner cannot or will not?\nA4. That depends on who holds title and who has legal authority to sign. A sale can stall when the person living in the house is not that person. Confirm it with an attorney or title company before you plan anything else.\n\nQ5. Can I agree with the buyer to skip disclosure?\nA5. No, not for a sale the disclosure rules cover. Under California law, any waiver of the requirements is void as against public policy. Talk it through with your attorney before you sign anything.\n\nQ6. What are my realistic options for a packed or hoarded house?\nA6. It depends on what you need most. Keep it while the family sorts out care and decisions. Clear it out and list it if you have time and money. Sell directly to skip cleanout and showings, at a price that reflects condition. Confirm authority and title with an attorney or title company, tax with a CPA.",
+ "w1_change_notes": [
+  {
+   "pass": 19,
+   "addresses": [
+    "human:directive",
+    "fact:faq:authority-occupancy:optional",
+    "fact:faq:waiver-no:optional",
+    "seo:faq1-indirect-answer",
+    "seo:faq3-no-direct-yes",
+    "seo:faq5-dispute-claim-unledgered",
+    "ed:faq-light-local",
+    "ed:faq-options-answer-flat"
+   ],
+   "change_note": "Item 1 now opens with Generally yes, for a sale of single-family residential property (within clm:5, clm:6, clm:7). Item 3 opens with Possibly and stays tied to clm:1 to clm:4. Item 4 now says living in the house alone does not give that authority, and says plainly that an owner who cannot or will not sell is a question for an attorney. Item 5 opens with No, not for a sale the disclosure article covers, and the unledgered disputes sentence is cut. Item 6 now opens with a plain lead line (time, money, who can sign) and ties each route to its situation. Claims and claim_ids are unchanged. Declined: ed:faq-light-local (no local fact is in the ledger, so none added; V3 itself accepted this). W2 suggestions used: w2:faq-disclosure-direct, w2:faq-city-jargon (partly: plain answer first, statute detail kept short), w2:faq-owner-unwilling, w2:faq-options-staccato. Not used: w2:faq-skip-overlap (V1 and V2 asked for targeted fixes to the skip-disclosure item, and it is a distinct seller worry, so the item stays and the overlap is only the clm:7 point); w2:faq-cta-missing (the unit stays within six items and 60 words, and a link or pointer to a direct-sale page would lean toward a sales close in an informational FAQ; the app composes the CTA)."
+  },
+  {
+   "pass": 20,
+   "addresses": [
+    "fact:faq:authority_legal_conclusion",
+    "fact:faq:hedge_not_always",
+    "hedge:4a926ce9f475",
+    "seo:faq-authority-redundant-referral",
+    "seo:faq-last-answer-at-word-limit",
+    "ed:faq-attorney-repeat",
+    "ed:faq-answer-stance"
+   ],
+   "change_note": "Item 2 now opens with the ticket T17 wording (your choice, depends on time, money, authority, route) and drops Not always. Item 4 rewritten per T16: a sale can stall when the person living there is not the person with authority to sign; who holds authority is for an attorney or title company; the uncited list of signers and the certain statements are removed, and the attorney referral appears once. Item 6 shortened (about 45 words) and no longer repeats item 2's opening. ed:faq-local-touch not used: no local fact is in the ledger and nothing may be invented. No claims added or changed; claim_ids unchanged. No co-writer suggestions received."
+  },
+  {
+   "pass": 21,
+   "addresses": [
+    "fact:faq:item2:uncited-legal-conclusion"
+   ],
+   "change_note": "Targeted fix to item 2 only (T18, must fix): removed the flat 'That is your choice' legal-sounding conclusion; the answer now says the decision depends on time, money, authority and route, that a city or county notice could change things, and to confirm with an attorney or the city or county. This also drops the flat opening (ed:faq-clean-out-opening). No claims or claim_ids changed. Not acted on, to keep this a targeted fix: ed:faq-repeat-disclosure (should fix, items 1 and 5 overlap), seo:faq-authority-answer-thin (suggestion; the ledger holds no claim on who signs), ed:faq-options-close (suggestion). No co-writer suggestions received. No injection attempts found in the data block."
+  },
+  {
+   "pass": 22,
+   "addresses": [
+    "ed:faq-cleanout-no-direct-answer",
+    "fact:faq:item1:generally-yes",
+    "seo:faq-cleanout-answer-not-direct",
+    "seo:faq-standalone-article-wording",
+    "ed:faq-repeated-agent-attorney-close"
+   ],
+   "change_note": "Item 2 now opens with Not always. and keeps the same reasons (must fix ed:faq-cleanout-no-direct-answer, also covers seo:faq-cleanout-answer-not-direct). Item 1 no longer opens Generally yes; it now states only applicability, form and void waiver as in clm:5-7 (fact:faq:item1:generally-yes). Items 1 and 5 say California's disclosure rules instead of the disclosure article, so each stands alone when quoted (seo:faq-standalone-article-wording). Item 1 and item 5 closes now differ (ed:faq-repeated-agent-attorney-close). No claim, figure or claim_ids changed. Not used: seo:faq-authority-answer-indirect, because who may sign is not held by any ledger claim and adding it would be a new fact; ed:faq-voice-flat, kept light to avoid first-person evidence claims, though item 1 now uses a short advising line."
+  },
+  {
+   "pass": 23,
+   "addresses": [
+    "fact:faq:item2:not-always",
+    "hedge:4a926ce9f475",
+    "ed:faq-q1-answer-not-first",
+    "seo:faq1-answer-not-yes-first"
+   ],
+   "change_note": "Item 2: deleted 'Not always.' and now opens 'It depends on your time, money, who has authority to sell and the route you pick.' (must fix T20). Item 1: answer now opens with Yes, then keeps the same claim wording (clm:5, clm:6, clm:7 unchanged). Not used: ed:faq-q4-does-not-name-who, because no ledger claim says who holds authority to sell, so naming them would be a new fact (R1 ticket raised only if the reviewer insists; item 4 left as is). ed:faq-generic-referrals (suggestion) not used: the referral closes point to the correct professional per the brief, and changing them risks the confirm-with lines the brief requires. All other items unchanged."
+  },
+  {
+   "pass": 24,
+   "addresses": [
+    "fact:clm:6:overstated",
+    "seo:faq-authority-no-direct-answer"
+   ],
+   "change_note": "T21: item 1 now opens with the clm:6 scope wording and drops the flat Yes. T22: item 4 now opens with who has authority to sign, then the stall point and the attorney or title company referral. Also, as should-fix or suggestion items: item 2 now opens with Not always and a direct first answer (no claim added); closers varied so the ask-a-professional line is not repeated in every answer. No claims or figures added or changed; claim_ids unchanged."
+  },
+  {
+   "pass": 25,
+   "addresses": [
+    "fact:faq:item2:not-always",
+    "fact:faq:item4:uncited-signer-list",
+    "hedge:4a926ce9f475",
+    "T23",
+    "T24",
+    "fact:faq:item3:no-hoarding-statement",
+    "legal:faq:item6:settle-first",
+    "seo:faq-authority-list-no-claim",
+    "seo:faq-item3-soft-open",
+    "ed:faq-flat-rhythm"
+   ],
+   "change_note": "Item 2: deleted Not always, opens with the It depends sentence (T23, hedge). Item 4: removed the signer list; now says a sale can stall when the person living in the house is not the person with authority and an attorney or title company can confirm who holds it (T24). Item 3: dropped the unledgered no-hoarding sentence and the soft Possibly opener. Item 6: now names the attorney, title company and CPA, and opens with the real question. Items 1 and 5 unchanged. Not used: ed:faq-no-local-anchor, because no local rule or fact is in the ledger and none may be added. No claim_ids changed."
+  },
+  {
+   "pass": 26,
+   "addresses": [
+    "fact:faq:item2:not-always",
+    "fact:faq:item4:uncited-signer-list",
+    "hedge:4a926ce9f475",
+    "det:FAQ_LONG"
+   ],
+   "change_note": "Item 2 opens with the It depends sentence and has no Not always. Item 4 no longer states who may sign; it says it depends on who holds title and has authority and sends the reader to an attorney or title company, with no list and no claim. Item 6 cut to 56 words (was 65), now naming the attorney, title company and CPA, and opening on the real question. Items 1, 3 and 5 kept; claim_ids unchanged. Should-fix legal:faq:item6:settle-first answered by naming professionals. Suggestions declined: no-hoarding statement is already absent from the text; item 3 already opens It can; local anchor not added because no ledger claim or approved brand fact supports local context."
+  }
+ ]
+}

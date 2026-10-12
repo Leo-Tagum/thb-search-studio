@@ -1,0 +1,314 @@
+[
+ {
+  "unit": "s1",
+  "role": "V2",
+  "key": "seo:capsule-law-unnamed",
+  "severity": "suggestion",
+  "text": "Capsule says 'the law' without naming it; weak when quoted alone.",
+  "seededKey": false
+ },
+ {
+  "unit": "s1",
+  "role": "V2",
+  "key": "seo:relative-reference-capsule-above",
+  "severity": "suggestion",
+  "text": "'The disclosure rules in the capsule above' is not self-contained if the paragraph is quoted.",
+  "seededKey": false
+ },
+ {
+  "unit": "s1",
+  "role": "V2",
+  "key": "seo:first-person-voice",
+  "severity": "suggestion",
+  "text": "'I'd want these answered first' uses a first-person voice with no established speaker.",
+  "seededKey": false
+ },
+ {
+  "unit": "s1",
+  "role": "V3",
+  "key": "ed:local-feel-thin",
+  "severity": "suggestion",
+  "text": "Opening has no Northern California or Bay Area texture; acceptable for the opener, but local context must appear in later sections.",
+  "seededKey": false
+ },
+ {
+  "unit": "s2",
+  "role": "V1",
+  "key": "fact:s2:first-person-practice",
+  "severity": "suggestion",
+  "text": "First-person 'the first question I ask' implies a personal practice not backed by an approved brand fact.",
+  "seededKey": false
+ },
+ {
+  "unit": "s2",
+  "role": "V2",
+  "key": "seo:first-person-claim-of-practice",
+  "severity": "suggestion",
+  "text": "'the first question I ask' implies personal practice with no supporting brand fact or ledger claim.",
+  "seededKey": false
+ },
+ {
+  "unit": "s2",
+  "role": "V3",
+  "key": "ed:repeated-title-sign-point",
+  "severity": "should fix",
+  "text": "The 'holder of title or authority has to sign' point is stated three to four times in one short section.",
+  "seededKey": false
+ },
+ {
+  "unit": "s2",
+  "role": "V3",
+  "key": "ed:redundant-table-intro",
+  "severity": "suggestion",
+  "text": "The line 'Here is who else can be affected, and why each one matters.' repeats the H3 and adds nothing.",
+  "seededKey": false
+ },
+ {
+  "unit": "s2",
+  "role": "V3",
+  "key": "ed:local-context-thin",
+  "severity": "suggestion",
+  "text": "No Northern California or Bay Area feel in this section.",
+  "seededKey": false
+ },
+ {
+  "unit": "s3",
+  "role": "V2",
+  "key": "seo:statute-named-late",
+  "severity": "suggestion",
+  "text": "Opening paragraph refers to 'the state statute' without naming H&S 17920.3 until the next paragraph.",
+  "seededKey": false
+ },
+ {
+  "unit": "s3",
+  "role": "V3",
+  "key": "ed:repeated-official-decides",
+  "severity": "suggestion",
+  "text": "The 'an official decides whether a home meets the conditions' point is made three times in one section.",
+  "seededKey": false
+ },
+ {
+  "unit": "s3",
+  "role": "V3",
+  "key": "ed:h3-bullets-not-checks",
+  "severity": "suggestion",
+  "text": "H3 promises checks but the first two bullets read as descriptions of concerns.",
+  "seededKey": false
+ },
+ {
+  "unit": "s4",
+  "role": "V1",
+  "key": "fact:s4:not-whether-to-disclose:soften",
+  "severity": "should fix",
+  "text": "\"not whether to disclose\" implies disclosure is always required despite the 1102.2 exception.",
+  "seededKey": false
+ },
+ {
+  "unit": "s4",
+  "role": "V2",
+  "key": "seo:link-plan-unused",
+  "severity": "suggestion",
+  "text": "No internal link in this section; none is planned for it, so this is informational only.",
+  "seededKey": false
+ },
+ {
+  "unit": "s4",
+  "role": "V3",
+  "key": "ed:intro-repeats-bullets",
+  "severity": "suggestion",
+  "text": "Opening paragraph and the first bullet list state the same three legal points twice.",
+  "seededKey": false
+ },
+ {
+  "unit": "s5",
+  "role": "V1",
+  "key": "fact:s5:choice-wording",
+  "severity": "suggestion",
+  "text": "'Clearing the house out is your choice' is stated flat; a local enforcement notice could make cleanup not optional.",
+  "seededKey": false
+ },
+ {
+  "unit": "s5",
+  "role": "V2",
+  "key": "seo:answer-not-plain-no",
+  "severity": "suggestion",
+  "text": "Opening sentence answers the H2 but not as a plain yes/no that is easy to quote.",
+  "seededKey": false
+ },
+ {
+  "unit": "s5",
+  "role": "V2",
+  "key": "seo:redundant-tradeoff-sentence",
+  "severity": "suggestion",
+  "text": "Last bullet repeats itself: 'You would be trading some price for privacy and fewer showings.'",
+  "seededKey": false
+ },
+ {
+  "unit": "s5",
+  "role": "V3",
+  "key": "ed:repeated-tradeoff-sentence",
+  "severity": "suggestion",
+  "text": "Last bullet repeats 'privacy and fewer showings' in two consecutive sentences.",
+  "seededKey": false
+ },
+ {
+  "unit": "s5",
+  "role": "V3",
+  "key": "ed:vague-closing-step",
+  "severity": "should fix",
+  "text": "Closing line 'spend money on a cleanout or on a sale' is vague and reads oddly.",
+  "seededKey": false
+ },
+ {
+  "unit": "s5",
+  "role": "V3",
+  "key": "ed:thin-juan-voice",
+  "severity": "suggestion",
+  "text": "Voice is competent but has little of Juan's 'real question / It depends' rhythm; 'Here is the law in plain terms' is generic.",
+  "seededKey": false
+ },
+ {
+  "unit": "s6",
+  "role": "V2",
+  "key": "seo:direct-answer-could-name-routes",
+  "severity": "suggestion",
+  "text": "Opening paragraph answers the H2 only indirectly; routes are not named until the H3s.",
+  "seededKey": false
+ },
+ {
+  "unit": "s6",
+  "role": "V3",
+  "key": "ed:stiff-law-lead-in",
+  "severity": "suggestion",
+  "text": "\"Here is what the law says.\" is a stiff lead-in to the statute paragraph.",
+  "seededKey": false
+ },
+ {
+  "unit": "s7",
+  "role": "V1",
+  "key": "fact:s7:who-decides:soft",
+  "severity": "suggestion",
+  "text": "'It is the health officer or the fire official' names deciders that clm:1 (junk/debris) does not name.",
+  "seededKey": false
+ },
+ {
+  "unit": "s7",
+  "role": "V2",
+  "key": "seo:first-person-me",
+  "severity": "suggestion",
+  "text": "'not you and not me' uses a first-person voice that may be inconsistent with the rest of the guide.",
+  "seededKey": false
+ },
+ {
+  "unit": "s7",
+  "role": "V3",
+  "key": "ed:statute-list-rhythm",
+  "severity": "suggestion",
+  "text": "The So is / So is / And so is chain reads like a statute recital.",
+  "seededKey": false
+ },
+ {
+  "unit": "s7",
+  "role": "V3",
+  "key": "ed:can-apply-to-clutter",
+  "severity": "should fix",
+  "text": "'Some of them can apply to a house with a lot of accumulated belongings' arrives before the hedge that the statute does not mention hoarding.",
+  "seededKey": false
+ },
+ {
+  "unit": "s7",
+  "role": "V3",
+  "key": "ed:people-gap",
+  "severity": "suggestion",
+  "text": "No mention of an occupant who is reluctant or not ready to leave.",
+  "seededKey": false
+ },
+ {
+  "unit": "s8",
+  "role": "V2",
+  "key": "seo:opening-omits-listing-agent",
+  "severity": "suggestion",
+  "text": "Opening sentence omits the listing agent that the bullet list includes.",
+  "seededKey": false
+ },
+ {
+  "unit": "s8",
+  "role": "V3",
+  "key": "ed:s8-generic-opening",
+  "severity": "should fix",
+  "text": "Opening is a bare list of professionals; lead with the homeowner's real question in Juan's stance.",
+  "seededKey": false
+ },
+ {
+  "unit": "s8",
+  "role": "V3",
+  "key": "ed:s8-note-promise",
+  "severity": "suggestion",
+  "text": "Note says the guide explains what to ask, but the list gives topics, not questions.",
+  "seededKey": false
+ },
+ {
+  "unit": "s8",
+  "role": "V3",
+  "key": "ed:s8-closing-voice",
+  "severity": "suggestion",
+  "text": "Closing hand-off is correct and low-pressure but could show honest-options stance.",
+  "seededKey": false
+ },
+ {
+  "unit": "faq",
+  "role": "V1",
+  "key": "fact:faq:item6:direct-sale-wording",
+  "severity": "suggestion",
+  "text": "Item 6 says 'Sell directly to skip cleanout and showings'. It stays general and does not say Twin Home Buyer does this, so it is not a blocker. Keep it general and never tie it to THB.",
+  "seededKey": false
+ },
+ {
+  "unit": "faq",
+  "role": "V1",
+  "key": "fact:faq:item2:confirm-line",
+  "severity": "suggestion",
+  "text": "Item 2 mentions authority and city or county notices but has no confirm-with-a-professional line. Items 3, 4 and 6 carry that language, so this passes.",
+  "seededKey": false
+ },
+ {
+  "unit": "faq",
+  "role": "V2",
+  "key": "seo:faq3-answer-opens-with-it",
+  "severity": "should fix",
+  "text": "Item 3 answer starts with 'It', which does not stand alone when quoted.",
+  "seededKey": false
+ },
+ {
+  "unit": "faq",
+  "role": "V2",
+  "key": "seo:faq4-answer-opens-with-that",
+  "severity": "should fix",
+  "text": "Item 4 answer starts with 'That depends...' and does not name who can sell in its first words.",
+  "seededKey": false
+ },
+ {
+  "unit": "faq",
+  "role": "V3",
+  "key": "ed:faq-ambiguous-pronoun",
+  "severity": "suggestion",
+  "text": "Item 3 answer opens with 'It can look at the property.' with no clear antecedent.",
+  "seededKey": false
+ },
+ {
+  "unit": "faq",
+  "role": "V3",
+  "key": "ed:faq-disclosure-repeat",
+  "severity": "suggestion",
+  "text": "Items 1 and 5 both restate the void-waiver point.",
+  "seededKey": false
+ },
+ {
+  "unit": "faq",
+  "role": "V3",
+  "key": "ed:faq-flat-voice",
+  "severity": "should fix",
+  "text": "Answers are accurate but neutral; little of Juan's 'real question is' stance.",
+  "seededKey": false
+ }
+]

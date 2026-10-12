@@ -1,0 +1,39 @@
+{
+ "runs": 37,
+ "estTokens": 329421,
+ "estIn": 310673,
+ "estOut": 18748,
+ "retries": 1,
+ "per": {
+  "thb-04-section-writer": {
+   "runs": 10,
+   "inC": 399259,
+   "outC": 36763
+  },
+  "thb-05-fact-privacy-auditor": {
+   "runs": 9,
+   "inC": 258434,
+   "outC": 13103
+  },
+  "thb-06-seo-aeo-geo-auditor": {
+   "runs": 9,
+   "inC": 242626,
+   "outC": 12679
+  },
+  "thb-07-editorial-critic": {
+   "runs": 9,
+   "inC": 342373,
+   "outC": 12447
+  }
+ },
+ "decisions": {
+  "05 PASS": 9,
+  "06 PASS": 9,
+  "07 PASS": 9
+ },
+ "firstMs": 1791836372091,
+ "lastMs": 1791836907708,
+ "statuses": {
+  "SUBMITTED": 37
+ }
+}

@@ -1,6 +1,6 @@
 # Phase 3c — Comparison report: team mode vs classic (hoarder guide)
 
-Status: DRAFT for Leo, 2026-10-12. Written for Leo (the Studio director), who decides. Read-only on the original article; nothing here approves, publishes or writes to WordPress.
+Status: FINAL, 2026-10-12. Leo has read it and decided (section 8). Written for Leo (the Studio director). Read-only on the original article; nothing here approves, publishes or writes to WordPress.
 
 - **Classic:** article `e2b915e3-af97-4ea6-8979-4861ec729027`, version `4db42fea93cc`, HUMAN_REVIEW, untouched (fingerprint `23f8dd72…4611`, checked at the end of Task 15; not touched in Task 16).
 - **Team branch:** article `d7f03fff-22d0-48fe-9ee0-3d6d5102c856`, version `d93053c44bb1`, HUMAN_REVIEW, no proposal, no approval.
@@ -21,7 +21,7 @@ Status: DRAFT for Leo, 2026-10-12. Written for Leo (the Studio director), who de
 | Token estimate (characters / 4 on packets and outputs; an ESTIMATE) | about 495k | about 1037k (2.1x) |
 | Elapsed, first to last run (operator-driven, sequential; an estimate) | about 20 min | about 88 min |
 
-**Bottom line.** Team mode handled every one of the 50 findings (39 fixed on the text, 2 partly, 9 declined with a reason) and the blind judge scored the team text slightly higher (+3.2 on 100, preferred in 5 of 9 units). That edge is small, comes from one judge on one article, and cost about twice the runs and tokens and four times the elapsed time. The comparison cannot separate team mode from the simple act of revising (section 9). My recommendation is a **hybrid**: keep classic as the default and add the team-mode V1 re-review of changed sentences to its revision path; do not adopt team mode as the default yet (section 8). **Update (Task 17): two follow-up tests (section 7) strengthen this:** V1 still finds 7 must-fix issues in the classic-revised text that classic's own reviewers passed 27 of 27, and the team and classic revisions score within noise of each other (67.8 vs 65.7, with 5 of 9 preferences flipping when the labels were swapped).
+**Bottom line.** Team mode handled every one of the 50 findings (39 fixed on the text, 2 partly, 9 declined with a reason) and the blind judge scored the team text slightly higher (+3.2 on 100, preferred in 5 of 9 units). That edge is small, comes from one judge on one article, and cost about twice the runs and tokens and four times the elapsed time. The comparison cannot separate team mode from the simple act of revising (section 9). My recommendation is a **hybrid**: keep classic as the default and add the team-mode V1 re-review of changed sentences to its revision path; do not adopt team mode as the default yet (section 8). **Update (Task 16 follow-up): two follow-up tests (section 7) strengthen this, and Leo approved the hybrid on 2026-10-12 (section 8):** V1 still finds 7 must-fix issues in the classic-revised text that classic's own reviewers passed 27 of 27, and the team and classic revisions score within noise of each other (67.8 vs 65.7, with 5 of 9 preferences flipping when the labels were swapped).
 
 ## 2. Blind scoring, unit by unit
 
@@ -634,9 +634,9 @@ Legend: `−` removed from classic, `+` added in team, unmarked lines unchanged.
 
 ## 6. What went wrong, and how to fix it (proposals only; nothing built)
 
-**Status of everything in this section: PROPOSED, not approved, nothing built.** Leo has approved none of the fixes below. The one exception in tone is 6.1: lost declines is a **bug to fix in any mode**, because classic also has no record of which optional findings were addressed or declined (7.2).
+**Status of everything in this section: DEFERRED to Phase 3d (Leo, 2026-10-12). Nothing is built.** The fixes below are proposals, not approved for building in Phase 3c. One is classed differently: 6.1 (lost declines) is a **must-fix bug in any mode** for Phase 3d, because classic also has no record of which optional findings were addressed or declined (7.2).
 
-### 6.1 BUG (fix in any mode): declines are lost when reviewers re-issue their lists
+### 6.1 MUST-FIX BUG in Phase 3d (fix in any mode): declines are lost when reviewers re-issue their lists
 
 **What happened.** `recordReview` replaces a reviewer's collected items with its new list each round, keeping a decline only when the key is identical. Reviewers re-key and reword freely, so a decline vanishes the next round. Result: 0 declines recorded in the system, at least 30 made by the writer, and one item (no local anchor) raised and declined in seven units and four separate times in the FAQ alone.
 
@@ -662,7 +662,7 @@ The recurring local-anchor item (12 of the 45 entries in section 4) is a **brief
 
 **Proposal.** (a) A decision table in the reviewer and writer prompts: a probably-true, provable legal point is an EVIDENCE_REQUEST to R1 first; reword or drop only when it is not provable. (b) A router rule: the same finding raised in three or more units, or declined twice, converts automatically to one ROOT_CAUSE_NOTE to S2 or one HUMAN_ESCALATION ("library gap: no local fact") per article. (c) Treat a writer note "not used because no ledger claim" as an evidence-request trigger. (d) Content work, not code: add local facts to the Evidence Library so the "local" dimension (5.3 of 15 in both versions) can improve. (e) These two ticket types are proven only on fixtures (smoke test); a second real article, with a fresh draft where the ledger is incomplete, is the real test.
 
-## 7. Follow-up tests (Task 17)
+## 7. Follow-up tests (Task 16 follow-up)
 
 Two read-only tests asked for after the first version of this report. Both left the original article untouched (fingerprint `23f8dd72…4611`, rechecked after each).
 
@@ -672,7 +672,7 @@ Two read-only tests asked for after the first version of this report. Both left 
 
 **Result: V1 returned REVISION on 7 of 9 units** (s4 and s5 passed). 15 must-fix cards, 1 optional card, 13 hedge sentences ruled reword or drop (9 reword, 4 drop, 1 proven), one overstated claim check (clm:5 in s7), and the FAQ failed the legal-qualification check. Privacy was clean in all nine. 18 of 20 quoted passages appear verbatim in the unit text; the two that did not are close paraphrases of real sentences (checked by hand: s1 "Most owners want to know how fast the house can be emptied", s6 "The real question is usually not which route is best. It is which route fits your situation."). No quote was invented.
 
-| Unit | V1 on classic (locked, unrevised): decision / must-fix / hedge rulings | V1 on classic-revised (Task 17 baseline): decision / must-fix / hedge | V1 in the team run on its rewrites: must-fix cards |
+| Unit | V1 on classic (locked, unrevised): decision / must-fix / hedge rulings | V1 on classic-revised (Task 16 follow-up baseline): decision / must-fix / hedge | V1 in the team run on its rewrites: must-fix cards |
 |---|---|---|---|
 | s1 | REVISION / 5 / reword/reword/reword/reword/reword | REVISION / 2 / reword/reword | 0 (and it passed every unit before lock) |
 | s2 | REVISION / 1 / reword | REVISION / 1 / - | 1 (and it passed every unit before lock) |
@@ -758,9 +758,11 @@ Same method as section 2 (random A/B per unit, one independent judge run per uni
 | The 50 findings | untouched | addressed in the text, not tracked | 39 addressed, 2 partly, 9 declined with reasons |
 | Tickets / escalations | n/a | none | 23 tickets, 1 escalation (budget) |
 
-## 8. Recommendation (updated after Task 17)
+## 8. Recommendation and decision (updated after the Task 16 follow-up)
 
-Leo decides. **My recommendation is still the hybrid, and Task 17 strengthens it: classic as the default pipeline, with the team-mode V1 re-review as a mandatory gate on any text the classic loop writes or revises.**
+**Decision (Leo, 2026-10-12): hybrid approved.** Classic is the default pipeline. V1 becomes the fact gate on classic text. Team mode is kept but is not the default. The section 6 fixes are deferred to Phase 3d, with 6.1 (lost declines) as a must-fix bug. This is a decision about direction: **the V1 gate on the classic path is not built yet** (Phase 3d), and nothing in section 6 is built.
+
+My recommendation, now approved: **hybrid, and the Task 16 follow-up strengthens it: classic as the default pipeline, with the team-mode V1 re-review as a mandatory gate on any text the classic loop writes or revises.**
 
 | | Classic as locked | Classic revision (as run) | **Hybrid: classic revision + V1 gate (estimate)** | Team mode (as built) |
 |---|---|---|---|---|
@@ -788,7 +790,7 @@ The hybrid column is an **estimate** built from this run's per-role averages: V1
 
 ## 9. Limits of this comparison
 
-- **Revision versus no revision: now tested once.** The first version of this report compared a revision with an unrevised draft; Task 17 added a classic revision (7.2, 7.3). The editorial result is a statistical tie; the V1 result favours the team text.
+- **Revision versus no revision: now tested once.** The first version of this report compared a revision with an unrevised draft; the Task 16 follow-up added a classic revision (7.2, 7.3). The editorial result is a statistical tie; the V1 result favours the team text.
 - **One article, one run each, one judge model.** Nine units; each judge run saw both texts and scored them in one call; swapping the labels moved scores by 2-3 points and flipped 5 of 9 preferences. Differences of a few points are noise.
 - **Unequal conditions.** The classic revision ran its nine units in parallel; the team revision ran one role at a time. Token estimates are comparable, elapsed times are not.
 - **The classic revision got the findings as free text.** Classic has no structured way to carry optional findings, so each unit's findings were sent as one directive. A classic revision with a better findings mechanism might do better.
@@ -800,5 +802,5 @@ The hybrid column is an **estimate** built from this run's per-role averages: V1
 
 - Team branch: `/studio/d7f03fff-22d0-48fe-9ee0-3d6d5102c856`. Classic-revision branch: `/studio/54070caa-bd79-4184-a82a-9235b1c33b64` (HUMAN_REVIEW, version `6cd1c5264e9c`). Original: `/studio/e2b915e3-af97-4ea6-8979-4861ec729027`, unchanged.
 - Ticket log of the team run: `npm run studio -- team-log d7f03fff-22d0-48fe-9ee0-3d6d5102c856`. Budget exception: audit event `team_budget_exception` on the team branch.
-- Judging inputs and outputs (blind texts, hidden mappings, both rounds, V1 packets and outputs for the classic and classic-revised units, per-finding verdicts, declines): in the session scratchpad, not committed.
+- Judging inputs and outputs (blind texts, the A/B mappings withheld from the judges, both rounds, V1 packets and outputs for the classic and classic-revised units, per-finding verdicts, declines, usage): committed under [phase-3c-data/](phase-3c-data/README.md), with a README that maps each folder to a section of this report. Checked first for seller names, addresses and prices: none.
 - Rollback of either branch: `npm run studio -- branch-delete <branch_id> --yes` (guarded; refuses the original and fixtures). Neither has been deleted.

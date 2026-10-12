@@ -1,0 +1,52 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["ea44cab5d3bbdade6b52f787b32b19c487f7ff5d41c76d69a28a260a3ae6d406"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:hedge:a1a2dca21c13:unsupported",
+      "severity": "required",
+      "note": "The sentence \"The real question is usually not which route is best.\" is a generalization about what sellers usually face. No ledger claim or stored passage supports it. Reword without \"usually\", for example as a plain framing of the choice (\"The question to ask is which route fits your situation.\").",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:5", "clm:6", "clm:7"],
+  "required_actions": [
+    "Reword \"The real question is usually not which route is best.\" so it does not make an unsupported claim about what is usually true."
+  ],
+  "output_version_id": "v1-s6-review-ea44cab5-r1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s6",
+    "version_hash": "ea44cab5d3bbdade6b52f787b32b19c487f7ff5d41c76d69a28a260a3ae6d406",
+    "claim_checks": [
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "\"The required disclosures are made on a copy of the Real Estate Transfer Disclosure Statement form.\" matches Civil Code 1102.6(a) as in the ledger."},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "\"applies, except as provided in Civil Code 1102.2, to a transfer by sale of single-family residential property\" keeps the exception and scope of 1102(a)."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "\"any waiver of those requirements is void as against public policy\" matches 1102(c). \"so there is no agreeing your way around it\" is a plain restatement, not an added rule."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:a1a2dca21c13", "ruling": "reword", "note": "No ledger claim or passage supports what is \"usually\" the real question. State it as framing without a frequency claim."},
+      {"key": "hedge:c7e68260e007", "ruling": "proven", "note": "Not a statistic. It restates the approved brief honest_options (each route has a when_it_fits) and the unit itself: four of the five routes are not Twin Home Buyer. No ledger claim is needed; nothing here asserts a count of sellers."}
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:hedge:a1a2dca21c13:unsupported",
+        "section": "s6",
+        "issue": "Unsupported generalization: \"The real question is usually not which route is best.\"",
+        "severity": "must fix",
+        "evidence": "hedge:a1a2dca21c13; no ledger claim or stored passage supports \"usually\"",
+        "fix": "Drop \"usually\", e.g. \"The question to ask is which route fits your situation.\"",
+        "blocking": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "article_id": "e2b915e3-af97-4ea6-8979-4861ec729027",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["009de91b37cb0aed558ac09b306b0a49a7012fba8f192abd489fed58072a854b"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:hedge:44c9f7832c5c:reword",
+      "severity": "required",
+      "note": "The callout sentence \"Getting clarity early usually creates more options, not fewer.\" is a generalization about outcomes that no ledger claim or stored source supports. Reword to advice without an outcome claim, for example: settle who holds title and who can sign before you spend money on cleanout or talk price."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": ["Remove or reword \"Getting clarity early usually creates more options, not fewer.\" so it gives advice and makes no outcome claim."],
+  "output_version_id": "v1-s2-classic-review-001",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s2",
+    "version_hash": "009de91b37cb0aed558ac09b306b0a49a7012fba8f192abd489fed58072a854b",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {
+        "key": "hedge:44c9f7832c5c",
+        "ruling": "reword",
+        "note": "No ledger claim or source supports that early clarity usually creates more options. Keep the advice (settle title and signer before spending on cleanout or talking price) and drop the outcome claim."
+      }
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:hedge:44c9f7832c5c:reword",
+        "section": "s2",
+        "issue": "Callout sentence \"Getting clarity early usually creates more options, not fewer.\" is an unsupported outcome generalization.",
+        "severity": "must fix",
+        "evidence": "hedge:44c9f7832c5c; no ledger claim or stored passage supports it (unit cites no claims)",
+        "fix": "Delete the sentence or reword to advice only, with no outcome claim.",
+        "blocking": false
+      }
+    ]
+  }
+}

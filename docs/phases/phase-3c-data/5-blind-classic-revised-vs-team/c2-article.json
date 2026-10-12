@@ -1,0 +1,8 @@
+{
+ "state": "HUMAN_REVIEW",
+ "version_hash": "6cd1c5264e9c4fd993b62adea3803b73cd9412c9c7bfb0223929c97f840d9225",
+ "approved_hash": null,
+ "is_fixture": false,
+ "branch_of": "e2b915e3-af97-4ea6-8979-4861ec729027",
+ "pipeline_mode": "classic"
+}

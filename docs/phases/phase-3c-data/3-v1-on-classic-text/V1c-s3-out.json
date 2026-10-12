@@ -1,0 +1,70 @@
+{
+  "article_id": "e2b915e3-af97-4ea6-8979-4861ec729027",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["c4a0bf2f422a0a91caec9f80ffef92aed656c28149399d56263e9a7b2f2cf99d"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:s3:unsupported_generalization:nobody",
+      "severity": "required",
+      "note": "Unsupported claim about how often the city takes notice: \"Plenty of homes hold a lot of belongings and nobody from the city ever looks twice.\" No ledger claim or source supports it. Remove the sentence, or say only that a full house is not by itself one of the conditions the statute lists.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:s3:spoiled_material:scope",
+      "severity": "optional",
+      "note": "\"Trash, spoiled material or signs of pests are another, and they are the kind of thing the statute talks about.\" \"Spoiled material\" is not in clm:1 to clm:4. Prefer the ledger terms: junk, debris, garbage, infestation, combustible waste.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4"],
+  "required_actions": [
+    "Remove or reword the sentence \"Plenty of homes hold a lot of belongings and nobody from the city ever looks twice.\" so it makes no unsupported generalization."
+  ],
+  "output_version_id": "v1-s3-classic-review-1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s3",
+    "version_hash": "c4a0bf2f422a0a91caec9f80ffef92aed656c28149399d56263e9a7b2f2cf99d",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Table row 1 matches the ledger wording (among listed conditions that can make a building substandard). Who decides is local enforcement authority, per the brief; no overreach."},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Infestation, as determined by a health officer, listed as a condition of inadequate sanitation. Matches."},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer. Matches."},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Fire chief or deputy opinion, fire or explosion or ready fuel. Matches."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:d53c4af01b7f", "ruling": "drop", "note": "No ledger claim or stored source supports how often cities ignore full houses."}
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s3:unsupported_generalization:nobody",
+        "section": "s3",
+        "issue": "Unsupported generalization: \"Plenty of homes hold a lot of belongings and nobody from the city ever looks twice.\"",
+        "severity": "must fix",
+        "evidence": "hedge:d53c4af01b7f; no ledger claim supports it (clm:1 to clm:4 cover statute conditions only)",
+        "fix": "Drop the sentence, or say only that a full house is not by itself a condition the statute lists.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s3:spoiled_material:scope",
+        "section": "s3",
+        "issue": "\"spoiled material\" in \"Trash, spoiled material or signs of pests are another, and they are the kind of thing the statute talks about\" is not a listed condition.",
+        "severity": "should fix",
+        "evidence": "clm:1, clm:2, clm:3, clm:4",
+        "fix": "Use the ledger terms: junk, debris, garbage, infestation, combustible waste.",
+        "blocking": false
+      }
+    ]
+  }
+}

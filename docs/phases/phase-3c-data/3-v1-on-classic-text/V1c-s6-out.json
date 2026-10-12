@@ -1,0 +1,48 @@
+{
+  "article_id": "e2b915e3-af97-4ea6-8979-4861ec729027",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["6b1468e57786e629f48ebfbedfd5ce88fb9c1012b8f027b048a1006f7924a9f4"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:hedge:1cd8d866ff31:unsupported",
+      "severity": "required",
+      "note": "Sentence 'Getting these answers early usually creates more options, not fewer.' is an unsupported generalization and an implied outcome claim; no ledger claim or source supports it. Drop it or reword to say only that checking authority, title, tax and enforcement questions early lets you choose a route with the facts in hand."
+    },
+    {
+      "issue_key": "fact:hedge:a1a2dca21c13:unsupported",
+      "severity": "required",
+      "note": "Sentence 'The real question is usually not which route is best.' states a generalization about what sellers ask, with no support. Remove 'usually' or reword to 'The real question is which route fits your situation.'"
+    }
+  ],
+  "evidence_ids": ["clm:5", "clm:6", "clm:7"],
+  "required_actions": [
+    "Drop or reword 'Getting these answers early usually creates more options, not fewer.'",
+    "Remove 'usually' from 'The real question is usually not which route is best.'"
+  ],
+  "output_version_id": "v1-s6-6b1468e5-review1",
+  "timestamp": "2026-10-12T12:00:00Z",
+  "result": {
+    "unit_key": "s6",
+    "version_hash": "6b1468e57786e629f48ebfbedfd5ce88fb9c1012b8f027b048a1006f7924a9f4",
+    "claim_checks": [
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "'The required disclosures are made on a copy of the Real Estate Transfer Disclosure Statement form' matches clm:5; no form contents described."},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "'applies, except as provided in Civil Code 1102.2, to a transfer by sale of single-family residential property' matches clm:6 including the exception."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "'any waiver of those requirements is void as against public policy' matches clm:7."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:a1a2dca21c13", "ruling": "reword", "note": "No claim supports 'usually'. Say 'The real question is which route fits your situation.'"},
+      {"key": "hedge:c7e68260e007", "ruling": "proven", "note": "Structural statement about the unit's own five options, four of which are not Twin Home Buyer (brief honest_options); not a claim about owners."},
+      {"key": "hedge:1cd8d866ff31", "ruling": "drop", "note": "Nothing supports that early answers usually create more options. Drop, or say only that early answers let you choose with facts."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:hedge:1cd8d866ff31:unsupported", "section": "s6", "issue": "'Getting these answers early usually creates more options, not fewer.' is an unsupported generalization and outcome claim.", "severity": "must fix", "evidence": "hedge rule; no ledger claim or passage supports it", "fix": "Drop it, or say only that checking early lets you choose a route with the facts in hand.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:hedge:a1a2dca21c13:unsupported", "section": "s6", "issue": "'The real question is usually not which route is best.' generalizes about sellers without support.", "severity": "must fix", "evidence": "hedge rule; no ledger claim supports 'usually'", "fix": "The real question is which route fits your situation.", "blocking": false}
+    ]
+  }
+}

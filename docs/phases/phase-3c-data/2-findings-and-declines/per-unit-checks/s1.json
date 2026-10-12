@@ -1,0 +1,77 @@
+{
+ "unit": "s1",
+ "findings": [
+  {
+   "n": 1,
+   "role": "V1",
+   "key": "fact:s1:soft-generalization",
+   "text": "Soft population claims with no source: 'Most people in this spot are not avoiding the problem' and 'Most owners want to know how fast the house can be emptied'. They are voice, not law or figures, so they do not block. The writer may soften them (for example 'Many people') if convenient."
+  },
+  {
+   "n": 2,
+   "role": "V2",
+   "key": "seo:capsule-yes-claim-no-ledger",
+   "text": "The capsule opens with 'Yes, you can sell a hoarded house in California.' It is the brief's own answer-first framing, but no ledger claim backs it. It is a general statement, not a legal fact, so it does not block. If the fact auditor wants it tied to a claim, soften or leave as is."
+  },
+  {
+   "n": 3,
+   "role": "V2",
+   "key": "seo:h2-keyword-variant",
+   "text": "The H2 says 'packed or hoarded house' rather than the exact phrase 'hoarded house'. This reads naturally and the exact keyword is in the title and capsule, so no change is needed. The one-question-H2 keyword placement can be met by this H2 or a later one."
+  },
+  {
+   "n": 4,
+   "role": "V3",
+   "key": "ed:capsule-repeated-in-body",
+   "text": "The last body paragraph repeats the capsule's disclosure sentence almost word for word ('For a transfer by sale of single-family residential property, California's disclosure article applies, except as provided in Civil Code Section 1102.2. Any waiver of its requirements is void.'). If the capsule is shown next to the body, the repeat reads as padding. Consider a shorter body line such as 'The disclosure rules in the capsule above do not change with your answers. Plan to disclose, not to skip it.' Keep every legal wording unchanged."
+  },
+  {
+   "n": 5,
+   "role": "V3",
+   "key": "ed:generic-good-news",
+   "text": "'Here is the good news.' is mildly stock. The next sentences already carry the point, so you could open that paragraph with 'A full house does not mean the house cannot be sold.'"
+  },
+  {
+   "n": 6,
+   "role": "V3",
+   "key": "ed:unsupported-most-owners",
+   "text": "'Most owners want to know how fast the house can be emptied' states an unsupported generalization. A softer version is 'The usual first question is how fast the house can be emptied.' Wording only."
+  },
+  {
+   "n": 7,
+   "role": "V3",
+   "key": "ed:no-local-anchor",
+   "text": "The section has no Bay Area or Northern California cue. That is acceptable in an opening that must not state local rules or service area. A later section should carry the local context."
+  }
+ ],
+ "classic_text": "## What should you know first about a packed or hoarded house before you sell?\n\n[answer capsule] Yes, you can sell a hoarded house in California. The route depends on who has authority, the condition, the people involved, what is owed and your timeline. For a transfer by sale of single-family residential property, California's disclosure article applies, except as provided in Civil Code Section 1102.2, and a waiver of its requirements is void.\n\nThe house is full. Maybe it is your parent's home, maybe a relative's, maybe your own. Every room is packed, and the idea of selling feels impossible. You do not know whether to clear it out first, and you do not know what you are required to tell a buyer.\n\nMost people in this spot are not avoiding the problem. The house just feels too heavy to deal with. If someone you love is still living there, the decision is harder. A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.\n\nHere is the good news. A full house does not mean the house cannot be sold. It means you want the right information before you pick a path. Getting clear early usually creates more options, not fewer.\n\nMost owners want to know how fast the house can be emptied. The real question is usually what situation you are actually in. I'd want five things answered first:\n\n1. **Who has authority?** Who holds title, and who is allowed to sign? If the person living in the house is not that person, the sale can stall.\n2. **What is the condition?** What is in the house, whether any rooms or exits are blocked, and whether there may be damage hidden behind the belongings.\n3. **Who is affected?** The occupant, co-owners, heirs, anyone else who lives there. All of them matter to the plan.\n4. **What is owed?** Loans, back taxes, liens and unpaid bills, set against the cost of cleanout and repairs and what the house can sell for.\n5. **How soon do you need this done?** Whether speed, certainty, privacy or the highest price matters most to you.\n\nYour answers decide the route. Keeping the home for now, clearing it and listing it, bringing in professional help, or selling directly can each be the right choice. Which one fits depends on you, not on what a buyer wants to hear.\n\nOne thing does not depend on your answers. For a transfer by sale of single-family residential property, California's disclosure article applies, except as provided in Civil Code Section 1102.2. Any waiver of its requirements is void. Plan to disclose, not to skip it. What goes on the form is a question for your agent or attorney, and a later section covers it.\n\n[note] Authority, title, liens and disclosure are legal questions. Confirm them with a real estate attorney or a title company before you commit to a route.",
+ "team_final_text": "## What should you know first about a packed or hoarded house before you sell?\n\n[answer capsule] You can sell a hoarded house in California. Which route fits depends on who has authority, the condition, the people involved, what is owed and how soon you need it done. Disclosure still applies: the law covers a sale of single-family residential property, with exceptions, and a waiver of its requirements is void.\n\nThe house is full. Maybe it is your parent's home, maybe a relative's, maybe your own. Every room is packed, and the idea of selling feels impossible. You do not know whether to clear it out first, and you do not know what you are required to tell a buyer.\n\nA house this full carries history, and if someone is still living there, every decision touches them. That is a family matter before it is a real estate matter. Plan with the person who lives there, not around them, and keep judgment out of it.\n\nHow fast the house can be emptied is the question that feels urgent. The one that decides things is what situation you are in. I'd want these answered first, because each one changes what you can do:\n\n1. **Who has authority?** Who holds title, and who is allowed to sign? If the person living in the house is not that person, the sale can stall. An unsigned co-owner can hold up the whole plan.\n2. **What is the condition?** What is in the house, whether any rooms or exits are blocked, and whether there may be damage hidden behind the belongings. A blocked exit changes what has to happen before anyone can safely walk through.\n3. **Who is affected?** The occupant, co-owners, heirs, anyone else who lives there. All of them matter to the plan.\n4. **What is owed?** Loans, back taxes, liens and unpaid bills, set against the cost of cleanout and repairs and what the house can sell for.\n5. **How soon do you need this done?** Whether speed, certainty, privacy or the highest price matters most to you.\n\nYour answers point to a path, and each path trades something. Keeping the home for now buys time and keeps control, but the problems wait for you. Clearing it out and listing it can reach the whole market, but it costs time and money up front. Professional help adds certainty on legal points, at the price of fees and time. Selling directly can cut the work, but a direct buyer prices in the condition, so you give up some price for speed and privacy.\n\nThe disclosure rules in the capsule above do not change with your answers. A sale of single-family residential property uses the Real Estate Transfer Disclosure Statement form, so plan to disclose, not to skip it. What goes on the form is a question for your agent or attorney, and a later section covers it.\n\n[note] Authority, title, liens and disclosure are legal questions. Confirm them with a real estate attorney or a title company before you commit to a path. The next section starts with the first of the five: who has to sign.",
+ "w1_change_notes": [
+  {
+   "pass": 1,
+   "addresses": [
+    "human:directive",
+    "fact:s1:soft-generalization",
+    "seo:capsule-yes-claim-no-ledger",
+    "seo:h2-keyword-variant",
+    "ed:capsule-repeated-in-body",
+    "ed:generic-good-news",
+    "ed:unsupported-most-owners",
+    "ed:no-local-anchor"
+   ],
+   "change_note": "Targeted revision. Fixed: removed Most people and Most owners (now Many people; the first question is often how fast the house can be emptied); also reworded usually, nobody and Getting clear early usually to plain non-sweeping wording. Dropped the stock good-news opener. Shortened the body disclosure paragraph so it no longer repeats the capsule and points back to it; legal wording in the capsule is unchanged and claim_ids stay clm:6 and clm:7. Capsule now leads with the plain point that disclosure still applies (W2 capsule-jargon), about 58 words. Added one general, non-seller illustration of blocked exit and unsigned co-owner (W2 examples-abstract), no figures or stories. Closing note now bridges to who has to sign next (W2 cta-bridge). Left as is with reason: Yes-opening in the capsule is the brief's own answer-first framing and is a general statement, not a legal fact; H2 keeps packed or hoarded house (approved H2, keyword is in the title and capsule); no local anchor added because this opening may not state local rules or a service area and a later section carries local context. No new claims or facts."
+  },
+  {
+   "pass": 2,
+   "addresses": [
+    "ed:lifted-reference-lines",
+    "ed:generic-middle-paragraphs",
+    "fact:s1:many-people:unsupported-generalization",
+    "seo:capsule-article-ambiguous",
+    "ed:note-close",
+    "seo:first-person-voice"
+   ],
+   "change_note": "T1: rewrote the lines that tracked voice-reference excerpts (the situation question, none-of-these, more-options, too-heavy, judged) in original words. T2: merged the two middle paragraphs into one short respectful paragraph and rewrote the routes paragraph to say what each path trades in time, certainty, control or price, without new facts. Dropped the Many people sentence (unsupported generalization) and the often-family generalization. Capsule no longer says the disclosure article or names Section 1102.2; it now says the law covers a sale of single-family residential property, with exceptions, and a waiver is void (clm:6, clm:7), 52 words, no figures; clm:5 is now cited for the Transfer Disclosure Statement mention in the body. Replaced the word five with these, and cut repeated use of the word route. The first-person line now explains why I'd want these answered (each changes what you can do). Not used: the Bay Area anchor suggestion (ed:local-context-absent), because the ledger and brief give no local fact for this opening and the standards allow local context only when true and useful; no co-writer suggestions were received."
+  }
+ ]
+}

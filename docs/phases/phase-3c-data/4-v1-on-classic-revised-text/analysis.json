@@ -1,0 +1,253 @@
+{
+ "out": [
+  {
+   "unit": "s1",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 2,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:s1:hedge:usually",
+     "issue": "Unsupported generalization: \"Getting clear early usually creates more options, not fewer.\"",
+     "fix": "Getting clear early can leave you more options."
+    },
+    {
+     "sev": "must fix",
+     "key": "fact:s1:hedge:nobody",
+     "issue": "Unsupported frequency claim: \"A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.\"",
+     "fix": "A packed house can be a family matter as well as a real estate matter, and you should not feel judged for it."
+    },
+    {
+     "sev": "should fix",
+     "key": "fact:s1:many-people",
+     "issue": "Unsupported claim about what people do: \"Many people in this spot are not avoiding the problem.\"",
+     "fix": "You may not be avoiding the problem; the house just feels too heavy to deal with."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:2ef3c1c171ab",
+     "ruling": "reword",
+     "note": "No ledger claim or passage supports \"often a family matter before it is a real estate matter\". Say it can be a family matter, and phrase the not-judging line as a gentle statement to the reader."
+    },
+    {
+     "key": "hedge:de986bc437c2",
+     "ruling": "reword",
+     "note": "No claim supports \"usually\". Say getting clear early can leave you more options."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 4,
+   "quotes_found": 4,
+   "mustN": 2,
+   "optN": 1
+  },
+  {
+   "unit": "s2",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 3,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:s2:generalization:most-families",
+     "issue": "Unsupported generalization: \"Most families are not looking for judgment.\"",
+     "fix": "Speak to the reader instead, e.g. \"You are probably looking for time and a clear next step,\" or drop the sentence."
+    }
+   ],
+   "hedge": [],
+   "bad_claims": [],
+   "quotes": 1,
+   "quotes_found": 1,
+   "mustN": 1,
+   "optN": 0
+  },
+  {
+   "unit": "s3",
+   "decision": "PASS",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 3,
+   "cards": [],
+   "hedge": [],
+   "bad_claims": [],
+   "quotes": 0,
+   "quotes_found": 0,
+   "mustN": 0,
+   "optN": 0
+  },
+  {
+   "unit": "s4",
+   "decision": "PASS",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 3,
+   "cards": [
+    {
+     "sev": "should fix",
+     "key": "fact:s4:unsupported_generalization",
+     "issue": "\"Many owners think the clutter has to be explained away...\" and \"this is often the question that makes people freeze\" are unsupported generalizations.",
+     "fix": "Reword to the reader's situation, e.g. \"You may wonder whether the clutter has to be explained or left out.\""
+    },
+    {
+     "sev": "suggestion",
+     "key": "fact:s4:hiding_vs_waiver",
+     "issue": "\"The waiver rule means that route is not open\" extends clm:7 (waiver void) to hiding disclosure.",
+     "fix": "Say that skipping disclosure by agreement (a waiver) is void, and point to the agent or attorney for the rest."
+    }
+   ],
+   "hedge": [],
+   "bad_claims": [],
+   "quotes": 3,
+   "quotes_found": 2,
+   "mustN": 0,
+   "optN": 2
+  },
+  {
+   "unit": "s5",
+   "decision": "PASS",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 3,
+   "cards": [],
+   "hedge": [],
+   "bad_claims": [],
+   "quotes": 0,
+   "quotes_found": 0,
+   "mustN": 0,
+   "optN": 0
+  },
+  {
+   "unit": "s6",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 4,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:hedge:a1a2dca21c13:unsupported",
+     "issue": "Unsupported generalization: \"The real question is usually not which route is best.\"",
+     "fix": "Drop \"usually\", e.g. \"The question to ask is which route fits your situation.\""
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:a1a2dca21c13",
+     "ruling": "reword",
+     "note": "No ledger claim or passage supports what is \"usually\" the real question. State it as framing without a frequency claim."
+    },
+    {
+     "key": "hedge:c7e68260e007",
+     "ruling": "proven",
+     "note": "Not a statistic. It restates the approved brief honest_options (each route has a when_it_fits) and the unit itself: four of the five routes are not Twin Home Buyer. No ledger claim is needed; nothing here asserts a count of sellers."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 1,
+   "quotes_found": 1,
+   "mustN": 1,
+   "optN": 0
+  },
+  {
+   "unit": "s7",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 5,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:hedge:4c9bb9176582:unsupported_generalization",
+     "issue": "Unsupported generalization: \"The real question is usually whether the house or the paperwork is the bigger risk to the sale.\" and \"A lot of it comes from the paperwork and the people.\"",
+     "fix": "Say the house, the paperwork and the people can each stall a sale, with no 'usually' and no 'a lot of it'."
+    },
+    {
+     "sev": "should fix",
+     "key": "fact:clm:5:scope_unstated",
+     "issue": "\"The disclosures are made on the Real Estate Transfer Disclosure Statement form.\" does not state the single-family residential scope.",
+     "fix": "Add 'on a sale of single-family residential property' and keep the confirm-with-an-agent-or-attorney line."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:4c9bb9176582",
+     "ruling": "reword",
+     "note": "No claim or passage supports 'usually'. Say these are things that can stall a sale, without a frequency, and drop 'A lot of it comes from the paperwork and the people'."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 4,
+   "quotes_found": 3,
+   "mustN": 1,
+   "optN": 1
+  },
+  {
+   "unit": "s8",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 6,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:hedge:8d8256f677da:reword",
+     "issue": "Unsupported generalization: \"A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign.\"",
+     "fix": "Reword as a risk, e.g. a sale can stall if it turns out late that the person planning to sign lacks authority; avoid nobody/no one."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:8d8256f677da",
+     "ruling": "reword",
+     "note": "No claim or passage supports 'nobody checked'. Say what is supported: a sale can stall when authority to sign is unclear (brief warning, seller-problem logic), framed as a risk not a fact about people."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 2,
+   "quotes_found": 2,
+   "mustN": 1,
+   "optN": 0
+  },
+  {
+   "unit": "faq",
+   "decision": "REVISION",
+   "privacy_ok": true,
+   "legal_ok": true,
+   "must": 7,
+   "cards": [
+    {
+     "sev": "must fix",
+     "key": "fact:faq:authority-occupancy:unsupported",
+     "issue": "Uncited legal conclusion: \"Living in the house alone does not give you that authority.\"",
+     "fix": "Use \"The person living in the house is not always the person with authority to sign.\" and keep the attorney or title company confirmation."
+    }
+   ],
+   "hedge": [
+    {
+     "key": "hedge:4a926ce9f475",
+     "ruling": "proven",
+     "note": "'Not always.' is a qualifier, not a legal claim; it is supported by the brief's honest_options (keep_it, fix_it, sell_directly), which show cleanout is not required in every route. No ledger claim is needed."
+    }
+   ],
+   "bad_claims": [],
+   "quotes": 2,
+   "quotes_found": 1,
+   "mustN": 1,
+   "optN": 0
+  }
+ ],
+ "must": 7,
+ "opt": 4,
+ "hedgeRule": {
+  "proven": 2,
+  "reword": 5,
+  "drop": 0
+ },
+ "claimBad": 0,
+ "quotesOk": 14,
+ "quotesTotal": 17
+}

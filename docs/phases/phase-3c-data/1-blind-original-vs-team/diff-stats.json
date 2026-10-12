@@ -1,0 +1,92 @@
+{
+ "s1": {
+  "classicSentences": 36,
+  "teamSentences": 34,
+  "kept": 14,
+  "removed": 22,
+  "added": 20,
+  "classicWords": 492,
+  "teamWords": 523,
+  "keptPct": 39
+ },
+ "s2": {
+  "classicSentences": 42,
+  "teamSentences": 39,
+  "kept": 21,
+  "removed": 21,
+  "added": 18,
+  "classicWords": 557,
+  "teamWords": 540,
+  "keptPct": 50
+ },
+ "s3": {
+  "classicSentences": 34,
+  "teamSentences": 33,
+  "kept": 18,
+  "removed": 16,
+  "added": 15,
+  "classicWords": 505,
+  "teamWords": 483,
+  "keptPct": 53
+ },
+ "s4": {
+  "classicSentences": 22,
+  "teamSentences": 26,
+  "kept": 4,
+  "removed": 18,
+  "added": 22,
+  "classicWords": 296,
+  "teamWords": 412,
+  "keptPct": 18
+ },
+ "s5": {
+  "classicSentences": 31,
+  "teamSentences": 35,
+  "kept": 18,
+  "removed": 13,
+  "added": 17,
+  "classicWords": 457,
+  "teamWords": 473,
+  "keptPct": 58
+ },
+ "s6": {
+  "classicSentences": 38,
+  "teamSentences": 44,
+  "kept": 14,
+  "removed": 24,
+  "added": 30,
+  "classicWords": 560,
+  "teamWords": 635,
+  "keptPct": 37
+ },
+ "s7": {
+  "classicSentences": 38,
+  "teamSentences": 37,
+  "kept": 30,
+  "removed": 8,
+  "added": 7,
+  "classicWords": 536,
+  "teamWords": 555,
+  "keptPct": 79
+ },
+ "s8": {
+  "classicSentences": 21,
+  "teamSentences": 18,
+  "kept": 10,
+  "removed": 11,
+  "added": 8,
+  "classicWords": 294,
+  "teamWords": 285,
+  "keptPct": 48
+ },
+ "faq": {
+  "classicSentences": 29,
+  "teamSentences": 28,
+  "kept": 9,
+  "removed": 20,
+  "added": 19,
+  "classicWords": 353,
+  "teamWords": 352,
+  "keptPct": 31
+ }
+}

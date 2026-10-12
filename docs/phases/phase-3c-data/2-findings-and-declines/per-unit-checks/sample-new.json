@@ -1,0 +1,357 @@
+{
+ "note": "10 items sampled at random from the optional items the team's final reviews raised that do not share a (reviewer, key) with any seeded finding",
+ "items": [
+  {
+   "id": 1,
+   "unit": "s5",
+   "role": "V1",
+   "key": "fact:s5:choice-wording",
+   "severity": "suggestion",
+   "text": "'Clearing the house out is your choice' is stated flat; a local enforcement notice could make cleanup not optional."
+  },
+  {
+   "id": 2,
+   "unit": "s3",
+   "role": "V3",
+   "key": "ed:h3-bullets-not-checks",
+   "severity": "suggestion",
+   "text": "H3 promises checks but the first two bullets read as descriptions of concerns."
+  },
+  {
+   "id": 3,
+   "unit": "s2",
+   "role": "V3",
+   "key": "ed:redundant-table-intro",
+   "severity": "suggestion",
+   "text": "The line 'Here is who else can be affected, and why each one matters.' repeats the H3 and adds nothing."
+  },
+  {
+   "id": 4,
+   "unit": "s3",
+   "role": "V2",
+   "key": "seo:statute-named-late",
+   "severity": "suggestion",
+   "text": "Opening paragraph refers to 'the state statute' without naming H&S 17920.3 until the next paragraph."
+  },
+  {
+   "id": 5,
+   "unit": "s2",
+   "role": "V3",
+   "key": "ed:repeated-title-sign-point",
+   "severity": "should fix",
+   "text": "The 'holder of title or authority has to sign' point is stated three to four times in one short section."
+  },
+  {
+   "id": 6,
+   "unit": "s8",
+   "role": "V3",
+   "key": "ed:s8-closing-voice",
+   "severity": "suggestion",
+   "text": "Closing hand-off is correct and low-pressure but could show honest-options stance."
+  },
+  {
+   "id": 7,
+   "unit": "s4",
+   "role": "V1",
+   "key": "fact:s4:not-whether-to-disclose:soften",
+   "severity": "should fix",
+   "text": "\"not whether to disclose\" implies disclosure is always required despite the 1102.2 exception."
+  },
+  {
+   "id": 8,
+   "unit": "s5",
+   "role": "V3",
+   "key": "ed:vague-closing-step",
+   "severity": "should fix",
+   "text": "Closing line 'spend money on a cleanout or on a sale' is vague and reads oddly."
+  },
+  {
+   "id": 9,
+   "unit": "s7",
+   "role": "V3",
+   "key": "ed:people-gap",
+   "severity": "suggestion",
+   "text": "No mention of an occupant who is reluctant or not ready to leave."
+  },
+  {
+   "id": 10,
+   "unit": "faq",
+   "role": "V1",
+   "key": "fact:faq:item6:direct-sale-wording",
+   "severity": "suggestion",
+   "text": "Item 6 says 'Sell directly to skip cleanout and showings'. It stays general and does not say Twin Home Buyer does this, so it is not a blocker. Keep it general and never tie it to THB."
+  }
+ ],
+ "seeded_findings_for_those_units": [
+  {
+   "n": 8,
+   "unit": "s2",
+   "role": "V2",
+   "key": "seo:direct-answer-delayed",
+   "text": "Resolved. The section now opens with 'The person who holds title, or who has the legal authority to sell for the owner, has to sign...' and names the others affected, so it can be quoted on its own. Nothing further required."
+  },
+  {
+   "n": 9,
+   "unit": "s2",
+   "role": "V2",
+   "key": "seo:link-repeat-optional",
+   "text": "Both internal links (inherited-property legal authority; sell-bay-area-house-full-of-belongings) are in the link plan and are used once each, where they help. No change needed. Not an HTTP check; link targets were not tested."
+  },
+  {
+   "n": 10,
+   "unit": "s2",
+   "role": "V3",
+   "key": "ed:repeated-authority-point",
+   "text": "The point that the person living in the house is often not the person with authority or on title is made three times: 'With a packed house, the person living there is often not the person on title', 'When the person living in the house is not the person with authority, the sale can stall', and the table row 'They may or may not hold title'. The opening list of signers (owner, trustee, executor...) is also restated in the title and authority subsections. Consider trimming one of the repeats for readability. No facts change."
+  },
+  {
+   "n": 11,
+   "unit": "s2",
+   "role": "V3",
+   "key": "ed:verbatim-site-lines",
+   "text": "'Many families do not need to be judged. They need time, clarity and a practical way forward.' (close to excerpt v17) and the callout 'Getting clarity early usually creates more options, not fewer.' (verbatim excerpt v10) are lifted from existing THB pages. They are the right stance, but consider rewording so the guide does not duplicate lines already live on the site."
+  },
+  {
+   "n": 12,
+   "unit": "s2",
+   "role": "V3",
+   "key": "ed:overstated-whole-sale",
+   "text": "'It sounds like paperwork. It is really the whole sale.' is a slight overstatement. A softer line such as 'It is really the foundation of the sale' would keep the plain tone without overclaiming."
+  },
+  {
+   "n": 13,
+   "unit": "s3",
+   "role": "V1",
+   "key": "fact:s3:household-label:optional",
+   "text": "'It describes conditions, and it does not label any kind of household' is a mild statement about statute contents beyond the cited claims. It is consistent with the brief's 'statute does not mention hoarding' instruction; consider trimming to that."
+  },
+  {
+   "n": 14,
+   "unit": "s3",
+   "role": "V1",
+   "key": "fact:s3:spoiled-material:optional",
+   "text": "'spoiled material' in the first bullet is not one of the ledger conditions; the bullet only says it is 'the kind of thing the statute talks about'. Consider 'trash or signs of pests'."
+  },
+  {
+   "n": 15,
+   "unit": "s3",
+   "role": "V2",
+   "key": "seo:circular-sentence",
+   "text": "In \"I'd read a few of them before you decide anything, because they show the conditions the statute lists\", the reason repeats itself. Consider a clearer reason, such as: they show what a local official can look at."
+  },
+  {
+   "n": 16,
+   "unit": "s3",
+   "role": "V2",
+   "key": "seo:unsupported-aside",
+   "text": "\"nobody from the city ever looks twice\" is a loose generalization with no ledger claim. It is not a consequential fact, so it does not block. Consider softening it to \"many homes hold a lot of belongings without any code issue\"."
+  },
+  {
+   "n": 17,
+   "unit": "s3",
+   "role": "V2",
+   "key": "seo:h3-not-question",
+   "text": "The h3 \"What this means in practice\" is not phrased as a seller question. This is acceptable for an h3, and the keyword is not required in this non-first section."
+  },
+  {
+   "n": 18,
+   "unit": "s3",
+   "role": "V3",
+   "key": "ed:circular-because-clause",
+   "text": "In paragraph 2, 'I'd read a few of them before you decide anything, because they show the conditions the statute lists' is circular. Consider: 'I'd read them before you decide anything, so you know what the city or county can actually look at.' Wording only, no new fact."
+  },
+  {
+   "n": 19,
+   "unit": "s3",
+   "role": "V3",
+   "key": "ed:unsupported-generalisation",
+   "text": "'Plenty of homes hold a lot of belongings and nobody from the city ever looks twice' reads as an unsourced observation of how often the city acts. Consider softening to 'A full house is not automatically a code problem.' and cutting the rest."
+  },
+  {
+   "n": 20,
+   "unit": "s3",
+   "role": "V3",
+   "key": "ed:bullet-beyond-statute",
+   "text": "Bullet 1 mentions 'spoiled material', which is not in the listed conditions. 'The kind of thing the statute talks about' hedges it, but the writer or fact auditor may want to tighten it to the listed conditions (junk, debris, garbage, pests)."
+  },
+  {
+   "n": 21,
+   "unit": "s3",
+   "role": "V3",
+   "key": "ed:echo-of-voice-reference",
+   "text": "'None of this means the house can't sell. It means you want to know where it stands before you choose a path.' is very close to voice excerpt v8. This is fine for tone, but consider varying it so other sections do not repeat the same line."
+  },
+  {
+   "n": 22,
+   "unit": "s4",
+   "role": "V2",
+   "key": "seo:answer-after-lead-in",
+   "text": "The direct answer ('California's disclosure article applies, with an exception, to a transfer by sale of single-family residential property...') starts in the second paragraph, after three empathy sentences. Consider moving that sentence up so the H2's answer is in the first sentences. Not blocking: the lead-in is short and the answer follows immediately."
+  },
+  {
+   "n": 23,
+   "unit": "s4",
+   "role": "V2",
+   "key": "seo:quote-self-contained",
+   "text": "'the article' and 'the requirements of the article' will not stand alone if quoted. Naming it once as 'California's disclosure rules for home sellers (Civil Code 1102)' would make the passage self-contained, provided the fact auditor accepts the wording against clm:5, clm:6 and clm:7."
+  },
+  {
+   "n": 24,
+   "unit": "s4",
+   "role": "V2",
+   "key": "seo:buyer-says-no-need",
+   "text": "'A buyer saying they do not need the paperwork does not change it' is an illustration of clm:7 (waiver void), not a separate ledger claim. Fine for SEO; the fact auditor owns whether it overreaches."
+  },
+  {
+   "n": 25,
+   "unit": "s4",
+   "role": "V3",
+   "key": "ed:filler-remember-this",
+   "text": "\"The part I want you to remember is this one.\" is mild lead-in filler. Optional tighter wording: \"This is the part that matters most.\" Wording only; no fact changes."
+  },
+  {
+   "n": 26,
+   "unit": "s5",
+   "role": "V2",
+   "key": "seo:direct-answer-missing",
+   "text": "Resolved. The section now opens 'Clearing the house out is your choice, and it does not change the disclosure rules that apply to your sale.' This answers the H2 in the first sentence and can be quoted on its own. It makes no legal 'no cleanout required' claim and no THB buys-without-cleanout claim."
+  },
+  {
+   "n": 27,
+   "unit": "s5",
+   "role": "V2",
+   "key": "seo:opening-exception-optional",
+   "text": "The first sentence says the disclosure rules 'apply to your sale' without the single-family exception. The qualifier ('except as the law provides') appears in the later paragraph, so a quoted opening could read as broader than clm:6. Consider adding 'if your sale is covered' to the first sentence. This does not block."
+  },
+  {
+   "n": 28,
+   "unit": "s5",
+   "role": "V3",
+   "key": "ed:no-local-anchor",
+   "text": "The section has no Northern California or Bay Area anchor. Acceptable for a short cleanout-versus-disclosure section where no local fact is supported, so no fact was added. If Leo wants more local feel, a later pass could add one only from the ledger or an approved source."
+  },
+  {
+   "n": 29,
+   "unit": "s5",
+   "role": "V3",
+   "key": "ed:vague-either-path",
+   "text": "In 'Work out what you need most before you spend money on either path', 'either path' is slightly vague. Consider 'before you spend money on a cleanout or on a sale'. Wording only."
+  },
+  {
+   "n": 37,
+   "unit": "s7",
+   "role": "V3",
+   "key": "ed:local-thin",
+   "text": "Local feel rests on one Oakland link. Do not add facts to fix this; the brief states no local rules, so the absence is acceptable here."
+  },
+  {
+   "n": 38,
+   "unit": "s7",
+   "role": "V3",
+   "key": "ed:opening-generic-ish",
+   "text": "'Most owners want to know what could actually stop this sale.' is acceptable and no longer copies v8. A sharper version would name the seller's worry directly, for example whether the house or the paperwork is the bigger risk. Wording only, optional."
+  },
+  {
+   "n": 39,
+   "unit": "s8",
+   "role": "V1",
+   "key": "fact:s8:usually_generalization",
+   "text": "'Getting clarity early usually creates more options, not fewer.' is a soft general statement, not a legal, figure or outcome promise. Consider softening or cutting, but it does not block."
+  },
+  {
+   "n": 40,
+   "unit": "s8",
+   "role": "V2",
+   "key": "seo:s8-answer-not-named-first",
+   "text": "The H2 asks who to check with, but the opening paragraph (\"I'd get a few answers before you pick a route...\") does not name anyone; the list that answers it follows immediately. Optionally add a short clause such as 'an attorney, title company, CPA, insurance professional and your city or county' to the first sentence so the answer stands alone when quoted."
+  },
+  {
+   "n": 41,
+   "unit": "s8",
+   "role": "V2",
+   "key": "seo:s8-generalization",
+   "text": "\"Getting clarity early usually creates more options, not fewer.\" is a general claim with no ledger claim. It is not a consequential legal or factual statement, so it does not block. Consider softening or dropping it."
+  },
+  {
+   "n": 42,
+   "unit": "s8",
+   "role": "V3",
+   "key": "ed:verbatim-voice-line",
+   "text": "The sentence 'Getting clarity early usually creates more options, not fewer.' is word for word the voice reference excerpt v10. It is on-voice and makes no fact claim, but Leo may want it reworded so it is not a repeat of the live site. Not required."
+  },
+  {
+   "n": 43,
+   "unit": "s8",
+   "role": "V3",
+   "key": "ed:local-context-thin",
+   "text": "The section has no Bay Area or Northern California wording. Absence is acceptable for a professional-confirmation list ('city or county' is the local hook), and no local fact may be invented, so this is advisory only."
+  },
+  {
+   "n": 44,
+   "unit": "faq",
+   "role": "V1",
+   "key": "fact:faq:authority-occupancy:optional",
+   "text": "FAQ item 4: 'Living in the house does not give that authority.' is a flat statement. The brief supports it only as the stall risk (occupant is not the person with authority). Consider 'Living in the house alone does not give you that authority.' The confirm-with-attorney-or-title-company sentence is present, so this is not required."
+  },
+  {
+   "n": 45,
+   "unit": "faq",
+   "role": "V1",
+   "key": "fact:faq:waiver-no:optional",
+   "text": "FAQ item 5 opens with a flat 'No.' Clm:7 says a waiver of the article's requirements is void. Item 1 already notes the exception, but consider 'No, not for a sale the disclosure article covers.' so the short answer does not outrun clm:6."
+  },
+  {
+   "n": 46,
+   "unit": "faq",
+   "role": "V2",
+   "key": "seo:faq1-indirect-answer",
+   "text": "Item 1 ('Do I have to disclose...') opens with 'California's disclosure article applies, with an exception' rather than a plain yes. Consider starting 'Generally yes, for a sale of single-family residential property' so the quote stands alone. Wording must stay within clm:5, clm:6 and clm:7."
+  },
+  {
+   "n": 47,
+   "unit": "faq",
+   "role": "V2",
+   "key": "seo:faq3-no-direct-yes",
+   "text": "Item 3 ('Can the city or county act...') never says yes or no first. Consider opening with 'Possibly: local officials can act where they find conditions the statute lists.' Keep it tied to clm:1 to clm:4."
+  },
+  {
+   "n": 48,
+   "unit": "faq",
+   "role": "V2",
+   "key": "seo:faq5-dispute-claim-unledgered",
+   "text": "Item 5 says 'Planning to skip or soften disclosure can cause disputes later'. This is not tied to a ledger claim. It is soft and appears in the brief's risk row, but consider cutting it or keeping it as general caution."
+  },
+  {
+   "n": 49,
+   "unit": "faq",
+   "role": "V3",
+   "key": "ed:faq-light-local",
+   "text": "No answer reads as Northern California or Bay Area specific. Acceptable for a short FAQ whose facts are state law, and no local fact is supported, so nothing was added. Leo may want one local touch in the page body instead."
+  },
+  {
+   "n": 50,
+   "unit": "faq",
+   "role": "V3",
+   "key": "ed:faq-options-answer-flat",
+   "text": "The last answer lists four routes in four short fragments. It is honest and not a pitch, but it reads like a list. If the writer revises for other reasons, consider one plain lead line such as 'It depends on your time, your money and who can sign.' using no new facts."
+  }
+ ],
+ "classic_text": {
+  "s5": "## Do you have to clean out the house before you sell it?\n\nClearing the house out is your choice, and it does not change the disclosure rules that apply to your sale. What matters is what a cleanout gets you, and whether you can actually do it. For a lot of families the house feels too heavy to start on. That is a fair place to be, and it does not mean the house cannot be sold.\n\n### What a cleanout does change\n\n- It shows the real condition. Once the rooms are clear, you and any buyer can see the floors, walls, roof lines and anything that was hidden behind the belongings.\n- It lets you decide with facts. A professional cleanout crew, then an inspection, tells you what you are really selling before you pick a route.\n- It makes showing the home possible, which matters if you want to market it broadly.\n\n### What a cleanout does not change\n\nClearing the house does not turn the disclosure paperwork into something optional. The disclosure rules apply to a sale of single-family residential property, except as the law provides. The disclosures are made on a copy of the Real Estate Transfer Disclosure Statement form. A waiver of the requirements is void as against public policy. So do not treat a cleanout as a way to avoid the form, and do not agree with anyone to skip it.\n\nI am not telling you what must go on the form for your house, or whether an exception fits your sale. Go through it with a listing agent or a real estate attorney.\n\n### When you might choose not to clear it first\n\n- You do not have the time, health or help to run a cleanout and the repairs that may follow.\n- The person living there is not ready to move, and a rushed cleanout would hurt them more than it helps the sale.\n- The family has not settled who decides. Clearing out belongings before that is settled can start a fight that is hard to undo.\n- You want privacy and fewer showings, and you accept that a buyer who takes the house with its condition will price that in.\n\nNone of those is a wrong answer. Each one trades something: time, price, control or certainty. Work out what you need most before you spend money on either path.\n\nIf this is a parent's home, [this post on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/) covers the family side. For a plain explanation of the term, see [what selling your house as-is means](https://www.twinhomebuyer.com/what-does-selling-your-house-as-is-mean/).\n\n[note] Confirm with a real estate attorney or your listing agent what must be disclosed on the Transfer Disclosure Statement for your home, and who has authority to clear out and sell it.",
+  "s3": "## What conditions can turn a cluttered house into a code or safety problem?\n\nA full house is not automatically a code problem. Plenty of homes hold a lot of belongings and nobody from the city ever looks twice. But clutter can change character when it becomes trash, pests or fuel for a fire. That is where the law starts to care.\n\nCalifornia's Health and Safety Code, section 17920.3, lists conditions that can make a building substandard. I'd read a few of them before you decide anything, because they show the conditions the statute lists. The statute does not mention hoarding. It describes conditions, and it does not label any kind of household.\n\nCondition in the statute | What the statute says | Who decides\nJunk, debris and garbage | Premises where an accumulation of junk, debris, garbage and similar materials constitutes fire, health or safety hazards are among the listed conditions that can make a building substandard. | The local enforcement authority\nInsects, vermin or rodents | Infestation of insects, vermin or rodents, as determined by a health officer, is listed as a condition of inadequate sanitation. | A health officer\nGarbage and rubbish facilities | Lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer, is listed as a condition of inadequate sanitation. | A health officer\nCombustible waste or vegetation | Combustible waste or vegetation that, in the opinion of the fire chief or the chief's deputy, is in a condition to cause a fire or explosion or provide ready fuel to spread fire is listed. | The fire chief or the chief's deputy\n\nLook at the last column. Whether a particular house meets any of these is not for you, me or a buyer to say. The local enforcement authority makes that call, and in several of these conditions the statute names a health officer or a fire official.\n\n### What this means in practice\n\n- A pile of belongings is one thing. Trash, spoiled material or signs of pests are another, and they are the kind of thing the statute talks about.\n- Blocked rooms and hidden damage are practical concerns of their own. A buyer's inspection may find problems behind the clutter, so you will want to know about them first.\n- If a notice or violation already exists, you want to find out about it before you pick a route, not in the middle of a sale.\n\nNone of this means the house can't sell. It means you want to know where it stands before you choose a path. If you want background on code violations and enforcement in the Oakland area, [this guide on Oakland code violations](https://www.twinhomebuyer.com/oakland-code-violations-2026/) is a place to start. Local rules differ by city and county, so treat it as background and not as the rule for your address.\n\n[note] This is a plain-language reading of a state statute, not legal advice. Confirm with your city or county building, health or fire department whether any notice, violation or local rule applies to your property. An attorney can help if you receive a notice.",
+  "s2": "## Who has to sign, and who else is affected?\n\nThe person who holds title, or who has the legal authority to sell for the owner, has to sign. Depending on the situation, that might be an owner, a trustee, an executor, an administrator, a surviving spouse, or several heirs agreeing together. Others are affected too: the person living in the house, co-owners and heirs, any tenant or other occupant, and neighbors.\n\nBefore cleanout, before price, before anything else, I ask one question. Who actually holds title to the house?\n\nIt sounds like paperwork. It is really the whole sale. The answer decides who can sign, and who has to be involved. With a packed house, the person living there is often not the person on title. The home may have been a parent's or a relative's, and the family may be sorting out who decides while the house sits full.\n\n### Start with who holds title\n\nTitle can sit with an individual, a trust, an estate or an LLC. Each one changes who has to sign and who has to agree. You may not know which one applies yet. That is normal, and it is the first thing to find out.\n\n### Then ask who has the authority to sell\n\nHolding the keys is not the same as having the authority to sign. When the person living in the house is not the person with authority, the sale can stall.\n\nI am not going to tell you which rules apply to your family. That depends on the documents and the facts, and it is a question for a real estate attorney or a title company. If the house was inherited, [find out first whether you can legally sell it](https://www.twinhomebuyer.com/inherited-property-bay-area-legal-authority-to-sell/). A trust, a will, a probate case or several heirs can all change the process.\n\n### Then look at who else is affected\n\nA packed or hoarded house is often tied to family. The seller may be an adult child, an heir or a relative. The person living there may be reluctant to leave, unwell, or not ready. Treat that person with respect. Many families do not need to be judged. They need time, clarity and a practical way forward.\n\nWho | Why they matter\nThe person living in the home | Their health, wishes and timing shape what is realistic. They may or may not hold title.\nCo-owners and heirs | If more than one person has a say, they may all need to agree before anyone can move ahead.\nA tenant or other occupant | Anyone else living there affects access, timing and what you can promise a buyer.\nNeighbors | They may already be worried about the property, which can matter if a local office gets involved.\nA professional organizer or cleanout crew | They can help the family sort, keep and clear, and they need clear direction from whoever has authority.\n\nIf you are handling a parent's home, [this guide on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/) speaks to that situation directly.\n\n[callout] Settle who holds title and who can sign before you spend money on cleanout or talk price with anyone. Getting clarity early usually creates more options, not fewer.\n\n[note] Confirm with a real estate attorney or a title company who holds title, who has authority to sell, and who must sign. This guide does not state probate or trust rules.",
+  "s8": "## Who should you check with before you decide?\n\nI'd get a few answers before you pick a route. Not all of them, and not all at once. But the people below can each settle a question that this guide can only point at. A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign.\n\n- **Real estate attorney:** who has authority to sell, any probate or trust questions, and what has to be disclosed on the Transfer Disclosure Statement.\n- **Listing agent:** how the disclosure form is completed for your specific home, if you are thinking about listing.\n- **Title company:** liens, title issues and who has to sign.\n- **CPA:** the tax consequences of selling.\n- **Insurance professional:** what coverage looks like on a vacant or hazardous property.\n- **City or county building, health or fire department:** whether any enforcement notice or local rule applies to the property.\n\nIf a notice has already been posted or a letter has come, start with the city or county. It is better to know what is open before you choose a path than to hear about it from a buyer.\n\n[note] Confirm legal, tax, title, code and insurance points with the right professional for your situation. This guide explains the questions to ask. It does not replace the answers.\n\nOnce you know who can sign, what is owed and what the city or county says, you can compare keeping it, clearing it, listing it and selling directly with real information. Getting clarity early usually creates more options, not fewer.\n\nIf a direct sale is one of the routes you want to talk through, the next step is the [packed and hoarded house page](https://www.twinhomebuyer.com/hoarder-houses/). Read it, then decide. There is no rush attached to it.",
+  "s4": "## What do you have to disclose when you sell a house in California?\n\nWhen the house is full, this is often the question that makes people freeze. They think the clutter has to be explained away, or that it might be better not to mention it at all. Let me separate what the law says from what I can't tell you.\n\nHere is what the law says. California's disclosure article applies, with an exception, to a transfer by sale of single-family residential property. The disclosures the article requires are made on a copy of the Real Estate Transfer Disclosure Statement form.\n\nThe part I want you to remember is this one. Any waiver of the requirements of the article is void as against public policy. In plain words, you can't make the disclosure requirement go away by agreement. A buyer saying they do not need the paperwork does not change it.\n\n### What this means for a packed house\n\n- Do not plan around skipping or hiding disclosure. The waiver rule means that route is not open.\n- The exception matters. Whether your sale falls inside it, or whether your property counts as single-family residential, is a question for a professional, not a guess.\n- This guide does not go through what the form asks. What belongs on it for your house is for your agent or attorney to walk through with you.\n\nClutter makes this harder because you may not know what is behind it. That is one reason people look at cleanout and inspection before listing. I cover that choice in the next section.\n\n[note] Confirm with a real estate attorney or your listing agent: whether the disclosure requirement and its exception apply to your sale, and what goes on the Transfer Disclosure Statement for your specific house.",
+  "s7": "## What can delay or block the sale?\n\nMost owners want to know what could actually stop this sale. Some of it comes from the house. A lot of it comes from the paperwork and the people. Sort those apart early and you can plan around them instead of being surprised by them. Three things can stall the sale of a packed house.\n\n### A local official takes an interest in the property\n\nCalifornia's Health & Safety Code lists conditions that can make a building substandard. Some of them can apply to a house with a lot of accumulated belongings. Premises where junk, debris, garbage and similar materials add up to a fire, health or safety hazard are on the list. So is infestation of insects, vermin or rodents, as determined by a health officer. So is a lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer. And so is combustible waste or vegetation that, in the opinion of the fire chief or the chief's deputy, could cause a fire or explosion or provide ready fuel to spread fire.\n\nNotice who decides. It is the health officer or the fire official, not you and not me. The statute doesn't mention hoarding, and a full house is not automatically one of these conditions. Whether your house meets any of them is for the local authority. So find out whether there is an open notice or violation on the property before you choose a route. For background on how this works near Oakland, see [Oakland code violations](https://www.twinhomebuyer.com/oakland-code-violations-2026/).\n\n### A disclosure shortcut\n\nDo not plan to skip disclosure or play it down because the house is hard to see. The disclosures are made on the Real Estate Transfer Disclosure Statement form. And any waiver of the requirements is void as against public policy. A buyer who agrees to skip disclosures has not changed that. Go through the form with an agent or an attorney, and let them tell you what belongs on it for your house.\n\n### The wrong person, the wrong paperwork, or a late surprise\n\nA sale can stall when the person living in the house is not the person with authority to sell. It can stall when heirs disagree. It can stall when a lien or an unpaid bill turns up late in escrow. None of that is a cleanout problem. It is a paperwork and people problem, and it is better to find these problems early.\n\n- Who holds title: an individual, a trust, an estate or an LLC?\n- Who has the legal authority to sign, and who else has to agree?\n- Is there anything recorded against the property that a buyer or title company will find?\n\nIf the home came from a parent or relative, start with [whether you can legally sell it](https://www.twinhomebuyer.com/inherited-property-bay-area-legal-authority-to-sell/). Then read about [title issues and liens](https://www.twinhomebuyer.com/bay-area-title-issues-and-liens/). For the common slowdowns on an as-is sale, see [what can delay an as-is home sale](https://www.twinhomebuyer.com/what-can-delay-as-is-home-sale-bay-area/).\n\n[note] Confirm with the right professional: a real estate attorney for authority to sell and what goes on the disclosure form, a title company for liens and who must sign, and the city or county building, health or fire department for any enforcement notice on the property.",
+  "faq": "Q1. Do I have to disclose the condition of a packed or hoarded house when I sell in California?\nA1. For a sale of single-family residential property, California's disclosure article applies, with an exception. The disclosures are made on the Real Estate Transfer Disclosure Statement form, and any waiver of the requirements is void. Go through the form with an agent or attorney before you list.\n\nQ2. Do I have to clean out a house before selling it?\nA2. Not always. It depends on your time, your money, who has authority to sell and which route you pick. Clearing it out shows the real condition before you list. A direct sale is the other route, and a direct buyer prices in the condition.\n\nQ3. Can the city or county act on a packed or hoarded house?\nA3. State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards. Whether a home meets them is for the local authority. The statute does not mention hoarding. Ask the city or county whether any notice is open.\n\nQ4. Who can sell the house if the owner cannot or will not?\nA4. Only someone with legal authority to sign. That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house does not give that authority. Confirm who can sign with an attorney or title company before you plan anything else.\n\nQ5. Can I agree with the buyer to skip disclosure?\nA5. No. Under the California statute, any waiver of the disclosure requirements is void as against public policy. Planning to skip or soften disclosure can cause disputes later. Work through the form with an agent or attorney instead.\n\nQ6. What are my realistic options for a packed or hoarded house?\nA6. Keep it while you sort out care and decisions. Clear it out, then list it with an agent. Get professional help first on authority, title and tax. Or sell directly if you want to avoid cleanout and showings and accept that the price reflects the condition."
+ },
+ "team_final_text": {
+  "s5": "## Do you have to clean out the house before you sell it?\n\nClearing the house out is your choice, and it does not change the disclosure rules if your sale is covered by them. The harder question is whether you can start at all. When every room is full, the first step can feel out of reach. That does not mean the house cannot be sold.\n\n### What a cleanout does change\n\n- It shows the condition. Once the rooms are clear, you and any buyer can see the floors, walls and ceilings that were covered by belongings.\n- It gives you more to decide with. A professional cleanout crew, then an inspection, can show you more of what you are selling before you pick a route. An inspection still has limits, so ask the inspector what it did not cover.\n- It makes showing the home possible, which matters if you want to market it broadly.\n\n### What a cleanout does not change\n\nA cleanout does not replace the disclosure form. You still complete it, if your sale is covered.\n\nHere is the law in plain terms. The disclosure rules apply to a sale of single-family residential property, except as the law provides. The disclosures go on a copy of the Real Estate Transfer Disclosure Statement form. A waiver of the requirements is void as against public policy. So do not agree with anyone to skip the form.\n\nI am not telling you what must go on the form for your house, or whether an exception fits your sale. Go through it with a listing agent or a real estate attorney.\n\n### When you might choose not to clear it first\n\n- You do not have the time, health or help to run a cleanout and the repairs that may follow.\n- The person living there is not ready to move, and a rushed cleanout would hurt them more than it helps the sale.\n- The family has not settled who decides. Clearing out belongings before that is settled can start a fight that is hard to undo.\n- You want privacy and fewer showings, and you accept that a direct buyer will price in the condition. You would be trading some price for privacy and fewer showings.\n\nNone of those is a wrong answer. Each one trades something: time, price, control or certainty. If this is a parent's home, [this post on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/) covers the family side. For a plain explanation of the term, see [what selling your house as-is means](https://www.twinhomebuyer.com/what-does-selling-your-house-as-is-mean/).\n\nThe next step is to work out what you need most, before you spend money on a cleanout or on a sale.\n\n[note] Confirm with a real estate attorney or your listing agent what must be disclosed on the Transfer Disclosure Statement for your home, and who has authority to clear out and sell it.",
+  "s3": "## What conditions can turn a cluttered house into a code or safety problem?\n\nA full house is not automatically a code problem. But clutter can change character when it becomes trash, pests or fuel for a fire. The state statute lists conditions like those, and an official decides whether a home meets them.\n\nCalifornia's Health and Safety Code, section 17920.3, lists conditions that can make a building substandard. I'd read them before you decide anything, so you know what the city or county can actually look at. The statute does not mention hoarding.\n\nWhat it looks like | What the statute says | Who decides\nJunk, debris and garbage piling up | An accumulation of junk, debris, garbage and similar materials that constitutes fire, health or safety hazards is among the listed conditions that can make a building substandard. | The local enforcement authority\nInsects, vermin or rodents | Infestation of insects, vermin or rodents, as determined by a health officer, is listed as a condition of inadequate sanitation. | A health officer\nNo adequate way to store and remove garbage | Lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer, is listed as a condition of inadequate sanitation. | A health officer\nCombustible waste or vegetation | Listed when, in the opinion of the fire chief or the chief's deputy, it is in a condition to cause a fire or explosion or provide ready fuel to spread fire. | The fire chief or the chief's deputy\n\nLook at the last column. Whether a particular house meets any of these is not for you, me or a buyer to say. The local enforcement authority makes that call, and for several of these conditions the statute names a health officer or a fire official.\n\n### What should you check before you pick a route?\n\n- A pile of belongings is one thing. Trash or signs of pests are another, and they can resemble conditions the statute lists. Whether a home meets them is for the official to decide.\n- Blocked rooms and hidden damage are practical concerns of their own. A buyer's inspection may find problems behind the clutter, so you will want to know about them first.\n- Whether a notice or violation already exists on the property. Find that out before you choose how to sell, not in the middle of a sale.\n\nIf your house is near Oakland, [this guide on Oakland code violations](https://www.twinhomebuyer.com/oakland-code-violations-2026/) gives background on code violations and enforcement there. Treat it as secondary to checking with your own city or county, because local rules differ. What you must tell a buyer is a separate question, and the next section covers it.\n\n[note] This is a plain-language reading of a state statute, not legal advice. Confirm with your city or county building, health or fire department whether any notice, violation or local rule applies to your property. An attorney can help if you receive a notice.",
+  "s2": "## Who has to sign, and who else is affected?\n\nThe person who holds title, or who has legal authority to sell for the owner, has to sign. Co-owners, heirs, anyone living in the home and others may also be affected, so find out who holds title first.\n\nThe house is full. A parent or relative may still live there. The family has not settled who gets to decide. Before cleanout and before price, the first question I ask is who actually holds title.\n\n### Start with who holds title\n\nTitle can sit with an individual, a trust, an estate or an LLC. Each one changes who has to sign and who has to agree. You may not know which one applies yet. That is fine. It is the first thing to find out.\n\n### Then ask who has the authority to sell\n\nThe person who holds title, or who has the legal authority to sell for the owner, has to sign. Depending on the situation, that could be an owner, a trustee, an executor, an administrator, a surviving spouse, or several heirs agreeing together. Which one applies to your family depends on the documents and the facts, so do not read that list as a rule for your house.\n\nHolding the keys is not the same as having the authority to sign. When the person living in the house is not the person with authority, the sale can stall. If the house was inherited, [find out first whether you can legally sell it](https://www.twinhomebuyer.com/inherited-property-bay-area-legal-authority-to-sell/). A trust, a will, a probate case or several heirs can all change the process.\n\n### Then look at who else is affected\n\nA packed or hoarded house can be tied to family. The seller may be an adult child, an heir or a relative. The person living there may be reluctant to leave, unwell, or not ready. This is someone's home and a family's decision, so go slowly, listen, and keep that person at the center of the plan.\n\nHere is who else can be affected, and why each one matters.\n\nWho | Why they matter\nThe person living in the home | Their health, wishes and timing shape what is realistic.\nCo-owners and heirs | If more than one person has a say, they may all need to agree before anyone can move ahead.\nA tenant or other occupant | Anyone else living there affects access, timing and what you can promise a buyer.\nNeighbors | If a neighbor has raised concerns, a local office may already know about the property. Ask whether any notice exists before you choose a route.\nA professional organizer or cleanout crew | They can help the family sort, keep and clear, and they need clear direction from whoever has authority.\n\nIf you are handling a parent's home, [this guide on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/) speaks to that situation directly.\n\n[callout] Settle who holds title and who can sign before you pay for a cleanout or talk price with anyone. Spending first can commit you to a plan the right person did not agree to.\n\n[note] Confirm with a real estate attorney or a title company who holds title, who has authority to sell, and who must sign. This guide does not state probate or trust rules.",
+  "s8": "## Who should you check with before you decide?\n\nBefore you pick a route, check with an attorney, a title company, a CPA, an insurance professional and your city or county. Each can settle a question this guide can only point at. You do not need all of them at once.\n\n- **Real estate attorney:** who has authority to sell, any probate or trust questions, and what has to be disclosed on the Transfer Disclosure Statement.\n- **Listing agent:** how the disclosure form is completed for your specific home, if you are thinking about listing.\n- **Title company:** liens, title issues and who has to sign.\n- **CPA:** the tax consequences of selling.\n- **Insurance professional:** what coverage looks like on a vacant or hazardous property.\n- **City or county building, health or fire department:** whether any enforcement notice or local rule applies to the property.\n\nWhere to start depends on your situation. If the home was a parent's or relative's, start with the attorney or the title company, because who can sign comes first. If a notice has been posted or a letter has come, start with the city or county. If you are thinking about listing, talk to a listing agent about the disclosure form.\n\n[note] Confirm legal, tax, title, code and insurance points with the right professional for your situation. This guide explains what to ask, not what the answer is for your house.\n\nOnce you know who can sign, what is owed and what the city or county says, you can compare keeping it, clearing it, listing it and selling directly with real information.\n\nIf a direct sale is one of the routes you want to talk through, the next step is the [packed and hoarded house page](https://www.twinhomebuyer.com/hoarder-houses/).",
+  "s4": "## What do you have to disclose when you sell a house in California?\n\nWith a full house, the worry is that you do not know what you have to tell a buyer about its state, and telling them feels like it could hurt the sale. When you sell single-family residential property in California, the disclosures are made on the Real Estate Transfer Disclosure Statement form, the rules have an exception, and a waiver of them is void. Here is what that means, and what I would do about the rest.\n\n- California's seller disclosure law (Civil Code 1102 and following) applies, except as provided in Section 1102.2, to a transfer by sale of single-family residential property.\n- Under Civil Code 1102.6(a), the disclosures that law requires are made on a copy of the Real Estate Transfer Disclosure Statement form.\n- Under Civil Code 1102(c), any waiver of the requirements of California's seller disclosure law is void as against public policy.\n\n### What this means for a packed house\n\nThe waiver point matters most when the house is hard to face. You cannot get out of the requirements by agreeing with a buyer to skip them. So the useful question is not whether to disclose. It is how to do it accurately, with help.\n\n- The rules have an exception. Whether your sale falls inside it, or whether your property counts as single-family residential, is a question to settle with a professional.\n- This guide does not go through what the form asks. What belongs on it for your house is for your agent or attorney to walk through with you.\n- Clutter can hide conditions you do not know about yet. That is one reason to think about cleanout and an inspection before you list. The next section covers that choice.\n\n### What I would do first\n\n1. Write down what you actually know about the house: rooms you cannot get into, damage you have seen, anything a neighbor or official has mentioned.\n2. Take that list to a real estate attorney or a listing agent before you talk price with anyone.\n3. Ask them to tell you whether the rules and the exception apply to your sale, and to go through the form with you for your specific house.\n4. Decide on cleanout, listing or a direct sale after that, not before.\n\n[note] Not sure who to call? Start with a real estate attorney for the legal questions, or your listing agent for how the form is filled out.",
+  "s7": "## What can delay or block the sale?\n\nYou may be worried that the house itself will sink this sale. It can slow things down. So can the paperwork and the people involved. Three things can stall the sale of a packed house: a local official taking an interest, a disclosure misstep, and a problem with who can sign or what is recorded against the property.\n\n### A local official takes an interest in the property\n\nCalifornia's Health & Safety Code lists conditions that can make a building substandard. Some of them can apply to a house with a lot of accumulated belongings. Premises where junk, debris, garbage and similar materials add up to a fire, health or safety hazard are on the list. So is infestation of insects, vermin or rodents, as determined by a health officer. So is a lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer. And so is combustible waste or vegetation that, in the opinion of the fire chief or the chief's deputy, could cause a fire or explosion or provide ready fuel to spread fire.\n\nNotice who decides. It is the health officer or the fire official, not you and not me. The statute doesn't mention hoarding, and a full house is not automatically one of these conditions. Whether your house meets any of them is for the local authority. So find out whether there is an open notice or violation on the property before you choose a route. For background on how this works near Oakland, see [Oakland code violations](https://www.twinhomebuyer.com/oakland-code-violations-2026/).\n\n### Skipping or playing down the disclosure form\n\nDo not plan to skip disclosure or play it down because the house is hard to see. On a sale of single-family residential property, with an exception, the disclosures the law requires are made on the Real Estate Transfer Disclosure Statement form. Any waiver of those requirements is void as against public policy. A buyer who agrees to skip disclosures has not changed that. Go through the form with an agent or an attorney, and let them tell you what belongs on it for your house.\n\n### The wrong person, the wrong paperwork, or a late surprise\n\nA sale can stall when the person living in the house is not the person with authority to sell. It can stall when heirs disagree. It can stall when a lien or an unpaid bill turns up late in escrow. None of that is a cleanout problem. It is a paperwork and people problem, and it is better to find these problems early.\n\n- Who holds title: an individual, a trust, an estate or an LLC?\n- Who has the legal authority to sign, and who else has to agree?\n- Is there anything recorded against the property that a buyer or title company will find?\n\nIf the home came from a parent or relative, start with [whether you can legally sell it](https://www.twinhomebuyer.com/inherited-property-bay-area-legal-authority-to-sell/). Then read about [title issues and liens](https://www.twinhomebuyer.com/bay-area-title-issues-and-liens/). For the common slowdowns on an as-is sale, see [what can delay an as-is home sale](https://www.twinhomebuyer.com/what-can-delay-as-is-home-sale-bay-area/).\n\n[note] Confirm with the right professional: a real estate attorney for authority to sell and what goes on the disclosure form, a title company for liens and who must sign, and the city or county building, health or fire department for any enforcement notice on the property.",
+  "faq": "Q1. Do I have to disclose the condition of a packed or hoarded house when I sell in California?\nA1. California's disclosure article applies to a sale of single-family residential property, with an exception. The disclosures are made on the Real Estate Transfer Disclosure Statement form, and any waiver of the requirements is void. Ask an agent or attorney how to complete it for your house.\n\nQ2. Do I have to clean out a house before selling it?\nA2. It depends on your time, your money, who has authority to sell and the route you pick. Clearing out shows the real condition before you list. A direct buyer prices in the condition. A city or county notice could also change your options.\n\nQ3. Can the city or county act on a packed or hoarded house?\nA3. It can look at the property. State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards. Whether a home meets them is for the local authority. Ask the city or county whether any notice is open.\n\nQ4. Who can sell the house if the owner cannot or will not?\nA4. That depends on who holds title and who has legal authority to sign. A sale can stall when the person living in the house is not that person. Confirm it with an attorney or title company before you plan anything else.\n\nQ5. Can I agree with the buyer to skip disclosure?\nA5. No, not for a sale the disclosure rules cover. Under California law, any waiver of the requirements is void as against public policy. Talk it through with your attorney before you sign anything.\n\nQ6. What are my realistic options for a packed or hoarded house?\nA6. It depends on what you need most. Keep it while the family sorts out care and decisions. Clear it out and list it if you have time and money. Sell directly to skip cleanout and showings, at a price that reflects condition. Confirm authority and title with an attorney or title company, tax with a CPA."
+ }
+}

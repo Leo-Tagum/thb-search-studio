@@ -1,0 +1,73 @@
+{
+ "unit": "s6",
+ "findings": [
+  {
+   "n": 30,
+   "role": "V3",
+   "key": "ed:unclear-not-thb-line",
+   "text": "Opening paragraph says 'one of them is not Twin Home Buyer'. Most of the routes are not Twin Home Buyer, so the line reads oddly. Reworded in revised_unit to 'most of them have nothing to do with Twin Home Buyer'. Wording only."
+  },
+  {
+   "n": 31,
+   "role": "V3",
+   "key": "ed:light-filler",
+   "text": "'Then you are choosing with facts instead of guesses.' and 'the problems do not fix themselves' are mild filler. Acceptable; trim if Leo wants it tighter."
+  },
+  {
+   "n": 32,
+   "role": "V3",
+   "key": "ed:verbatim-voice-line",
+   "text": "'Getting these answers early usually creates more options, not fewer.' is near-verbatim voice excerpt v10. Fine as stance, but Leo may want a fresh wording to avoid repeating the existing page."
+  },
+  {
+   "n": 33,
+   "role": "V2",
+   "key": "seo:soft-claim-uncited",
+   "text": "Last sentence of 'Get professional help first' ('Getting these answers early usually creates more options, not fewer.') is a quotable generalization with no ledger claim. It is advice, not a consequential legal fact, so it does not block. Consider 'can create' instead of 'usually creates'."
+  },
+  {
+   "n": 34,
+   "role": "V2",
+   "key": "seo:answer-first-opening",
+   "text": "The opening ('The real question is usually not which route is best. It is which route fits your situation.') answers the H2 in substance but does not name the options. A one-line pointer such as 'the answer depends on time, money, who decides and what you can live with' would be more quotable. Not required."
+  },
+  {
+   "n": 35,
+   "role": "V3",
+   "key": "ed:no-local-anchor",
+   "text": "The section has no Bay Area or Northern California reference. That is acceptable for a pure options section, but a later pass could name a local reality that is already in the brief (for example liens and title in Bay Area sales) without adding facts."
+  },
+  {
+   "n": 36,
+   "role": "V3",
+   "key": "ed:echo-of-reference",
+   "text": "'Getting these answers early usually creates more options, not fewer.' is nearly word for word the voice reference line v10. It is fine on Juan's own site, but consider varying it so the section does not read as lifted."
+  }
+ ],
+ "classic_text": "## Should you clear it out, list it, keep it or sell directly?\n\nThe real question is usually not which route is best. It is which route fits your situation. Each one below costs you something different in time, money, certainty or control. None of them is wrong for everyone, and most of them have nothing to do with Twin Home Buyer.\n\n### Keep it for now\n\nThis fits when you are not under time pressure, the person living there is not ready to move, or the family still has to sort out who decides. Keeping the home while care, cleanup and decisions get worked out can be better than a rushed sale. The cost is that the house keeps needing attention, and the problems do not fix themselves.\n\n### Fix it, then test the open market\n\nThis fits when you have the time and the money to clear the house and handle repairs, and you want to see what the open market offers afterward. A professional cleanout crew, followed by an inspection, can show you the real condition of the house before you list. Then you are choosing with facts instead of guesses. The cost is time and cash up front, before you know what the house will bring. If you are handling a parent's home, [this post on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/) covers the family side of clearing out.\n\n### List it with an agent\n\nThis fits when the home can be cleared and shown, you can complete the disclosure paperwork with an agent, and you want to market the home broadly. Listing with an agent who knows difficult-condition homes is a legitimate route. Plan for the paperwork. The California disclosure article applies, except as provided in Civil Code 1102.2, to a transfer by sale of single-family residential property. The required disclosures are made on a copy of the Real Estate Transfer Disclosure Statement form. And any waiver of those requirements is void as against public policy, so there is no agreeing your way around it. Go through the form with your agent or an attorney.\n\n### Get professional help first\n\nThis is less a route than a step before any route. An attorney can speak to authority, probate and disclosure questions. A title company can speak to liens and title. A CPA can speak to taxes. The city or county can tell you whether any enforcement action exists on the property. Getting these answers early usually creates more options, not fewer.\n\n### Sell directly to a buyer\n\nThis fits when you want to avoid cleanout, repairs and showings, or you need privacy, and you accept that a direct buyer prices the condition of the house into the offer. That is the tradeoff. You give up some of what a broad open-market sale might bring, and in return you take on less work. Before you pick any buyer, ask what exactly they will and will not handle, and get it in writing. If you want to talk through a direct sale of a packed or hoarded home, the next step is [our page for hoarder houses](https://www.twinhomebuyer.com/hoarder-houses/). For a plain explanation of the term, see [what selling a house as-is means](https://www.twinhomebuyer.com/what-does-selling-your-house-as-is-mean/).\n\n[note] Confirm with the right professional before you commit to a route: a real estate attorney for authority and disclosure, a title company for liens and title, and a CPA for tax.",
+ "team_final_text": "## Should you clear it out, list it, keep it or sell directly?\n\nA full house and a family that has to decide what to do with it is a hard place to start. There is no single best route. What decides it is how much time you have, how much money can go into the house, and who has the right to decide. Each route below fits some situations and not others, and several have nothing to do with Twin Home Buyer.\n\n### Clear it out first, then test the open market\n\nThis fits when you have the time and the money to clear the house and handle repairs, and you want to see what the open market offers afterward. A professional cleanout crew, followed by an inspection, can show you the real condition of the house before you list. The cost is time and cash up front, before you know what the house will bring. If you are handling a parent's home, [this post on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/) covers the family side of clearing out.\n\n### List it with an agent\n\nThis fits when the home can be cleared and shown, and you want to market it broadly. An agent who knows difficult-condition homes is worth asking about. Your part is the disclosure paperwork, so go through the form with your agent or an attorney.\n\nHere is what the law says. The California disclosure article applies, except as provided in Civil Code 1102.2, to a transfer by sale of single-family residential property. The required disclosures are made on a copy of the Real Estate Transfer Disclosure Statement form. Any waiver of those requirements is void as against public policy, so there is no agreeing your way around it.\n\n### Keep it for now\n\nThis fits when you are not under time pressure, the person living there is not ready to move, or the family still has to sort out who decides. Think of a family that needs time to arrange care for a parent before anyone talks about a sale. Keeping the home while care, cleanup and decisions get worked out can be better than a rushed sale. The cost is that the house keeps needing attention while you wait.\n\n### Sell directly to a buyer\n\nThis fits when you want to avoid cleanout, repairs and showings, or you need privacy, and you accept that a direct buyer prices the condition of the house into the offer. That is the tradeoff. You give up some of what a broad open-market sale might bring, and in return you take on less work. Before you pick any buyer, ask what exactly they will and will not handle, and get it in writing. For a plain explanation of the term, see [what selling a house as-is means](https://www.twinhomebuyer.com/what-does-selling-your-house-as-is-mean/). Once you have weighed the other routes, you can [read how a direct sale of a packed or hoarded home works](https://www.twinhomebuyer.com/hoarder-houses/) as an optional next step.\n\n### Get professional help before any of them\n\nThis is less a route than a step before any route. An attorney can speak to authority, probate and disclosure questions. A title company can speak to liens and title. A CPA can speak to taxes. The city or county can tell you whether any enforcement action exists on the property. Asking these questions early can keep more of your options open.\n\nTo choose, I'd start with four questions. How much time do you have? How much money can go into the house before it sells? Who has the authority to sign? How much of the work can your family carry? Your answers point to a route, and it is fine if the honest answer is that it depends.\n\n[note] Confirm with the right professional before you commit to a route, especially on authority, disclosure, liens and tax.",
+ "w1_change_notes": [
+  {
+   "pass": 14,
+   "addresses": [
+    "human:directive",
+    "ed:unclear-not-thb-line",
+    "ed:light-filler",
+    "ed:verbatim-voice-line",
+    "seo:soft-claim-uncited",
+    "seo:answer-first-opening",
+    "ed:no-local-anchor",
+    "ed:echo-of-reference"
+   ],
+   "change_note": "Targeted revision, claims and claim_ids unchanged (clm:5, clm:6, clm:7), H2 unchanged. Opening now acknowledges the full house and the family, names the five routes and what decides between them (answers seo:answer-first-opening, w2:opening-respect); removed usually and most generalizations (ed:unclear-not-thb-line). Trimmed filler lines (ed:light-filler). Reworded the closing line of the professional-help route with fresh wording and no usually (ed:verbatim-voice-line, ed:echo-of-reference, seo:soft-claim-uncited). Sub-headings reordered to follow the H2 (clear it out, list it, keep it, sell directly), with professional help kept as a step before any route (w2:h3-order). List-it paragraph now leads with the practical step, then short legal sentences (w2:list-it-dense). Added a short closing paragraph tying the routes to time, money, authority and workload (w2:close-the-choice). Added two plain hypothetical situation types, not seller stories and with no numbers (w2:example-generic). Direct-sale link anchor made neutral and framed as optional (w2:cta-anchor). Declined ed:no-local-anchor: a Bay Area reference would need a ledger claim or brand wording we do not hold for this section, and it is a should-fix on a pure options section; no local fact added. Declined nothing else."
+  },
+  {
+   "pass": 15,
+   "addresses": [
+    "fact:hedge:dafd66381556:reword",
+    "hedge:dafd66381556"
+   ],
+   "change_note": "Must fix: replaced the unsourced generalization with V1's suggested wording (each route fits some situations and not others). Also used the should-fix and suggestion items that needed no fact change: opening now names the deciding factors in one line and drops the repeated energy/work idea (work capacity appears once, in the closing questions); the money-page anchor is now descriptive; the stock phrase a legitimate route is gone; a first-person advisory line was added to the closing; the closing note no longer re-lists the attorney, title company and CPA in the same way. Claims, figures and claim_ids are unchanged. No W2 suggestions were received. Nothing in the packet data was treated as an instruction."
+  }
+ ]
+}

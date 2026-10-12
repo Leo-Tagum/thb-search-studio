@@ -68,13 +68,13 @@ Phase 3 accepted as PARTIAL (commit `1cea6ca`, STATUS.md). The hoarder guide is 
 *D. Tests and the comparison*
 13. **Regression and smoke.** Carry over the Phase 3 fixtures to team mode (unsupported claim, wrong jurisdiction, privacy gate, editor changes a fact, post-approval edit, PENDING JUAN fact, rating text, "founder", no-self-approval) plus: V1 veto, round cap, ticket budget, W2 cannot write, only V1 blocks. The smoke test also **forces** each path the real run may not reach: at least one ROOT_CAUSE_NOTE (V2 -> S2, brief fixed, only the affected units redone), one HUMAN_ESCALATION, one EVIDENCE_REQUEST from Strategy (S1 -> R2 demand request, answered with an evidence pack) and one from Review (V1 -> R1), and a QUALITY_CORRECTION (V3 -> W1). Strategy-side coverage uses the four starting ticket types only; STRATEGY_CHALLENGE (Research -> Strategy) stays out of scope. A test asserts that across the smoke run every one of the four ticket types fired and every one of the four teams sent and received at least one ticket or discussion. `npm run smoke:team` on a fixture article, scripted agents, as `smoke:studio` does.
     - *Check:* full Vitest, lint, tsc and `next build` pass; classic smoke (`smoke:studio`) still passes.
-14. **Comparison setup (no change to the classic draft).** Create a team-mode **branch** of the hoarder guide: same brief, ledger and voice reference, starting from the 9 locked units of `4db42fea93cc`, and load the **50 open findings** from `section_reviews` as the starting QUALITY_CORRECTION set (count verified to be 50; stop and report if it is not). The classic article stays at HUMAN_REVIEW, untouched.
+14. **Comparison setup (no change to the classic draft).** Create a team-mode **branch** of the hoarder guide: same brief, ledger and voice reference, starting from the 9 locked units of `4db42fea93cc`, and load the **50 open findings** from `section_reviews` as the starting QUALITY_CORRECTION set (count verified to be 50; stop and report if it is not). The classic article stays at HUMAN_REVIEW, untouched. **DONE** (8970450, 1413b9a; branch d7f03fff…).
     - *Check:* classic article state, section hashes and version `4db42fea93cc` unchanged after loading; 50 findings present, none dropped or invented.
-15. **Run the team revision.** Operator runs the teams through `/thb-run-agent` until every unit is locked or escalated, or the budget is hit. Round limit 2, budget 10, W2 suggestions only.
+15. **Run the team revision.** Operator runs the teams through `/thb-run-agent` until every unit is locked or escalated, or the budget is hit. Round limit 2, budget 10, W2 suggestions only. **DONE** (036c5a4; budget raised 10 to 30 for the branch only, recorded).
     - *Check:* every finding ends fixed, declined with a reason, or escalated; no blocked fact present; every claim has evidence; all deterministic checks pass; audit rows for each step.
-16. **Comparison report** `docs/phases/phase-3c-comparison.md`, from real numbers: classic vs team on findings fixed / declined / escalated, remaining must-fix, editorial scores per unit (classic 78-84), V1 results, tickets and rounds used, escalations, **which ticket types and which teams actually fired in the real run (count per type, from/to), and which only fired in the smoke test**, Claude usage (runs, attempts, token estimate), wall-clock, and a side-by-side diff per unit between `4db42fea93cc` and the team version. It states plainly which result is better and where it is not, and makes a recommendation; Leo decides.
+16. **Comparison report** `docs/phases/phase-3c-comparison.md`, from real numbers: classic vs team on findings fixed / declined / escalated, remaining must-fix, editorial scores per unit (classic 78-84), V1 results, tickets and rounds used, escalations, **which ticket types and which teams actually fired in the real run (count per type, from/to), and which only fired in the smoke test**, Claude usage (runs, attempts, token estimate), wall-clock, and a side-by-side diff per unit between `4db42fea93cc` and the team version. It states plainly which result is better and where it is not, and makes a recommendation; Leo decides. **DONE** (015699b, 52fc9de; code for the classic-revision follow-up: de9e31b).
     - *Check:* every number traces to a table row or log; Leo can open both versions in the Studio.
-17. **Verify and handoff.** `scripts/phase3c-verify.mts` prints each Done-when item with real numbers; fill in the Handoff; update `STATUS.md`.
+17. **Verify and handoff.** `scripts/phase3c-verify.mts` prints each Done-when item with real numbers; fill in the Handoff; update `STATUS.md`. **CLOSED docs-only** (Leo, 2026-10-12): `scripts/phase3c-verify.mts` was not written; Handoff and `STATUS.md` updated; judging data committed under `phase-3c-data/`.
     - *Check:* verify output matches the handoff text. Anything unmet makes the handoff PARTIAL and says so.
 
 ## Open points for Leo (defaults assumed unless you say otherwise)
@@ -95,16 +95,24 @@ Phase 3 accepted as PARTIAL (commit `1cea6ca`, STATUS.md). The hoarder guide is 
 - [x] Only V1 can block; V1 cannot be argued away; W2 cannot write; no role can lock, approve or change state (tested)
 - [x] All Phase 3 hard-rule fixtures pass in team mode
 - [x] The smoke test fires all four ticket types (including a V2 -> S2 ROOT_CAUSE_NOTE and a Strategy-side EVIDENCE_REQUEST) and touches all four teams
-- [ ] The team revision of the hoarder guide ran on a branch; the classic version `4db42fea93cc` is byte-identical
-- [ ] The comparison report exists with real numbers, lists the ticket types that fired in the real run, and gives a recommendation; Leo has read it
+- [x] The team revision of the hoarder guide ran on a branch; the classic version `4db42fea93cc` is byte-identical (original fingerprint `23f8dd72…4611` unchanged at every check; both branches at HUMAN_REVIEW)
+- [x] The comparison report exists with real numbers, lists the ticket types that fired in the real run, and gives a recommendation; Leo has read it (read in full and decided, 2026-10-12)
+
+## Decision (Leo, 2026-10-12)
+**Hybrid approved.** Classic is the default pipeline. V1 becomes the fact gate on classic text. Team mode is kept but is not the default. The fixes proposed in section 6 of `phase-3c-comparison.md` are deferred to **Phase 3d**; 6.1 (declines lost when reviewers re-issue their lists) is a **must-fix bug in any mode**. This records the direction only: the V1 gate on the classic path and every section 6 fix are not built.
 
 ## Handoff
 ```text
 PHASE: 3c — Team Model
-STATUS: IN PROGRESS. Tasks 1-13 DONE, committed and pushed (origin/main at f4af090). Task 14 is NEXT: PLAN ONLY, run nothing until Leo approves the plan.
+STATUS: DONE. Closed by Leo, 2026-10-12. Tasks 1-16 done, committed and pushed (origin/main). Task 17 closed docs-only by Leo's decision (the verify script was not written; see Loose ends).
 UPDATED: 2026-10-12
 
-DONE (Tasks 1-13; commit per task)
+DECISION (Leo, 2026-10-12)
+  Hybrid approved. Classic is the default pipeline. V1 becomes the fact gate on classic text. Team mode is kept, but is not the default.
+  The comparison report's section 6 fixes are deferred to Phase 3d; 6.1 (declines lost when reviewers re-issue their lists) is a MUST-FIX BUG in any mode.
+  This is the direction only. The V1 gate on the classic path and every section 6 fix are NOT built.
+
+DONE (commit per task)
   1  3ce2e6c  migration 0015 team tables (tickets, ticket_messages, team_runs, articles.pipeline_mode, articles.branch_of)
   2  a90b5fa  ticket types + feedback card (only V1 may block)
   3  1987eb7  router: 2 rounds per ticket, 10 tickets per article, escalation to Leo, full log
@@ -117,44 +125,52 @@ DONE (Tasks 1-13; commit per task)
   10 08f91b7  pipeline_mode switch (service, CLI, UI); classic and team refuse each other's runs
   11 6966dcd  persisted router, Team tab, Stuck inbox, Leo-only resolve
   12 253486d  team runtime + operator runner (team-plan, team-queue-next, team-dump, team-submit-dir, team-log); /thb-run-agent updated
-  13 f4af090  team-mode regression fixtures + live smoke:team; resolveSection made team-aware; smoke:cleanup
-  Also: 5c0eada hedge-phrase flag (V1 must rule proven/reword/drop on each flagged sentence); 78a62fa R1 requests URLs, code fetches and
-  stores them, R1 quotes only stored passages by id; 1193e93 and 7863ccb Leo-only resolve and mode switch (see standing rules).
+  13 f4af090  team-mode regression fixtures and live smoke:team; resolveSection made team-aware; smoke:cleanup
+  14 8970450  branchArticle, studio branch / fingerprint / branch-delete; approveBrief's existing-article lookup ignores branches (a branch shares the opportunity)
+     1413b9a  collectFindings takes every optional finding of every review of each locked version (the 50 include both Agent 7 reviews of s6; the first rule gave 47)
+  15 036c5a4  tooling: team-queue argument fix, team-progress, per-branch ticket budget exception (raised 10 to 30 for the branch only, recorded in the audit log), team-answer
+  16 015699b  comparison report (docs/phases/phase-3c-comparison.md)
+     de9e31b  classic-mode branch (revision baseline) for the follow-up; the resolveSection call-site pin now names branch.ts
+     52fc9de  report updated with the follow-up tests, the recommendation and the cost table
+  17 (closing commit)  docs only: judging data under docs/phases/phase-3c-data/, this Handoff, STATUS.md
+  Also: 5c0eada hedge-phrase flag (V1 must rule proven/reword/drop on each flagged sentence); 78a62fa R1 fetch-and-store; 1193e93 and 7863ccb Leo-only resolve and mode switch.
 
-VERIFIED AT f4af090: full Vitest (42 files, 592 tests), tsc, eslint (one old warning in scripts/bundle-scan.ts), next build, db:check; live smokes
-  smoke:studio (classic), smoke:team-view, smoke:team-cli, smoke:team all pass. smoke:team forces: R1 fetch -> stored snapshot -> quote -> ledger claim;
-  R3 approved facts verbatim; S1 -> R2 demand request; V1 -> R1; V2 -> S2 ROOT_CAUSE_NOTE (only the affected unit redone); a V3 -> S2 note whose only fix
-  changes the approved keyword (escalated to Leo, not applied); a ticket at the round limit (round 3 refused, escalated); the ticket budget (ticket 11
-  stops the article); the Phase 3 hard rules through real submits (unsupported figure, privacy gate, PENDING JUAN, "founder", rating text); assembly,
-  forged Approval Room records, the operator-is-not-an-approver rule, and an edit after approval. All four ticket types fired; all four teams sent and received.
+RESULTS (full numbers in docs/phases/phase-3c-comparison.md; token figures are estimates, characters / 4)
+  - The 50 seeded findings, judged on the final team text: 39 addressed, 2 partly, 0 not addressed, 9 declined with reasons (6 are the same missing local anchor).
+  - Blind editorial score (same rubric, A/B hidden): team 68.8 vs unrevised classic 65.6; team 67.8 vs classic-revised 65.7 over two rounds with the labels swapped (only 4 of 9 preferences held when the labels swapped): within the judges' noise.
+  - V1 on the nine locked classic units: REVISION on 7, 15 must-fix issues. After the classic revision: REVISION on 6, 7 must-fix. Classic's Agents 5, 6 and 7 passed all 27 of 27 classic-revised reviews. Only the team pipeline ended with a V1-clean text.
+  - Cost: team revision 110 agent runs, about 1.04M tokens, about 88 min sequential; classic revision 37 runs, about 329k, about 9 min (units in parallel); classic as drafted 56 runs, about 495k.
+  - Team run: 23 tickets, all QUALITY_CORRECTION, all closed in round 1; the 10-ticket budget was hit at s4 (unit 4 of 9) and raised for the branch; 1 escalation (the budget stop). EVIDENCE_REQUEST and ROOT_CAUSE_NOTE fired only in the smoke tests, never on the real article.
 
-MIGRATIONS 0015-0019: all APPLIED to the live database, all additive, all approved by Leo (0016, 0017, 0018, 0019 each approved when proposed).
+ARTICLES (none deleted; no proposal, no approval, no publication, no WordPress write on any of them)
+  - Original, classic: e2b915e3-af97-4ea6-8979-4861ec729027, HUMAN_REVIEW, version 4db42fea93cc, 50 optional findings unapplied, untouched. Fingerprint 23f8dd72…4611 unchanged at every check.
+  - Team branch: d7f03fff-22d0-48fe-9ee0-3d6d5102c856, HUMAN_REVIEW, version d93053c44bb1, pipeline_mode team, branch_of the original, is_fixture false. Team run budget exception 30.
+  - Classic-revision branch: 54070caa-bd79-4184-a82a-9235b1c33b64, HUMAN_REVIEW, version 6cd1c5264e9c, pipeline_mode classic, branch_of the original, is_fixture false.
+  - Rollback of a branch: npm run studio -- branch-delete <branch_id> --yes (refuses the original and fixtures). smoke:cleanup never touches a branch (is_fixture false).
+
+VERIFIED
+  - At de9e31b: full Vitest 44 files and 632 tests, tsc, eslint (0 errors, one old warning in scripts/bundle-scan.ts), next build. The docs-only commits after it change no code.
+  - The live smokes (smoke:studio, smoke:team-view, smoke:team-cli, smoke:team) were last run at f4af090 (Task 13) and were NOT re-run after Tasks 14-16. The branch, fingerprint, budget-exception and classic-branch code was unit-tested and used live on the real article, with the original's fingerprint compared after each step.
+  - Judging data was scanned for seller names, addresses, prices, contacts, keys and local paths before committing: none (the packets carry Twin Home Buyer's own approved company details only).
+
+MIGRATIONS 0015-0019: all applied to the live database, all additive, all approved by Leo. None added in Tasks 14-17.
   0015 team tables and articles.pipeline_mode ('classic' default), articles.branch_of
-  0016 tickets.merged_from (links a combined council card to its original cards)
-  0017 tickets.from_roles, tickets.escalation_trigger
-  0018 articles.is_fixture (default false: every existing article is a real one)
-  0019 tickets.issue_key
-  agent_runs.agent_key is free text, so the team agent keys need no migration (a test guards that). Existing article: still 'classic', is_fixture false.
+  0016 tickets.merged_from · 0017 tickets.from_roles, tickets.escalation_trigger · 0018 articles.is_fixture · 0019 tickets.issue_key
 
 STANDING RULES (keep following them)
-  - Only "leo" acts on a real article: resolving a section and switching the pipeline are refused for any other actor. The "smoke-test" actor is accepted
-    only on an article flagged is_fixture (a throwaway the smoke scripts create), never on a real one. Agent roles, agent keys, the bridge and the
-    orchestrator are refused outright. The Task 14 branch is a real article (is_fixture = false), so every human action on it runs as leo.
+  - Only "leo" acts on a real article: resolving a section and switching the pipeline are refused for any other actor. The "smoke-test" actor is accepted only on an article flagged is_fixture, never on a real one. Agent roles, agent keys, the bridge and the orchestrator are refused outright. Both branches are real articles (is_fixture false), so every human action on them runs as leo.
   - No approvals, no publishing, no WordPress writes, no Approval Room clicks. Code sets locks; no agent output can set a lock, an approval or a state.
   - Classic stays the default and is unchanged. The classic hoarder article (version 4db42fea93cc, HUMAN_REVIEW, 50 optional findings) must stay untouched.
-  - Never force-push. Push only when asked. Apply a migration only when Leo approves it.
-  - Approved identity (keyword, working title, H2 questions, slug/URL, action and target page, required links, never-target list, protected pages) is
-    never changed by S2: a change escalates to Leo.
+  - Never force-push. Push only when asked. Apply a migration only when Leo approves it. Ask before any change to a real article.
+  - Approved identity (keyword, working title, H2 questions, slug/URL, action and target page, required links, never-target list, protected pages) is never changed by S2: a change escalates to Leo.
   - A stuck situation (escalation, round-limit hit, budget stop) stops for Leo; the runner never resolves anything.
   - Run smoke:team in the background (about 15 minutes against the live database). If a smoke is killed, npm run smoke:cleanup removes only fixture rows.
 
-NEXT: Task 14 (comparison setup: a team-mode BRANCH of the hoarder guide, starting from the 9 locked units of 4db42fea93cc, with the 50 open findings
-  loaded as the starting QUALITY_CORRECTION set; count verified to be 50 or stop and report). PLAN ONLY first: report what tables and rows the run creates,
-  whether the branch reuses the approved brief and evidence or reruns R1-R3 and S1/S2, how team vs classic will be measured (findings fixed / still present /
-  new; V1 blocks; tickets used of 10; escalations to Leo; Claude usage), the cost estimate (the plan assumed 3-6x classic; confirm or correct), stop points
-  (every escalation and HUMAN_REVIEW), and rollback (delete the branch without touching the original). Wait for Leo's approval before running anything.
-  Tasks 15 (run the team revision), 16 (comparison report) and 17 (phase3c-verify script, final Handoff, STATUS.md) follow.
+LOOSE ENDS (honest list)
+  - Task 17 as planned asked for scripts/phase3c-verify.mts and a verify-matches-handoff check. Leo closed Task 17 docs-only, so neither exists; under the original rule this would have made the handoff PARTIAL, and Leo has accepted it as DONE.
+  - The comparison's limits are in section 9 of the report: one article, one judge model, noise of 2-3 points, unequal parallelism, token figures are estimates, the hybrid cost is a projection, and the V1 fix loop has not been run.
+  - Phase 3 close-out is independent of 3c: Leo's review of the classic draft, Juan's approval and approver registration still apply to 4db42fea93cc.
+  - The remote: the local branch master pushes to origin/main. origin/master is an old branch at 4d83920 and was never touched.
 
-NOT YET DONE: Tasks 14-17; Done-when items "team revision ran on a branch, classic version byte-identical" and "comparison report exists and Leo has read it".
-  STATUS.md has not been updated for Phase 3c (Task 17).
+NEXT: Phase 3d (not started; scope set by Leo). Deferred from this phase, in this order: (1) 6.1 lost declines, a must-fix bug in any mode; (2) the V1 fact gate on classic text (build and pilot on the next real article, measure V1 must-fix before and after); (3) 6.2 reviewer conflicts, 6.3 rewrite overstatements, 6.4 ticket usage, as Leo decides.
 ```

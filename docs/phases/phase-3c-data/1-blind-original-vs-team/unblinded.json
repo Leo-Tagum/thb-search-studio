@@ -1,0 +1,210 @@
+{
+ "rows": [
+  {
+   "unit": "s1",
+   "classic": 61,
+   "team": 73,
+   "preferred": "team",
+   "label": "B (A=classic, B=team)",
+   "why": "B explains what each path costs the seller (time, money, fees, price given up for speed and privacy), where A just names the paths, so B meets q3 and q4 and has real deal logic. B also adds concrete consequences to the five questions (an unsigned co-owner, a blocked exit) that A leaves abstract. A repeats the statute sentence nearly word for word and uses the filler 'Here is the good news'. B states it once and refers back to it. B is the one Juan would more comfortably sign.",
+   "classic_weak": "The options sentence names four paths but gives no cost or trade-off for any of them, so q4 is only half met. The statutory sentence is repeated almost word for word, which is legalistic and padded, and the capsule opens with a stiff statute reading. The five questions stay abstract: they say the sale can stall, but not how or why. 'Here is the good news' is mild filler. Little on what can go wrong beyond one line about stalling.",
+   "team_weak": "Section is a little denser, and the four-path trade-off paragraph could be a list for scanning. Still no local texture, which is acceptable for an opening section. The 'story' lines about the family are slightly generic.",
+   "classic_strong": "Opens on the real situation (the full house, whose it is, not knowing whether to clear it). The five questions are clear and scannable. Warm, non-judgmental toward the family. The 'real question is usually' move matches Juan's rhythm.",
+   "team_strong": "Capsule is a plain answer first, with the legal point stated once and a pointer back to it later. Adds concrete consequences to the questions (an unsigned co-owner can hold up the plan, a blocked exit changes what has to happen first). The options sentence gives each path its honest cost: time and control, up-front money, fees, giving up price for speed and privacy. This is real deal logic and honest about direct sale as a trade-off, not a pitch. Ends on the next step, tying into the following section.",
+   "classic_flag": [
+    "Here is the good news. A full house does not mean the house cannot be sold.",
+    "Keeping the home for now, clearing it and listing it, bringing in professional help, or selling directly can each be the right choice. (a list of options with no trade-offs could sit on any investor site)",
+    "The statute sentence is stated twice, in the capsule and again in the body, in near-identical wording"
+   ],
+   "team_flag": [
+    "Plan with the person who lives there, not around them, and keep judgment out of it. (soft, could sit anywhere, but harmless)"
+   ]
+  },
+  {
+   "unit": "s2",
+   "classic": 73,
+   "team": 72,
+   "preferred": "classic",
+   "label": "A (A=classic, B=team)",
+   "why": "A has a stronger Juan voice: it sets up the single question, says 'It sounds like paperwork. It is really the whole sale,' and tells the reader what it will not claim. B is more concrete in places (the callout's consequence of spending first, the neighbor-notice action), but it repeats the signer sentence verbatim and its table lead-in is filler. A's lifted voice-reference lines keep the margin narrow, so it wins by a small amount on voice and tightness.",
+   "classic_weak": "Two sentences are borrowed almost word for word from the voice reference, which weakens originality. The callout states no concrete consequence of spending first. Almost nothing local; the Bay Area appears only in link slugs. The neighbors row is vague ('if a local office gets involved').",
+   "team_weak": "The 'person who holds title... has to sign' sentence appears twice, in the opener and again under the authority heading, which reads as padding. The first-person voice is thinner, with one 'I ask' and then an impersonal explainer. The table lead-in is filler. Almost nothing local.",
+   "classic_strong": "Answer-first opening, then a clear first-person turn ('I ask one question. Who actually holds title?'). 'It sounds like paperwork. It is really the whole sale.' is real deal logic in plain words. Honest about limits ('I am not going to tell you which rules apply'). Table rows explain why each party matters, including that the resident may not be on title. No sales pitch.",
+   "team_strong": "Opens on the seller's real situation ('The house is full. A parent or relative may still live there.'). The callout gives a reason to wait: spending first can commit you to a plan the right person did not agree to. The neighbors row is actionable (ask whether any notice exists before choosing a route). The caveat that the list of signers is not a rule for your house is stated where the list sits. Less lifted language.",
+   "classic_flag": [
+    "Getting clarity early usually creates more options, not fewer. (callout; lifted nearly verbatim from the voice reference and generic enough to sit on any investor site)",
+    "Many families do not need to be judged. They need time, clarity and a practical way forward. (lifted from the voice reference)"
+   ],
+   "team_flag": [
+    "Here is who else can be affected, and why each one matters. (filler lead-in to the table)"
+   ]
+  },
+  {
+   "unit": "s3",
+   "classic": 68,
+   "team": 71,
+   "preferred": "team",
+   "label": "B (A=classic, B=team)",
+   "why": "B is tighter and more quotable: the opening gives the answer in three sentences, and the H3 is a question that leads a scannable checklist. Its table labels ('What it looks like') read more like a homeowner's view than A's 'Condition in the statute'. A has the warmer Juan beat ('None of this means the house can't sell'), but it also carries a circular 'I'd read a few of them... because they show the conditions' line and unsupported touches ('nobody from the city ever looks twice', 'spoiled material'). B's hedging and its pointer to the disclosure section make it safer and more useful.",
+   "classic_weak": "'I'd read a few of them... because they show the conditions the statute lists' is circular filler. 'Nobody from the city ever looks twice' and 'spoiled material' go slightly past what the text cites. The H3 'What this means in practice' is not question-shaped, which hurts scannability. Local feel rests only on the Oakland link. No options are given, though the section does not need them.",
+   "team_weak": "Slightly less of Juan's reassuring, personal rhythm; it drops the 'None of this means the house can't sell' beat. Local feel is still only the Oakland link. Slightly drier tone.",
+   "classic_strong": "Warm opening that frames the real worry (a full house is not automatically a problem). Closing line echoes Juan's rhythm. The 'Who decides' column and the 'look at the last column' point give real authority logic. Plain language throughout.",
+   "team_strong": "Answer-first intro says what the statute lists and that an official decides. The table's first column uses plain-language labels ('No adequate way to store and remove garbage'). The H3 is a question, and the checklist is hedged properly ('they can resemble conditions the statute lists. Whether a home meets them is for the official to decide'). 'What you must tell a buyer is a separate question' bridges to the next section. It is tight and has little filler.",
+   "classic_flag": [
+    "\"None of this means the house can't sell. It means you want to know where it stands before you choose a path.\" is generic reassurance any seller site could carry.",
+    "The closing note on confirming with the city or county and an attorney is standard boilerplate."
+   ],
+   "team_flag": [
+    "The closing note on confirming with the city or county and an attorney is standard boilerplate."
+   ]
+  },
+  {
+   "unit": "s4",
+   "classic": 53,
+   "team": 69,
+   "preferred": "team",
+   "label": "B (A=classic, B=team)",
+   "why": "B gives the homeowner something to do: a concrete sequence that puts attorney or agent advice before any price talk and the sale path decision. A mostly restates the rule and refers out. B also puts the answer first and offers scannable, quotable bullets, where A starts with softer framing. A's plain-spoken waiver explanation is good, but B's reframe and first-steps list carry more Juan-style practical judgment.",
+   "classic_weak": "Mostly a restatement of the rule plus 'ask a professional'. No concrete next steps, little on what can go wrong, no options compared. The legal lead-in is stiff and the answer is not up front. The closing note is a generic referral. Nothing local or deal-specific.",
+   "team_weak": "The opening sentence is long and dense. The bullets restate the summary a little. No local color, though the section does not need much. The numbered steps lean on professionals rather than giving more of Juan's own judgment.",
+   "classic_strong": "Opens on the freeze a homeowner feels and names the fear (explain it away or hide it). The waiver point is made memorable in plain words ('a buyer saying they do not need the paperwork does not change it'). Short, declarative, calm.",
+   "team_strong": "Answer-first summary, then the cited rules as scannable, quotable bullets. Reframes the real question ('not whether to disclose, it is how to do it accurately, with help'). A practical 'What I would do first' list: write down what you know, take it to an attorney or agent before talking price, decide on cleanout/listing/direct sale after. That ordering is real deal logic and fits Juan's 'clarity early' stance.",
+   "classic_flag": [
+    "Here is what the law says. California's disclosure article applies, with an exception, to a transfer by sale of single-family residential property.",
+    "This guide does not go through what the form asks. What belongs on it for your house is for your agent or attorney to walk through with you."
+   ],
+   "team_flag": [
+    "This guide does not go through what the form asks. What belongs on it for your house is for your agent or attorney to walk through with you."
+   ]
+  },
+  {
+   "unit": "s5",
+   "classic": 64,
+   "team": 61,
+   "preferred": "classic",
+   "label": "B (A=team, B=classic)",
+   "why": "B reads more like Juan: it names the homeowner's feeling plainly ('That is a fair place to be'), gives the plain-language rule 'do not treat a cleanout as a way to avoid the form', and ends the options list on a clean trade-off line. A hedges with 'if your sale is covered' twice and repeats the price-for-privacy point. A does have one better detail, the inspection-limits note, but B's flow and voice outweigh it. Both lack local texture, so the gap is small.",
+   "classic_weak": "'Tells you what you are really selling' overclaims what an inspection shows, and 'roof lines' is a small addition. Assumes the disclosure rules apply to the sale ('that apply to your sale'). No local texture. The cleanout benefits bullets are fairly generic.",
+   "team_weak": "Repeated 'if your sale is covered' hedging makes it feel lawyerly and less like Juan. The line about trading price for privacy and fewer showings repeats itself. The closing 'next step' line is generic and thin. The opening 'whether you can start at all' is slightly clinical. Nothing local to the Bay Area, and nothing that would show its absence is right.",
+   "classic_strong": "Warmer and more direct ('That is a fair place to be'). Cleaner statement of the disclosure rule with the practical rule 'do not treat a cleanout as a way to avoid the form'. The trade-off line closes the options section well ('Each one trades something: time, price, control or certainty'). Links placed together at the end.",
+   "team_strong": "Answers the question in the first line. Useful limit on inspections ('ask the inspector what it did not cover'). Honest list of reasons not to clear first, with real family and authority friction. Correctly refuses to say what goes on the form.",
+   "classic_flag": [
+    "It lets you decide with facts. A professional cleanout crew, then an inspection, tells you what you are really selling before you pick a route."
+   ],
+   "team_flag": [
+    "A cleanout does not replace the disclosure form. You still complete it, if your sale is covered.",
+    "The next step is to work out what you need most, before you spend money on a cleanout or on a sale."
+   ]
+  },
+  {
+   "unit": "s6",
+   "classic": 67,
+   "team": 72,
+   "preferred": "team",
+   "label": "A (A=team, B=classic)",
+   "why": "A ends with four practical decision questions covering time, money, signing authority and family capacity, which gives the homeowner a way to choose and carries the stronger deal logic. A also softens the Twin Home Buyer link to an optional next step. B opens in the more Juan-like way ('the real question is...') and echoes his reference lines. However, it has no decision aid, includes filler ('facts instead of guesses'), and leans more toward a pitch in the direct-sale paragraph.",
+   "classic_weak": "It never gives the reader a way to choose, so it does not answer what the homeowner is thinking ('which one is mine?'). The direct-sale paragraph moves toward a pitch ('If you want to talk through...our page'). 'Choosing with facts instead of guesses' is filler. It has less concrete deal logic, and the examples are thinner.",
+   "team_weak": "The opening is softer and more generic than Juan's 'the real question is...' stance. No local texture, although the section has little room for it. 'Think of a family that needs time to arrange care' reads as a slightly stock illustration. The first-person voice appears only in the closing paragraph.",
+   "classic_strong": "The opening names the real question first, then answers it, which matches Juan's reference rhythm. 'Getting these answers early usually creates more options, not fewer' echoes his stance. Each route lists a cost in time, money, certainty or control. The closing note names which professional covers which issue.",
+   "team_strong": "Closes with four decision questions (time, money, authority to sign, family capacity) in first person, which answers what the homeowner is actually asking and is real deal logic. Each route states who it fits and what it costs. The legal passage is introduced plainly. The direct-sale link is framed as an optional next step after weighing the other routes, which is honest and educate-first. The cleanout and 'keep it' sections name the real tradeoffs.",
+   "classic_flag": [
+    "Then you are choosing with facts instead of guesses.",
+    "the next step is our page for hoarder houses (the sentence 'If you want to talk through a direct sale...')",
+    "The cost is that the house keeps needing attention, and the problems do not fix themselves."
+   ],
+   "team_flag": [
+    "A full house and a family that has to decide what to do with it is a hard place to start.",
+    "The cost is that the house keeps needing attention while you wait."
+   ]
+  },
+  {
+   "unit": "s7",
+   "classic": 69,
+   "team": 72,
+   "preferred": "team",
+   "label": "A (A=team, B=classic)",
+   "why": "The two versions are identical in the statute and paperwork sections; the differences are in the intro, one heading and the disclosure paragraph. A opens on the homeowner's real fear and names the three stall points up front, and its heading 'Skipping or playing down the disclosure form' is more scannable and specific. B's disclosure paragraph reads more cleanly than A's clunky 'with an exception', but A stays closer to the cited scope, so I prefer A narrowly.",
+   "classic_weak": "Intro 'Most owners want to know' is a generic framing rather than the owner's own worry, and it tells less than A (does not name the three stall points in order before the subheads). The heading 'A disclosure shortcut' is vaguer and less scannable. The disclosure text drops the single-family scope and exception, so it reads slightly broader than the cited language. No honest options comparison; thin local content.",
+   "team_weak": "'On a sale of single-family residential property, with an exception' is clunky and legalistic, and breaks the plain voice. The statute list reads long and flat. Almost no first-person advice beyond 'not you and not me', and no honest comparison of routes. Local flavor is limited to one Oakland link.",
+   "classic_strong": "Cleaner, smoother disclosure paragraph with no awkward qualifier. The intro ('sort those apart early and you can plan around them instead of being surprised') is practical and gives the reader a useful frame. The people-and-paperwork section is identical in strength and clearly separates it from cleanout.",
+   "team_strong": "Opens on the owner's actual worry ('the house itself will sink this sale') and names the three stall points in the first lines, so it is answer-first and quotable. The 'Notice who decides... not you and not me' passage is honest and Juan-like. The 'Skipping or playing down the disclosure form' heading says exactly what the reader might be tempted to do. The who-holds-title, who-signs, what-is-recorded checklist is real deal logic with useful internal links.",
+   "classic_flag": [
+    "The statute-list paragraph is the same recitation that could sit on another site.",
+    "The closing [note] listing professionals is generic.",
+    "'A disclosure shortcut' paragraph is generic compliance language."
+   ],
+   "team_flag": [
+    "The statute-list paragraph (junk, infestation, garbage storage, combustible waste) is a plain recitation any investor or legal-info site could carry; only the 'who decides' paragraph after it is distinctive.",
+    "The closing [note] listing which professional to call could sit unchanged on another site."
+   ]
+  },
+  {
+   "unit": "s8",
+   "classic": 67,
+   "team": 64,
+   "preferred": "classic",
+   "label": "B (A=team, B=classic)",
+   "why": "B speaks in Juan's first person ('I'd get a few answers') and names the concrete risk of finding out halfway through that nobody checked who could sign. It also uses the 'hear about it from a buyer' line and the 'clarity creates more options' close, which match the voice reference's rhythm and stance. A has a useful by-situation 'where to start' paragraph and puts who can sign first, but it is checklist-like and impersonal, and its intro lists five professionals while the bullets list six. B's voice advantage outweighs A's routing detail.",
+   "classic_weak": "It lacks A's route-by-situation guidance beyond the notice case, so it gives less on where to start for a parent's or relative's home. 'Not all of them, and not all at once' is slightly loose. 'There is no rush attached to it' is a mild soft pitch. Nothing in it is local.",
+   "team_weak": "Reads like an advisory checklist, with no first person and no sense of Juan speaking. The opening names five professionals but the list has six, so it does not match. It opens on a procedural instruction, not the homeowner's worry. It never says what goes wrong if nobody checks. It is stiff, and the opening and the note could sit on any site.",
+   "classic_strong": "First-person 'I'd get a few answers before you pick a route' sounds like Juan. It names the real risk: finding out halfway through that nobody checked who could sign. 'Better to know what is open than to hear about it from a buyer' is practical. 'Getting clarity early usually creates more options, not fewer' follows the voice reference. Calm, non-judgmental tone.",
+   "team_strong": "Answer-first opening. The 'where to start depends on your situation' paragraph routes the reader by case (inherited, notice posted, thinking of listing) and puts who can sign first, which is real deal logic. Compact, scannable bullets. Neutral close with no pitch.",
+   "classic_flag": [
+    "The note: 'Confirm legal, tax, title, code and insurance points with the right professional...' is generic disclaimer language."
+   ],
+   "team_flag": [
+    "Before you pick a route, check with an attorney, a title company, a CPA, an insurance professional and your city or county. Each can settle a question this guide can only point at.",
+    "This guide explains what to ask, not what the answer is for your house.",
+    "Once you know who can sign, what is owed and what the city or county says, you can compare keeping it, clearing it, listing it and selling directly with real information."
+   ]
+  },
+  {
+   "unit": "faq",
+   "classic": 68,
+   "team": 65,
+   "preferred": "classic",
+   "label": "A (A=classic, B=team)",
+   "why": "A is slightly better on education and voice. It uses 'Not always.', says plainly that the statute does not mention hoarding, and lists who can sign and says living in the house is not authority. B is cleaner on A5 scoping and ties each option to a professional in A6, but its A3 and A4 are thinner and lean on attorney referrals. Both lack local texture, so the gap is small.",
+   "classic_weak": "No local Northern California or Bay Area texture. A1 'with an exception' is vague. A1 and A5 close on the same 'go through the form with an agent or attorney' advice. Little first-person voice.",
+   "team_weak": "No local flavor. A3 'It can look at the property' is thin. A4 does not say who can sign. Answers lean on 'It depends' and attorney referrals, so they teach less than A's. The voice is neutral rather than Juan's.",
+   "classic_strong": "Opens A2 with 'Not always.' as Juan does. A3 says honestly the statute does not mention hoarding. A4 names who can sign (owner, trustee, executor, heirs) and says living in the house gives no authority. A6 lays out options, including keeping the house, with the price tradeoff stated.",
+   "team_strong": "A4 says why a sale stalls: the person living in the house is not the person with authority. A5 limits the 'No' to sales the rules cover. A6 pairs each option with the right professional (attorney or title company, CPA). A2 ties a city or county notice to the cleanout decision.",
+   "classic_flag": [
+    "A1 'applies, with an exception' is generic and unexplained",
+    "A5 'Planning to skip or soften disclosure can cause disputes later' is stock caution that fits any site"
+   ],
+   "team_flag": [
+    "A1 'with an exception' is vague",
+    "A5 'Talk it through with your attorney before you sign anything' is generic"
+   ]
+  }
+ ],
+ "cSum": 590,
+ "tSum": 619,
+ "cWins": 4,
+ "tWins": 5,
+ "ties": 0,
+ "dimTot": {
+  "classic": {
+   "voice": 129,
+   "education": 125,
+   "deal_logic": 115,
+   "local": 48,
+   "structure": 99,
+   "trust": 74
+  },
+  "team": {
+   "voice": 123,
+   "education": 135,
+   "deal_logic": 127,
+   "local": 48,
+   "structure": 108,
+   "trust": 78
+  }
+ },
+ "auth": {
+  "classic": 81,
+  "team": 84
+ },
+ "sumsOk": true
+}

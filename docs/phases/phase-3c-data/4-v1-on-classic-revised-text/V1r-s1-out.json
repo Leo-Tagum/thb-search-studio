@@ -1,0 +1,55 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.0.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["39c0cae5bb58ec5519c11155a384610a253f5f5c10985a2d18a490125b92538f"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:s1:hedge:usually",
+      "severity": "required",
+      "note": "\"Getting clear early usually creates more options, not fewer.\" No ledger claim or stored passage supports this frequency claim. Reword to a non-statistical statement, for example that getting clear early can leave you more options.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:s1:hedge:nobody",
+      "severity": "required",
+      "note": "\"A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.\" The \"often ... before\" frequency claim has no support in the ledger. Reword to something like \"A packed house can be a family matter as well as a real estate matter, and you should not feel judged for it.\"",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:s1:many-people",
+      "severity": "optional",
+      "note": "\"Many people in this spot are not avoiding the problem.\" A claim about what many people do, with no ledger support. Consider \"You may not be avoiding the problem.\"",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:6", "clm:7"],
+  "required_actions": [
+    "Reword \"Getting clear early usually creates more options, not fewer.\" without the frequency claim.",
+    "Reword \"A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.\" without the unsupported frequency claim."
+  ],
+  "output_version_id": "v1-s1-review-39c0cae5-r1",
+  "timestamp": "2026-10-12T12:00:00Z",
+  "result": {
+    "unit_key": "s1",
+    "version_hash": "39c0cae5bb58ec5519c11155a384610a253f5f5c10985a2d18a490125b92538f",
+    "claim_checks": [
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Capsule says the disclosure article applies to a transfer by sale of single-family residential property, except as provided in Section 1102.2. Matches the ledger."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "Capsule says a waiver of the article's requirements is void. Matches the ledger."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:2ef3c1c171ab", "ruling": "reword", "note": "No ledger claim or passage supports \"often a family matter before it is a real estate matter\". Say it can be a family matter, and phrase the not-judging line as a gentle statement to the reader."},
+      {"key": "hedge:de986bc437c2", "ruling": "reword", "note": "No claim supports \"usually\". Say getting clear early can leave you more options."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s1:hedge:usually", "section": "s1", "issue": "Unsupported generalization: \"Getting clear early usually creates more options, not fewer.\"", "severity": "must fix", "evidence": "hedge:de986bc437c2; no ledger claim supports it", "fix": "Getting clear early can leave you more options.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s1:hedge:nobody", "section": "s1", "issue": "Unsupported frequency claim: \"A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.\"", "severity": "must fix", "evidence": "hedge:2ef3c1c171ab; no ledger claim supports it", "fix": "A packed house can be a family matter as well as a real estate matter, and you should not feel judged for it.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s1:many-people", "section": "s1", "issue": "Unsupported claim about what people do: \"Many people in this spot are not avoiding the problem.\"", "severity": "should fix", "evidence": "No ledger claim supports a statement about many people", "fix": "You may not be avoiding the problem; the house just feels too heavy to deal with.", "blocking": false}
+    ]
+  }
+}

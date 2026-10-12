@@ -1,0 +1,200 @@
+{
+ "out": [
+  {
+   "unit": "s1",
+   "r1": {
+    "c2": 62,
+    "t": 73,
+    "pref": "team",
+    "label": "B",
+    "why": "B explains what each path costs the seller (time, money, price for speed), which is the honest-options and deal-logic stance the voice reference asks for, while A only lists the options. B also adds concrete things that can go wrong (an unsigned co-owner, a blocked exit) and has a cleaner capsule, plus advice to plan with the occupant. A's family warmth is comparable, but it leans on generic reassurance and gives less to quote."
+   },
+   "r2": {
+    "c2": 64,
+    "t": 75,
+    "pref": "team",
+    "label": "A",
+    "why": "A explains what each route trades away (time, money up front, fees, price for speed and privacy) where B only lists the routes, so A educates and shows real deal logic. A also gives consequences inside the five questions (an unsigned co-owner stalling the sale, a blocked exit), where B leaves them bare. B's extra reassurance paragraph is generic and leans on voice-reference phrasing, while its capsule is slightly more precise on the statute. Both lack local color, but A is the one Juan would more readily sign."
+   }
+  },
+  {
+   "unit": "s2",
+   "r1": {
+    "c2": 67,
+    "t": 70,
+    "pref": "team",
+    "label": "B",
+    "why": "B explains what can go wrong (the sale can stall; spending first can lock in a plan the right person did not agree to) and gives a concrete next step on neighbors, so its deal logic and education are stronger. A has the better first-person cadence and a cleaner structure without repetition, but its callout and neighbor row are vaguer. B's duplicated answer sentence is its main flaw, yet the substance outweighs it."
+   },
+   "r2": {
+    "c2": 69,
+    "t": 65,
+    "pref": "classic-revised",
+    "label": "B",
+    "why": "B leads with a complete answer (who signs, plus every other affected party) and speaks in first person with phrases like 'I am not going to tell you which rules apply', which sounds closer to Juan and the voice reference. A repeats its core sentence almost verbatim in the lead and again under the authority heading, and adds filler lead-ins. A's callout (spending first can commit you to a plan the right person did not agree to) and its neighbor-notice row are more concrete than B's, but B's cleaner structure and voice make it the better version overall."
+   }
+  },
+  {
+   "unit": "s3",
+   "r1": {
+    "c2": 72,
+    "t": 72,
+    "pref": "classic-revised",
+    "label": "B",
+    "why": "Very close. B ends on the reassuring 'this does not mean the house can't sell' line and keeps options open, which sounds more like Juan and addresses what the homeowner is actually worried about. A has a slightly better answer-first opening and a more scannable, seller-facing table column. Both are held back by statute-heavy table text and a thin local layer. B's voice edge is small but real."
+   },
+   "r2": {
+    "c2": 70,
+    "t": 73,
+    "pref": "team",
+    "label": "B",
+    "why": "B answers the heading in its first lines and uses a question-shaped subhead, a homeowner-language table column and a bridge to the disclosure section, so it is easier to scan, quote and extract. A has the warmer Juan-style close ('does not mean the house can't sell') but a generic 'What this means in practice' heading and a vaguer opening. Both are local only through one Oakland link, so B's structure and slightly clearer action items give it a small edge."
+   }
+  },
+  {
+   "unit": "s4",
+   "r1": {
+    "c2": 59,
+    "t": 65,
+    "pref": "team",
+    "label": "A",
+    "why": "A gives the homeowner a sequenced next step (write down what you know, see an attorney before talking price, then choose cleanout, listing or a direct sale), which carries real deal logic and honest options that B lacks. B has a slightly warmer, more natural voice in its middle paragraph and a cleaner answer-first opening, but it ends up mostly telling the owner to ask a professional. A's stiff second sentence and repeated bullets are its main flaws."
+   },
+   "r2": {
+    "c2": 54,
+    "t": 66,
+    "pref": "team",
+    "label": "B",
+    "why": "B opens on the homeowner's fear and answers it, then gives the code sections as scannable, quotable bullets. A opens on a statute recital and filler like 'Let me separate what the law says from what I can't tell you'. B's numbered 'what I would do first' list adds real sequencing (write down what you know, get an attorney or agent before talking price, decide on cleanout or a direct sale afterward). A ends with only a generic confirm-with-a-professional note. B sounds more like Juan advising and is more useful."
+   }
+  },
+  {
+   "unit": "s5",
+   "r1": {
+    "c2": 68,
+    "t": 67,
+    "pref": "classic-revised",
+    "label": "A",
+    "why": "The two are close and share most text. A has the warmer, more Juan-like opening ('the house feels too heavy to start on... a fair place to be') and a firmer line against using a cleanout to dodge the form. B is slightly better on structure, with the inspection-limits caveat and a clear next step. But B has the 'Here is the law in plain terms' lead-in and a redundant trade-off sentence that read like filler, so A wins narrowly on voice."
+   },
+   "r2": {
+    "c2": 65,
+    "t": 68,
+    "pref": "team",
+    "label": "A",
+    "why": "A is slightly more honest and more careful: it notes that an inspection has limits, where B claims the inspection tells you what you are 'really selling'. A also closes on a clear next step before the note, and its 'Here is the law in plain terms' line is more Juan-like. B is warmer in the opening and addresses the 'avoid the form' worry more directly, so the margin is small."
+   }
+  },
+  {
+   "unit": "s6",
+   "r1": {
+    "c2": 66,
+    "t": 71,
+    "pref": "team",
+    "label": "A",
+    "why": "A opens on the seller's actual situation, closes with four first-person decision questions and an honest 'it depends', and places the hoarder-house link as an optional next step, so it reads more like Juan and less like a funnel. B is tighter and opens on the 'real question' pattern, but its 'Fix it' heading mismatches its content and its direct-sale route ends on a soft pitch. B also has no closing decision aid, and its legal sentences are buried inline in the agent route."
+   },
+   "r2": {
+    "c2": 65,
+    "t": 73,
+    "pref": "team",
+    "label": "B",
+    "why": "B opens with the family's actual predicament and closes with a first-person four-question decision aid (time, money, authority to sign, family capacity) that sounds like Juan and gives the homeowner something to do. A closes on a link to the hoarder-houses page that reads like a pitch, and its opening is a thesis instead of a problem. B also splits the legal text into its own labelled paragraph and demotes the THB link to an optional step, which improves quotability and trust. Both lack local specifics and share much of the same route copy."
+   }
+  },
+  {
+   "unit": "s7",
+   "r1": {
+    "c2": 70,
+    "t": 69,
+    "pref": "classic-revised",
+    "label": "A",
+    "why": "Both share the same body, so the difference is in the intro and the disclosure block. A opens with 'The real question is usually whether the house or the paperwork is the bigger risk' and adds 'Sort those apart early', which sounds more like Juan's reasoning than B's softer 'It can slow things down.' B has the clearer disclosure heading, keeps the single-family qualifier, and previews the three stall points for scanning, so the gap is small. I give A a slight edge for voice."
+   },
+   "r2": {
+    "c2": 70,
+    "t": 72,
+    "pref": "team",
+    "label": "A",
+    "why": "The two are nearly identical in the official-notice and paperwork subsections; the difference is the intro and the disclosure subsection. A names the three stall points up front and uses a clearer disclosure heading, which gives it better answer-first structure and scannability. B's 'The real question is usually...' opener is closer to Juan's reference rhythm, but it promises three things without naming them and its 'disclosure shortcut' heading is vaguer. A's 'with an exception' hedge costs it a little voice, so the margin is slight."
+   }
+  },
+  {
+   "unit": "s8",
+   "r1": {
+    "c2": 64,
+    "t": 65,
+    "pref": "tie",
+    "label": "tie",
+    "why": "A has the stronger Juan voice ('I'd check', 'not all at once', the halfway-through line) but gives less guidance on order. B adds situation-based starting points (inherited home goes to attorney or title first, notice goes to the city or county first), which is better deal logic and more useful, but it is flatter and impersonal. The totals are within a point, and which one wins depends on whether voice or practical routing is weighted more. Combining A's voice with B's routing would beat both."
+   },
+   "r2": {
+    "c2": 64,
+    "t": 61,
+    "pref": "classic-revised",
+    "label": "B",
+    "why": "B sounds like Juan: first-person advice, a stated consequence (finding out halfway that nobody checked who could sign) and a no-pressure close, where A reads as a neutral checklist. A's advantage is the three-way 'where to start' routing, which is better deal logic and more scannable, but B's voice and trust gain outweighs it. Both share the same generic bullet list and have nothing local."
+   }
+  },
+  {
+   "unit": "faq",
+   "r1": {
+    "c2": 65,
+    "t": 60,
+    "pref": "classic-revised",
+    "label": "A",
+    "why": "A answers the homeowner's question first ('Generally yes', 'Only someone with legal authority to sign') where B stays abstract on A1 and A4. A4 in particular names who can sign (trustee, executor, heirs) and that living in the house does not count, which is stronger deal logic than B's general statement. B has a few good touches (the city notice link in B2, the sale stalling in B4, a tidy B6), but A is more quotable and specific overall."
+   },
+   "r2": {
+    "c2": 68,
+    "t": 55,
+    "pref": "classic-revised",
+    "label": "B",
+    "why": "B leads each answer with a direct reply ('Generally yes', 'Not always', 'Possibly'), where A mostly opens with 'It depends' or a statute paraphrase, so B matches what the homeowner is thinking and is easier to quote. B's A4 spells out who can sign (owner, trustee, executor or administrator, agreeing heirs) and that living in the house is not authority, which is concrete deal logic that A leaves abstract. B also admits the statute does not mention hoarding and states the sell-directly tradeoff plainly. Both lack local color and first-person voice, but B is closer to Juan's 'Not always' stance."
+   }
+  }
+ ],
+ "agg": {
+  "r1": {
+   "c2": 593,
+   "t": 612,
+   "c2w": 4,
+   "tw": 4,
+   "tie": 1
+  },
+  "r2": {
+   "c2": 589,
+   "t": 608,
+   "c2w": 3,
+   "tw": 6,
+   "tie": 0
+  }
+ },
+ "posA": {
+  "r1": 5,
+  "r2": 3
+ },
+ "dimSum": {
+  "classic-revised": {
+   "voice": 259,
+   "education": 247,
+   "deal_logic": 231,
+   "local": 94,
+   "structure": 202,
+   "trust": 149
+  },
+  "team": {
+   "voice": 248,
+   "education": 264,
+   "deal_logic": 250,
+   "local": 94,
+   "structure": 211,
+   "trust": 153
+  }
+ },
+ "auth": {
+  "classic-revised": 155,
+  "team": 162
+ },
+ "sumsOk": true
+}
