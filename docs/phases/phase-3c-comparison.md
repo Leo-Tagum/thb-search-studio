@@ -4,7 +4,7 @@ Status: DRAFT for Leo, 2026-10-12. Written for Leo (the Studio director), who de
 
 - **Classic:** article `e2b915e3-af97-4ea6-8979-4861ec729027`, version `4db42fea93cc`, HUMAN_REVIEW, untouched (fingerprint `23f8dd72…4611`, checked at the end of Task 15; not touched in Task 16).
 - **Team branch:** article `d7f03fff-22d0-48fe-9ee0-3d6d5102c856`, version `d93053c44bb1`, HUMAN_REVIEW, no proposal, no approval.
-- **What was compared:** the classic draft as it was locked (with its 50 optional findings unapplied) against the team's *revision* of it. This is not a comparison of two drafting runs. See the limits in section 8.
+- **What was compared:** the classic draft as it was locked (with its 50 optional findings unapplied) against the team's *revision* of it. This is not a comparison of two drafting runs. See the limits in section 9.
 
 ## 1. Summary
 
@@ -21,7 +21,7 @@ Status: DRAFT for Leo, 2026-10-12. Written for Leo (the Studio director), who de
 | Token estimate (characters / 4 on packets and outputs; an ESTIMATE) | about 495k | about 1037k (2.1x) |
 | Elapsed, first to last run (operator-driven, sequential; an estimate) | about 20 min | about 88 min |
 
-**Bottom line.** Team mode handled every one of the 50 findings (39 fixed on the text, 2 partly, 9 declined with a reason) and the blind judge scored the team text slightly higher (+3.2 on 100, preferred in 5 of 9 units). That edge is small, comes from one judge on one article, and cost about twice the runs and tokens and four times the elapsed time. The comparison cannot separate team mode from the simple act of revising (section 8). My recommendation is a **hybrid**: keep classic as the default and add the team-mode V1 re-review of changed sentences to its revision path; do not adopt team mode as the default yet (section 7).
+**Bottom line.** Team mode handled every one of the 50 findings (39 fixed on the text, 2 partly, 9 declined with a reason) and the blind judge scored the team text slightly higher (+3.2 on 100, preferred in 5 of 9 units). That edge is small, comes from one judge on one article, and cost about twice the runs and tokens and four times the elapsed time. The comparison cannot separate team mode from the simple act of revising (section 9). My recommendation is a **hybrid**: keep classic as the default and add the team-mode V1 re-review of changed sentences to its revision path; do not adopt team mode as the default yet (section 8). **Update (Task 17): two follow-up tests (section 7) strengthen this:** V1 still finds 7 must-fix issues in the classic-revised text that classic's own reviewers passed 27 of 27, and the team and classic revisions score within noise of each other (67.8 vs 65.7, with 5 of 9 preferences flipping when the labels were swapped).
 
 ## 2. Blind scoring, unit by unit
 
@@ -634,7 +634,9 @@ Legend: `−` removed from classic, `+` added in team, unmarked lines unchanged.
 
 ## 6. What went wrong, and how to fix it (proposals only; nothing built)
 
-### 6.1 Declines are lost when reviewers re-issue their lists
+**Status of everything in this section: PROPOSED, not approved, nothing built.** Leo has approved none of the fixes below. The one exception in tone is 6.1: lost declines is a **bug to fix in any mode**, because classic also has no record of which optional findings were addressed or declined (7.2).
+
+### 6.1 BUG (fix in any mode): declines are lost when reviewers re-issue their lists
 
 **What happened.** `recordReview` replaces a reviewer's collected items with its new list each round, keeping a decline only when the key is identical. Reviewers re-key and reword freely, so a decline vanishes the next round. Result: 0 declines recorded in the system, at least 30 made by the writer, and one item (no local anchor) raised and declined in seven units and four separate times in the FAQ alone.
 
@@ -660,44 +662,143 @@ The recurring local-anchor item (12 of the 45 entries in section 4) is a **brief
 
 **Proposal.** (a) A decision table in the reviewer and writer prompts: a probably-true, provable legal point is an EVIDENCE_REQUEST to R1 first; reword or drop only when it is not provable. (b) A router rule: the same finding raised in three or more units, or declined twice, converts automatically to one ROOT_CAUSE_NOTE to S2 or one HUMAN_ESCALATION ("library gap: no local fact") per article. (c) Treat a writer note "not used because no ledger claim" as an evidence-request trigger. (d) Content work, not code: add local facts to the Evidence Library so the "local" dimension (5.3 of 15 in both versions) can improve. (e) These two ticket types are proven only on fixtures (smoke test); a second real article, with a fresh draft where the ledger is incomplete, is the real test.
 
-## 7. Recommendation
+## 7. Follow-up tests (Task 17)
 
-Leo decides. My recommendation is the **hybrid**.
+Two read-only tests asked for after the first version of this report. Both left the original article untouched (fingerprint `23f8dd72…4611`, rechecked after each).
 
-| | Classic (as is) | Hybrid: classic plus a V1 re-review | Team mode (as built) | Team mode with the 6.x fixes (estimate) |
+### 7.1 V1 on the classic units
+
+**Question.** Does V1 (the team's fact and privacy reviewer, with the hedge-phrase flag) find real problems in classic text that classic's own reviewers passed? V1 reviewed each of the nine **locked classic units** (version `4db42fea93cc`) with the same task packet the team run uses (full scope, the code-detected hedge flags, the article ledger). Nothing was queued, stored or submitted. Classic's Agent 5 had passed all nine.
+
+**Result: V1 returned REVISION on 7 of 9 units** (s4 and s5 passed). 15 must-fix cards, 1 optional card, 13 hedge sentences ruled reword or drop (9 reword, 4 drop, 1 proven), one overstated claim check (clm:5 in s7), and the FAQ failed the legal-qualification check. Privacy was clean in all nine. 18 of 20 quoted passages appear verbatim in the unit text; the two that did not are close paraphrases of real sentences (checked by hand: s1 "Most owners want to know how fast the house can be emptied", s6 "The real question is usually not which route is best. It is which route fits your situation."). No quote was invented.
+
+| Unit | V1 on classic (locked, unrevised): decision / must-fix / hedge rulings | V1 on classic-revised (Task 17 baseline): decision / must-fix / hedge | V1 in the team run on its rewrites: must-fix cards |
+|---|---|---|---|
+| s1 | REVISION / 5 / reword/reword/reword/reword/reword | REVISION / 2 / reword/reword | 0 (and it passed every unit before lock) |
+| s2 | REVISION / 1 / reword | REVISION / 1 / - | 1 (and it passed every unit before lock) |
+| s3 | REVISION / 1 / drop | PASS / 0 / - | 1 (and it passed every unit before lock) |
+| s4 | PASS / 0 / - | PASS / 0 / - | 1 (and it passed every unit before lock) |
+| s5 | PASS / 0 / - | PASS / 0 / - | 0 (and it passed every unit before lock) |
+| s6 | REVISION / 2 / reword/proven/drop | REVISION / 1 / reword/proven | 1 (and it passed every unit before lock) |
+| s7 | REVISION / 2 / drop | REVISION / 1 / reword | 1 (and it passed every unit before lock) |
+| s8 | REVISION / 2 / reword/drop | REVISION / 1 / reword | 0 (and it passed every unit before lock) |
+| faq | REVISION / 2 / reword | REVISION / 1 / proven | 7 (and it passed every unit before lock) |
+
+**The issues on the unrevised classic text, with quotes** (V1's own words, shortened; each quoted sentence is in the unit text):
+
+- **s1**: Unsupported generalization: "Most people in this spot are not avoiding the problem."
+- **s1**: Unsupported generalization: "Most owners want to know how fast the house can be emptied."
+- **s1**: Unsupported outcome generalization: "Getting clear early usually creates more options, not fewer."
+- **s1**: Unsupported generalization: "The real question is usually what situation you are actually in."
+- **s1**: Unsupported frequency and absolute: "A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it."
+- **s2**: Callout sentence "Getting clarity early usually creates more options, not fewer." is an unsupported outcome generalization.
+- **s3**: Unsupported generalization: "Plenty of homes hold a lot of belongings and nobody from the city ever looks twice."
+- **s6**: 'Getting these answers early usually creates more options, not fewer.' is an unsupported generalization and outcome claim.
+- **s6**: 'The real question is usually not which route is best.' generalizes about sellers without support.
+- **s7**: "The disclosures are made on the Real Estate Transfer Disclosure Statement form." omits the single-family residential scope, reading as a flat rule.
+- **s7**: "Most owners want to know what could actually stop this sale." is an unsupported generalization.
+- **s8**: "Getting clarity early usually creates more options, not fewer." is an unsupported outcome generalization.
+- **s8**: "...finding out halfway through that nobody checked who could sign." is an unsupported generalization.
+- **faq**: Authority answer states law flatly with no ledger claim: "Only someone with legal authority to sign." and "Living in the house does not give that authority."
+- **faq**: Flagged sentence "Not always." implies a conditional legal cleanout duty with no support.
+
+**Against the issues V1 found in the team run.** The team run's V1 reviewed the *rewritten* text, so its cards are different instances of the same few families:
+- **Unsupported generalizations** ("most", "usually", "often", "nobody", "never", "Not always"). Present on the classic text in s1, s2, s3, s6, s7, s8 and the FAQ; the team's V1 raised them again on rewrites (s2 "never", s6 "None of them is wrong for everyone", FAQ "Not always."). One sentence, "Getting clarity early usually creates more options, not fewer", sits unsupported in four classic units (s1, s2, s6, s8).
+- **Scope overstatements of a claim** (clm:5, clm:6, clm:7). Found on the classic s7 ("The disclosures are made on the Real Estate Transfer Disclosure Statement form" without the single-family scope). The same family reappeared in the team run on rewrites in s3 ("match conditions the statute lists"), s4 ("That route is closed") and s7.
+- **Flat legal conclusions in the FAQ** (who can sign; living in the house is not authority). Present in the classic FAQ and re-raised on every FAQ rewrite.
+- **Classic's Agent 5 passed all 9 units in both runs** (and passed all 9 classic-revised units too): the classic fact gate is not catching this family, while the hedge flag plus V1's must-rule step does.
+
+**Does classic revision remove them?** No. After the classic revision baseline, V1 still returns REVISION on 6 of 9 units with 7 must-fix cards and 5 reword rulings. Examples: s1 "usually" and "nobody", s2 "Most families", s6 "usually", s7 "usually", s8 "nobody checked", and the FAQ line on authority. It is fewer than before (15 → 7), because the writer addressed some of the 50 findings, but the classic reviewers passed every one of these units first time (Agents 5, 6 and 7: 27 of 27 PASS). The team pipeline is the only variant where V1 passed the final text.
+
+**Limits.** V1's rulings are model judgments, not legal proof; "real" here means V1 cited a sentence that is in the text and that has no ledger claim behind it (the hedge sentences are located by code, not by V1). Only two of the unmatched quotes were inspected by hand.
+
+### 7.2 The classic revision baseline
+
+A second real branch of the original, `54070caa-bd79-4184-a82a-9235b1c33b64`: `is_fixture` false, `branch_of` the original, `pipeline_mode` classic, the same brief and ledger copies as the team branch, and the same 50 findings (s1 7, s2 5, s3 9, s4 4, s5 4, s6 7, s7 2, s8 5, faq 7). Each unit was reopened as leo through the classic reopen, with that unit's findings as the directive, then run through the classic pipeline: writer (Agent 4), fact and privacy (5), SEO/AEO/GEO (6), editorial (7). It stopped at **HUMAN_REVIEW**, version `6cd1c5264e9c…`, with no proposal, no approval and no WordPress write. The original's fingerprint matched before and after.
+
+- **Cost:** 37 agent runs (writer 10, Agent 5 9, Agent 6 9, Agent 7 9), 1 retry, about 329k estimated tokens (characters / 4, an ESTIMATE), about 9 minutes elapsed. The nine independent units were run in parallel here, so this elapsed time is not comparable to the team run's sequential 88 minutes.
+- **Reviewer outcome:** Agents 5, 6 and 7 passed all 9 units on their first review (27 of 27). The only second writer pass was the FAQ (a deterministic 60-word limit). There were no tickets, no escalations and no budget limit.
+- **What the classic loop does with optional findings:** it does not track them. The 50 went to the writer as one directive per unit; nothing records which the writer addressed or declined (the same gap as 6.1, in a different form).
+- **Deviation to disclose:** one validator rejection (Agent 6, s5: an `issue_key` outside the allowed pattern) was corrected by re-running the reviewer with the exact error, with no edit by me. Two code changes preceded the run: the classic mode of `branchArticle`, and a deliberate extension of the `resolveSection` call-site pin to name `branch.ts` (it passes the caller's actor after the agent-actor refusal).
+
+### 7.3 Blind scoring: classic-revised vs team, with an order-swapped second run
+
+Same method as section 2 (random A/B per unit, one independent judge run per unit, the shared editorial-critic rubric, voice reference as the only context). **Round 1** used one random labelling; **round 2** judged the same texts with the A and B labels swapped, to check whether position or anchoring drives the result.
+
+| Unit | Round 1: classic-revised / team, preferred | Round 2 (labels swapped): classic-revised / team, preferred | Same preference both rounds? |
+|---|---|---|---|
+| s1 | 62 / 73, **team** | 64 / 75, **team** | yes |
+| s2 | 67 / 70, **team** | 69 / 65, **classic-revised** | no |
+| s3 | 72 / 72, **classic-revised** | 70 / 73, **team** | no |
+| s4 | 59 / 65, **team** | 54 / 66, **team** | yes |
+| s5 | 68 / 67, **classic-revised** | 65 / 68, **team** | no |
+| s6 | 66 / 71, **team** | 65 / 73, **team** | yes |
+| s7 | 70 / 69, **classic-revised** | 70 / 72, **team** | no |
+| s8 | 64 / 65, **tie** | 64 / 61, **classic-revised** | no |
+| faq | 65 / 60, **classic-revised** | 68 / 55, **classic-revised** | yes |
+
+- **Averages.** Round 1: classic-revised 65.9, team 68.0. Round 2: classic-revised 65.4, team 67.6. Combined (18 scores each): classic-revised **65.7**, team **67.8**, a difference of 2.1 points on 100.
+- **Preferences.** Round 1: classic-revised 4, team 4, tie 1. Round 2: classic-revised 3, team 6, tie 0. Only 4 of 9 units got the same preference in both rounds (s1, s4, s6 team; faq classic-revised); 5 flipped.
+- **Anchoring and position check.** The same text changed its score by 2.0 points on average (classic-revised) and 2.7 (team) when only the label order changed. The judges chose label A in 5 of 9 units in round 1 and 3 of 9 in round 2, so there is no strong position bias, but the swap alone moved scores by 2-3 points and flipped over half the preferences. The noise is about the size of the gap.
+- **By rubric dimension** (average of 18; classic-revised | team): voice 14.4|13.8, education 13.7|14.7, deal_logic 12.8|13.9, local 5.2|5.2, structure 11.2|11.7, trust 8.3|8.5. Authenticity YES answers (of 180): classic-revised 155, team 162.
+- **Against the section 2 scores.** The unrevised classic text averaged 65.6 against the team's 68.8 in the first blind comparison; the classic-revised text averages 65.7. **Revising the classic way did not move its editorial score**; the team revision sits about 2-3 points higher in every comparison, which is inside the judges' noise.
+
+**What I take from it.** There is no reliable editorial quality difference between a team revision and a classic revision of this article. The difference that does show up is on fact and legal wording: only the team pipeline ended with a V1-clean text (7.1).
+
+### 7.4 Cost and quality side by side
+
+| | Classic as locked (no revision) | Classic revision (as run) | Team revision (as run) |
+|---|---|---|---|
+| Agent runs | 56 (drafting) | 37 (revision only) | 110 (revision only) |
+| Token estimate | about 495k (drafting) | about 329k | about 1037k (3.1x the classic revision) |
+| Elapsed | about 20 min | about 9 min (units in parallel) | about 88 min (sequential) |
+| Blind editorial score | 65.6 | 65.7 | 67.8 (68.8 vs unrevised classic) |
+| V1 must-fix cards left in the final text | 15 (7 of 9 units) | 7 (6 of 9 units) | 0 (V1 passed every unit before lock) |
+| Reviewers' first-pass result | Agent 5: 9 PASS, 4 REVISION over 13 reviews | 27 of 27 PASS | V1 10 REVISION in 25 reviews; V2 3 and V3 5 |
+| The 50 findings | untouched | addressed in the text, not tracked | 39 addressed, 2 partly, 9 declined with reasons |
+| Tickets / escalations | n/a | none | 23 tickets, 1 escalation (budget) |
+
+## 8. Recommendation (updated after Task 17)
+
+Leo decides. **My recommendation is still the hybrid, and Task 17 strengthens it: classic as the default pipeline, with the team-mode V1 re-review as a mandatory gate on any text the classic loop writes or revises.**
+
+| | Classic as locked | Classic revision (as run) | **Hybrid: classic revision + V1 gate (estimate)** | Team mode (as built) |
 |---|---|---|---|---|
-| Runs per article | 56 | about 75 | 110 | about 90 |
-| Token estimate | about 495k | about 660k (1.3x) | about 1037k (2.1x) | about 850k (1.7x) |
-| Elapsed | about 20 min | about 35 min | about 88 min | about 60 min |
-| Ticket budget | n/a | n/a | 10 is not enough: this revision needed 23 (about 2.5 per unit) | 30, or tickets only for cross-team issues |
-| Findings handled | none (50 left open) | the 50 stay open unless revised | all 50 (39 fixed, 2 partly, 9 declined) | same |
-| Quality (blind score) | 65.6 | not measured | 68.8 | not measured |
-| Fact and legal re-review of rewrites | only changed material claims | yes, changed sentences | yes | yes |
+| Agent runs | 56 | 37 | about 58 (37 + V1 on 9 units + about 6 fixes + 6 re-checks) | 110 |
+| Token estimate | about 495k | about 329k | about 515k (1.6x the classic revision) | about 1037k (3.1x) |
+| Elapsed | about 20 min | about 9 min (parallel) | about 20 min (parallel units) | about 88 min (sequential) |
+| Blind editorial score | 65.6 | 65.7 | about 66 (not measured) | 67.8-68.8 |
+| V1 must-fix left in the text | 15 (7 of 9 units) | 7 (6 of 9) | 0 after the fix pass | 0 |
+| New process risk | none | none | one extra loop | tickets, budget (10 is too small), reviewer conflicts, lost declines |
 
-The hybrid and team-with-fixes figures are my estimates, built from this run's per-role averages (V1 about 7.8k tokens per run, W1 about 11.5k): hybrid adds one V1 pass per unit (9 runs), about 5 writer fixes and 5 V1 re-checks (the number of units V1 flagged first time round in the team run, which reviewed rewritten text, so it is an assumption for classic text). Elapsed times are scaled from the measured 20 and 88 minutes. Token figures are estimates, not billed usage.
+The hybrid column is an **estimate** built from this run's per-role averages: V1 about 7.8k estimated tokens per run, W1 about 11.5k. It adds one V1 pass per unit (9 runs, about 70k), about 6 writer fixes (the units V1 flagged on the classic-revised text; about 69k) and 6 V1 re-checks (about 47k) to the measured classic revision. The fix loop itself has not been run. Token figures are estimates, not billed usage.
 
-**Why hybrid, not full team mode.**
+**Why hybrid.**
 
-1. The quality gain is small and uncertain: +3.2 on 100 by one judge, 5-4 in preference, with the in-pipeline scorer pointing the other way. Cost is about 2x runs and tokens and about 4x elapsed time.
-2. The part of team mode that clearly added value is V1's re-review of rewritten sentences (it caught real overstatements, mostly ones the rewrite created). That is cheap to keep without the rest. The hedge-phrase flag and the changed-sentence scope are already built.
-3. The parts that cost the most and added the least are the V2/V3 must-fix loops (reviewer conflicts, the FAQ ping-pong) and the 10-ticket budget, which is too small for a revision of this size.
-4. Two of the four ticket types (EVIDENCE_REQUEST, ROOT_CAUSE_NOTE) have no real-article evidence yet. The tickets that did fire were all one type.
+1. **The measurable defect is in classic's fact gate, not in its prose.** V1 found 15 must-fix issues in the unrevised classic text and still found 7 after the classic revision, while Agents 5, 6 and 7 passed 27 of 27. These are the unsupported generalizations and scope overstatements that matter most for a legal-adjacent article.
+2. **Editorial quality does not separate the two revisions.** Team 67.8 against classic-revised 65.7 on 100, with 5 of 9 preferences flipping when only the labels swapped. I would not pay for it.
+3. **Cost.** The team revision used 3.1x the tokens of the classic revision and about 10x its elapsed time (the elapsed gap is inflated by running classic units in parallel; my rough estimate for a sequential classic revision is 25-30 minutes, so about 3x). The hybrid is about half the team's tokens.
+4. **The team model's extra moving parts are the ones that failed** (section 6): lost declines, reviewer conflicts, a 10-ticket budget that this revision outgrew by 2.3x, and two ticket types never used on a real article.
 
-**Why not simply keep classic.** Classic leaves the 50 findings open and, as this run shows, the revision step is where fact and legal risk enters; a re-review of rewritten text is worth the 1.3x.
+**Why not just keep classic.** Classic leaves V1's family of defects in the text. The V1 gate is cheap and already built (hedge flag, changed-sentence scope, must-rule step).
 
-**Why not adopt team mode now.** The cost is 2.1x for an edge I cannot separate from noise, and the fixes in section 6 should come first. Revisit team mode after those fixes, on a second article, ideally a new draft (not a revision) where Research and Strategy can matter.
+**Why not team mode as the default yet.** Cost, no separable quality gain, and the open proposals in section 6, none of which is approved or built.
 
-## 8. Limits of this comparison
+**To validate the hybrid** (proposed, not run): add the V1 gate to the classic revision path on the next real article, measure the V1 must-fix count before and after, and compare against a team-mode run of the same article only if the gain looks doubtful.
 
-- **Revision versus no revision.** Classic was left as locked; the team revised it. A fair test of team mode would compare it with a classic *revision* of the same 50 findings (the classic loop can reopen units and re-run the writer and reviewers). I estimate that at roughly 25-30 runs, but it has not been run. Some of the team's quality edge is probably the effect of revising at all.
-- **One article, one run, one judge.** Nine units, a single judge model per unit, both texts scored in the same call. Differences of a few points are noise.
-- **The classic run baseline.** Classic's 56 runs and 20 minutes include drafting; the team's 110 runs are revision only. Cost per finished article is therefore not directly comparable.
-- **Operator effects.** Elapsed time includes the operator's one-at-a-time runner and my own disclosed prompt guidance in one s4 round (a sentence suggesting how to reconcile V2 and V3). Five validator rejections were corrected on retry without editing any output.
-- **Estimates.** Token figures are characters divided by four on stored packets and outputs, not billed tokens.
-- **Not tested:** whether V1 would find real problems in the *classic* locked text (the hybrid's benefit). Running V1 over the nine classic units is cheap (about 9 runs, 70k tokens) and read-only; it would test that directly.
+## 9. Limits of this comparison
 
-## 9. Where the data is
+- **Revision versus no revision: now tested once.** The first version of this report compared a revision with an unrevised draft; Task 17 added a classic revision (7.2, 7.3). The editorial result is a statistical tie; the V1 result favours the team text.
+- **One article, one run each, one judge model.** Nine units; each judge run saw both texts and scored them in one call; swapping the labels moved scores by 2-3 points and flipped 5 of 9 preferences. Differences of a few points are noise.
+- **Unequal conditions.** The classic revision ran its nine units in parallel; the team revision ran one role at a time. Token estimates are comparable, elapsed times are not.
+- **The classic revision got the findings as free text.** Classic has no structured way to carry optional findings, so each unit's findings were sent as one directive. A classic revision with a better findings mechanism might do better.
+- **V1 is one model's judgment.** It is not legal review. It cited sentences that exist in the text, but whether each is a true overstatement was not independently verified for all 27 cards.
+- **Estimates.** Token figures are characters / 4 on stored packets and outputs, not billed tokens. The hybrid costs are projections.
+- **Operator effects.** One s4 prompt in the team run carried a sentence of my own guidance (disclosed earlier). The classic baseline needed one re-run after a validator rejection.
 
-- Branch: `/studio/d7f03fff-22d0-48fe-9ee0-3d6d5102c856` (Team tab: tickets, budget exception, outcomes). Original: `/studio/e2b915e3-af97-4ea6-8979-4861ec729027`.
-- Ticket log: `npm run studio -- team-log d7f03fff-22d0-48fe-9ee0-3d6d5102c856`. Budget exception: audit event `team_budget_exception` on the branch.
-- Judging inputs and outputs (blind texts, mapping, scores, per-finding verdicts, declines): kept in the session scratchpad, not committed.
+## 10. Where the data is
+
+- Team branch: `/studio/d7f03fff-22d0-48fe-9ee0-3d6d5102c856`. Classic-revision branch: `/studio/54070caa-bd79-4184-a82a-9235b1c33b64` (HUMAN_REVIEW, version `6cd1c5264e9c`). Original: `/studio/e2b915e3-af97-4ea6-8979-4861ec729027`, unchanged.
+- Ticket log of the team run: `npm run studio -- team-log d7f03fff-22d0-48fe-9ee0-3d6d5102c856`. Budget exception: audit event `team_budget_exception` on the team branch.
+- Judging inputs and outputs (blind texts, hidden mappings, both rounds, V1 packets and outputs for the classic and classic-revised units, per-finding verdicts, declines): in the session scratchpad, not committed.
+- Rollback of either branch: `npm run studio -- branch-delete <branch_id> --yes` (guarded; refuses the original and fixtures). Neither has been deleted.
