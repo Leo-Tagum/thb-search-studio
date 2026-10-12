@@ -36,7 +36,7 @@ import { AGENT_KEYS, type AgentKey } from "../src/lib/agents/schemas";
 import { semanticChecks, submitOutput } from "../src/lib/agents/bridge";
 import { outputSchemas } from "../src/lib/agents/schemas";
 import { SupabaseBridgeStore, makeOrchestrator, queueRun, validationContext } from "../src/lib/agents/supabase-deps";
-import { STUDIO_AGENT_KEYS, isStudioAgent, type StudioAgentKey } from "../src/lib/studio/agents";
+import { CLASSIC_V1_KEY, STUDIO_AGENT_KEYS, isStudioAgent, type StudioAgentKey } from "../src/lib/studio/agents";
 import { load, queueStudioRun, resolveSection, setPipelineMode, stateOf, submitStudio, validateStudio } from "../src/lib/studio/service";
 import { declinesOfRow } from "../src/lib/studio/declines-view";
 import { branchArticle, branchDelete, fingerprint } from "../src/lib/studio/branch";
@@ -50,15 +50,24 @@ import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
 const [cmd, a, b, c] = process.argv.slice(2);
-const ALL = [...AGENT_KEYS, ...STUDIO_AGENT_KEYS] as string[];
-const agentKeyOf = (x: string) => (/^[1-7]$/.test(x) ? ALL[Number(x) - 1] : x);
+const ALL = [...AGENT_KEYS, ...STUDIO_AGENT_KEYS, CLASSIC_V1_KEY] as string[];
+const agentKeyOf = (x: string) => (/^[1-7]$/.test(x) ? ALL[Number(x) - 1] : /^v1$/i.test(x) ? CLASSIC_V1_KEY : x);
+/** Who runs next on a unit: V1 is the fact gate of a classic unit; Agent 5 only for a unit saved before Phase 3d that has not been touched since. */
+const runnerFor = (st: { status: string; gate?: string }): string | undefined => (st.status === "NEEDS_FACT" ? (st.gate === "v1" ? CLASSIC_V1_KEY : "thb-05-fact-privacy-auditor") : RUNNERS[st.status]?.[0]);
 const RUNNERS: Record<string, string[]> = { NEEDS_WRITE: ["thb-04-section-writer"], NEEDS_REVISION: ["thb-04-section-writer"], NEEDS_FACT: ["thb-05-fact-privacy-auditor"], NEEDS_SEO: ["thb-06-seo-aeo-geo-auditor"], NEEDS_EDITORIAL: ["thb-07-editorial-critic"] };
+
+/** V1 runs through the classic service when its article is a classic one (the gate), through the team service when the article runs in team mode. */
+async function isClassicV1Run(run: { agent_key: string; subject_id: string }): Promise<boolean> {
+  if (run.agent_key !== CLASSIC_V1_KEY) return false;
+  const { data: art } = await db.from("articles").select("pipeline_mode").eq("id", run.subject_id).single();
+  return modeOf(art ?? {}) === "classic";
+}
 
 if (cmd === "queue") {
   const agent = agentKeyOf(a);
   if (!ALL.includes(agent)) throw new Error(`unknown agent ${a}`);
-  if (isStudioAgent(agent)) {
-    if (!c) throw new Error("Agents 4-7 need a unit key (s1, s2, ... or faq)");
+  if (isStudioAgent(agent) || agent === CLASSIC_V1_KEY) {
+    if (!c) throw new Error("Agents 4-7 and V1 need a unit key (s1, s2, ... or faq)");
     const { runId, duplicate } = await queueStudioRun(db, agent as StudioAgentKey, b, c);
     console.log(`${duplicate ? "existing" : "queued"} run ${runId} (${agent}) for article ${b} unit ${c}`);
   } else {
@@ -70,7 +79,8 @@ if (cmd === "queue") {
   console.log(`article ${L.article.title} — state ${L.article.state}`);
   for (const s of L.sections) {
     const st = stateOf(s);
-    const next = RUNNERS[st.status];
+    const nextAgent = runnerFor(st);
+    const next = nextAgent ? [nextAgent] : undefined;
     console.log(`  ${st.key.padEnd(4)} ${st.status}${st.issues.length ? ` issues=${st.issues.map((i) => `${i.key}(${i.attempts})`).join(",")}` : ""}${st.blockedBy ? ` BLOCKED: ${st.blockedBy}` : ""}${st.escalation ? ` ESCALATED: ${st.escalation.reason}` : ""}${next ? `  -> ${next[0]}` : ""}`);
     if (cmd === "queue-next" && next) {
       try { const { runId, duplicate } = await queueStudioRun(db, next[0] as StudioAgentKey, a, st.key); console.log(`      ${duplicate ? "existing" : "queued"} run ${runId}`); } catch (e) { console.log(`      not queued: ${e instanceof Error ? e.message : e}`); }
@@ -78,9 +88,9 @@ if (cmd === "queue") {
   }
 } else if (cmd === "dump-queued") {
   // writes every QUEUED Agent 4-7 packet to <dir>/<agent-number>-<unit>-packet.json (the operator hands each file to its subagent)
-  const { data: qs } = await db.from("agent_runs").select("id,agent_key,task_packet").eq("status", "QUEUED").like("agent_key", "thb-0%");
+  const { data: qs } = await db.from("agent_runs").select("id,agent_key,subject_id,task_packet").eq("status", "QUEUED").or(`agent_key.like.thb-0%,agent_key.eq.${CLASSIC_V1_KEY}`);
   for (const r of qs ?? []) {
-    if (!isStudioAgent(r.agent_key)) continue;
+    if (!isStudioAgent(r.agent_key) && !(await isClassicV1Run(r))) continue;
     const file = `${a}/${r.agent_key.slice(4, 6)}-${r.task_packet.unit_key}-packet.json`;
     writeFileSync(file, JSON.stringify({ run_id: r.id, attempts_used: 0, last_error: null, ...r.task_packet }, null, 2));
     console.log(`${r.id} ${r.agent_key} ${r.task_packet.unit_key} -> ${file}`);
@@ -104,9 +114,9 @@ if (cmd === "queue") {
   const run = await new SupabaseBridgeStore(db).getRun(id);
   console.log(JSON.stringify({ run_id: run.id, attempts_used: run.retries, last_error: run.error, ...run.task_packet }, null, 2));
 } else if (cmd === "submit") {
-  const { data: run } = await db.from("agent_runs").select("agent_key").eq("id", a).single();
-  if (teamRoleOfAgentKey(run!.agent_key)) { console.log("this is a team role run: use  npm run studio -- team-submit <run_id> <file>"); process.exitCode = 2; }
-  else if (isStudioAgent(run!.agent_key)) {
+  const { data: run } = await db.from("agent_runs").select("agent_key,subject_id").eq("id", a).single();
+  if (teamRoleOfAgentKey(run!.agent_key) && !(await isClassicV1Run(run!))) { console.log("this is a team role run: use  npm run studio -- team-submit <run_id> <file>"); process.exitCode = 2; }
+  else if (isStudioAgent(run!.agent_key) || (await isClassicV1Run(run!))) {
     const res = await submitStudio(db, a, readFileSync(b, "utf8"));
     if (res.ok) console.log(`ACCEPTED run ${a}${res.note ? ` — ${res.note}` : ""}`);
     else {
@@ -128,8 +138,8 @@ if (cmd === "queue") {
   // Dry run: same validation as submit, but nothing is saved and no attempt is used.
   const { data: row } = await db.from("agent_runs").select("*").eq("id", a).single();
   let errors: string[] = [];
-  if (teamRoleOfAgentKey(row!.agent_key)) errors = await checkTeam(db, a, readFileSync(b, "utf8"));
-  else if (isStudioAgent(row!.agent_key)) errors = (await validateStudio(db, a, readFileSync(b, "utf8"))).errors;
+  if (teamRoleOfAgentKey(row!.agent_key) && !(await isClassicV1Run(row!))) errors = await checkTeam(db, a, readFileSync(b, "utf8"));
+  else if (isStudioAgent(row!.agent_key) || (await isClassicV1Run(row!))) errors = (await validateStudio(db, a, readFileSync(b, "utf8"))).errors;
   else {
     const run = await new SupabaseBridgeStore(db).getRun(a);
     try {
@@ -229,10 +239,10 @@ if (cmd === "queue") {
   for (const s of L.sections) console.log(`  ${s.section_key}: ${s.status}`);
   for (const [id, cl] of L.claims) console.log(`  claim ${id}: ${cl.support} ${cl.risk}${cl.lockedText ? " (locked)" : ""}`);
 } else if (cmd === "resolve") {
-  const kind = c as "request_revision" | "reopen" | "hold"; // argv: resolve <article> <unit> <kind> [text]
+  const kind = c as "request_revision" | "reopen" | "hold" | "v1_gate"; // argv: resolve <article> <unit> <kind> [text]
   const text = process.argv.slice(6).join(" ").trim();
-  if (!["request_revision", "reopen", "hold"].includes(kind)) throw new Error("kind must be request_revision, reopen or hold");
-  const res = await resolveSection(db, a, b, kind === "hold" ? { kind: "hold" } : { kind, text }, "leo");
+  if (!["request_revision", "reopen", "hold", "v1_gate"].includes(kind)) throw new Error("kind must be request_revision, reopen, hold or v1_gate");
+  const res = await resolveSection(db, a, b, kind === "hold" ? { kind: "hold" } : kind === "v1_gate" ? { kind: "v1_gate" } : { kind, text }, "leo");
   console.log(res.ok ? `${b} is now ${res.status}` : `REFUSED: ${res.reason}`);
   if (!res.ok) process.exitCode = 2;
 } else if (cmd === "voice-approve") {

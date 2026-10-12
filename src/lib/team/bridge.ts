@@ -7,7 +7,7 @@ import { z } from "zod";
 import { agent1Result, agent2Result, agent3Result, outputSchemas } from "../agents/schemas";
 import { MAX_ATTEMPTS, ratingRuleHits, semanticChecks, wrapUntrusted, norm, type TaskPacket, type ValidationContext } from "../agents/bridge";
 import { officialUrl } from "../agents/official-sources";
-import { studioOutputSchemas, studioSemanticChecks, type StudioValidationCtx } from "../studio/agents";
+import { studioOutputSchemas, studioSemanticChecks, V1_PROMPT_VERSION, type StudioValidationCtx } from "../studio/agents";
 import { r1SubmitErrors } from "./research";
 import { r1FetchRequest, verifyR1Web, type SnapshotStore } from "./snapshots";
 import { resolveRootCause, rootCauseResult, type ApprovedIdentity } from "./strategy";
@@ -25,7 +25,7 @@ export const TEAM_DECISIONS: Record<TeamRole, readonly string[]> = {
   W1: ["PASS", "BLOCKED"], W2: ["PASS"], V1: ["PASS", "REVISION", "BLOCKED"], V2: ["PASS", "REVISION"], V3: ["PASS", "REVISION"],
 };
 /** Prompt versions per role. 1.1.0 (Phase 3d): declines wording in W1, V1, V2 and V3. Every other role is unchanged at 1.0.0. */
-export const TEAM_PROMPT_VERSIONS: Record<TeamRole, string> = { R1: "1.0.0", R2: "1.0.0", R3: "1.0.0", S1: "1.0.0", S2: "1.0.0", W1: "1.1.0", W2: "1.0.0", V1: "1.1.0", V2: "1.1.0", V3: "1.1.0" };
+export const TEAM_PROMPT_VERSIONS: Record<TeamRole, string> = { R1: "1.0.0", R2: "1.0.0", R3: "1.0.0", S1: "1.0.0", S2: "1.0.0", W1: "1.1.0", W2: "1.0.0", V1: V1_PROMPT_VERSION, V2: "1.1.0", V3: "1.1.0" };
 export const teamPromptVersion = (role: TeamRole): string => TEAM_PROMPT_VERSIONS[role];
 export const isTeamRole = (k: string): k is TeamRole => k in TEAM_AGENT_FILE;
 export const teamRoleOfAgentKey = (k: string): TeamRole | null => (Object.entries(TEAM_AGENT_FILE).find(([, f]) => f === k)?.[0] as TeamRole | undefined) ?? null;

@@ -7,7 +7,8 @@ import { SupabaseRepo } from "../orchestrator/supabase-repo";
 import { MAX_ATTEMPTS, wrapUntrusted } from "../agents/bridge";
 import { checkArticle, checkUnit, type CheckCtx, type LedgerClaim } from "./checks";
 import { contentHash, sha256 } from "./hash";
-import { allLocked, applyDeterministic, applyReview, declineOptional, editorRevision, escalateGap, recordVersion, reopen, resolveByHuman, type SectionState } from "./loop";
+import { allLocked, applyDeterministic, applyReview, declineOptional, editorRevision, escalateGap, gateOnly, isV1FixPass, recordVersion, reopen, resolveByHuman, type SectionState } from "./loop";
+import { fixChurn, splitSentences } from "./v1-gate";
 import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
@@ -15,7 +16,8 @@ import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../tea
 import { agentLikeActor, resolveActorError } from "./actors";
 import { envelopeOf, saveEnvelope } from "./team-envelope";
 import { reopen as teamReopen, resolveByHuman as teamResolveByHuman } from "../team/loop";
-import { STUDIO_AGENT_META, isStudioAgent, studioOutputSchemas, studioSemanticChecks, type StudioAgentKey, type StudioValidationCtx } from "./agents";
+import { CLASSIC_V1_KEY, STUDIO_AGENT_META, V1_PROMPT_VERSION, isStudioAgent, studioOutputSchemas, studioSemanticChecks, type StudioAgentKey, type StudioValidationCtx } from "./agents";
+import { teamSchema, teamSemanticChecks, type TeamPacket } from "../team/bridge";
 
 export const SYSTEM: Actor = { kind: "system", id: "studio" };
 export const AUTHOR_URL = "https://www.twinhomebuyer.com/from-the-desk-of-juan-diaz/";
@@ -121,15 +123,22 @@ export const stateOf = (row: any): SectionState => {
 };
 
 // ---------- queue ----------
-export async function queueStudioRun(db: SupabaseClient, agent: StudioAgentKey, articleId: string, unitKey: string) {
+type ClassicAgent = StudioAgentKey | typeof CLASSIC_V1_KEY;
+const V1_META = { n: 5 as const, name: "V1 Fact and Privacy", promptVersion: V1_PROMPT_VERSION, decisions: ["PASS", "REVISION", "BLOCKED"] as readonly string[] };
+const metaOf = (agent: ClassicAgent) => (agent === CLASSIC_V1_KEY ? V1_META : STUDIO_AGENT_META[agent]);
+
+export async function queueStudioRun(db: SupabaseClient, agent: ClassicAgent, articleId: string, unitKey: string) {
   const L = await load(db, articleId);
   const wrongPipeline = pipelineGuard(modeOf(L.article), agent);
   if (wrongPipeline) throw new Error(wrongPipeline);
   const row = L.sections.find((s) => s.section_key === unitKey);
   if (!row) throw new Error(`no unit ${unitKey}`);
   const st = stateOf(row);
-  const needs: Record<StudioAgentKey, string[]> = { "thb-04-section-writer": ["NEEDS_WRITE", "NEEDS_REVISION"], "thb-05-fact-privacy-auditor": ["NEEDS_FACT"], "thb-06-seo-aeo-geo-auditor": ["NEEDS_SEO"], "thb-07-editorial-critic": ["NEEDS_EDITORIAL"] };
+  const needs: Record<ClassicAgent, string[]> = { "thb-04-section-writer": ["NEEDS_WRITE", "NEEDS_REVISION"], "thb-05-fact-privacy-auditor": ["NEEDS_FACT"], [CLASSIC_V1_KEY]: ["NEEDS_FACT"], "thb-06-seo-aeo-geo-auditor": ["NEEDS_SEO"], "thb-07-editorial-critic": ["NEEDS_EDITORIAL"] };
   if (!needs[agent].includes(st.status)) throw new Error(`${agent} cannot run on ${unitKey}: the section is ${st.status}`);
+  // V1 is the fact gate: Agent 5 is retired from the classic path and reviews only a section that was saved before the gate existed and has not been touched since.
+  if (agent === "thb-05-fact-privacy-auditor" && st.gate === "v1") throw new Error(`Agent 5 is retired from the classic path: ${unitKey} is under the V1 gate. Queue V1 (${CLASSIC_V1_KEY}).`);
+  if (agent === CLASSIC_V1_KEY && st.gate !== "v1") throw new Error(`${unitKey} has no V1 gate yet (it was saved before Phase 3d); its fact reviewer is Agent 5 until its text is revised or Leo sends it through the gate.`);
   if (agent === "thb-07-editorial-critic" && !(await voiceUsable(db))) throw new Error("Agent 7 is blocked: no usable voice reference (provisional or approved). Build and approve it first.");
   const { data: open } = await db.from("agent_runs").select("id").eq("agent_key", agent).eq("subject_id", articleId).eq("status", "QUEUED").eq("task_packet->>unit_key", unitKey).maybeSingle();
   if (open) return { runId: open.id, duplicate: true };
@@ -150,21 +159,30 @@ export async function queueStudioRun(db: SupabaseClient, agent: StudioAgentKey, 
     pending_juan_blocked: "hours/24h, closing time, ownership/founder/title, contractor license, address vs service area, Equity Track, $32M+, 100% on time, East Oakland roots; and any statement that THB buys as-is or without a cleanout. Never write a rating or review count.",
     current_version: cur ? { version_hash: cur.content_hash, unit: cur.content } : null,
     open_issues: st.issues,
+    ...(agent === CLASSIC_V1_KEY ? {
+      review_scope: st.v1Scope ?? { kind: "full" },
+      hedge_flags: (st.hedges ?? []).filter((h) => h.ruling !== "proven").map((h) => ({ key: h.key, term: h.term, sentence: h.sentence })),
+      previously_passed: st.v1Passed ? { version_hash: st.v1Passed.hash } : null,
+      previously_declined: (st.declines ?? []).map((d) => ({ key: d.key, issue: d.text, writer_reason: d.reason, raised: d.raised })),
+      declines_rule: "The writer declined these items and the code recorded them. Do not raise one again under a new key or new wording: it is counted once and not reopened. To raise it again, put what is new (a claim id, a stored passage, or the changed text) in new_evidence on the card and the finding.",
+    } : {}),
+    ...(agent === "thb-04-section-writer" && isV1FixPass(st) ? { v1_fix_pass: { fix_only_cited_sentences: st.fixCited ?? [], rule: "V1 returned REVISION. Change only the sentences listed in fix_only_cited_sentences, as the open issues say, and keep every other sentence exactly as it is. The code rejects a version that changes other sentences." } } : {}),
     ...(agent === "thb-04-section-writer" ? { declined_so_far: (st.declines ?? []).map((d) => ({ key: d.key, reason: d.reason, raised: d.raised })), open_optional_items: (st.collected ?? []).filter((c) => !c.declined).map((c) => ({ key: c.key, from: c.role, severity: c.severity, issue: c.text })), declines_rule: "To not apply an optional item (never a required issue), list it in result.declines as {key, reason} with the exact key from open_optional_items. The code stores it and shows it to Leo." } : {}),
     ...(agent === "thb-06-seo-aeo-geo-auditor" || agent === "thb-07-editorial-critic" ? { previously_declined: (st.declines ?? []).map((d) => ({ key: d.key, issue: d.text, writer_reason: d.reason, raised: d.raised })), declines_rule: "The writer declined these items and the code recorded them. Do not raise one again under a new key or new wording: it is counted once and not reopened. To raise it again, put what is new (a claim id, a stored passage, or the changed text) in new_evidence on the finding." } : {}),
     editorial_rules: "docs/references/editorial-standards.md",
   };
   if (agent === "thb-04-section-writer" || agent === "thb-07-editorial-critic") data.voice_reference = { status: vr?.provisional_by ? `provisionally approved by ${vr.provisional_by}; Juan confirms with the first article` : vr?.status, excerpts: safeJson(vr?.fact_value) };
   const allowed = [...L.claims.keys()];
+  const fixPass = agent === "thb-04-section-writer" && isV1FixPass(st);
   const packet = {
-    agent_key: agent, prompt_version: STUDIO_AGENT_META[agent].promptVersion,
-    instructions: `You are Agent ${STUDIO_AGENT_META[agent].n}. Follow .claude/agents/${agent}.md exactly. Work on ONE unit (${unitKey}) of ONE article using only the data block. You never approve, lock or set a state.`,
+    agent_key: agent, prompt_version: metaOf(agent).promptVersion,
+    instructions: `You are ${agent === CLASSIC_V1_KEY ? "V1 (Fact and Privacy, the fact gate of the classic loop)" : `Agent ${STUDIO_AGENT_META[agent as StudioAgentKey].n}`}. Follow .claude/agents/${agent}.md exactly. Work on ONE unit (${unitKey}) of ONE article using only the data block. You never approve, lock or set a state.${fixPass ? " This is a V1 fix pass: change only the sentences V1 cited (v1_fix_pass.fix_only_cited_sentences) and keep every other sentence exactly as it is; a version that changes other sentences is rejected by code." : ""}`,
     opportunity_id: L.article.opportunity_id, article_id: articleId, unit_key: unitKey, unit_hash: cur?.content_hash ?? null, allowed_claim_ids: allowed,
     input_version_ids: [cur?.content_hash ?? `unit:${unitKey}:none`],
-    output_contract: { schema: "blueprint-§5-common+studio-agent-result", decisions: STUDIO_AGENT_META[agent].decisions, submit: "npm run studio -- submit <run_id> <file.json>" },
+    output_contract: { schema: agent === CLASSIC_V1_KEY ? "blueprint-§5-common+team-role-result" : "blueprint-§5-common+studio-agent-result", decisions: metaOf(agent).decisions, submit: "npm run studio -- submit <run_id> <file.json>" },
     untrusted_data_block: wrapUntrusted(data),
   };
-  const { data: run, error } = await db.from("agent_runs").insert({ agent_key: agent, subject_type: "article", subject_id: articleId, status: "QUEUED", task_packet: packet, prompt_version: STUDIO_AGENT_META[agent].promptVersion }).select("id").single();
+  const { data: run, error } = await db.from("agent_runs").insert({ agent_key: agent, subject_type: "article", subject_id: articleId, status: "QUEUED", task_packet: packet, prompt_version: metaOf(agent).promptVersion }).select("id").single();
   if (error) throw error;
   await db.from("audit_events").insert({ actor: "system:studio", subject_type: "article", subject_id: articleId, event_type: "agent_run_queued", accepted: true, detail: { run: run.id, agent, unit: unitKey } });
   return { runId: run.id, duplicate: false };
@@ -206,11 +224,11 @@ export async function validateStudio(db: SupabaseClient, runId: string, raw: str
   const { data: run } = await db.from("agent_runs").select("*").eq("id", runId).single();
   const errors: string[] = [];
   let parsed: any = null; let L: Loaded | null = null; let row: any = null;
-  if (!isStudioAgent(run.agent_key)) return { run, parsed, errors: ["not a Content Studio agent run"], L, row };
+  if (!isStudioAgent(run.agent_key) && run.agent_key !== CLASSIC_V1_KEY) return { run, parsed, errors: ["not a Content Studio agent run"], L, row };
   const wrong = await modeError(db, run);
   if (wrong) return { run, parsed, errors: [wrong], L, row };
   try {
-    const r = studioOutputSchemas[run.agent_key as StudioAgentKey].safeParse(JSON.parse(raw));
+    const r = (run.agent_key === CLASSIC_V1_KEY ? teamSchema("V1") : studioOutputSchemas[run.agent_key as StudioAgentKey]).safeParse(JSON.parse(raw));
     if (!r.success) for (const i of r.error.issues) errors.push(`${i.path.join(".") || "(root)"}: ${i.message}`);
     else {
       parsed = r.data;
@@ -218,7 +236,10 @@ export async function validateStudio(db: SupabaseClient, runId: string, raw: str
       row = L.sections.find((s) => s.section_key === run.task_packet.unit_key);
       const cur = row?.current_version_id ? (await db.from("section_versions").select("*").eq("id", row.current_version_id).single()).data : null;
       const ctx: StudioValidationCtx = { packet: run.task_packet, currentUnit: cur?.content ?? null, currentHash: cur?.content_hash ?? null, check: L.check, voiceUsable: await voiceUsable(db), requiredIssuesOpen: stateOf(row).issues.map((i) => i.key).filter((k) => !k.startsWith("det:")), declinableKeys: (stateOf(row).collected ?? []).map((c) => c.key) };
-      errors.push(...studioSemanticChecks(run.agent_key as StudioAgentKey, parsed, ctx));
+      if (run.agent_key === CLASSIC_V1_KEY) {
+        const pending = (stateOf(row).hedges ?? []).filter((h) => h.ruling !== "proven").map((h) => h.key);
+        errors.push(...(await teamSemanticChecks("V1", parsed, { packet: { ...run.task_packet, role: "V1" } as TeamPacket, currentHash: ctx.currentHash, studio: ctx, pendingHedgeKeys: pending })));
+      } else errors.push(...studioSemanticChecks(run.agent_key as StudioAgentKey, parsed, ctx));
     }
   } catch (e) { errors.push(`not valid JSON: ${e instanceof Error ? e.message : String(e)}`); }
   return { run, parsed, errors, L, row };
@@ -268,6 +289,7 @@ async function blockArticle(db: SupabaseClient, articleId: string, kind: "BLOCKE
 
 async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, row: any): Promise<string | undefined> {
   const agent = run.agent_key as StudioAgentKey;
+  const isV1 = run.agent_key === CLASSIC_V1_KEY;
   const r = out.result;
   const st = stateOf(row);
   const articleId = run.subject_id as string;
@@ -284,10 +306,12 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
     }
     const u = r.unit as Unit;
     const v = await newVersion(db, row, u, agent, run.id, r.change_note);
-    const o = recordVersion(st, { hash: v.hash, sig: v.sig });
+    const o = recordVersion(st, { hash: v.hash, sig: v.sig, text: unitText(u) });
     if (!o.ok) throw new Error(o.error);
     let next = o.state;
     const findings = checkUnit(u, L.check);
+    // The writer's V1-fix pass may change only the sentences V1 cited. Agent 7 revisions, human edits and reopens are not fix passes and are not checked here.
+    if (isV1FixPass(st)) { const churn = fixChurn(st.v1Reviewed?.sentences ?? st.sentences, splitSentences(unitText(u)), st.fixCited ?? []); if (churn) findings.push(churn); }
     const d = applyDeterministic(next, findings);
     if (!d.ok) throw new Error(d.error);
     next = d.state;
@@ -306,7 +330,7 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
   } else {
     const dec = out.decision as "PASS" | "REVISION" | "BLOCKED";
     const optional = (out.findings as any[]).filter((f) => f.severity === "optional").map((f) => ({ key: f.issue_key as string, text: f.note as string, newEvidence: f.new_evidence as string | undefined }));
-    const review = applyReview(st, { agent: STUDIO_AGENT_META[agent].n as 5 | 6 | 7, versionHash: r.version_hash, decision: dec, issues: issuesOf(), blockKind: r.block_kind, optional });
+    const review = applyReview(st, { agent: isV1 ? "V1" : (STUDIO_AGENT_META[agent].n as 5 | 6 | 7), versionHash: r.version_hash, decision: dec, issues: issuesOf(), blockKind: r.block_kind, optional, hedgeRulings: isV1 ? r.hedge_rulings : undefined });
     if (!review.ok) throw new Error(review.error);
     let next = review.state;
     let versionId: string | null = row.current_version_id;
@@ -314,7 +338,7 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
       // The editor's replacement is a new version. Anything material sends it back to Agent 5; it can never lock a changed fact.
       const u = r.revised_unit as Unit;
       const v = await newVersion(db, row, u, agent, run.id, "editorial focused revision");
-      const e = editorRevision({ ...st, collected: next.collected, declines: next.declines, status: "NEEDS_EDITORIAL" }, { hash: v.hash, sig: v.sig });
+      const e = editorRevision({ ...st, collected: next.collected, declines: next.declines, status: "NEEDS_EDITORIAL" }, { hash: v.hash, sig: v.sig, text: unitText(u) });
       if (!e.ok) throw new Error(e.error);
       next = e.state; versionId = v.id; note = e.note;
       const findings = checkUnit(u, L.check);
@@ -326,7 +350,7 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
       await saveSection(db, row.id, next);
     }
     await db.from("section_reviews").insert({ section_id: row.id, version_id: versionId, agent_key: agent, decision: dec, findings: out.findings, required_actions: out.required_actions, advisory_score: agent === "thb-07-editorial-critic" ? Math.round(r.score.total) : null, agent_run_id: run.id });
-    await audit(db, articleId, "section_review", { unit: run.task_packet.unit_key, agent, decision: dec, status: next.status, note });
+    await audit(db, articleId, "section_review", { unit: run.task_packet.unit_key, agent: run.agent_key, decision: dec, status: next.status, note, v1_scope: isV1 ? (st.v1Scope?.kind ?? "full") : undefined, v1_round: isV1 ? next.v1Rounds : undefined });
     if (next.status === "LOCKED") {
       await db.from("article_sections").update({ locked_version_id: versionId }).eq("id", row.id);
       // Lock the verified wording of every claim this section relies on.
@@ -341,7 +365,7 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
 }
 
 // ---------- human actions on sections ----------
-export async function resolveSection(db: SupabaseClient, articleId: string, unitKey: string, action: { kind: "request_revision"; text: string } | { kind: "hold" } | { kind: "reopen"; text: string }, actorId: string) {
+export async function resolveSection(db: SupabaseClient, articleId: string, unitKey: string, action: { kind: "request_revision"; text: string } | { kind: "hold" } | { kind: "reopen"; text: string } | { kind: "v1_gate" }, actorId: string) {
   // Leo's action only: an agent-like actor is refused before anything is read or written.
   if (agentLikeActor(actorId) || !actorId.trim()) return { ok: false as const, reason: resolveActorError(actorId, null)! };   // before any read or write
   const L = await load(db, articleId);
@@ -352,7 +376,8 @@ export async function resolveSection(db: SupabaseClient, articleId: string, unit
   // A team article keeps its loop state in the team envelope: Leo's resolve goes through the team loop functions and never rewrites it in the classic shape.
   const team = modeOf(L.article) === "team";
   let newStatus: string;
-  const humanAction = action.kind === "hold" ? { kind: "hold" as const } : { kind: "request_revision" as const, issueText: action.text };
+  const humanAction = action.kind === "hold" ? { kind: "hold" as const } : { kind: "request_revision" as const, issueText: "text" in action ? action.text : "" };
+  if (team && action.kind === "v1_gate") return { ok: false as const, reason: "the V1 gate action is for classic articles; a team article has V1 in its council" };
   if (team) {
     const env = envelopeOf(row);
     const o = action.kind === "reopen" ? teamReopen(env.team, action.text) : teamResolveByHuman(env.team, humanAction);
@@ -361,18 +386,23 @@ export async function resolveSection(db: SupabaseClient, articleId: string, unit
     newStatus = o.state.status;
   } else {
     const st = stateOf(row);
-    const o = action.kind === "reopen" ? reopen(st, action.text) : resolveByHuman(st, humanAction);
+    let o: ReturnType<typeof reopen>;
+    if (action.kind === "v1_gate") {
+      // Leo sends a locked section through the V1 gate without changing its text (a section locked before Phase 3d has no V1 pass).
+      const cur = row.current_version_id ? (await db.from("section_versions").select("content").eq("id", row.current_version_id).single()).data : null;
+      o = gateOnly(st, { text: cur ? unitText(cur.content as Unit) : undefined });
+    } else o = action.kind === "reopen" ? reopen(st, action.text) : resolveByHuman(st, humanAction);
     if (!o.ok) return { ok: false as const, reason: o.error };
     await saveSection(db, row.id, o.state);
     newStatus = o.state.status;
   }
-  if (action.kind !== "hold") await db.from("escalations").update({ status: "RESOLVED", resolution: action.kind === "reopen" ? "reopened" : action.text, resolved_by: actorId, resolved_at: new Date().toISOString() }).eq("section_id", row.id).eq("status", "OPEN");
+  if (action.kind !== "hold") await db.from("escalations").update({ status: "RESOLVED", resolution: action.kind === "reopen" ? "reopened" : action.kind === "v1_gate" ? "v1_gate" : action.text, resolved_by: actorId, resolved_at: new Date().toISOString() }).eq("section_id", row.id).eq("status", "OPEN");
   await audit(db, articleId, `section_${action.kind}`, { unit: unitKey, text: "text" in action ? action.text : null }, actorId);
   // Anything that reopens work after assembly invalidates the old sign-off and returns the article to drafting.
   const { data: a } = await db.from("articles").select("state").eq("id", articleId).single();
   const o2 = orch(db);
   if (a && ["BLOCKED_CLAIM", "BLOCKED_PRIVACY"].includes(a.state) && action.kind !== "hold") { await o2.transition("article", articleId, "REVISION_REQUIRED", { kind: "human", id: actorId }, { unit: unitKey }); await o2.transition("article", articleId, "DRAFTING", { kind: "human", id: actorId }, { unit: unitKey }); }
-  else if (a && ["HUMAN_REVIEW", "APPROVED_FOR_WP_DRAFT"].includes(a.state) && action.kind === "reopen") {
+  else if (a && ["HUMAN_REVIEW", "APPROVED_FOR_WP_DRAFT"].includes(a.state) && (action.kind === "reopen" || action.kind === "v1_gate")) {
     // Any edit after assembly invalidates the sign-off: close the open proposal, clear the approval, and replace the version hash with a
     // sentinel so no earlier Approval Room record can ever match the article again.
     await db.from("proposals").update({ status: "SUPERSEDED" }).eq("article_id", articleId).eq("status", "OPEN");

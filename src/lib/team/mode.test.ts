@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { STUDIO_AGENT_KEYS } from "../studio/agents";
+import { CLASSIC_V1_KEY, STUDIO_AGENT_KEYS } from "../studio/agents";
 import { TEAM_AGENT_FILE } from "./bridge";
 import { isPipelineMode, modeChangeRule, modeOf, pipelineGuard } from "./mode";
 
@@ -12,11 +12,19 @@ describe("a team article refuses classic runs and the reverse", () => {
   });
   it("every team role (R1-R3, S1-S2, W1-W2, V1-V3) is refused on a classic article", () => {
     expect(TEAM_KEYS).toHaveLength(10);
-    for (const k of TEAM_KEYS) expect(pipelineGuard("classic", k), k).toMatch(/classic mode.*team role/);
+    for (const k of TEAM_KEYS.filter((x) => x !== CLASSIC_V1_KEY)) expect(pipelineGuard("classic", k, "team"), k).toMatch(/classic mode.*team role/);
+    expect(pipelineGuard("classic", CLASSIC_V1_KEY, "team")).toMatch(/classic service, not the team one/);     // V1 is also the classic fact gate: it runs on a classic article only through the classic service
+  });
+  it("V1 is the fact gate of the classic pipeline and a team council member: each article uses it through its own service only", () => {
+    expect(pipelineGuard("classic", CLASSIC_V1_KEY)).toBeNull();
+    expect(pipelineGuard("classic", CLASSIC_V1_KEY, "classic")).toBeNull();
+    expect(pipelineGuard("team", CLASSIC_V1_KEY, "team")).toBeNull();
+    expect(pipelineGuard("team", CLASSIC_V1_KEY, "classic")).toMatch(/team service, not the classic one/);
+    expect(pipelineGuard("team", CLASSIC_V1_KEY)).toMatch(/team service, not the classic one/);
   });
   it("each pipeline runs its own agents", () => {
     for (const k of STUDIO_AGENT_KEYS) expect(pipelineGuard("classic", k)).toBeNull();
-    for (const k of TEAM_KEYS) expect(pipelineGuard("team", k)).toBeNull();
+    for (const k of TEAM_KEYS) expect(pipelineGuard("team", k, "team")).toBeNull();
   });
   it("opportunity-level agents (1-3) are not an article pipeline matter", () => {
     for (const k of ["thb-01-seo-strategist", "thb-02-research-evidence", "thb-03-content-architect"]) {

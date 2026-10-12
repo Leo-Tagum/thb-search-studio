@@ -217,7 +217,7 @@ export async function submitTeam(db: SupabaseClient, runId: string, raw: string)
   const { data: rrow } = await db.from("agent_runs").select("agent_key,subject_id,retries").eq("id", runId).single();
   if (!rrow || !teamRoleOfAgentKey(rrow.agent_key)) return { ok: false, errors: ["not a team role run"], final: true, attempt: 0 };
   const { data: art } = await db.from("articles").select("pipeline_mode").eq("id", rrow.subject_id).single();
-  const wrong = pipelineGuard(modeOf(art ?? {}), rrow.agent_key);
+  const wrong = pipelineGuard(modeOf(art ?? {}), rrow.agent_key, "team");
   if (wrong) return { ok: false, errors: [wrong], final: false, attempt: rrow.retries };           // refused outright: no attempt used
   const box: { note?: string } = {};
   const res = await submitTeamOutput(dbRunStore(db, box), runId, raw, (run) => teamCtxFor(db, run));
@@ -522,6 +522,7 @@ export async function dumpTeamQueued(db: SupabaseClient, dir: string): Promise<s
   const { data } = await db.from("agent_runs").select("id,agent_key,task_packet,retries,error").eq("status", "QUEUED").in("agent_key", TEAM_KEYS).order("created_at");
   const lines: string[] = [];
   for (const rr of data ?? []) {
+    if (!String(rr.task_packet?.output_contract?.submit ?? "").includes("team-submit")) continue;   // V1 on a classic article is a classic gate run (npm run studio -- dump-queued)
     const role = teamRoleOfAgentKey(rr.agent_key)!;
     const file = `${dir}/${role}-${rr.task_packet.unit_key ?? "article"}${rr.task_packet.ticket_id ? `-${rr.task_packet.ticket_id}` : ""}-packet.json`;
     writeFileSync(file, JSON.stringify({ run_id: rr.id, attempts_used: rr.retries, last_error: rr.error, ...rr.task_packet }, null, 2));

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { allLocked, applyDeterministic, applyReview, editLocked, editorRevision, newSection, recordVersion, resolveByHuman, type Outcome, type SectionState } from "./loop";
+import { allLocked, applyDeterministic, applyReview, editLocked, editorRevision, newSection as newGatedSection, recordVersion, resolveByHuman, type Outcome, type SectionState } from "./loop";
+
+// These tests cover the flow of a section saved before Phase 3d (no V1 gate, Agent 5 as the fact auditor): such a state stays valid until its text is touched.
+// The V1 gate has its own tests in v1-gate.test.ts.
+const newSection = (key: string): SectionState => ({ ...newGatedSection(key), gate: undefined });
 
 const ok = (o: Outcome): SectionState => { if (!o.ok) throw new Error(o.error); return o.state; };
 const v = (hash: string, sig = "sigA") => ({ hash, sig });

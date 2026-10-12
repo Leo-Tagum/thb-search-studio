@@ -7,6 +7,9 @@ import { checkUnit, type CheckCtx } from "./checks";
 
 export const STUDIO_AGENT_KEYS = ["thb-04-section-writer", "thb-05-fact-privacy-auditor", "thb-06-seo-aeo-geo-auditor", "thb-07-editorial-critic"] as const;
 export type StudioAgentKey = (typeof STUDIO_AGENT_KEYS)[number];
+/** Phase 3d: V1 (the team's fact and privacy reviewer) is the fact gate of the classic loop. It is not a classic Agent 1-7 and keeps its own file and prompt version. */
+export const CLASSIC_V1_KEY = "thb-v1-fact-privacy";
+export const V1_PROMPT_VERSION = "1.1.0";
 export const isStudioAgent = (k: string): k is StudioAgentKey => (STUDIO_AGENT_KEYS as readonly string[]).includes(k);
 
 export const STUDIO_AGENT_META: Record<StudioAgentKey, { n: 4 | 5 | 6 | 7; name: string; promptVersion: string; decisions: readonly string[] }> = {

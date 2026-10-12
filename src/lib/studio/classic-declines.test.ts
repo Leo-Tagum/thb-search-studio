@@ -5,18 +5,18 @@ import { studioOutputSchemas, studioSemanticChecks, type StudioValidationCtx } f
 const ANCHOR = "No local fact anchors this section to the Bay Area, so the local angle stays generic.";
 const ok = (o: Outcome): SectionState => { if (!o.ok) throw new Error(o.error); return o.state; };
 
-/** A section that has passed the fact stage (the stage name stays "fact"; its reviewer is V1 from task 3) and is waiting for SEO. */
+/** A section that has passed the V1 gate and is waiting for SEO. */
 const atSeo = () => {
   let s = ok(applyDeterministic(ok(recordVersion(newSection("s2"), { hash: "h1", sig: "sig" })), []));
-  s = ok(applyReview(s, { agent: 5, versionHash: "h1", decision: "PASS", issues: [] }));
+  s = ok(applyReview(s, { agent: "V1", versionHash: "h1", decision: "PASS", issues: [] }));
   return s;
 };
 
 type Opt = { key: string; text: string; newEvidence?: string };
 /** Agent 6 reviews the current version with a required issue (so the unit goes back to the writer) and these optional findings. */
 const seoRevision = (s: SectionState, optional: Opt[]): SectionState => ok(applyReview(s, { agent: 6, versionHash: s.versionHash!, decision: "REVISION", issues: [{ key: "seo:must", text: "Add the direct answer." }], optional }));
-/** The writer answers with a new version (fact stage already passed for the same material content, so it goes straight back to SEO). */
-const rewrite = (s: SectionState, hash: string): SectionState => ok(applyDeterministic(ok(recordVersion(s, { hash, sig: "sig" })), []));
+/** The writer answers with a new version and V1 passes it (the V1 gate): back at SEO on the new hash. */
+const rewrite = (s: SectionState, hash: string): SectionState => ok(applyReview(ok(applyDeterministic(ok(recordVersion(s, { hash, sig: "sig" })), [])), { agent: "V1", versionHash: hash, decision: "PASS", issues: [] }));
 
 describe("classic loop: optional findings and declines (report 6.1 in classic)", () => {
   it("optional findings are collected for Leo and never block", () => {

@@ -2,7 +2,7 @@
 //   - Classic stays the default and keeps working unchanged.
 //   - A team article refuses classic agent runs and the reverse, so the two pipelines can never mix on one article.
 //   - The mode can change only before any section is written, or on a team-mode branch (the comparison run, Task 14), and never once a proposal exists.
-import { STUDIO_AGENT_KEYS } from "../studio/agents";
+import { CLASSIC_V1_KEY, STUDIO_AGENT_KEYS } from "../studio/agents";
 import { TEAM_AGENT_FILE } from "./bridge";
 
 export const PIPELINE_MODES = ["classic", "team"] as const;
@@ -14,7 +14,13 @@ const CLASSIC_KEYS: readonly string[] = STUDIO_AGENT_KEYS;
 const TEAM_KEYS: readonly string[] = Object.values(TEAM_AGENT_FILE);
 
 /** Why this agent may not run on an article in this mode, or null when it may. Only article-level agents are checked (Agents 1-3 work on opportunities). */
-export function pipelineGuard(mode: PipelineMode, agentKey: string): string | null {
+export function pipelineGuard(mode: PipelineMode, agentKey: string, via?: PipelineMode): string | null {
+  // V1 is the fact gate of the classic loop and a member of the team council: the same agent file, two services. A classic article's V1 runs go through the
+  // classic service only, a team article's through the team service only.
+  if (agentKey === CLASSIC_V1_KEY) {
+    const through = via ?? "classic";
+    return mode === through ? null : `V1 on a ${mode}-mode article runs through the ${mode} service, not the ${through} one.`;
+  }
   if (mode === "team" && CLASSIC_KEYS.includes(agentKey)) return `This article runs in team mode: the classic agent ${agentKey} cannot run on it. Use the team roles.`;
   if (mode === "classic" && TEAM_KEYS.includes(agentKey)) return `This article runs in classic mode: the team role ${agentKey} cannot run on it. Switch the article to team mode first (possible only before any section is written, or on a team branch).`;
   return null;
