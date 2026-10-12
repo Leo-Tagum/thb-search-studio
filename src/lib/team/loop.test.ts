@@ -102,9 +102,12 @@ describe("V1 re-reviews wording changes, scoped to the changed sentences", () =>
     expect(s.v1Scope).toEqual({ kind: "changed", sentences: ["Most owners never check what a buyer will actually pay."] });
     s = review(review(s, pass("V2", s)), pass("V3", s));
     expect(s.status).toBe("NEEDS_COUNCIL");                                   // V2 and V3 cannot lock it
-    s = review(s, rev("V1", s, "fact:unsourced-most-owners"));
+    expect(s.hedges.map((h) => h.term)).toEqual(["most owners"]);               // code flagged it; V1 must now rule on it
+    expect(recordReview(s, pass("V1", s)).ok).toBe(false);
+    s = review(s, { ...rev("V1", s, "fact:unsourced-most-owners"), hedgeRulings: [{ key: s.hedges[0].key, ruling: "reword", note: "no source for how many owners" }] });
     expect(s.status).toBe("NEEDS_REVISION");
-    expect(s.mustFix[0]).toMatchObject({ key: "fact:unsourced-most-owners", role: "V1" });
+    expect(s.mustFix.map((i) => i.key)).toContain("fact:unsourced-most-owners");
+    expect(s.mustFix.find((i) => i.key.startsWith("hedge:"))).toMatchObject({ role: "V1" });
     expect(s.v1Passed).toBeNull();
   });
   it("V1's scope is only what changed, and it is a full review after a V1 item, a material change, or when no text is given", () => {
@@ -230,5 +233,81 @@ describe("humans", () => {
     expect(s.pending).toEqual(["V1", "V2", "V3"]);
     expect(ok(resolveByHuman(ok(escalateGap(newTeamSection("s3"), "gap")), { kind: "hold" })).status).toBe("ESCALATED");
     expect(resolveByHuman(newTeamSection("s4"), { kind: "hold" }).ok).toBe(false);
+  });
+});
+
+describe("hedge phrases: flagged by code, V1 rules on each one", () => {
+  const clean = "Hoarded homes can still sell as-is. Ask an attorney about your situation.";
+  const hedged = "Hoarded homes can still sell as-is. Most owners never check what a buyer will pay. Nobody looks twice at a cluttered porch.";
+  const withText = (text: string, hash = "h1") => ok(applyDeterministic(ok(recordVersion(newTeamSection("s1"), { hash, sig: "sigA", text })), []));
+  const rule = (s: TeamSectionState, ruling: "proven" | "reword" | "drop", note?: string) => s.hedges.map((h) => ({ key: h.key, ruling, note }));
+
+  it("flags each hedge sentence on the new version and does not block or send it to the writer", () => {
+    const s = withText(hedged);
+    expect(s.hedges.map((h) => h.term)).toEqual(["most owners", "nobody"]);
+    expect(s.status).toBe("NEEDS_COUNCIL");
+    expect(s.mustFix).toEqual([]);
+    expect(withText(clean).hedges).toEqual([]);
+  });
+  it("V1 cannot pass or revise without ruling on every flagged sentence", () => {
+    const s = withText(hedged);
+    expect(recordReview(s, pass("V1", s)).ok).toBe(false);
+    expect(recordReview(s, { ...pass("V1", s), hedgeRulings: [{ key: s.hedges[0].key, ruling: "proven", note: "clm:4 supports this" }] }).ok).toBe(false);   // the second is unruled
+    expect(recordReview(s, { ...rev("V1", s, "fact:other"), hedgeRulings: [] }).ok).toBe(false);
+    expect(recordReview(s, { ...pass("V1", s), hedgeRulings: [{ key: "hedge:nope", ruling: "proven", note: "clm:1 evidence" }, ...rule(s, "proven", "clm:4 supports this")] }).ok).toBe(false);
+  });
+  it("only V1 rules on hedge sentences", () => {
+    const s = withText(hedged);
+    expect(recordReview(s, { ...pass("V2", s), hedgeRulings: rule(s, "proven", "clm:4 supports this") }).ok).toBe(false);
+  });
+  it("a proven ruling needs its evidence", () => {
+    const s = withText(hedged);
+    expect(recordReview(s, { ...pass("V1", s), hedgeRulings: rule(s, "proven") }).ok).toBe(false);
+    expect(recordReview(s, { ...pass("V1", s), hedgeRulings: rule(s, "proven", " ") }).ok).toBe(false);
+  });
+  it("all proven (with evidence) lets the section lock", () => {
+    let s = withText(hedged);
+    s = review(s, { ...pass("V1", s), hedgeRulings: rule(s, "proven", "clm:4 supports this") });
+    s = review(review(s, pass("V2", s)), pass("V3", s));
+    expect(s.status).toBe("LOCKED");
+  });
+  it("reword or drop becomes a V1 must-fix: a PASS cannot carry it, a REVISION does, and no lock follows", () => {
+    let s = withText(hedged);
+    expect(recordReview(s, { ...pass("V1", s), hedgeRulings: rule(s, "drop") }).ok).toBe(false);
+    s = review(s, { ...rev("V1", s, "fact:other"), hedgeRulings: [{ key: s.hedges[0].key, ruling: "reword", note: "say what the data shows" }, { key: s.hedges[1].key, ruling: "drop" }] });
+    s = review(review(s, pass("V2", s)), pass("V3", s));
+    expect(s.status).toBe("NEEDS_REVISION");
+    expect(s.mustFix.filter((i) => i.key.startsWith("hedge:")).map((i) => i.role)).toEqual(["V1", "V1"]);
+    expect(s.mustFix.find((i) => i.key === s.hedges[0].key)?.text).toContain("Most owners never check");
+  });
+  it("a REVISION made only of hedge rulings is accepted (no other must-fix needed)", () => {
+    const s = withText(hedged);
+    const r = recordReview(s, { role: "V1", versionHash: "h1", decision: "REVISION", items: [], hedgeRulings: rule(s, "reword") });
+    expect(r.ok).toBe(true);
+  });
+  it("the reworded sentence passes; a repeated hedge in new words needs a fresh ruling", () => {
+    let s = withText(hedged);
+    s = review(review(review(s, { role: "V1", versionHash: "h1", decision: "REVISION", items: [], hedgeRulings: rule(s, "drop") }), pass("V2", s)), pass("V3", s));
+    s = ok(recordVersion(s, { hash: "h2", sig: "sigA", text: "Hoarded homes can still sell as-is. Buyers price in the cleanout cost. Usually the porch is the first thing a buyer sees." }));
+    expect(s.hedges.map((h) => h.term)).toEqual(["usually"]);
+    expect(s.hedges[0].ruling).toBeNull();
+    s = review(review(s, pass("V2", s)), pass("V3", s));
+    expect(recordReview(s, pass("V1", s)).ok).toBe(false);                    // V1 has not ruled on "Usually ..."
+    s = review(s, { ...pass("V1", s), hedgeRulings: rule(s, "proven", "src:7 quote shows this") });
+    expect(s.status).toBe("LOCKED");
+  });
+  it("a proven ruling carries to an unchanged sentence in a later version, but not to a changed one", () => {
+    let s = withText(hedged);
+    s = review(review(review(s, { ...pass("V1", s), hedgeRulings: rule(s, "proven", "clm:4 supports this") }), rev("V2", s, "seo:x")), pass("V3", s));
+    const same = ok(recordVersion(s, { hash: "h2", sig: "sigA", text: hedged + " Another fix." }));
+    expect(same.hedges.map((h) => h.ruling)).toEqual(["proven", "proven"]);
+    expect(same.v1Scope).toEqual({ kind: "changed", sentences: ["Another fix."] });
+    const changed = ok(recordVersion(s, { hash: "h3", sig: "sigA", text: hedged.replace("Most owners never", "Most owners rarely").replace("Nobody", "No one") }));
+    expect(changed.hedges.map((h) => [h.term, h.ruling])).toEqual([["most owners", null]]);
+  });
+  it("an edit to a locked section re-flags from scratch", () => {
+    const e = ok(editLocked(passAll(withText(clean)), { hash: "h2", sig: "sigB", text: hedged }));
+    expect(e.hedges).toHaveLength(2);
+    expect(e.hedges.every((h) => h.ruling === null)).toBe(true);
   });
 });

@@ -9,7 +9,7 @@
 //   - the lock is set only by recordReview, when V1 passed the current material content and no must-fix is open. No role can lock.
 // Pure functions over a TeamSectionState; persistence lives in the service. Two revision attempts per must-fix, then escalation (REVISION_LIMIT).
 import { REVISION_LIMIT } from "../orchestrator/states";
-import type { Finding } from "../studio/checks";
+import { hedgeFlagsInText, type Finding } from "../studio/checks";
 
 export type CouncilRole = "V1" | "V2" | "V3";
 export const COUNCIL: readonly CouncilRole[] = ["V1", "V2", "V3"];
@@ -21,6 +21,7 @@ export type TeamSectionState = {
   key: string; status: TeamStatus;
   versionNo: number; versionHash: string | null; sig: string | null; sentences: string[] | null;
   v1Passed: { hash: string; sig: string; sentences: string[] | null } | null;   // what V1 passed; the lock requires its hash to equal versionHash
+  hedges: HedgeRecord[];             // flagged hedge sentences in the current version; the lock needs every one ruled "proven"
   v1Scope: V1Scope | null;           // what V1 must look at on the pending review (null when V1 is not pending)
   pending: CouncilRole[];            // council members who still have to review the current version
   mustFix: MustFix[];                // open must-fixes (V1 items, V2/V3 must-fix, deterministic findings, Leo directives)
@@ -29,10 +30,13 @@ export type TeamSectionState = {
   escalation: { issueKey: string; reason: string } | null;
   blockedBy: string | null;
 };
+export type HedgeRuling = "proven" | "reword" | "drop";
+/** A sentence with a hedge phrase ("most owners", "usually" ...). Flagged by code, never a block: V1 must rule on each one explicitly. */
+export type HedgeRecord = { key: string; term: string; sentence: string; ruling: HedgeRuling | null; note: string | null };
 export type V1Scope = { kind: "full" } | { kind: "changed"; sentences: string[] };
 export type Outcome = { ok: true; state: TeamSectionState; note?: string } | { ok: false; error: string };
 
-export const newTeamSection = (key: string): TeamSectionState => ({ key, status: "NEEDS_WRITE", versionNo: 0, versionHash: null, sig: null, sentences: null, v1Passed: null, v1Scope: null, pending: [], mustFix: [], collected: [], lockedHash: null, escalation: null, blockedBy: null });
+export const newTeamSection = (key: string): TeamSectionState => ({ key, status: "NEEDS_WRITE", versionNo: 0, versionHash: null, sig: null, sentences: null, v1Passed: null, hedges: [], v1Scope: null, pending: [], mustFix: [], collected: [], lockedHash: null, escalation: null, blockedBy: null });
 const HUMAN_STOPS: TeamStatus[] = ["ESCALATED", "BLOCKED_CLAIM", "BLOCKED_PRIVACY"];
 const fail = (error: string): Outcome => ({ ok: false, error });
 /** Sentences of a unit's plain text, whitespace-normalized, for the changed-sentence scope. */
@@ -55,8 +59,10 @@ export function recordVersion(s: TeamSectionState, v: { hash: string; sig: strin
   // Deterministic and Leo items are re-evaluated on the new text; council items stay open until their reviewer re-reviews.
   const mustFix = s.mustFix.filter((i) => i.role !== "LEO").map((i) => ({ ...i, attempts: i.attempts + 1 }));
   const pending: CouncilRole[] = v1Again ? ["V1", "V2", "V3"] : ["V2", "V3"];
+  // Hedge sentences are re-detected on the new text. A sentence V1 already ruled "proven" (same words) keeps that ruling; anything else needs a fresh ruling.
+  const hedges: HedgeRecord[] = v.text === undefined ? s.hedges : hedgeFlagsInText(v.text).map((h) => { const old = s.hedges.find((x) => x.key === h.key && x.ruling === "proven"); return { ...h, ruling: old ? "proven" : null, note: old?.note ?? null }; });
   const note = v1Again && base ? (v1Scope!.kind === "changed" ? `V1 re-reviews ${v1Scope!.sentences.length} changed sentence(s)` : "V1 re-reviews the full section") : undefined;
-  return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, sentences, status: "NEEDS_COUNCIL", pending, mustFix, v1Passed: v1Again ? null : base, v1Scope, blockedBy: null }, note };
+  return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, sentences, status: "NEEDS_COUNCIL", pending, mustFix, hedges, v1Passed: v1Again ? null : base, v1Scope, blockedBy: null }, note };
 }
 
 /** Deterministic findings (checks.ts) run on every new version before any reviewer sees it. Call with [] when the checks are clean. */
@@ -75,7 +81,8 @@ export function applyDeterministic(s: TeamSectionState, findings: Finding[]): Ou
 }
 
 export type ReviewItem = { key: string; severity: ItemSeverity; text: string };
-export type CouncilReview = { role: string; versionHash: string; decision: "PASS" | "REVISION" | "BLOCKED"; items: ReviewItem[]; blockKind?: "BLOCKED_CLAIM" | "BLOCKED_PRIVACY" };
+export type HedgeVerdict = { key: string; ruling: HedgeRuling; note?: string };
+export type CouncilReview = { role: string; versionHash: string; decision: "PASS" | "REVISION" | "BLOCKED"; items: ReviewItem[]; blockKind?: "BLOCKED_CLAIM" | "BLOCKED_PRIVACY"; hedgeRulings?: HedgeVerdict[] };
 
 /** One council member reviews the current version. When the last pending member reports, the code decides: revise, or lock. */
 export function recordReview(s: TeamSectionState, r: CouncilReview): Outcome {
@@ -85,26 +92,45 @@ export function recordReview(s: TeamSectionState, r: CouncilReview): Outcome {
   if (r.versionHash !== s.versionHash) return fail("the review is for an older version of this section");
   if (!s.pending.includes(role)) return fail(`${role} has no review pending on this version`);
   if (r.decision === "BLOCKED" && role !== "V1") return fail("only V1 can block");
-  const must = r.items.filter((i) => i.severity === "must fix");
-  if (r.decision === "PASS" && must.length) return fail("a PASS cannot carry must-fix items");
-  if (r.decision === "REVISION" && !must.length) return fail("a REVISION needs at least one must-fix item");
+  if (r.hedgeRulings?.length && role !== "V1") return fail("only V1 rules on hedge sentences");
   if (r.decision === "BLOCKED") {
     return { ok: true, state: { ...s, pending: [], status: r.blockKind ?? "BLOCKED_CLAIM", blockedBy: r.items.map((i) => i.text).join("; ") || "V1 blocked" } };
   }
+  // Hedge sentences: V1 must rule on every unruled one (proven with its evidence / reword / drop). Reword and drop become V1 must-fixes.
+  let hedges = s.hedges;
+  const hedgeMust: ReviewItem[] = [];
+  if (role === "V1") {
+    const byKey = new Map((r.hedgeRulings ?? []).map((h) => [h.key, h]));
+    for (const h of r.hedgeRulings ?? []) if (!s.hedges.some((x) => x.key === h.key)) return fail(`ruling for ${h.key}, which is not a flagged sentence in this version`);
+    const missing = s.hedges.filter((h) => h.ruling !== "proven" && !byKey.has(h.key));
+    if (missing.length) return fail(`V1 must rule (proven / reword / drop) on every flagged sentence; missing: ${missing.map((h) => `${h.key} "${h.sentence}"`).join("; ")}`);
+    for (const h of s.hedges) {
+      const v = byKey.get(h.key);
+      if (!v) continue;
+      if (v.ruling === "proven" && !(v.note ?? "").trim().match(/\S.{4,}/)) return fail(`ruling "proven" for ${h.key} needs the evidence (a ledger claim id or source) in note`);
+      if (v.ruling !== "proven") hedgeMust.push({ key: h.key, severity: "must fix", text: `${v.ruling} the unsourced generalization (${h.term}): "${h.sentence}"${v.note ? ` - ${v.note}` : ""}` });
+    }
+    hedges = s.hedges.map((h) => { const v = byKey.get(h.key); return v ? { ...h, ruling: v.ruling, note: v.note?.trim() || null } : h; });
+  }
+  const items = [...r.items, ...hedgeMust];
+  const must = items.filter((i) => i.severity === "must fix");
+  if (r.decision === "PASS" && must.length) return fail("a PASS cannot carry must-fix items (a reword or drop ruling is a must-fix)");
+  if (r.decision === "REVISION" && !must.length) return fail("a REVISION needs at least one must-fix item");
   // This reviewer's earlier must-fixes are replaced by what it reports now; a key it no longer reports is closed.
   const prior = new Map(s.mustFix.filter((i) => i.role === role).map((i) => [i.key, i.attempts]));
   const mine: MustFix[] = must.map((i) => ({ key: i.key, role, text: i.text, attempts: prior.get(i.key) ?? 0 }));
   const stuck = mine.find((i) => i.attempts >= REVISION_LIMIT);
   const mustFix = [...s.mustFix.filter((i) => i.role !== role), ...mine];
   const was = new Map(s.collected.filter((c) => c.role === role).map((c) => [c.key, c.declined]));
-  const soft: Collected[] = r.items.filter((i) => i.severity !== "must fix").map((i) => ({ key: i.key, role, severity: i.severity as Collected["severity"], text: i.text, versionHash: r.versionHash, declined: was.get(i.key) ?? null }));
+  const soft: Collected[] = items.filter((i) => i.severity !== "must fix").map((i) => ({ key: i.key, role, severity: i.severity as Collected["severity"], text: i.text, versionHash: r.versionHash, declined: was.get(i.key) ?? null }));
   const collected = [...s.collected.filter((c) => c.role !== role), ...soft];
   const pending = s.pending.filter((p) => p !== role);
   const v1Passed = role === "V1" ? (r.decision === "PASS" ? { hash: s.versionHash!, sig: s.sig!, sentences: s.sentences } : null) : s.v1Passed;
-  const next: TeamSectionState = { ...s, pending, mustFix, collected, v1Passed, v1Scope: role === "V1" ? null : s.v1Scope };
+  const next: TeamSectionState = { ...s, pending, mustFix, collected, hedges, v1Passed, v1Scope: role === "V1" ? null : s.v1Scope };
   if (stuck) return { ok: true, state: { ...next, status: "ESCALATED", escalation: { issueKey: stuck.key, reason: `still not resolved after ${stuck.attempts} revision attempts: ${stuck.text}` } }, note: "escalated" };
   if (pending.length) return { ok: true, state: next };
   if (mustFix.length) return { ok: true, state: { ...next, status: "NEEDS_REVISION" } };
+  if (hedges.some((h) => h.ruling !== "proven")) return { ok: true, state: { ...next, status: "NEEDS_COUNCIL", pending: ["V1"], v1Scope: { kind: "changed", sentences: hedges.filter((h) => h.ruling !== "proven").map((h) => h.sentence) } }, note: "a flagged sentence has no V1 ruling: back to V1" };
   if (v1Passed?.hash !== s.versionHash) return { ok: true, state: { ...next, status: "NEEDS_COUNCIL", pending: ["V1"], v1Scope: { kind: "full" } }, note: "V1 has not passed this content: back to V1" };
   return { ok: true, state: { ...next, status: "LOCKED", lockedHash: s.versionHash, pending: [] }, note: "locked" };
 }
@@ -130,7 +156,7 @@ export function resolveByHuman(s: TeamSectionState, a: { kind: "request_revision
 /** An edit to a locked section makes a new version, clears the lock and every earlier pass. The caller invalidates approvals. */
 export function editLocked(s: TeamSectionState, v: { hash: string; sig: string; text?: string }): Outcome {
   if (s.status !== "LOCKED") return fail("section is not locked");
-  return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, sentences: v.text === undefined ? null : splitSentences(v.text), status: "NEEDS_COUNCIL", pending: ["V1", "V2", "V3"], v1Passed: null, v1Scope: { kind: "full" }, lockedHash: null, mustFix: [], collected: [] }, note: "lock cleared; full council review runs again" };
+  return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, sentences: v.text === undefined ? null : splitSentences(v.text), hedges: v.text === undefined ? [] : hedgeFlagsInText(v.text).map((h) => ({ ...h, ruling: null, note: null })), status: "NEEDS_COUNCIL", pending: ["V1", "V2", "V3"], v1Passed: null, v1Scope: { kind: "full" }, lockedHash: null, mustFix: [], collected: [] }, note: "lock cleared; full council review runs again" };
 }
 
 /** A human reopens a locked section without supplying text: it goes back to the writer and through the full council again. */

@@ -1,6 +1,6 @@
 // Phase 3 regression fixtures (fixture data only, never real seller data). Blueprint §14 rows 4-8 + editorial required elements + PENDING JUAN facts.
 import { describe, expect, it } from "vitest";
-import { checkArticle, checkUnit, type CheckCtx, type Finding, type LedgerClaim } from "./checks";
+import { checkArticle, checkUnit, hedgeFlagsInText, type CheckCtx, type Finding, type LedgerClaim } from "./checks";
 import { materialSig, riskyKeys } from "./tokens";
 import type { Section, Unit } from "./schema";
 
@@ -121,5 +121,21 @@ describe("required editorial elements block the article", () => {
     expect(codes(checkArticle(without("s2"), actx))).toContain("UNIT_MISSING");
     const swapped = [full[1], full[0], ...full.slice(2)];
     expect(codes(checkArticle(swapped, actx))).toContain("ORDER");
+  });
+});
+
+describe("hedge phrases (team mode flag, not part of checkUnit)", () => {
+  it("flags every listed phrase on whole words only, one entry per sentence", () => {
+    const text = "Most owners wait too long. Most people never ask. It is usually fine. Prices always change. Nobody looks twice. Everyone knows that. Never sign blind. Evergreen trees are neveraging and alwaysome.";
+    const f = hedgeFlagsInText(text);
+    expect(f.map((x) => x.term)).toEqual(["most owners", "most people", "usually", "always", "nobody", "everyone", "never"]);
+    expect(f.every((x) => /^hedge:[0-9a-f]{12}$/.test(x.key))).toBe(true);
+  });
+  it("keys depend on the sentence, not its position or case, and a clean text has none", () => {
+    expect(hedgeFlagsInText("A. Nobody looks twice.")[0].key).toBe(hedgeFlagsInText("Intro here.\n\nNOBODY looks  twice.")[0].key);
+    expect(hedgeFlagsInText("Hoarded homes can sell as-is.")).toEqual([]);
+  });
+  it("is not a classic finding: checkUnit does not report it", () => {
+    expect(JSON.stringify(checkUnit(s2("Most owners never check.", []), ctx()))).not.toMatch(/hedge/i);
   });
 });

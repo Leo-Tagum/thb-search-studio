@@ -4,6 +4,7 @@ import { experienceYearViolations, pendingJuanHits, ratingRuleHits, sourcedFactV
 import { checkOutputPrivacy, type InternalPassage } from "../seller/privacy-gate";
 import { parseInline, wordCount } from "./inline";
 import { riskyKeys, uncoveredKeys } from "./tokens";
+import { sha256 } from "./hash";
 import { unitClaimIds, unitStrings, unitText, type Unit } from "./schema";
 
 export type LedgerClaim = {
@@ -139,5 +140,29 @@ export function checkArticle(units: Unit[], ctx: ArticleCtx): Finding[] {
   if (!sections.some((s) => s.h2.trim().endsWith("?") && has(s.h2))) f.push({ code: "KEYWORD_H2", severity: "REVISION", detail: `one question H2 should carry "${ctx.keyword}"` });
   return f;
 }
+
+// ---------- hedge phrases (team mode) ----------
+// Unsourced generalizations ("most owners", "usually", "nobody looks twice") are usually wording, so the material signature misses them.
+// This is NOT a block and is not part of checkUnit (classic behavior is unchanged): it flags the sentence, and team-mode V1 must rule on each one
+// explicitly as proven (with its evidence), reword, or drop (see team/loop.ts).
+export const HEDGE_TERMS = ["most owners", "most people", "usually", "always", "never", "nobody", "everyone"] as const;
+const HEDGE_RE = new RegExp("\\b(" + HEDGE_TERMS.join("|") + ")\\b", "i");
+export type HedgeFlag = { key: string; term: string; sentence: string };
+const normSentence = (x: string) => x.replace(/\s+/g, " ").trim();
+
+export function hedgeFlagsInText(text: string): HedgeFlag[] {
+  const out: HedgeFlag[] = [];
+  const seen = new Set<string>();
+  for (const sentence of text.split(/\n+/).flatMap((line) => normSentence(line).split(/(?<=[.!?])\s+/)).map(normSentence).filter(Boolean)) {
+    const m = HEDGE_RE.exec(sentence);
+    if (!m) continue;
+    const key = `hedge:${sha256(sentence.toLowerCase()).slice(0, 12)}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({ key, term: m[1].toLowerCase(), sentence });
+  }
+  return out;
+}
+export const hedgeFlags = (u: Unit): HedgeFlag[] => hedgeFlagsInText(unitStrings(u).map((x) => parseInline(x).plain).join("\n"));
 
 export { riskyKeys };
