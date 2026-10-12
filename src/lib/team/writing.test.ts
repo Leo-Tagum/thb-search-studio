@@ -108,9 +108,9 @@ describe("W2: suggestions only, never draft text, claims, locks or state", () =>
 describe("writing files", () => {
   const read = (f: string) => readFileSync(`.claude/agents/${f}.md`, "utf8");
   const toolsOf = (t: string) => t.split(/\r?\n/).find((l) => l.startsWith("tools:"));
-  it("W1 carries Agent 4's Prohibited action, 1.0.0, Read/Write only, and the ticket and hedge rules", () => {
+  it("W1 carries Agent 4's Prohibited action, 1.1.0, Read/Write only, and the ticket and hedge rules", () => {
     const t = read("thb-w1-writer");
-    expect(t).toMatch(/prompt_version: 1\.0\.0/);
+    expect(t).toMatch(/prompt_version: 1\.1\.0/);
     expect(t).toContain("**Prohibited action: Making unapproved new factual claims.**");
     expect(toolsOf(t)).toBe("tools: Read, Write");
     expect(t).toMatch(/You never add a claim/);

@@ -62,7 +62,7 @@ const NEW_CLAIM_TEXT = `A seller of one to four residential units ${FIXTURE_QUOT
 // ---------- scripted agents ----------
 const dataOf = (p: any) => { const b = p.untrusted_data_block as string; return JSON.parse(b.slice(b.indexOf("\n") + 1, b.lastIndexOf("\n<<<END"))); };
 const env = (role: string, p: any, decision: string, result: any, extra: Record<string, unknown> = {}) => ({
-  article_id: p.article_id, opportunity_id: p.opportunity_id, agent_name: role, agent_prompt_version: "1.0.0", model_version: "claude-code/smoke-script", input_version_ids: p.input_version_ids,
+  article_id: p.article_id, opportunity_id: p.opportunity_id, agent_name: role, agent_prompt_version: String(p.prompt_version ?? "1.0.0"), model_version: "claude-code/smoke-script", input_version_ids: p.input_version_ids,
   decision, findings: [], evidence_ids: [], required_actions: [], output_version_id: `smoke-${Date.now()}-${Math.random()}`, timestamp: new Date().toISOString(), result, ...extra,
 });
 const card = (from: string, to: string, ticket: string, section: string, o: Record<string, unknown> = {}) => ({ ticket, from: [from], to, section, issue: "One issue.", severity: "must fix", evidence: "rule or id", fix: null, blocking: false, ...o });

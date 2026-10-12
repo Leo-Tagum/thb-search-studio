@@ -147,7 +147,7 @@ describe("should-fix and suggestions never block", () => {
     s = review(review(review(s, pass("V1", s)), pass("V3", s, [{ key: "ed:cta", severity: "should fix", text: "softer CTA" }])), pass("V2", s));
     expect(s.status).toBe("LOCKED");
     expect(forLeo(s).open).toEqual([]);
-    expect(forLeo(s).declined[0]).toMatchObject({ key: "ed:cta", declined: "The CTA follows the approved wording." });
+    expect(forLeo(s).declined[0]).toMatchObject({ key: "ed:cta", reason: "The CTA follows the approved wording.", raised: 2 });
   });
   it("declining needs a reason and an existing item", () => {
     const s = written();

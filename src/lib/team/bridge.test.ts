@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import type { CheckCtx, LedgerClaim } from "../studio/checks";
 import type { StudioValidationCtx } from "../studio/agents";
-import { buildTeamPacket, submitTeamOutput, teamSchema, teamSchemaKey, teamSemanticChecks, MAX_ATTEMPTS, TEAM_AGENT_FILE, type TeamCtx, type TeamRun, type TeamRunStore } from "./bridge";
+import { buildTeamPacket, submitTeamOutput, teamSchema, teamSchemaKey, teamSemanticChecks, MAX_ATTEMPTS, TEAM_AGENT_FILE, TEAM_PROMPT_VERSIONS, type TeamCtx, type TeamRun, type TeamRunStore } from "./bridge";
 import { makeSnapshot, memoryStore } from "./snapshots";
 import { briefSchema, resolveRootCause, type ApprovedIdentity, type Brief } from "./strategy";
 import { TEAM_ROLES, type TeamRole } from "./tickets";
@@ -10,7 +10,7 @@ import { TEAM_ROLES, type TeamRole } from "./tickets";
 const NOW = "2026-10-12T12:00:00Z";
 const ENV: Record<string, string> = { R1: "R1 Legal and official", R2: "R2 Search", R3: "R3 Experience", S1: "S1 Strategist", S2: "S2 Architect", W1: "W1 Writer", W2: "W2 Co-writer", V1: "V1 Fact and Privacy", V2: "V2 SEO/AEO/GEO", V3: "V3 Editorial Critic" };
 const env = (role: string, decision: string, result: object, o: Record<string, unknown> = {}) => ({
-  article_id: "a1", opportunity_id: "o1", agent_name: ENV[role], agent_prompt_version: "1.0.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings: [],
+  article_id: "a1", opportunity_id: "o1", agent_name: ENV[role], agent_prompt_version: TEAM_PROMPT_VERSIONS[role as TeamRole], model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings: [],
   evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: NOW, result, ...o,
 });
 const packet = (role: TeamRole, data: unknown = { note: "x" }, unit: string | null = "s2") => buildTeamPacket(role, { articleId: "a1", opportunityId: "o1", unitKey: unit, versionHash: "h1" }, data);

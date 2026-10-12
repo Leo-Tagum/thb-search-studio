@@ -10,6 +10,7 @@
 // Pure functions over a TeamSectionState; persistence lives in the service. Two revision attempts per must-fix, then escalation (REVISION_LIMIT).
 import { REVISION_LIMIT } from "../orchestrator/states";
 import { hedgeFlagsInText, type Finding } from "../studio/checks";
+import { declinesForLeo, mergeReview, recordWriterDeclines, type DeclineRecord } from "../studio/declines";
 
 export type CouncilRole = "V1" | "V2" | "V3";
 export const COUNCIL: readonly CouncilRole[] = ["V1", "V2", "V3"];
@@ -26,6 +27,7 @@ export type TeamSectionState = {
   pending: CouncilRole[];            // council members who still have to review the current version
   mustFix: MustFix[];                // open must-fixes (V1 items, V2/V3 must-fix, deterministic findings, Leo directives)
   collected: Collected[];            // should-fix and suggestions, listed for Leo; never block
+  declines?: DeclineRecord[];        // the writer's declines (Phase 3d): stored by code, never replaced by a reviewer's list, kept across versions, reopen and unlock
   lockedHash: string | null;
   escalation: { issueKey: string; reason: string } | null;
   blockedBy: string | null;
@@ -36,7 +38,7 @@ export type HedgeRecord = { key: string; term: string; sentence: string; ruling:
 export type V1Scope = { kind: "full" } | { kind: "changed"; sentences: string[] };
 export type Outcome = { ok: true; state: TeamSectionState; note?: string } | { ok: false; error: string };
 
-export const newTeamSection = (key: string): TeamSectionState => ({ key, status: "NEEDS_WRITE", versionNo: 0, versionHash: null, sig: null, sentences: null, v1Passed: null, hedges: [], v1Scope: null, pending: [], mustFix: [], collected: [], lockedHash: null, escalation: null, blockedBy: null });
+export const newTeamSection = (key: string): TeamSectionState => ({ key, status: "NEEDS_WRITE", versionNo: 0, versionHash: null, sig: null, sentences: null, v1Passed: null, hedges: [], v1Scope: null, pending: [], mustFix: [], collected: [], declines: [], lockedHash: null, escalation: null, blockedBy: null });
 const HUMAN_STOPS: TeamStatus[] = ["ESCALATED", "BLOCKED_CLAIM", "BLOCKED_PRIVACY"];
 const fail = (error: string): Outcome => ({ ok: false, error });
 /** Sentences of a unit's plain text, whitespace-normalized, for the changed-sentence scope. */
@@ -80,7 +82,7 @@ export function applyDeterministic(s: TeamSectionState, findings: Finding[]): Ou
   return { ok: true, state: { ...s, mustFix: [...rest, ...det], pending: [], status: "NEEDS_REVISION" } };
 }
 
-export type ReviewItem = { key: string; severity: ItemSeverity; text: string };
+export type ReviewItem = { key: string; severity: ItemSeverity; text: string; newEvidence?: string | null };
 export type HedgeVerdict = { key: string; ruling: HedgeRuling; note?: string };
 export type CouncilReview = { role: string; versionHash: string; decision: "PASS" | "REVISION" | "BLOCKED"; items: ReviewItem[]; blockKind?: "BLOCKED_CLAIM" | "BLOCKED_PRIVACY"; hedgeRulings?: HedgeVerdict[] };
 
@@ -121,12 +123,12 @@ export function recordReview(s: TeamSectionState, r: CouncilReview): Outcome {
   const mine: MustFix[] = must.map((i) => ({ key: i.key, role, text: i.text, attempts: prior.get(i.key) ?? 0 }));
   const stuck = mine.find((i) => i.attempts >= REVISION_LIMIT);
   const mustFix = [...s.mustFix.filter((i) => i.role !== role), ...mine];
-  const was = new Map(s.collected.filter((c) => c.role === role).map((c) => [c.key, c.declined]));
-  const soft: Collected[] = items.filter((i) => i.severity !== "must fix").map((i) => ({ key: i.key, role, severity: i.severity as Collected["severity"], text: i.text, versionHash: r.versionHash, declined: was.get(i.key) ?? null }));
-  const collected = [...s.collected.filter((c) => c.role !== role), ...soft];
+  // Soft items go through the declines store: an item the writer already declined counts once and is not reopened, unless the reviewer cites new evidence.
+  const merged = mergeReview(s.declines ?? [], s.collected, role, items.filter((i) => i.severity !== "must fix").map((i) => ({ key: i.key, severity: i.severity as "should fix" | "suggestion", text: i.text, newEvidence: i.newEvidence })), r.versionHash);
+  const collected = merged.collected as Collected[];
   const pending = s.pending.filter((p) => p !== role);
   const v1Passed = role === "V1" ? (r.decision === "PASS" ? { hash: s.versionHash!, sig: s.sig!, sentences: s.sentences } : null) : s.v1Passed;
-  const next: TeamSectionState = { ...s, pending, mustFix, collected, hedges, v1Passed, v1Scope: role === "V1" ? null : s.v1Scope };
+  const next: TeamSectionState = { ...s, pending, mustFix, collected, declines: merged.declines, hedges, v1Passed, v1Scope: role === "V1" ? null : s.v1Scope };
   if (stuck) return { ok: true, state: { ...next, status: "ESCALATED", escalation: { issueKey: stuck.key, reason: `still not resolved after ${stuck.attempts} revision attempts: ${stuck.text}` } }, note: "escalated" };
   if (pending.length) return { ok: true, state: next };
   if (mustFix.length) return { ok: true, state: { ...next, status: "NEEDS_REVISION" } };
@@ -135,13 +137,17 @@ export function recordReview(s: TeamSectionState, r: CouncilReview): Outcome {
   return { ok: true, state: { ...next, status: "LOCKED", lockedHash: s.versionHash, pending: [] }, note: "locked" };
 }
 
-/** W1 declines a should-fix or suggestion with a reason (listed for Leo). A must-fix cannot be declined, and a V1 item can never be argued away. */
+/** W1 declines should-fix items and suggestions with a reason (listed for Leo, stored in `declines`). A must-fix cannot be declined, and a V1 item can never be argued away. */
+export function declineMany(s: TeamSectionState, list: { key: string; reason: string }[], extra: { key: string; text: string; role: string }[] = []): Outcome {
+  const r = recordWriterDeclines(s.declines ?? [], s.collected, list, { mustFixKeys: s.mustFix.map((i) => i.key), extraDeclinable: extra });
+  if (!r.ok) return fail(r.errors.join("; "));
+  return { ok: true, state: { ...s, declines: r.declines, collected: r.collected as Collected[] } };
+}
 export function decline(s: TeamSectionState, key: string, reason: string): Outcome {
   if (s.mustFix.some((i) => i.key === key)) return fail("a must-fix cannot be declined: fix it, or escalate to Leo. Only the reviewer that raised it can close it, by passing the new version");
-  const c = s.collected.find((x) => x.key === key);
-  if (!c) return fail(`no open item ${key}`);
   if (!reason.trim()) return fail("declining needs a reason");
-  return { ok: true, state: { ...s, collected: s.collected.map((x) => (x.key === key ? { ...x, declined: reason } : x)) } };
+  if (!s.collected.some((x) => x.key === key)) return fail(`no open item ${key}`);
+  return declineMany(s, [{ key, reason }]);
 }
 
 /** Leo resolves an escalation or a block: back to the writer, with a Leo directive. Every reviewer, V1 included, looks at the next version. */
@@ -185,4 +191,4 @@ export function briefRevised(s: TeamSectionState, d: { key: string; text: string
 
 export const allLocked = (sections: TeamSectionState[]) => sections.length > 0 && sections.every((s) => s.status === "LOCKED");
 /** What goes to Leo with the finished section: open (not declined) should-fix and suggestions, and the declined ones with their reasons. */
-export const forLeo = (s: TeamSectionState) => ({ open: s.collected.filter((c) => !c.declined), declined: s.collected.filter((c) => c.declined) });
+export const forLeo = (s: TeamSectionState) => declinesForLeo(s.declines ?? [], s.collected);

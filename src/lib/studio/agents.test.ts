@@ -2,7 +2,7 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { scoreIssues, STUDIO_AGENT_KEYS, studioOutputSchemas, studioSemanticChecks, type StudioValidationCtx } from "./agents";
+import { scoreIssues, STUDIO_AGENT_KEYS, STUDIO_AGENT_META, studioOutputSchemas, studioSemanticChecks, type StudioValidationCtx } from "./agents";
 import type { CheckCtx, LedgerClaim } from "./checks";
 import type { Section } from "./schema";
 
@@ -14,7 +14,7 @@ const ctx = (o: Partial<StudioValidationCtx> = {}): StudioValidationCtx => ({
   currentUnit: unit, currentHash: "h1", check, voiceUsable: true, requiredIssuesOpen: [], ...o,
 });
 const env = (agent: string, decision: string, result: object, findings: object[] = []) => ({
-  article_id: "a1", opportunity_id: "o1", agent_name: "x", agent_prompt_version: "1.0.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings,
+  article_id: "a1", opportunity_id: "o1", agent_name: "x", agent_prompt_version: Object.values(STUDIO_AGENT_META).find((m) => String(m.n) === agent)!.promptVersion, model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings,
   evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-10T12:00:00Z", result, _agent: agent,
 });
 const strip = ({ _agent, ...rest }: any) => { void _agent; return rest; };

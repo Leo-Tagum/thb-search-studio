@@ -16,7 +16,7 @@ export const STUDIO_AGENT_META: Record<StudioAgentKey, { n: 4 | 5 | 6 | 7; name:
   "thb-07-editorial-critic": { n: 7, name: "Editorial Critic", promptVersion: "1.0.0", decisions: ["PASS", "REVISION"] },
 };
 
-const issue = z.strictObject({ issue_key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i), severity: z.enum(["required", "optional"]), note: z.string().min(5), claim_id: z.string().nullish() });  // a null claim_id means "no claim"
+const issue = z.strictObject({ issue_key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i), severity: z.enum(["required", "optional"]), note: z.string().min(5), claim_id: z.string().nullish(), new_evidence: z.string().trim().min(5).max(1000).optional() });  // new_evidence: only to raise again an item the writer already declined  // a null claim_id means "no claim"
 const base = {
   article_id: z.string().min(1),
   opportunity_id: z.string().min(1),
@@ -37,6 +37,7 @@ const agent4Result = z.strictObject({
   unit: unit.optional(),                      // absent only when BLOCKED (a gap that cannot be written without inventing a fact)
   addresses: z.array(z.string()),             // issue keys this version answers (targeted revision)
   change_note: z.string().min(5),
+  declines: z.array(z.strictObject({ key: z.string().trim().min(1).max(100), reason: z.string().trim().min(10).max(500) })).max(40).default([]),   // optional items the writer chooses not to apply; stored by code
 });
 const claimCheck = z.strictObject({ claim_id: z.string(), verdict: z.enum(["supported_as_written", "unsupported", "altered", "stale", "wrong_jurisdiction", "overstated"]), note: z.string() });
 const agent5Result = z.strictObject({
@@ -82,6 +83,7 @@ export type StudioValidationCtx = {
   check: CheckCtx;
   voiceUsable: boolean;
   requiredIssuesOpen: string[];               // issue keys the writer is expected to answer
+  declinableKeys?: string[];                  // writer only: the open should-fix / suggestion keys it may decline
 };
 
 export const scoreIssues = (s: Record<string, number>): string[] => {
@@ -114,6 +116,10 @@ export function studioSemanticChecks(agent: StudioAgentKey, out: Record<string, 
         for (const id of unitClaimIds(r.unit)) if (!allowed.has(id)) errs.push(`claim ${id} is not in the ledger supplied in the packet; the writer cannot add claims`);
       }
       for (const k of ctx.requiredIssuesOpen) if (!(r.addresses as string[]).includes(k)) errs.push(`the revision must address open issue ${k} (list it in addresses)`);
+      for (const d of (r.declines ?? []) as { key: string }[]) {
+        if (ctx.requiredIssuesOpen.includes(d.key)) errs.push(`declines: ${d.key} is a must-fix and cannot be declined: fix it`);
+        else if (!(ctx.declinableKeys ?? []).includes(d.key)) errs.push(`declines: ${d.key} is not an open should-fix or suggestion for this unit (use the exact key from your packet)`);
+      }
     } else if (r.unit) errs.push("a BLOCKED output carries no unit; say what is missing in required_actions");
     else if (out.required_actions.length === 0) errs.push("BLOCKED needs required_actions naming the gap (never fill it with an invented fact)");
   }

@@ -9,10 +9,10 @@ import { checkUnit } from "./checks";
 import { contentHash, sha256 } from "./hash";
 import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Unit } from "./schema";
-import { buildTeamPacket, submitTeamOutput, teamRoleOfAgentKey, TEAM_AGENT_FILE, type TeamCtx, type TeamRun, type TeamRunStore } from "../team/bridge";
+import { buildTeamPacket, submitTeamOutput, teamPromptVersion, teamRoleOfAgentKey, TEAM_AGENT_FILE, type TeamCtx, type TeamPacket, type TeamRun, type TeamRunStore } from "../team/bridge";
 import { combineFeedback, type CouncilItem } from "../team/council";
 import { claimRow, packSummary, remapClaimKeys, supportedClaims, type PackClaim, type PackSource } from "../team/ledger";
-import { applyDeterministic, briefRevised, newTeamSection, recordReview, recordVersion, type CouncilRole, type TeamSectionState } from "../team/loop";
+import { applyDeterministic, briefRevised, declineMany, newTeamSection, recordReview, recordVersion, type CouncilRole, type TeamSectionState } from "../team/loop";
 import { modeOf, pipelineGuard } from "../team/mode";
 import { planSteps, type PlanStep } from "../team/plan";
 import { closeTicket, raiseTicket, reopen, respond, runStatus, type Result, type RouterState, type TicketRec } from "../team/router";
@@ -116,7 +116,8 @@ async function packetData(t: T, role: TeamRole, unit: string | null, ticket: Tic
       current_version: cur ? { version_hash: cur.content_hash, unit: cur.content } : null,
     };
     Object.assign(base, unitBlock);
-    if (role === "W1") Object.assign(base, { voice_reference: await voice(), open_corrections: env.team.mustFix.map((m) => ({ key: m.key, from: m.role, issue: m.text, attempts: m.attempts })), open_tickets_to_you: router.tickets.filter((x) => x.to === "W1" && x.unitKey === unit && x.status === "OPEN").map((x) => ({ ticket: x.id, key: x.key, issue: x.issue, fix: x.fix, severity: x.severity, from: x.from })), should_fix_for_leo: env.team.collected.filter((c) => !c.declined).map((c) => ({ key: c.key, from: c.role, severity: c.severity, issue: c.text })), co_writer_suggestions: env.suggestions && cur && env.suggestions.versionHash === cur.content_hash ? env.suggestions.items : [], research_answers: answersFor("W1") });
+    if (role === "V1" || role === "V2" || role === "V3") Object.assign(base, { previously_declined: (env.team.declines ?? []).map((d) => ({ key: d.key, issue: d.text, writer_reason: d.reason, raised: d.raised })), declines_rule: "The writer declined these items and the code recorded them. Do not raise one again under a new key or new wording: it is counted once and not reopened. To raise it again, put what is new (a claim id, a stored passage, or the changed text) in new_evidence." });
+    if (role === "W1") Object.assign(base, { voice_reference: await voice(), open_corrections: env.team.mustFix.map((m) => ({ key: m.key, from: m.role, issue: m.text, attempts: m.attempts })), open_tickets_to_you: router.tickets.filter((x) => x.to === "W1" && x.unitKey === unit && x.status === "OPEN").map((x) => ({ ticket: x.id, key: x.key, issue: x.issue, fix: x.fix, severity: x.severity, from: x.from })), declined_so_far: (env.team.declines ?? []).map((d) => ({ key: d.key, reason: d.reason, raised: d.raised })), declines_rule: "To not apply a should-fix or suggestion (never a must-fix), list it in result.declines as {key, reason} with the exact key from your packet. The code stores it and shows it to Leo.", should_fix_for_leo: env.team.collected.filter((c) => !c.declined).map((c) => ({ key: c.key, from: c.role, severity: c.severity, issue: c.text })), co_writer_suggestions: env.suggestions && cur && env.suggestions.versionHash === cur.content_hash ? env.suggestions.items : [], research_answers: answersFor("W1") });
     if (role === "W2") Object.assign(base, { voice_reference: await voice() });
     if (role === "V3") Object.assign(base, { voice_reference: await voice(), co_writer_suggestions: env.suggestions?.items ?? [] });
     if (role === "V1") {
@@ -173,7 +174,7 @@ async function teamCtxFor(db: SupabaseClient, run: TeamRun): Promise<TeamCtx> {
     const cur = r ? await currentVersion(db, r) : null;
     const env = r ? envelopeOf(r) : { team: newTeamSection(unit) };
     ctx.currentHash = cur?.content_hash ?? null;
-    ctx.studio = { packet: { agent_key: TEAM_AGENT_FILE[role], prompt_version: "1.0.0", unit_key: unit, unit_hash: cur?.content_hash ?? null, allowed_claim_ids: [...L.claims.keys()], opportunity_id: L.article.opportunity_id, article_id: p.article_id } as any, currentUnit: cur?.content ?? null, currentHash: cur?.content_hash ?? null, check: L.check, voiceUsable: await voiceUsable(db), requiredIssuesOpen: env.team.mustFix.map((m) => m.key) };
+    ctx.studio = { packet: { agent_key: TEAM_AGENT_FILE[role], prompt_version: teamPromptVersion(role), unit_key: unit, unit_hash: cur?.content_hash ?? null, allowed_claim_ids: [...L.claims.keys()], opportunity_id: L.article.opportunity_id, article_id: p.article_id } as any, currentUnit: cur?.content ?? null, currentHash: cur?.content_hash ?? null, check: L.check, voiceUsable: await voiceUsable(db), requiredIssuesOpen: env.team.mustFix.map((m) => m.key), declinableKeys: role === "W1" ? [...env.team.collected.map((c) => c.key), ...(await w1ShouldFixKeys(db, p, unit))] : undefined };
     ctx.pendingHedgeKeys = env.team.hedges.filter((h) => h.ruling !== "proven").map((h) => h.key);
   }
   const opp = await opportunityOf(db, L);
@@ -336,6 +337,13 @@ export async function applyTeamAccepted(db: SupabaseClient, run: TeamRun, out: a
   return notes.filter(Boolean).join("; ");
 }
 
+/** Keys of should-fix / suggestion tickets still open to W1 on this unit: W1 may decline these as well as the council's collected items. */
+async function w1ShouldFixKeys(db: SupabaseClient, p: TeamPacket, unit: string): Promise<string[]> {
+  if (!p.team_run_id) return [];
+  const rt = (await loadRouter(db, p.team_run_id)).state;
+  return rt.tickets.filter((x) => x.to === "W1" && x.unitKey === unit && x.status === "OPEN" && x.severity !== "must fix" && !!x.key).map((x) => x.key as string);
+}
+
 async function applyW1(t: T, unit: string, run: TeamRun, out: any): Promise<string> {
   const { db, L } = t;
   const rw = row(t, unit); const env = envelopeOf(rw); const r = out.result;
@@ -355,12 +363,23 @@ async function applyW1(t: T, unit: string, run: TeamRun, out: any): Promise<stri
   const findings = checkUnit(u, L.check);
   const d = applyDeterministic(rv.state, findings);
   if (!d.ok) throw new Error(d.error);
-  const next: Envelope = { ...env, team: d.state, waitingOn: [], councilCards: {}, suggestions: undefined };
+  let teamState = d.state;
+  const declined: { key: string; reason: string }[] = r.declines ?? [];
+  if (declined.length) {
+    const rt = await routerOf(t);
+    const extra = rt.tickets.filter((x) => x.to === "W1" && x.unitKey === unit && x.status === "OPEN" && x.severity !== "must fix" && !!x.key).map((x) => ({ key: x.key as string, text: x.issue, role: x.from[0] as string }));
+    const dm = declineMany(teamState, declined, extra);
+    if (!dm.ok) throw new Error(dm.error);
+    teamState = dm.state;
+  }
+  const next: Envelope = { ...env, team: teamState, waitingOn: [], councilCards: {}, suggestions: undefined };
   await saveEnvelope(db, rw, next, { current_version_id: ver.id, body: JSON.stringify(u) });
   await auditArticle(db, t.articleId, "section_version", { unit, version: versionNo, hash, status: d.state.status, deterministic_findings: findings.map((f) => `${f.code}: ${f.detail}`), hedges: d.state.hedges.length, v1_scope: d.state.v1Scope?.kind ?? null, note: rv.note });
   if (d.state.status === "BLOCKED_CLAIM" || d.state.status === "BLOCKED_PRIVACY") await blockArticleFor(db, t.articleId, d.state.status, { unit, blockedBy: d.state.blockedBy });
   await escalateRow(t, rw, d.state);
   await answerTickets(t, "W1", unit, r.addresses, r.change_note);
+  for (const x of declined) await answerTickets(t, "W1", unit, [x.key], `Declined: ${x.reason}`);
+  if (declined.length) await auditArticle(db, t.articleId, "writer_declines", { unit, declines: declined });
   await closeConsumed(t, "W1", unit);
   await raiseAll(t, r.tickets, hash);
   return `section ${unit} v${versionNo} is now ${d.state.status}`;
@@ -373,8 +392,8 @@ async function applyCouncil(t: T, role: CouncilRole, unit: string, run: TeamRun,
   const cards: FeedbackCard[] = r.cards;
   // Loop items: every correction, and every other card that is a must-fix (a root cause for S2, an evidence request the unit cannot do without): the unit does not lock while one is open.
   const items = [
-    ...cards.filter((c) => c.ticket === "QUALITY_CORRECTION" || (c.severity === "must fix" && c.ticket !== "HUMAN_ESCALATION")).map((c, i) => ({ key: c.key ?? `card:${c.ticket.toLowerCase()}:${i}`, severity: c.severity, text: c.issue })),
-    ...(out.findings as any[]).filter((f) => f.severity === "optional" && !cards.some((c) => c.key === f.issue_key)).map((f) => ({ key: f.issue_key, severity: "should fix" as const, text: f.note })),
+    ...cards.filter((c) => c.ticket === "QUALITY_CORRECTION" || (c.severity === "must fix" && c.ticket !== "HUMAN_ESCALATION")).map((c, i) => ({ key: c.key ?? `card:${c.ticket.toLowerCase()}:${i}`, severity: c.severity, text: c.issue, newEvidence: c.new_evidence })),
+    ...(out.findings as any[]).filter((f) => f.severity === "optional" && !cards.some((c) => c.key === f.issue_key)).map((f) => ({ key: f.issue_key, severity: "should fix" as const, text: f.note, newEvidence: f.new_evidence })),
   ];
   const before = env.team;
   // A review that arrives after the unit moved on (escalated, blocked, sent back, or this member already reported) is recorded but changes nothing.

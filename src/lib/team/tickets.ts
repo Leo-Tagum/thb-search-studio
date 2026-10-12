@@ -27,6 +27,7 @@ export const feedbackCard = z
     severity: z.enum(SEVERITIES),
     evidence: text(1000),                       // query / rule / source id; a card without evidence is rejected
     fix: text(1500).nullish(),
+    new_evidence: text(1000).optional(),        // Phase 3d: only to raise again an item the writer already declined (a claim id, a stored passage, or what changed)
     blocking: z.boolean(),
   })
   .superRefine((c, ctx) => {
