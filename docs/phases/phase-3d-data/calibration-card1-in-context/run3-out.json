@@ -1,0 +1,55 @@
+{
+  "article_id": "23a8fee0-1fb7-403b-8dcc-9dc2187462d6",
+  "opportunity_id": "84c0b5ea-23c0-467f-a87a-b11c730399cb",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:faq:item4:authority-roles-unsupported",
+      "severity": "required",
+      "note": "Item 4 answer states 'Only someone with legal authority to sign. That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house alone does not give you that authority.' This is a list of legal roles and a legal conclusion with no cited claim; the ledger has no claim on who holds authority to sell (claim_ids is empty). Remove the role list and the flat conclusion, or say only that who can sign depends on how title is held and must be confirmed with an attorney or title company.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:6", "clm:7"],
+  "required_actions": [
+    "Item 4: delete 'That might be the owner, a trustee, an executor or administrator, or several heirs who agree.' and 'Living in the house alone does not give you that authority.' (or soften to conditional wording tied to how title is held); keep the confirm-with-an-attorney-or-title-company sentence."
+  ],
+  "output_version_id": "v1-faq-b30a408c-run3-r1",
+  "timestamp": "2026-10-12T12:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Item 3 says state law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards; matches clm:1, local authority decides."},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Item 3 makes no claim beyond the general listed-conditions wording."},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Item 3 makes no claim beyond the general listed-conditions wording."},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Item 3 makes no claim beyond the general listed-conditions wording."},
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "Item 1: disclosures are made on the Real Estate Transfer Disclosure Statement form."},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Item 1: applies to sale of single-family residential property, with an exception; not overstated."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "Items 1 and 5: any waiver is void as against public policy; matches clm:7."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:4a926ce9f475", "ruling": "not_a_claim", "note": "'Not always.' opens a conditional answer ('It depends on your time, your money...') and states no figure, frequency statistic or legal rule."}
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:item4:authority-roles-unsupported",
+        "section": "faq",
+        "issue": "Item 4 lists legal roles who can sign and states Living in the house alone does not give you that authority, with no ledger claim.",
+        "severity": "must fix",
+        "evidence": "Rule 2 and severity calibration 1 (list of legal roles); item 4 has claim_ids [] and the ledger has no authority-to-sell claim.",
+        "fix": "Say who can sign depends on how title is held, and confirm with an attorney or title company; drop the role list and the flat conclusion.",
+        "blocking": false
+      }
+    ]
+  }
+}

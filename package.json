@@ -35,6 +35,8 @@
     "verify:phase3": "tsx --env-file=.env.local scripts/phase3-verify.mts",
     "verify:phase3d": "tsx --env-file=.env.local scripts/phase3d-verify.mts",
     "adversarial": "tsx --env-file=.env.local scripts/adversarial-smoke.mts",
+    "calibrate": "tsx --env-file=.env.local scripts/calibration-smoke.mts",
+    "calibrate-context": "tsx --env-file=.env.local scripts/calibration-context-smoke.mts",
     "room:build": "tsx scripts/build-approval-room.mts"
   },
   "dependencies": {

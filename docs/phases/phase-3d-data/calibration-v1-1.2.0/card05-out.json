@@ -1,0 +1,29 @@
+{
+  "article_id": "6dd4f29f-0f6b-404a-b3f9-ff9b6c506fa4",
+  "opportunity_id": "1c625acb-e1cb-4679-a5ea-2d7ef2314df3",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["388b3616441d4d0cdee19c6a3944a9136ef7a7d993c16beb7deeb133b7c649f0"],
+  "decision": "PASS",
+  "findings": [
+    {"issue_key": "fact:s5:usually:soften", "severity": "optional", "note": "'The real question is usually not which route is best.' uses an unsupported frequency word. It states no legal rule, figure or fact. Plainer wording would drop 'usually'."}
+  ],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "v1-s5-388b3616-pass-1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s5",
+    "version_hash": "388b3616441d4d0cdee19c6a3944a9136ef7a7d993c16beb7deeb133b7c649f0",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:a1a2dca21c13", "ruling": "soften", "note": "Frequency word 'usually' is unsupported but the sentence states no statistic, legal rule or fact. Plainer wording would drop 'usually' or frame it as a question the seller may want to ask."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s5:usually:soften", "section": "s5", "issue": "Unsupported frequency word 'usually' in 'The real question is usually not which route is best.'", "severity": "should fix", "evidence": "hedge:a1a2dca21c13; no ledger claim supports a frequency", "fix": "Drop 'usually' or reword as a question the seller can ask themselves.", "blocking": false}
+    ]
+  }
+}

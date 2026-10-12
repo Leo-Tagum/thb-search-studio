@@ -1,0 +1,46 @@
+{
+  "article_id": "0eada27a-244e-43f5-b18f-5693829e35d4",
+  "opportunity_id": "8616c84d-a4df-43a4-8621-b379eb7ec01a",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["c7cb73a629991e449d1c65fcd462ee238b322cfd148c27ea90cc712f70c95926"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:faq:q1:authority-roles-unsupported",
+      "severity": "required",
+      "note": "Answer 1 says 'Whoever has legal authority to sign, such as an owner, trustee, executor, administrator, surviving spouse or several heirs acting together.' This is a list of legal roles with authority to sell. No ledger claim supports it (claim_ids is empty) and the ledger holds no probate or trust rule. It also has no confirm-with-a-professional language.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [
+    "Remove the list 'owner, trustee, executor, administrator, surviving spouse or several heirs acting together' from the answer to 'Who can sell the house if the owner cannot or will not?', or support it with a ledger claim.",
+    "Reword answer 1 so it names no specific legal roles and tells the seller to confirm who has authority to sell with a real estate or probate attorney or a title company."
+  ],
+  "output_version_id": "v1-faq-c7cb73a6-review-1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "c7cb73a629991e449d1c65fcd462ee238b322cfd148c27ea90cc712f70c95926",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:q1:authority-roles-unsupported",
+        "section": "faq",
+        "issue": "FAQ answer 1 lists legal roles with authority to sign (owner, trustee, executor, administrator, surviving spouse, several heirs) with no ledger support and no confirm-with-a-professional line.",
+        "severity": "must fix",
+        "evidence": "Editorial standards section 5; no ledger claim covers authority to sell; claim_ids is empty on the item",
+        "fix": "Drop the role list. Say that who can sign depends on who holds title and what authority applies, and that a real estate or probate attorney or a title company can confirm it for the specific home.",
+        "blocking": false
+      }
+    ]
+  }
+}

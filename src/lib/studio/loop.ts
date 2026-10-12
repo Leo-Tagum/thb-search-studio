@@ -10,6 +10,7 @@ import type { Finding } from "./checks";
 import { hedgeFlagsInText } from "./checks";
 import { declinesForLeo, mergeReview, recordWriterDeclines, type Collected, type DeclineRecord } from "./declines";
 import { citedSentences, splitSentences } from "./v1-gate";
+import { isMustFixRuling, keepsRuling, needsRuling, rulingGuard, rulingNoteError } from "./hedge-rulings";
 import type { HedgeRecord, HedgeRuling } from "../team/loop";
 
 export type Stage = "fact" | "seo" | "editorial";
@@ -52,7 +53,7 @@ const AGENT_STAGE: Record<ReviewAgent, Stage> = { 5: "fact", V1: "fact", 6: "seo
 export const reviewerFor = (s: SectionState): ReviewAgent | null => (s.status === "NEEDS_FACT" ? (s.gate === "v1" ? "V1" : 5) : s.status === "NEEDS_SEO" ? 6 : s.status === "NEEDS_EDITORIAL" ? 7 : null);
 
 const hedgesFor = (text: string | undefined, old: HedgeRecord[] | undefined): HedgeRecord[] =>
-  text === undefined ? (old ?? []) : hedgeFlagsInText(text).map((h) => { const o = (old ?? []).find((x) => x.key === h.key && x.ruling === "proven"); return { ...h, ruling: o ? "proven" as const : null, note: o?.note ?? null }; });
+  text === undefined ? (old ?? []) : hedgeFlagsInText(text).map((h) => { const o = (old ?? []).find((x) => x.key === h.key && keepsRuling(x.ruling)); return { ...h, ruling: o ? o.ruling : null, note: o?.note ?? null }; });
 /** The writer is fixing what V1 cited: V1 items (not deterministic findings, not a human directive) are open. Only this pass is checked for churn. */
 export const isV1FixPass = (s: SectionState) => s.status === "NEEDS_REVISION" && s.issues.some(isV1Item);
 const isV1Item = (i: Issue) => i.stage === "fact" && !i.key.startsWith("det:") && !i.key.startsWith("human:");
@@ -127,12 +128,16 @@ function applyV1(s: SectionState, r: Review): Outcome {
   const byKey = new Map((r.hedgeRulings ?? []).map((h) => [h.key, h]));
   if (r.decision !== "BLOCKED") {
     for (const h of r.hedgeRulings ?? []) if (!hedges.some((x) => x.key === h.key)) return { ok: false, error: `ruling for ${h.key}, which is not a flagged sentence in this version` };
-    const missing = hedges.filter((h) => h.ruling !== "proven" && !byKey.has(h.key));
-    if (missing.length) return { ok: false, error: `V1 must rule (proven / reword / drop) on every flagged sentence; missing: ${missing.map((h) => `${h.key} "${h.sentence}"`).join("; ")}` };
-    for (const h of hedges) { const v = byKey.get(h.key); if (v?.ruling === "proven" && !(v.note ?? "").trim().match(/\S.{4,}/)) return { ok: false, error: `ruling "proven" for ${h.key} needs the evidence (a ledger claim id or source) in note` }; }
+    const missing = hedges.filter((h) => needsRuling(h) && !byKey.has(h.key));
+    if (missing.length) return { ok: false, error: `V1 must rule (proven / soften / not_a_claim / reword / drop) on every flagged sentence; missing: ${missing.map((h) => `${h.key} "${h.sentence}"`).join("; ")}` };
+    for (const h of hedges) {
+      const v = byKey.get(h.key); if (!v) continue;
+      const bad = rulingNoteError(h.key, v.ruling, v.note) ?? rulingGuard(h.sentence, v.ruling);
+      if (bad) return { ok: false, error: bad };
+    }
   }
   const ruled = hedges.map((h) => { const v = byKey.get(h.key); return v ? { ...h, ruling: v.ruling, note: v.note?.trim() || null } : h; });
-  const hedgeMust = ruled.filter((h) => byKey.has(h.key) && h.ruling !== "proven").map((h) => ({ key: h.key, text: `${h.ruling} the unsourced generalization (${h.term}): "${h.sentence}"${h.note ? ` - ${h.note}` : ""}` }));
+  const hedgeMust = ruled.filter((h) => byKey.has(h.key) && isMustFixRuling(h.ruling)).map((h) => ({ key: h.key, text: `${h.ruling} the unsourced generalization (${h.term}): "${h.sentence}"${h.note ? ` - ${h.note}` : ""}` }));
   const reviewed: V1Mark = { hash: s.versionHash!, sig: s.sig!, sentences: s.sentences ?? null };
   if (r.decision === "BLOCKED") return { ok: true, state: { ...s, v1Reviewed: reviewed, v1Passed: null, status: r.blockKind ?? "BLOCKED_CLAIM", blockedBy: r.issues.map((i) => i.text).join("; ") || "V1 blocked" } };
   const found = [...r.issues, ...hedgeMust];
@@ -146,7 +151,7 @@ function applyV1(s: SectionState, r: Review): Outcome {
   const withHedges = { ...s, hedges: ruled, v1Reviewed: reviewed, v1Passed: null, v1Scope: null };
   const o = withIssues(withHedges, "fact", found);
   if (!o.ok) return o;
-  const fixCited = citedSentences(s.sentences, found.map((f) => f.text), ruled.filter((h) => byKey.has(h.key) && h.ruling !== "proven").map((h) => h.sentence));
+  const fixCited = citedSentences(s.sentences, found.map((f) => f.text), ruled.filter((h) => byKey.has(h.key) && isMustFixRuling(h.ruling)).map((h) => h.sentence));
   // Two fix attempts, then Leo: the third REVISION in one cycle escalates (a reworded sentence gets a new key, so the per-issue count alone would never reach it).
   if (rounds >= REVISION_LIMIT && o.state.status !== "ESCALATED") return { ok: true, state: { ...o.state, status: "ESCALATED", v1Rounds: rounds + 1, fixCited, escalation: { issueKey: found[0].key, reason: `V1 still returns REVISION after ${REVISION_LIMIT} fix attempts: ${found.map((f) => f.text).join(" | ")}` } }, note: "escalated" };
   return { ok: true, state: { ...o.state, v1Rounds: rounds + 1, fixCited }, note: o.note };
@@ -157,8 +162,10 @@ export function applyReview(s: SectionState, r: Review): Outcome {
   if (r.versionHash !== s.versionHash) return { ok: false, error: "the review is for an older version of this section" };
   const stage = AGENT_STAGE[r.agent];
   // Optional findings go through the declines store: one the writer already declined counts once and is not reopened, unless the reviewer cites new evidence.
-  if (r.optional) {
-    const m = mergeReview(s.declines ?? [], s.collected ?? [], r.agent === "V1" ? "V1" : `A${r.agent}`, r.optional.map((o) => ({ key: o.key, severity: "should fix" as const, text: o.text, newEvidence: o.newEvidence })), r.versionHash);
+  // V1's `soften` rulings are should-fixes: they join its optional findings and never block.
+  const softened = r.agent === "V1" ? (r.hedgeRulings ?? []).filter((h) => h.ruling === "soften").flatMap((h) => { const f = (s.hedges ?? []).find((x) => x.key === h.key); return f ? [{ key: `soften:${h.key}`, text: `soften the unsourced generalization (${f.term}): "${f.sentence}"${h.note ? ` - ${h.note}` : ""}`, newEvidence: null as string | null }] : []; }) : [];
+  if (r.optional || softened.length) {
+    const m = mergeReview(s.declines ?? [], s.collected ?? [], r.agent === "V1" ? "V1" : `A${r.agent}`, [...(r.optional ?? []), ...softened].map((o) => ({ key: o.key, severity: "should fix" as const, text: o.text, newEvidence: o.newEvidence })), r.versionHash);
     s = { ...s, collected: m.collected, declines: m.declines };
   }
   if (r.agent === "V1") return applyV1(s, r);

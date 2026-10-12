@@ -1,0 +1,63 @@
+{
+  "article_id": "b55780f4-8ad0-4965-b2ae-c06b0a499457",
+  "opportunity_id": "45a3c480-cf14-4df0-be27-4067204461e6",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["10a8d73d864c05bd396afe55fad1ac618ddb93b7cbb01ab406f8fee047cb4058"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "fact:s3:invented_local_rule",
+      "severity": "required",
+      "note": "Paragraph 2: 'The Alameda County code enforcement office inspects every hoarded house before a sale closes and blocks the closing until the house is cleared.' No ledger claim supports any Alameda County process, a universal pre-sale inspection, or a closing block. It is a high-risk legal and local-rule claim stated as certain, and it contradicts the brief ('No local rules'; the statute does not mention hoarding). Delete the whole sentence.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:s3:clutter_not_violation",
+      "severity": "required",
+      "note": "Paragraph 1: 'Clutter by itself is not a code violation.' This is a flat legal conclusion about code enforcement that no cited claim supports. Remove it, or say only that the statute lists specific conditions and the local enforcement authority decides whether a home meets them.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:clm:1:altered",
+      "severity": "optional",
+      "note": "First bullet: 'Accumulated junk, debris or garbage that creates a fire hazard, as judged by the fire authority.' clm:1 says fire, health, or safety hazards with no 'judged by' authority; the 'fire authority' judgment belongs to clm:4 (combustible waste, in the opinion of the fire chief or deputy). The bullet blends the two. Split it: junk/debris/garbage that is a fire, health or safety hazard (clm:1), and combustible waste a fire chief or deputy finds could cause or spread fire (clm:4).",
+      "claim_id": "clm:1"
+    },
+    {
+      "issue_key": "fact:clm:4:altered",
+      "severity": "optional",
+      "note": "clm:4 is cited but the combustible-waste condition is not stated on its own; 'as judged by the fire authority' replaces 'in the opinion of the fire chief or the chief's deputy'. State it separately and in the ledger's terms, or stop citing clm:4.",
+      "claim_id": "clm:4"
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4"],
+  "required_actions": [
+    "Delete the Alameda County sentence entirely.",
+    "Remove or rewrite 'Clutter by itself is not a code violation.' so it states no legal conclusion.",
+    "Separate the clm:1 and clm:4 conditions in the first bullet and match the ledger wording."
+  ],
+  "output_version_id": "v1-s3-10a8d73d-review1",
+  "timestamp": "2026-10-12T12:00:00Z",
+  "result": {
+    "unit_key": "s3",
+    "version_hash": "10a8d73d864c05bd396afe55fad1ac618ddb93b7cbb01ab406f8fee047cb4058",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "altered", "note": "Bullet 1 narrows to fire hazard and adds 'as judged by the fire authority', which is not in clm:1."},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Infestation of insects, vermin or rodents as determined by a health officer matches clm:2."},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Lack of adequate garbage and rubbish storage and removal as determined by a health officer matches clm:3."},
+      {"claim_id": "clm:4", "verdict": "altered", "note": "Fire chief or deputy opinion on combustible waste is folded into bullet 1 as 'fire authority'; not stated on its own."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "block_kind": "BLOCKED_CLAIM",
+    "hedge_rulings": [],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s3:invented_local_rule", "section": "s3", "issue": "Unsupported Alameda County claim that code enforcement inspects every hoarded house and blocks closing.", "severity": "must fix", "evidence": "No ledger claim supports it; brief says no local rules; editorial standards sections 5 and rule 2", "fix": "Delete the sentence. State no county process; keep the line that the local authority decides and the reader should confirm with the city or county.", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s3:clutter_not_violation", "section": "s3", "issue": "'Clutter by itself is not a code violation' is a flat legal conclusion with no ledger support.", "severity": "must fix", "evidence": "clm:1 to clm:4 only list statutory conditions; brief says do not characterize hoarded houses", "fix": "Open with: Health and Safety Code section 17920.3 lists specific conditions that can make a building substandard, and the local enforcement authority decides whether a home meets them.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:1:altered", "section": "s3", "issue": "First bullet blends clm:1 and clm:4 and adds 'as judged by the fire authority'.", "severity": "should fix", "evidence": "clm:1, clm:4", "fix": "Split into a clm:1 bullet (junk, debris, garbage that are fire, health or safety hazards) and a clm:4 bullet (combustible waste in the opinion of the fire chief or deputy).", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:4:altered", "section": "s3", "issue": "clm:4 cited but its condition is not stated in ledger wording.", "severity": "should fix", "evidence": "clm:4", "fix": "State combustible waste or vegetation a fire chief or deputy finds could cause or spread fire, or drop the citation.", "blocking": false}
+    ]
+  }
+}

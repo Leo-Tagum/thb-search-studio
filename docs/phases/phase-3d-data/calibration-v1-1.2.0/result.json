@@ -1,0 +1,193 @@
+[
+  {
+    "card": 1,
+    "sentence": "Living in the house alone does not give you that authority.",
+    "leo": "B",
+    "expected": "should",
+    "actual": "must",
+    "match": false,
+    "decision": "REVISION",
+    "status": "NEEDS_REVISION",
+    "codeBlocked": false,
+    "mustFindings": [
+      "Item 1 answer 'Living in the house alone does not give you that authority.' states a legal conclusion about who holds authority to sell as certain. No ledger claim supports it (the unit cites no claims), 'that authority' has no antecedent, and the answer has no confirm-with-a-professional language. Rewrite so it does not assert who does or does not hold authority, and tell the reader to confirm authority to sell with a real estate attorney or title company."
+    ],
+    "shouldFindings": [],
+    "rulings": [],
+    "otherFindings": [
+      "optional: The brief asks for 5-7 FAQ items; the unit has 3. Item 1 does not actually answer its question. Wording and coverage preference, not a fact issue."
+    ]
+  },
+  {
+    "card": 2,
+    "sentence": "Trash or signs of pests are another, and they match conditions the statute lists.",
+    "leo": "A",
+    "expected": "must",
+    "actual": "must",
+    "match": true,
+    "decision": "REVISION",
+    "status": "NEEDS_REVISION",
+    "codeBlocked": false,
+    "mustFindings": [
+      "The sentence 'Trash or signs of pests are another, and they match conditions the statute lists.' states a statutory fact with no cited claim (claim_ids is empty). It does not name the statute, and 'match' turns the ledger wording into a flat rule. Under clm:1, junk and debris count only when they constitute fire, health or safety hazards. Under clm:2, infestation counts only as determined by a health officer. Ordinary trash does not match the statute on its own, and whether a home meets the conditions is for the local authority. The words 'trash', 'signs of pests', 'match' and 'the statute lists' must change."
+    ],
+    "shouldFindings": [],
+    "rulings": [],
+    "otherFindings": []
+  },
+  {
+    "card": 3,
+    "sentence": "Most families are not looking for judgment.",
+    "leo": "C",
+    "expected": "should_or_none",
+    "actual": "none",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [],
+    "rulings": [],
+    "otherFindings": []
+  },
+  {
+    "card": 4,
+    "sentence": "The real question is usually whether the house or the paperwork is the bigger risk to the sale.",
+    "leo": "B",
+    "expected": "should_or_none",
+    "actual": "should",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [
+      "'The real question is usually whether the house or the paperwork is the bigger risk to the sale.' The word 'usually' is an unsupported frequency word. It states no legal rule, figure or fact. Plainer wording such as 'The real question is whether...' would remove the unsupported frequency."
+    ],
+    "rulings": [
+      {
+        "ruling": "soften",
+        "note": "'usually' is a frequency word with no support, but the sentence states no legal rule, figure or fact. Plainer wording ('The real question is whether...') would remove it."
+      }
+    ],
+    "otherFindings": []
+  },
+  {
+    "card": 5,
+    "sentence": "The real question is usually not which route is best.",
+    "leo": "B",
+    "expected": "should_or_none",
+    "actual": "should",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [
+      "'The real question is usually not which route is best.' uses an unsupported frequency word. It states no legal rule, figure or fact. Plainer wording would drop 'usually'."
+    ],
+    "rulings": [
+      {
+        "ruling": "soften",
+        "note": "Frequency word 'usually' is unsupported but the sentence states no statistic, legal rule or fact. Plainer wording would drop 'usually' or frame it as a question the seller may want to ask."
+      }
+    ],
+    "otherFindings": []
+  },
+  {
+    "card": 6,
+    "sentence": "Most people in this spot are not avoiding the problem.",
+    "leo": "C",
+    "expected": "should_or_none",
+    "actual": "should",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [
+      "\"Most people in this spot are not avoiding the problem.\" is an unsupported frequency word. It states no legal rule, figure or fact about law. Plainer wording such as \"Many people in this spot are not avoiding the problem\" or \"Being stuck here does not mean you are avoiding the problem\" would remove the unsupported frequency."
+    ],
+    "rulings": [
+      {
+        "ruling": "soften",
+        "note": "Empathetic line, but 'most people' is an unsupported frequency. It states no law, figure or statute. Use 'many people' or drop the frequency word."
+      }
+    ],
+    "otherFindings": []
+  },
+  {
+    "card": 7,
+    "sentence": "Spending first can commit you to a plan the right person never agreed to.",
+    "leo": "C",
+    "expected": "should_or_none",
+    "actual": "none",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [],
+    "rulings": [
+      {
+        "ruling": "not_a_claim",
+        "note": "Conditional, advisory line ('can commit you'); states no fact, figure, frequency or legal rule, names no legal role or statute."
+      }
+    ],
+    "otherFindings": []
+  },
+  {
+    "card": 8,
+    "sentence": "Only someone with legal authority to sign.",
+    "leo": "C",
+    "expected": "should",
+    "actual": "should",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [
+      "Answer 1 'Only someone with legal authority to sign.' is a plain general legal principle with no ledger claim and no confirm-with-a-professional wording. It lists no roles, statute or figure, so this is a should-fix, not a block."
+    ],
+    "rulings": [],
+    "otherFindings": []
+  },
+  {
+    "card": 9,
+    "sentence": "Whoever has legal authority to sign, such as an owner, trustee, executor, administrator, surviving spouse or several heirs acting together.",
+    "leo": "A",
+    "expected": "must",
+    "actual": "must",
+    "match": true,
+    "decision": "REVISION",
+    "status": "NEEDS_REVISION",
+    "codeBlocked": false,
+    "mustFindings": [
+      "Answer 1 says 'Whoever has legal authority to sign, such as an owner, trustee, executor, administrator, surviving spouse or several heirs acting together.' This is a list of legal roles with authority to sell. No ledger claim supports it (claim_ids is empty) and the ledger holds no probate or trust rule. It also has no confirm-with-a-professional language."
+    ],
+    "shouldFindings": [],
+    "rulings": [],
+    "otherFindings": []
+  },
+  {
+    "card": 10,
+    "sentence": "A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign.",
+    "leo": "C",
+    "expected": "should_or_none",
+    "actual": "none",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [],
+    "rulings": [
+      {
+        "ruling": "not_a_claim",
+        "note": "Empathetic, hypothetical line about a stalled sale; states no fact, figure, frequency or legal rule and names no statute or legal roles."
+      }
+    ],
+    "otherFindings": []
+  }
+]

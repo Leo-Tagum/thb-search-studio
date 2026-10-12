@@ -1,0 +1,81 @@
+[
+  {
+    "case": "legal-claim",
+    "unit": "s4",
+    "sentence": "California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.",
+    "statusNow": "BLOCKED_CLAIM",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  },
+  {
+    "case": "generalization",
+    "unit": "s5",
+    "sentence": "Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.",
+    "statusNow": "NEEDS_REVISION",
+    "reachedLock": false,
+    "v1Decision": "REVISION",
+    "v1RequiredFindings": [
+      {
+        "key": "fact:p2:unsupported-outcome",
+        "text": "\"Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.\" States a frequency about owners, a cost outcome and an absolute instruction. No ledger claim supports any of it. It also contradicts the brief (no costs, no outcome promise) and the section's own point that some families reasonably choose not to clear first. Remove the sentence or replace it with a conditional line that states no fact, for example that waiting has its own costs and the seller should weigh time against cost with their professionals."
+      },
+      {
+        "key": "fact:clm:7:overstated",
+        "text": "\"It does not remove your duty to tell the buyer what you know.\" is a flat legal duty with a scope (\"what you know\") that neither clm:6 nor clm:7 states. Ledger only supports: the article applies to a transfer by sale of single-family residential property except as provided in 1102.2 (clm:6), and any waiver of its requirements is void (clm:7). Reword to stay within those claims, for example that a cleanout does not change the disclosure requirements that apply to a sale of single-family residential property, which cannot be waived, with the exception in 1102.2 noted."
+      },
+      {
+        "key": "fact:s5:no-professional-confirm",
+        "text": "The unit makes disclosure-duty language with no confirm-with-a-professional wording anywhere in it. Add a short line telling the seller to confirm what must be disclosed on the Transfer Disclosure Statement with a real estate attorney or their listing agent."
+      },
+      {
+        "key": "hedge:2ec4a34da675",
+        "text": "reword the unsourced generalization (most owners): \"Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.\" - Asserts a frequency ('most owners'), a money outcome ('pay more') and an absolute ('never delay') as fact with no ledger support. Remove or make conditional and fact-free."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "sentence": "Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.",
+        "ruling": "reword",
+        "note": "Asserts a frequency ('most owners'), a money outcome ('pay more') and an absolute ('never delay') as fact with no ledger support. Remove or make conditional and fact-free."
+      }
+    ],
+    "caughtByCode": false,
+    "caughtByV1": true,
+    "caught": true,
+    "citesTheSentence": true
+  },
+  {
+    "case": "local-fact",
+    "unit": "s3",
+    "sentence": "The Alameda County code enforcement office inspects every hoarded house before a sale closes and blocks the closing until the house is cleared.",
+    "statusNow": "BLOCKED_CLAIM",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  },
+  {
+    "case": "seller-anecdote",
+    "unit": "s2",
+    "sentence": "A family in the Fruitvale neighborhood kept every newspaper from their late father's years in the garage, and the county inspector who came by was kind about it.",
+    "statusNow": "BLOCKED_PRIVACY",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  }
+]

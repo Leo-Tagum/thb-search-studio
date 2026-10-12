@@ -1,0 +1,77 @@
+[
+  {
+    "run": 1,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:authority-roles:unsupported",
+        "note": "Item 4 (Who can sell the house...) states a list of legal roles and a legal conclusion with no cited claim: 'Only someone with legal authority to sign. That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house alone does not give you that authority.' No ledger claim supports who holds authority to sell or that occupancy confers none. The confirm-with-an-attorney line does not substitute for support."
+      }
+    ],
+    "otherFindings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:statute-no-hoarding:unsupported",
+        "note": "Item 3 says 'The statute does not mention hoarding.' This is a statement about the content of H&S 17920.3 that none of clm:1-4 supports. Remove it, or have Research add a ledger claim with a stored passage."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "not_a_claim",
+        "note": "'Not always.' is a short practical answer to a conditional question; the same answer names time, money, authority and route. It states no figure, frequency statistic or legal rule."
+      }
+    ]
+  },
+  {
+    "run": 2,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:authority-roles:unsupported",
+        "note": "Item 4 answer states a list of legal roles and a legal conclusion with no cited claim and no ledger support: 'Only someone with legal authority to sign. That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house alone does not give you that authority.' The ledger has no authority or probate claim (clm:1-7 cover only H&S 17920.3 and Civ. Code 1102/1102.6). Remove the list of roles and the sentence 'Living in the house alone does not give you that authority', or state only that the person who signs must have legal authority and the seller should confirm who that is with an attorney or title company."
+      }
+    ],
+    "otherFindings": [
+      {
+        "severity": "optional",
+        "key": "fact:faq:statute-no-hoarding:uncited",
+        "note": "Item 3 says 'The statute does not mention hoarding.' This is a statement about the text of H&S 17920.3 that no ledger claim (clm:1-4) records; it appears only as a brief open item. Ask for a ledger claim or stored passage backing it, or soften to 'The listed conditions do not name hoarding.' Not blocking because the brief carries it deliberately."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "soften",
+        "note": "'Not always.' in item 2 is a frequency phrase with no statute, figure or list of roles; the sentences after it explain the dependencies. A plainer 'It depends on...' opening would do."
+      }
+    ]
+  },
+  {
+    "run": 3,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:item4:authority-roles-unsupported",
+        "note": "Item 4 answer states 'Only someone with legal authority to sign. That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house alone does not give you that authority.' This is a list of legal roles and a legal conclusion with no cited claim; the ledger has no claim on who holds authority to sell (claim_ids is empty). Remove the role list and the flat conclusion, or say only that who can sign depends on how title is held and must be confirmed with an attorney or title company."
+      }
+    ],
+    "otherFindings": [],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "not_a_claim",
+        "note": "'Not always.' opens a conditional answer ('It depends on your time, your money...') and states no figure, frequency statistic or legal rule."
+      }
+    ]
+  }
+]

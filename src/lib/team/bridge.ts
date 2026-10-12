@@ -8,6 +8,7 @@ import { agent1Result, agent2Result, agent3Result, outputSchemas } from "../agen
 import { MAX_ATTEMPTS, ratingRuleHits, semanticChecks, wrapUntrusted, norm, type TaskPacket, type ValidationContext } from "../agents/bridge";
 import { officialUrl } from "../agents/official-sources";
 import { studioOutputSchemas, studioSemanticChecks, V1_PROMPT_VERSION, type StudioValidationCtx } from "../studio/agents";
+import { HEDGE_RULINGS, rulingGuard, rulingNoteError } from "../studio/hedge-rulings";
 import { r1SubmitErrors } from "./research";
 import { r1FetchRequest, verifyR1Web, type SnapshotStore } from "./snapshots";
 import { resolveRootCause, rootCauseResult, type ApprovedIdentity } from "./strategy";
@@ -40,7 +41,7 @@ const s7 = studioOutputSchemas["thb-07-editorial-critic"];
 const cards = z.array(feedbackCard).max(20);
 const tickets = z.array(feedbackCard).max(5);
 
-export const hedgeRuling = z.strictObject({ key: z.string().regex(/^hedge:[0-9a-f]{12}$/), ruling: z.enum(["proven", "reword", "drop"]), note: z.string().optional() });
+export const hedgeRuling = z.strictObject({ key: z.string().regex(/^hedge:[0-9a-f]{12}$/), ruling: z.enum(HEDGE_RULINGS), note: z.string().optional() });
 const r2Result = z.strictObject({
   ticket_id: z.string().nullable(),
   window: z.strictObject({ start: z.string(), end: z.string() }),
@@ -115,6 +116,7 @@ export type TeamCtx = {
   clearedStories?: Map<string, string>;                 // R3: story id -> approved wording (publication_cleared only)
   rootCause?: { ticket: { id: string; type: string; to: string; unitKey: string | null }; approved: ApprovedIdentity; supportedClaimIds: ReadonlySet<string> };   // S2
   pendingHedgeKeys?: string[];                          // V1: flagged sentences that still need a ruling
+  pendingHedges?: { key: string; sentence: string }[];   // the same sentences, so the ruling guard can read them
 };
 
 const ROUTES: Record<"S1" | "S2" | "W1" | "V1" | "V2" | "V3", Record<string, string[]>> = {
@@ -223,12 +225,15 @@ export async function teamSemanticChecks(role: TeamRole, out: any, ctx: TeamCtx)
       if (role === "V1") {
         const rulings = out.result.hedge_rulings as { key: string; ruling: string; note?: string }[];
         const pending = new Set(ctx.pendingHedgeKeys ?? []);
+        const sentenceOf = new Map((ctx.pendingHedges ?? []).map((h) => [h.key, h.sentence]));
         for (const r of rulings) {
           if (!pending.has(r.key)) errs.push(`hedge ruling ${r.key} is not a flagged sentence awaiting a ruling`);
           if (r.ruling === "proven" && !(r.note ?? "").trim()) errs.push(`hedge ruling ${r.key}: "proven" needs the claim id or passage id in note`);
+          const bad = (r.ruling === "proven" ? null : rulingNoteError(r.key, r.ruling, r.note)) ?? (sentenceOf.has(r.key) ? rulingGuard(sentenceOf.get(r.key)!, r.ruling) : null);
+          if (bad) errs.push(bad);
         }
-        if (out.decision !== "BLOCKED") for (const k of pending) if (!rulings.some((r) => r.key === k)) errs.push(`V1 must rule (proven / reword / drop) on flagged sentence ${k}`);
-        if (out.decision === "PASS" && rulings.some((r) => r.ruling !== "proven")) errs.push("a PASS cannot carry a reword or drop ruling; use REVISION");
+        if (out.decision !== "BLOCKED") for (const k of pending) if (!rulings.some((r) => r.key === k)) errs.push(`V1 must rule (proven / soften / not_a_claim / reword / drop) on flagged sentence ${k}`);
+        if (out.decision === "PASS" && rulings.some((r) => r.ruling === "reword" || r.ruling === "drop")) errs.push("a PASS cannot carry a reword or drop ruling; use REVISION (soften and not_a_claim may ride on a PASS)");
       }
       break;
     }

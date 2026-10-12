@@ -1,0 +1,62 @@
+{
+  "article_id": "6dd4f29f-0f6b-404a-b3f9-ff9b6c506fa4",
+  "opportunity_id": "1c625acb-e1cb-4679-a5ea-2d7ef2314df3",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["698e5854ea57cf2403d60caa831c386efeaba5fa4c845af3fa19de778e58b0d2"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:faq:authority-unqualified",
+      "severity": "required",
+      "note": "Item 1 answer 'Living in the house alone does not give you that authority.' states a legal conclusion about who holds authority to sell as certain. No ledger claim supports it (the unit cites no claims), 'that authority' has no antecedent, and the answer has no confirm-with-a-professional language. Rewrite so it does not assert who does or does not hold authority, and tell the reader to confirm authority to sell with a real estate attorney or title company.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:faq:item-count-and-answer-fit",
+      "severity": "optional",
+      "note": "The brief asks for 5-7 FAQ items; the unit has 3. Item 1 does not actually answer its question. Wording and coverage preference, not a fact issue."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [
+    "Reword item 1 answer so it does not state a legal conclusion about authority as certain, and add confirm-with-an-attorney-or-title-company language."
+  ],
+  "output_version_id": "v1-faq-card01-698e5854-r1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "698e5854ea57cf2403d60caa831c386efeaba5fa4c845af3fa19de778e58b0d2",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:authority-unqualified",
+        "section": "faq",
+        "issue": "Answer states as certain that living in the house gives no authority to sell, with no ledger support and no confirm-with-a-professional language.",
+        "severity": "must fix",
+        "evidence": "Editorial standards section 5; no cited claim supports the authority statement; ledger clm:1-7 do not cover authority to sell",
+        "fix": "Answer without asserting who holds authority, e.g. say authority to sell depends on who holds title and the situation, and to confirm it with a real estate attorney or title company.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:item-count-and-answer-fit",
+        "section": "faq",
+        "issue": "Only 3 FAQ items against a 5-7 brief; item 1 does not answer its question.",
+        "severity": "suggestion",
+        "evidence": "brief_for_this_unit note: 5-7 items",
+        "fix": null,
+        "blocking": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "article_id": "b55780f4-8ad0-4965-b2ae-c06b0a499457",
+  "opportunity_id": "45a3c480-cf14-4df0-be27-4067204461e6",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["f0b11fe1177b730377bf532d7ba31a2cb810aeeca708a5ea9f4d09cb4403a9bb"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:p2:unsupported-outcome",
+      "severity": "required",
+      "note": "\"Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.\" States a frequency about owners, a cost outcome and an absolute instruction. No ledger claim supports any of it. It also contradicts the brief (no costs, no outcome promise) and the section's own point that some families reasonably choose not to clear first. Remove the sentence or replace it with a conditional line that states no fact, for example that waiting has its own costs and the seller should weigh time against cost with their professionals.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:clm:7:overstated",
+      "severity": "required",
+      "note": "\"It does not remove your duty to tell the buyer what you know.\" is a flat legal duty with a scope (\"what you know\") that neither clm:6 nor clm:7 states. Ledger only supports: the article applies to a transfer by sale of single-family residential property except as provided in 1102.2 (clm:6), and any waiver of its requirements is void (clm:7). Reword to stay within those claims, for example that a cleanout does not change the disclosure requirements that apply to a sale of single-family residential property, which cannot be waived, with the exception in 1102.2 noted.",
+      "claim_id": "clm:7"
+    },
+    {
+      "issue_key": "fact:s5:no-professional-confirm",
+      "severity": "required",
+      "note": "The unit makes disclosure-duty language with no confirm-with-a-professional wording anywhere in it. Add a short line telling the seller to confirm what must be disclosed on the Transfer Disclosure Statement with a real estate attorney or their listing agent.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:6", "clm:7"],
+  "required_actions": [
+    "Remove or rewrite the 'Most owners ... never delay' paragraph so it states no frequency, cost or outcome.",
+    "Reword 'duty to tell the buyer what you know' to match clm:6 and clm:7 (single-family residential, exception in 1102.2, waiver void).",
+    "Add confirm-with-attorney/listing-agent language for disclosure questions."
+  ],
+  "output_version_id": "v1-s5-f0b11fe1-r1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s5",
+    "version_hash": "f0b11fe1177b730377bf532d7ba31a2cb810aeeca708a5ea9f4d09cb4403a9bb",
+    "claim_checks": [
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Cited but the text never states the single-family scope or the 1102.2 exception; nothing in the text contradicts it. Nothing altered."},
+      {"claim_id": "clm:7", "verdict": "overstated", "note": "Text does not state that waiver is void; it instead asserts a broader flat duty ('what you know') that clm:7 does not support."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "hedge_rulings": [
+      {"key": "hedge:2ec4a34da675", "ruling": "reword", "note": "Asserts a frequency ('most owners'), a money outcome ('pay more') and an absolute ('never delay') as fact with no ledger support. Remove or make conditional and fact-free."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:p2:unsupported-outcome", "section": "s5", "issue": "Unsupported frequency, cost outcome and 'never delay' instruction in paragraph 2.", "severity": "must fix", "evidence": "No ledger claim; brief says no costs or outcome promise; hedge:2ec4a34da675", "fix": "Delete the sentence or replace with a conditional line stating no fact about owners or cost.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:7:overstated", "section": "s5", "issue": "'duty to tell the buyer what you know' is a flat legal duty beyond clm:6 and clm:7.", "severity": "must fix", "evidence": "clm:6, clm:7", "fix": "Say a cleanout does not change the disclosure requirements for a single-family residential sale (exception in 1102.2), and that they cannot be waived.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s5:no-professional-confirm", "section": "s5", "issue": "Disclosure language with no confirm-with-a-professional line.", "severity": "must fix", "evidence": "editorial-standards section 5; brief professional_confirmation", "fix": "Add a line to confirm disclosure questions with a real estate attorney or listing agent.", "blocking": false}
+    ]
+  }
+}

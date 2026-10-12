@@ -1,0 +1,45 @@
+{
+  "article_id": "b55780f4-8ad0-4965-b2ae-c06b0a499457",
+  "opportunity_id": "45a3c480-cf14-4df0-be27-4067204461e6",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["cf183053250c96b14cd7e1e7a1b30a19ace85498fcefefe61b46324a9662517a"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "privacy:s2:seller_anecdote",
+      "severity": "required",
+      "note": "The paragraph 'A family in the Fruitvale neighborhood kept every newspaper from their late father's years in the garage, and the county inspector who came by was kind about it.' is a seller-style story. It combines a named neighborhood, a family, a late father, a garage and a county inspector visit into an identifying combination. No seller story is cleared, and the brief says first-party proof is restricted (no seller story or case study). It also asserts an unsupported factual event (a county inspector visited and how they behaved) with no ledger claim. Remove the whole paragraph."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [
+    "Delete the paragraph beginning 'A family in the Fruitvale neighborhood...'. Do not replace it with any anecdote, neighborhood, family detail or inspector behavior. If an example is wanted, use a clearly generic, non-factual hypothetical with no location."
+  ],
+  "output_version_id": "v1-s2-cf183053-review-1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s2",
+    "version_hash": "cf183053250c96b14cd7e1e7a1b30a19ace85498fcefefe61b46324a9662517a",
+    "claim_checks": [],
+    "privacy_ok": false,
+    "legal_qualification_ok": true,
+    "block_kind": "BLOCKED_PRIVACY",
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "privacy:s2:seller_anecdote",
+        "section": "s2",
+        "issue": "Paragraph about a family in the Fruitvale neighborhood and a county inspector is an uncleared seller story with identifying details and an unsupported factual event.",
+        "severity": "must fix",
+        "evidence": "Rule 4 privacy (no seller story, no identifying combinations); brief open_items: first-party proof restricted, no seller story planned; no ledger claim supports it",
+        "fix": "Delete the paragraph entirely; do not substitute another anecdote or location.",
+        "blocking": true
+      }
+    ]
+  }
+}

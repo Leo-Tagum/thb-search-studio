@@ -9,6 +9,7 @@ import { checkArticle, checkUnit, type CheckCtx, type LedgerClaim } from "./chec
 import { contentHash, sha256 } from "./hash";
 import { allLocked, applyDeterministic, applyReview, declineOptional, editorRevision, escalateGap, gateOnly, isV1FixPass, recordVersion, reopen, resolveByHuman, type SectionState } from "./loop";
 import { fixChurn, splitSentences } from "./v1-gate";
+import { needsRuling } from "./hedge-rulings";
 import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
@@ -164,7 +165,7 @@ export async function queueStudioRun(db: SupabaseClient, agent: ClassicAgent, ar
     open_issues: st.issues,
     ...(agent === CLASSIC_V1_KEY ? {
       review_scope: st.v1Scope ?? { kind: "full" },
-      hedge_flags: (st.hedges ?? []).filter((h) => h.ruling !== "proven").map((h) => ({ key: h.key, term: h.term, sentence: h.sentence })),
+      hedge_flags: (st.hedges ?? []).filter(needsRuling).map((h) => ({ key: h.key, term: h.term, sentence: h.sentence })),
       previously_passed: st.v1Passed ? { version_hash: st.v1Passed.hash } : null,
       previously_declined: (st.declines ?? []).map((d) => ({ key: d.key, issue: d.text, writer_reason: d.reason, raised: d.raised })),
       declines_rule: "The writer declined these items and the code recorded them. Do not raise one again under a new key or new wording: it is counted once and not reopened. To raise it again, put what is new (a claim id, a stored passage, or the changed text) in new_evidence on the card and the finding.",
@@ -240,8 +241,8 @@ export async function validateStudio(db: SupabaseClient, runId: string, raw: str
       const cur = row?.current_version_id ? (await db.from("section_versions").select("*").eq("id", row.current_version_id).single()).data : null;
       const ctx: StudioValidationCtx = { packet: run.task_packet, currentUnit: cur?.content ?? null, currentHash: cur?.content_hash ?? null, check: L.check, voiceUsable: await voiceUsable(db), requiredIssuesOpen: stateOf(row).issues.map((i) => i.key).filter((k) => !k.startsWith("det:")), declinableKeys: (stateOf(row).collected ?? []).map((c) => c.key) };
       if (run.agent_key === CLASSIC_V1_KEY) {
-        const pending = (stateOf(row).hedges ?? []).filter((h) => h.ruling !== "proven").map((h) => h.key);
-        errors.push(...(await teamSemanticChecks("V1", parsed, { packet: { ...run.task_packet, role: "V1" } as TeamPacket, currentHash: ctx.currentHash, studio: ctx, pendingHedgeKeys: pending })));
+        const pendingH = (stateOf(row).hedges ?? []).filter(needsRuling);
+        errors.push(...(await teamSemanticChecks("V1", parsed, { packet: { ...run.task_packet, role: "V1" } as TeamPacket, currentHash: ctx.currentHash, studio: ctx, pendingHedgeKeys: pendingH.map((h) => h.key), pendingHedges: pendingH.map((h) => ({ key: h.key, sentence: h.sentence })) })));
       } else errors.push(...studioSemanticChecks(run.agent_key as StudioAgentKey, parsed, ctx));
     }
   } catch (e) { errors.push(`not valid JSON: ${e instanceof Error ? e.message : String(e)}`); }

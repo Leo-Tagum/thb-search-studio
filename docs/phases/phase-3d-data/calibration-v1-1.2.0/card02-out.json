@@ -1,0 +1,46 @@
+{
+  "article_id": "6dd4f29f-0f6b-404a-b3f9-ff9b6c506fa4",
+  "opportunity_id": "1c625acb-e1cb-4679-a5ea-2d7ef2314df3",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["a75e220b9aa5dcef73e29cb34ce038106027f14e9a466d6192965706278c250d"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:s2:uncited_statute_match",
+      "severity": "required",
+      "note": "The sentence 'Trash or signs of pests are another, and they match conditions the statute lists.' states a statutory fact with no cited claim (claim_ids is empty). It does not name the statute, and 'match' turns the ledger wording into a flat rule. Under clm:1, junk and debris count only when they constitute fire, health or safety hazards. Under clm:2, infestation counts only as determined by a health officer. Ordinary trash does not match the statute on its own, and whether a home meets the conditions is for the local authority. The words 'trash', 'signs of pests', 'match' and 'the statute lists' must change.",
+      "claim_id": "clm:1"
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2"],
+  "required_actions": [
+    "Rewrite the second paragraph so it cites clm:1 and clm:2 and says no more than they do: H&S 17920.3 lists accumulated junk and debris that constitute fire, health or safety hazards, and infestation as determined by a health officer, among conditions that can make a building substandard. Say that whether a particular home meets them is for the local enforcement authority.",
+    "Fix the dangling 'are another' (no antecedent in this section) and make clear that this section is about who signs and who is affected, per the brief."
+  ],
+  "output_version_id": "v1-s2-a75e220b-card02",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s2",
+    "version_hash": "a75e220b9aa5dcef73e29cb34ce038106027f14e9a466d6192965706278c250d",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s2:uncited_statute_match",
+        "section": "s2",
+        "issue": "'they match conditions the statute lists' states a statutory claim as a flat rule, with no cited claim and no named statute.",
+        "severity": "must fix",
+        "evidence": "clm:1 (H&S 17920.3(j): junk and debris that constitute fire, health or safety hazards), clm:2 (infestation as determined by a health officer)",
+        "fix": "Cite clm:1 and clm:2. Say the code lists accumulated junk and debris that constitute fire, health or safety hazards, and infestation as determined by a health officer, among conditions that can make a building substandard, and that the local authority decides whether a given home meets them. Do not say trash or signs of pests 'match'.",
+        "blocking": false
+      }
+    ]
+  }
+}

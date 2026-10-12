@@ -12,6 +12,7 @@ import { unitClaimIds, unitText, type Unit } from "./schema";
 import { buildTeamPacket, submitTeamOutput, teamPromptVersion, teamRoleOfAgentKey, TEAM_AGENT_FILE, type TeamCtx, type TeamPacket, type TeamRun, type TeamRunStore } from "../team/bridge";
 import { combineFeedback, type CouncilItem } from "../team/council";
 import { claimRow, packSummary, remapClaimKeys, supportedClaims, type PackClaim, type PackSource } from "../team/ledger";
+import { needsRuling } from "./hedge-rulings";
 import { applyDeterministic, briefRevised, declineMany, newTeamSection, recordReview, recordVersion, type CouncilRole, type TeamSectionState } from "../team/loop";
 import { modeOf, pipelineGuard } from "../team/mode";
 import { planSteps, type PlanStep } from "../team/plan";
@@ -59,7 +60,7 @@ export async function teamPlan(db: SupabaseClient, articleId: string, unit?: str
   const t = shared ?? (await open(db, articleId));
   const router = await routerOf(t);
   const queued = await queuedRuns(db, articleId);
-  const units = t.L.sections.map((s) => { const e = envelopeOf(s); return { key: s.section_key as string, status: e.team.status, pending: e.team.pending, waitingOn: e.waitingOn ?? [], issues: e.team.mustFix.length, hedges: e.team.hedges.filter((h) => h.ruling !== "proven").length }; });
+  const units = t.L.sections.map((s) => { const e = envelopeOf(s); return { key: s.section_key as string, status: e.team.status, pending: e.team.pending, waitingOn: e.waitingOn ?? [], issues: e.team.mustFix.length, hedges: e.team.hedges.filter(needsRuling).length }; });
   const steps = planSteps({ units, tickets: router.tickets, runStatus: runStatus(router), queued }).filter((s) => !unit || s.unit === unit);
   return { article: t.L.article.title as string, runStatus: runStatus(router), tickets: router.tickets, units, steps, queued };
 }
@@ -121,7 +122,7 @@ async function packetData(t: T, role: TeamRole, unit: string | null, ticket: Tic
     if (role === "W2") Object.assign(base, { voice_reference: await voice() });
     if (role === "V3") Object.assign(base, { voice_reference: await voice(), co_writer_suggestions: env.suggestions?.items ?? [] });
     if (role === "V1") {
-      const hedges = env.team.hedges.filter((h) => h.ruling !== "proven").map((h) => ({ key: h.key, term: h.term, sentence: h.sentence }));
+      const hedges = env.team.hedges.filter(needsRuling).map((h) => ({ key: h.key, term: h.term, sentence: h.sentence }));
       Object.assign(base, { review_scope: env.team.v1Scope ?? { kind: "full" }, hedge_flags: hedges, previously_passed: env.team.v1Passed ? { version_hash: env.team.v1Passed.hash } : null, research_answers: answersFor("V1") });
     }
     if (role === "V2") Object.assign(base, { main_keyword: L.article.primary_keyword, research_answers: answersFor("V2") });
@@ -175,7 +176,8 @@ async function teamCtxFor(db: SupabaseClient, run: TeamRun): Promise<TeamCtx> {
     const env = r ? envelopeOf(r) : { team: newTeamSection(unit) };
     ctx.currentHash = cur?.content_hash ?? null;
     ctx.studio = { packet: { agent_key: TEAM_AGENT_FILE[role], prompt_version: teamPromptVersion(role), unit_key: unit, unit_hash: cur?.content_hash ?? null, allowed_claim_ids: [...L.claims.keys()], opportunity_id: L.article.opportunity_id, article_id: p.article_id } as any, currentUnit: cur?.content ?? null, currentHash: cur?.content_hash ?? null, check: L.check, voiceUsable: await voiceUsable(db), requiredIssuesOpen: env.team.mustFix.map((m) => m.key), declinableKeys: role === "W1" ? [...env.team.collected.map((c) => c.key), ...(await w1ShouldFixKeys(db, p, unit))] : undefined };
-    ctx.pendingHedgeKeys = env.team.hedges.filter((h) => h.ruling !== "proven").map((h) => h.key);
+    ctx.pendingHedgeKeys = env.team.hedges.filter(needsRuling).map((h) => h.key);
+    ctx.pendingHedges = env.team.hedges.filter(needsRuling).map((h) => ({ key: h.key, sentence: h.sentence }));
   }
   const opp = await opportunityOf(db, L);
   if (role === "R1" || role === "R3") {

@@ -54,7 +54,7 @@ if (cmd === "setup") {
     const rev = (revs ?? []).at(-1);
     const items = st.issues.filter((i) => i.stage === "fact");
     const cited = items.some((i) => c.citesPattern.test(i.text));
-    const hedgeRuled = (st.hedges ?? []).filter((h) => h.ruling && h.ruling !== "proven");
+    const hedgeRuled = (st.hedges ?? []).filter((h) => h.ruling && h.ruling !== "proven" && h.ruling !== "not_a_claim");
     const caughtByCode = st.status === "BLOCKED_PRIVACY" || st.status === "BLOCKED_CLAIM";
     const caughtByV1 = !!rev && rev.decision !== "PASS" && (cited || hedgeRuled.length > 0);
     rows.push({

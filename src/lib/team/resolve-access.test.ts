@@ -161,7 +161,7 @@ describe("smoke scripts flag their fixture articles", () => {
   it("every script that creates an article with approveBrief and acts as smoke-test marks it is_fixture right after", () => {
     const scripts = readdirSync("scripts").filter((f) => f.endsWith(".mts")).map((f) => `scripts/${f}`);
     const makers = scripts.filter((f) => { const t = readFileSync(f, "utf8"); return /approveBrief\(/.test(t) && /"smoke-test"/.test(t); });
-    expect(makers.sort()).toEqual(["scripts/adversarial-smoke.mts", "scripts/studio-smoke.mts", "scripts/team-cli-smoke.mts", "scripts/team-smoke.mts", "scripts/team-view-smoke.mts"]);
+    expect(makers.sort()).toEqual(["scripts/adversarial-smoke.mts", "scripts/calibration-context-smoke.mts", "scripts/calibration-smoke.mts", "scripts/studio-smoke.mts", "scripts/team-cli-smoke.mts", "scripts/team-smoke.mts", "scripts/team-view-smoke.mts"]);
     for (const f of makers) {
       const t = readFileSync(f, "utf8");
       expect(t, f).toMatch(/update\(\{ is_fixture: true \}\)/);

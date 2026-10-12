@@ -11,6 +11,7 @@
 import { REVISION_LIMIT } from "../orchestrator/states";
 import { hedgeFlagsInText, type Finding } from "../studio/checks";
 import { declinesForLeo, mergeReview, recordWriterDeclines, type DeclineRecord } from "../studio/declines";
+import { isMustFixRuling, keepsRuling, needsRuling, rulingGuard, rulingNoteError, type HedgeRulingKind } from "../studio/hedge-rulings";
 
 export type CouncilRole = "V1" | "V2" | "V3";
 export const COUNCIL: readonly CouncilRole[] = ["V1", "V2", "V3"];
@@ -32,7 +33,7 @@ export type TeamSectionState = {
   escalation: { issueKey: string; reason: string } | null;
   blockedBy: string | null;
 };
-export type HedgeRuling = "proven" | "reword" | "drop";
+export type HedgeRuling = HedgeRulingKind;
 /** A sentence with a hedge phrase ("most owners", "usually" ...). Flagged by code, never a block: V1 must rule on each one explicitly. */
 export type HedgeRecord = { key: string; term: string; sentence: string; ruling: HedgeRuling | null; note: string | null };
 export type V1Scope = { kind: "full" } | { kind: "changed"; sentences: string[] };
@@ -62,7 +63,7 @@ export function recordVersion(s: TeamSectionState, v: { hash: string; sig: strin
   const mustFix = s.mustFix.filter((i) => i.role !== "LEO").map((i) => ({ ...i, attempts: i.attempts + 1 }));
   const pending: CouncilRole[] = v1Again ? ["V1", "V2", "V3"] : ["V2", "V3"];
   // Hedge sentences are re-detected on the new text. A sentence V1 already ruled "proven" (same words) keeps that ruling; anything else needs a fresh ruling.
-  const hedges: HedgeRecord[] = v.text === undefined ? s.hedges : hedgeFlagsInText(v.text).map((h) => { const old = s.hedges.find((x) => x.key === h.key && x.ruling === "proven"); return { ...h, ruling: old ? "proven" : null, note: old?.note ?? null }; });
+  const hedges: HedgeRecord[] = v.text === undefined ? s.hedges : hedgeFlagsInText(v.text).map((h) => { const old = s.hedges.find((x) => x.key === h.key && keepsRuling(x.ruling)); return { ...h, ruling: old ? old.ruling : null, note: old?.note ?? null }; });
   const note = v1Again && base ? (v1Scope!.kind === "changed" ? `V1 re-reviews ${v1Scope!.sentences.length} changed sentence(s)` : "V1 re-reviews the full section") : undefined;
   return { ok: true, state: { ...s, versionNo: s.versionNo + 1, versionHash: v.hash, sig: v.sig, sentences, status: "NEEDS_COUNCIL", pending, mustFix, hedges, v1Passed: v1Again ? null : base, v1Scope, blockedBy: null }, note };
 }
@@ -104,13 +105,16 @@ export function recordReview(s: TeamSectionState, r: CouncilReview): Outcome {
   if (role === "V1") {
     const byKey = new Map((r.hedgeRulings ?? []).map((h) => [h.key, h]));
     for (const h of r.hedgeRulings ?? []) if (!s.hedges.some((x) => x.key === h.key)) return fail(`ruling for ${h.key}, which is not a flagged sentence in this version`);
-    const missing = s.hedges.filter((h) => h.ruling !== "proven" && !byKey.has(h.key));
-    if (missing.length) return fail(`V1 must rule (proven / reword / drop) on every flagged sentence; missing: ${missing.map((h) => `${h.key} "${h.sentence}"`).join("; ")}`);
+    const missing = s.hedges.filter((h) => needsRuling(h) && !byKey.has(h.key));
+    if (missing.length) return fail(`V1 must rule (proven / soften / not_a_claim / reword / drop) on every flagged sentence; missing: ${missing.map((h) => `${h.key} "${h.sentence}"`).join("; ")}`);
     for (const h of s.hedges) {
       const v = byKey.get(h.key);
       if (!v) continue;
-      if (v.ruling === "proven" && !(v.note ?? "").trim().match(/\S.{4,}/)) return fail(`ruling "proven" for ${h.key} needs the evidence (a ledger claim id or source) in note`);
-      if (v.ruling !== "proven") hedgeMust.push({ key: h.key, severity: "must fix", text: `${v.ruling} the unsourced generalization (${h.term}): "${h.sentence}"${v.note ? ` - ${v.note}` : ""}` });
+      const bad = rulingNoteError(h.key, v.ruling, v.note) ?? rulingGuard(h.sentence, v.ruling);
+      if (bad) return fail(bad);
+      // reword and drop are must-fix; soften is a should-fix (listed for Leo, never blocks); proven and not_a_claim produce nothing.
+      if (isMustFixRuling(v.ruling)) hedgeMust.push({ key: h.key, severity: "must fix", text: `${v.ruling} the unsourced generalization (${h.term}): "${h.sentence}"${v.note ? ` - ${v.note}` : ""}` });
+      else if (v.ruling === "soften") hedgeMust.push({ key: `soften:${h.key}`, severity: "should fix", text: `soften the unsourced generalization (${h.term}): "${h.sentence}"${v.note ? ` - ${v.note}` : ""}` });
     }
     hedges = s.hedges.map((h) => { const v = byKey.get(h.key); return v ? { ...h, ruling: v.ruling, note: v.note?.trim() || null } : h; });
   }
@@ -132,7 +136,7 @@ export function recordReview(s: TeamSectionState, r: CouncilReview): Outcome {
   if (stuck) return { ok: true, state: { ...next, status: "ESCALATED", escalation: { issueKey: stuck.key, reason: `still not resolved after ${stuck.attempts} revision attempts: ${stuck.text}` } }, note: "escalated" };
   if (pending.length) return { ok: true, state: next };
   if (mustFix.length) return { ok: true, state: { ...next, status: "NEEDS_REVISION" } };
-  if (hedges.some((h) => h.ruling !== "proven")) return { ok: true, state: { ...next, status: "NEEDS_COUNCIL", pending: ["V1"], v1Scope: { kind: "changed", sentences: hedges.filter((h) => h.ruling !== "proven").map((h) => h.sentence) } }, note: "a flagged sentence has no V1 ruling: back to V1" };
+  if (hedges.some(needsRuling)) return { ok: true, state: { ...next, status: "NEEDS_COUNCIL", pending: ["V1"], v1Scope: { kind: "changed", sentences: hedges.filter(needsRuling).map((h) => h.sentence) } }, note: "a flagged sentence has no V1 ruling: back to V1" };
   if (v1Passed?.hash !== s.versionHash) return { ok: true, state: { ...next, status: "NEEDS_COUNCIL", pending: ["V1"], v1Scope: { kind: "full" } }, note: "V1 has not passed this content: back to V1" };
   return { ok: true, state: { ...next, status: "LOCKED", lockedHash: s.versionHash, pending: [] }, note: "locked" };
 }

@@ -1,0 +1,73 @@
+{
+  "article_id": "19b3be53-83f6-4e7f-b536-ffce0524ea04",
+  "opportunity_id": "ea0a413b-51f3-4ec6-9547-dad5d403e9aa",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:faq:authority-roles:unsupported",
+      "severity": "required",
+      "note": "Item 4 answer states a list of legal roles and a legal conclusion with no cited claim and no ledger support: 'Only someone with legal authority to sign. That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house alone does not give you that authority.' The ledger has no authority or probate claim (clm:1-7 cover only H&S 17920.3 and Civ. Code 1102/1102.6). Remove the list of roles and the sentence 'Living in the house alone does not give you that authority', or state only that the person who signs must have legal authority and the seller should confirm who that is with an attorney or title company.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:faq:statute-no-hoarding:uncited",
+      "severity": "optional",
+      "note": "Item 3 says 'The statute does not mention hoarding.' This is a statement about the text of H&S 17920.3 that no ledger claim (clm:1-4) records; it appears only as a brief open item. Ask for a ledger claim or stored passage backing it, or soften to 'The listed conditions do not name hoarding.' Not blocking because the brief carries it deliberately.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:6", "clm:7"],
+  "required_actions": [
+    "Item 4 (Who can sell the house): remove the role list and the 'Living in the house alone does not give you that authority' conclusion, or limit to 'the person signing must have legal authority; confirm who with an attorney or title company'."
+  ],
+  "output_version_id": "v1-faq-b30a408c-r1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Item 3 says state law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards; matches the ledger."},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Item 3 does not restate the infestation condition; nothing beyond the ledger claim is said."},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Item 3 does not restate the garbage facilities condition; nothing beyond the ledger claim is said."},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Item 3 does not restate the combustible waste condition; 'for the local authority' keeps the determination with the officials."},
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "Item 1: disclosures made on the Real Estate Transfer Disclosure Statement form."},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Item 1: single-family residential sale, with an exception; 'Generally yes' is qualified and not overstated."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "Items 1 and 5: waiver void as against public policy; item 5 limits it to sales the article covers."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:4a926ce9f475", "ruling": "soften", "note": "'Not always.' in item 2 is a frequency phrase with no statute, figure or list of roles; the sentences after it explain the dependencies. A plainer 'It depends on...' opening would do."}
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:authority-roles:unsupported",
+        "section": "faq",
+        "issue": "Item 4 lists legal roles (owner, trustee, executor, administrator, heirs) and concludes residence gives no authority, with no supporting claim.",
+        "severity": "must fix",
+        "evidence": "Ledger clm:1-7 contain no authority or probate claim; editorial-standards section 5; list of legal roles stays must-fix.",
+        "fix": "Say only that whoever signs must have legal authority, and to confirm who that is with an attorney or title company. Drop the role list and the 'Living in the house alone' sentence.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:statute-no-hoarding:uncited",
+        "section": "faq",
+        "issue": "Item 3 'The statute does not mention hoarding' is not recorded in any ledger claim.",
+        "severity": "should fix",
+        "evidence": "Brief open item on H&S 17920.3; clm:1-4 do not state it.",
+        "fix": "Add a ledger claim or soften to 'The listed conditions do not name hoarding.'",
+        "blocking": false
+      }
+    ]
+  }
+}

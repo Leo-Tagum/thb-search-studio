@@ -7,7 +7,7 @@ Classic stays the default pipeline. V1 (fact and privacy, with the hedge flag an
 Plan approved with conditions: list Agent 5's checks and where each is covered; the churn check applies only to the writer's V1-fix pass; every changed agent file gets a prompt version bump with the exact change (declines wording only); commit order declines module, classic declines, V1 gate, escalation, adversarial fixtures, smokes and verify script. Defaults accepted: 2 attempts then escalation; not retroactive; no migration; no new code flags unless the live test shows a V1 miss. The real run (task 10) may run units in parallel; the report says so and keeps counters and escalations per unit.
 
 ## Status
-Tasks 1-9 built and committed. **Task 10 (real run on `54070caa…`) not started: waiting for Leo's go-ahead.**
+Tasks 1-9 built and committed; V1 severity calibration (1.2.1) approved with documented exception (below). **Task 10 (real run on `54070caa…`) not started: waiting for Leo's go-ahead.**
 
 ## What was built
 | Task | Commit subject | What |
@@ -72,6 +72,39 @@ Four of four caught before any lock; none was a miss, so no new code flags. Limi
 - Live smokes run at the final code: `smoke:studio`, `smoke:team-view`, `smoke:team-cli`, `smoke:team`: all PASSED, fixture rows cleaned.
 - `npm run verify:phase3d`: original article fingerprint `23f8dd72…4611` and version `4db42fea93cc` unchanged; both branches at HUMAN_REVIEW; no migration after 0019; no fixture left; no gated unit locked without a V1 pass.
 - `phase3c-verify.mts` was not written separately: `verify:phase3d` checks the Phase 3c invariants too (migrations, both branches, the untouched original), so a second script would duplicate it.
+
+## V1 severity calibration (prompt 1.2.1): approved with documented exception
+
+**Release status: Approved with documented exception.** Not "gate passed": one release condition (card 1 returns should-fix) was not met, in the isolated run or in context, and Leo accepted that as a deliberate conservative exception.
+
+Origin: Leo judged ten of V1's must-fix cards blind (A 2, B 3, C 5; `phase-3c-evidence-audit.md`, Q20). V1 was calibrated so that:
+- specific legal claims, statutory conditions, lists of legal roles, case-specific legal conclusions, figures and money stay must-fix;
+- a general legal principle is a should-fix (an optional finding), visible to Leo and never blocking;
+- an unsupported frequency word that is not a statistic is `soften` (should-fix); an empathetic, conditional or hypothetical line is `not_a_claim` (no finding); `reword` and `drop` stay must-fix;
+- code guard (`src/lib/studio/hedge-rulings.ts`): `soften` and `not_a_claim` are refused on a flagged sentence with a statute or code section, a statutory condition, a figure or money, or a list of legal roles; `not_a_claim` is also refused on any sentence that states a legal rule. No protection was weakened to improve a score.
+
+**Result 1, original isolated run (real V1, ten sentences unchanged, production path, one unit each): 9/10.**
+
+| Card | Expected | Actual | Match |
+|---|---|---|---|
+| 1 | should-fix | **must-fix** | no |
+| 2 | must-fix | must-fix | yes |
+| 3 | should-fix or none | none | yes |
+| 4, 5, 6 | should-fix or none | should-fix (`soften`) | yes |
+| 7 | should-fix or none | none (`not_a_claim`) | yes |
+| 8 | should-fix | should-fix | yes |
+| 9 | must-fix | must-fix | yes |
+| 10 | should-fix or none | none (`not_a_claim`) | yes |
+
+**Result 2, card 1 in its original context (reported separately; not merged into the 9/10):** the six-item classic-revised FAQ exactly as V1 reviewed it in Phase 3c (version `b30a408c09e1`), sentence, context, prompt and guard unchanged, three independent real V1 runs on three fixture articles. **Must-fix in 3 of 3 runs.** In all three, V1's finding is on item 4 as a whole: it cites the list of legal roles in the neighbouring sentence ('the owner, a trustee, an executor or administrator, or several heirs who agree') together with 'Living in the house alone does not give you that authority', and says no ledger claim supports who holds authority; runs 2 and 3 offer to keep a plain statement that the signer needs authority and must be confirmed with an attorney or title company. So in context the must-fix is driven largely by the protected list of legal roles, and card 1's sentence is judged together with it. The isolated run (sentence alone, 'you' and no context) was also must-fix, as a case-specific conclusion about authority. In every run V1 also raised separate findings on other text (for example 'The statute does not mention hoarding.'), which were not scored.
+
+**Accepted deviation:** card 1 stays must-fix: conservative handling of potentially case-specific legal authority. Expected outcomes were not changed and the prompt was not tuned for it.
+
+Release conditions: 9/10 blind matches (needed 8); cards 2 and 9 must-fix (met); cards 1 and 8 should-fix (card 8 met, **card 1 not met: documented exception**); all four adversarial fixtures caught by the real V1 with the final guard and prompt (legal claim blocked, local fact blocked, seller anecdote blocked on privacy, generalization sent back with a must-fix); 738 Vitest tests, tsc and eslint clean; no specific-claim protection weakened.
+
+Prompt version: the validated text is the 1.2.0 text; 1.2.1 is the release label of that same text (no wording change after validation). Data: `phase-3d-data/calibration-v1-1.2.0/` (ten sentences), `calibration-card1-in-context/` (three runs), `adversarial-v1-1.2.0-final/` (four fixtures); scripts `scripts/calibration-smoke.mts`, `scripts/calibration-context-smoke.mts`.
+
+Limits: one model's rulings, one run per card in the isolated test; the guard is keyword-based (a legal rule worded without the listed words can still be ruled `not_a_claim`, so the protection rests on V1's judgment plus the specific-claim guard); the classification script maps findings to a card by wording overlap.
 
 ## Open for Leo
 Task 10: the hybrid on `54070caa…` (7 remaining V1 must-fix items), then V1's result per unit and the 5-item hedge spot-check list. Needs Leo's go-ahead before any change to that article.
