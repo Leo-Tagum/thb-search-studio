@@ -1,0 +1,62 @@
+{
+  "article_id": "a90416b3-8bc3-4198-988d-817e22e97605",
+  "opportunity_id": "80c3e939-48e3-493d-875b-2746ed1f0fbb",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["f0b11fe1177b730377bf532d7ba31a2cb810aeeca708a5ea9f4d09cb4403a9bb"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:clm:7:overstated",
+      "severity": "required",
+      "note": "'It does not remove your duty to tell the buyer what you know.' states a flat legal duty. clm:7 only says a waiver of the article's requirements is void, and clm:6 limits the article to a transfer by sale of single-family residential property, except as provided in Section 1102.2. No cited claim supports a general duty to tell a buyer 'what you know'. Reword to say only what clm:6 and clm:7 support (the Transfer Disclosure Statement rules apply to a sale of single-family residential property, with an exception, and a waiver of the requirements is void), without a flat duty.",
+      "claim_id": "clm:7"
+    },
+    {
+      "issue_key": "fact:clm:6:unsupported",
+      "severity": "required",
+      "note": "The unit cites clm:6 but never states it. The disclosure sentence omits the single-family residential scope and the exception (Section 1102.2), so the scope condition is dropped. Either state the scope with its exception as in clm:6 or stop citing clm:6.",
+      "claim_id": "clm:6"
+    },
+    {
+      "issue_key": "fact:s5:unsupported_outcome_claim",
+      "severity": "required",
+      "note": "'Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.' No ledger claim or stored passage supports the owner behavior, the cost-rises-with-delay claim, or the 'never delay' directive. It is an unsupported outcome and price claim and pressure language. Delete the sentence.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:s5:legal_qualification_missing",
+      "severity": "required",
+      "note": "The disclosure-duty language has no confirm-with-a-professional wording where the reader meets it. Add a plain pointer to confirm what must be disclosed with a real estate attorney or listing agent.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:6", "clm:7"],
+  "required_actions": [
+    "Replace 'It does not remove your duty to tell the buyer what you know' with wording limited to clm:6 and clm:7 (single-family residential, with the stated exception; a waiver of the requirements is void).",
+    "Delete the paragraph 'Most owners in this spot wait too long...' entirely.",
+    "Add language telling the seller to confirm disclosure questions with a real estate attorney or listing agent."
+  ],
+  "output_version_id": "v1-s5-f0b11fe1-review-1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s5",
+    "version_hash": "f0b11fe1177b730377bf532d7ba31a2cb810aeeca708a5ea9f4d09cb4403a9bb",
+    "claim_checks": [
+      {"claim_id": "clm:6", "verdict": "unsupported", "note": "Cited but not stated; the scope (single-family residential) and the Section 1102.2 exception are missing from the text."},
+      {"claim_id": "clm:7", "verdict": "overstated", "note": "Ledger says a waiver is void; the text turns it into a flat duty to tell the buyer what you know."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "hedge_rulings": [
+      {"key": "hedge:2ec4a34da675", "ruling": "drop", "note": "No ledger claim or stored passage supports 'most owners', 'usually pay more' or 'never delay'."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:7:overstated", "section": "s5", "issue": "Flat legal duty 'does not remove your duty to tell the buyer what you know' goes beyond clm:7 and clm:6.", "severity": "must fix", "evidence": "clm:7, clm:6", "fix": "Say the Transfer Disclosure Statement rules apply to a sale of single-family residential property, with an exception, and a waiver of the requirements is void; no flat duty wording.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:6:unsupported", "section": "s5", "issue": "clm:6 is cited but its scope and the Section 1102.2 exception are not stated.", "severity": "must fix", "evidence": "clm:6", "fix": "State the scope with its exception, or remove the clm:6 citation.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s5:unsupported_outcome_claim", "section": "s5", "issue": "'Most owners ... wait too long ... usually pay more ... never delay' is unsupported and pressure language.", "severity": "must fix", "evidence": "hedge:2ec4a34da675; no ledger claim supports it; editorial standards rule 2", "fix": "Delete the paragraph.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s5:legal_qualification_missing", "section": "s5", "issue": "Disclosure language has no confirm-with-a-professional pointer.", "severity": "must fix", "evidence": "editorial standards section 5; brief professional_confirmation", "fix": "Add a line to confirm disclosure questions with a real estate attorney or listing agent.", "blocking": false}
+    ]
+  }
+}

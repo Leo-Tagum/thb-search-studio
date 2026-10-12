@@ -22,3 +22,4 @@ _scratch/
 
 # local Claude Code permissions (machine-specific)
 .claude/settings.local.json
+.vitest/

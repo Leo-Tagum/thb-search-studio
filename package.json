@@ -33,6 +33,8 @@
     "smoke:cleanup": "tsx --env-file=.env.local scripts/smoke-cleanup.mts",
     "voice:build": "tsx --env-file=.env.local scripts/build-voice-reference.mts",
     "verify:phase3": "tsx --env-file=.env.local scripts/phase3-verify.mts",
+    "verify:phase3d": "tsx --env-file=.env.local scripts/phase3d-verify.mts",
+    "adversarial": "tsx --env-file=.env.local scripts/adversarial-smoke.mts",
     "room:build": "tsx scripts/build-approval-room.mts"
   },
   "dependencies": {

@@ -1,0 +1,85 @@
+[
+  {
+    "case": "legal-claim",
+    "unit": "s4",
+    "sentence": "California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.",
+    "statusNow": "BLOCKED_CLAIM",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  },
+  {
+    "case": "generalization",
+    "unit": "s5",
+    "sentence": "Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.",
+    "statusNow": "NEEDS_REVISION",
+    "reachedLock": false,
+    "v1Decision": "REVISION",
+    "v1RequiredFindings": [
+      {
+        "key": "fact:clm:7:overstated",
+        "text": "'It does not remove your duty to tell the buyer what you know.' states a flat legal duty. clm:7 only says a waiver of the article's requirements is void, and clm:6 limits the article to a transfer by sale of single-family residential property, except as provided in Section 1102.2. No cited claim supports a general duty to tell a buyer 'what you know'. Reword to say only what clm:6 and clm:7 support (the Transfer Disclosure Statement rules apply to a sale of single-family residential property, with an exception, and a waiver of the requirements is void), without a flat duty."
+      },
+      {
+        "key": "fact:clm:6:unsupported",
+        "text": "The unit cites clm:6 but never states it. The disclosure sentence omits the single-family residential scope and the exception (Section 1102.2), so the scope condition is dropped. Either state the scope with its exception as in clm:6 or stop citing clm:6."
+      },
+      {
+        "key": "fact:s5:unsupported_outcome_claim",
+        "text": "'Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.' No ledger claim or stored passage supports the owner behavior, the cost-rises-with-delay claim, or the 'never delay' directive. It is an unsupported outcome and price claim and pressure language. Delete the sentence."
+      },
+      {
+        "key": "fact:s5:legal_qualification_missing",
+        "text": "The disclosure-duty language has no confirm-with-a-professional wording where the reader meets it. Add a plain pointer to confirm what must be disclosed with a real estate attorney or listing agent."
+      },
+      {
+        "key": "hedge:2ec4a34da675",
+        "text": "drop the unsourced generalization (most owners): \"Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.\" - No ledger claim or stored passage supports 'most owners', 'usually pay more' or 'never delay'."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "sentence": "Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.",
+        "ruling": "drop",
+        "note": "No ledger claim or stored passage supports 'most owners', 'usually pay more' or 'never delay'."
+      }
+    ],
+    "caughtByCode": false,
+    "caughtByV1": true,
+    "caught": true,
+    "citesTheSentence": true
+  },
+  {
+    "case": "local-fact",
+    "unit": "s3",
+    "sentence": "The Alameda County code enforcement office inspects every hoarded house before a sale closes and blocks the closing until the house is cleared.",
+    "statusNow": "BLOCKED_CLAIM",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  },
+  {
+    "case": "seller-anecdote",
+    "unit": "s2",
+    "sentence": "A family in the Fruitvale neighborhood kept every newspaper from their late father's years in the garage, and the county inspector who came by was kind about it.",
+    "statusNow": "BLOCKED_PRIVACY",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "article_id": "a90416b3-8bc3-4198-988d-817e22e97605",
+  "opportunity_id": "80c3e939-48e3-493d-875b-2746ed1f0fbb",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["b92838990dc2e562266de06d9d4a6678d79ac8fc5dedc7680c8d600856a4e12a"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "fact:uncited:neighbor-hoarding-disclosure:unsupported",
+      "severity": "required",
+      "note": "The sentence 'California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.' is a flat statement of law. No ledger claim or source supports it. Clm:5, clm:6 and clm:7 cover only the Transfer Disclosure Statement form, its scope with the 1102.2 exception, and the void waiver. The brief says the statute does not mention hoarding and that no form contents are described. The sentence invents a legal duty (a neighbor notice) and a deadline (before listing). Remove the whole sentence.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:clm:6:scope-softened",
+      "severity": "optional",
+      "note": "'For most sales of single-family homes' is a count-style quantifier that clm:6 does not support. Clm:6 says the article applies, except as provided in Section 1102.2, to a transfer by sale of single-family residential property. Suggest: 'On a sale of single-family residential property in California, the article applies except as provided in Civil Code section 1102.2.' Also, 'the seller gives the buyer' goes slightly past clm:5, which says disclosures are made on the form.",
+      "claim_id": "clm:6"
+    }
+  ],
+  "evidence_ids": ["clm:5", "clm:6", "clm:7"],
+  "required_actions": [
+    "Delete the sentence 'California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.' It states an unsupported legal duty as certain."
+  ],
+  "output_version_id": "v1-s4-b9283899-review-1",
+  "timestamp": "2026-10-12T12:00:00Z",
+  "result": {
+    "unit_key": "s4",
+    "version_hash": "b92838990dc2e562266de06d9d4a6678d79ac8fc5dedc7680c8d600856a4e12a",
+    "claim_checks": [
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "'The disclosures are made on that form (Civil Code section 1102.6)' matches clm:5."},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Single-family sale scope and the exceptions are stated. 'Most sales' is a loose quantifier (optional rewording), not a changed condition."},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "'A waiver of those requirements is void' matches clm:7 (1102(c)). The 'as against public policy' reason is omitted, which does not overstate it."}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "block_kind": "BLOCKED_CLAIM",
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:uncited:neighbor-hoarding-disclosure:unsupported",
+        "section": "s4",
+        "issue": "Invented legal duty: 'California law requires you to tell your neighbors about a hoarding condition in writing before you list the house' has no ledger support.",
+        "severity": "must fix",
+        "evidence": "Ledger clm:5, clm:6 and clm:7 cover only the TDS form, its scope and the void waiver. Editorial standards section 5 on legal qualification. Brief says the statute does not mention hoarding.",
+        "fix": "Delete the sentence. Add no replacement legal claim. Keep the existing note about confirming form items with an agent or attorney.",
+        "blocking": true
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:clm:6:scope-softened",
+        "section": "s4",
+        "issue": "'For most sales of single-family homes' is a quantifier clm:6 does not support.",
+        "severity": "should fix",
+        "evidence": "clm:6 (Civil Code 1102(a), except as provided in Section 1102.2)",
+        "fix": "On a sale of single-family residential property in California, the article applies except as provided in Civil Code section 1102.2.",
+        "blocking": false
+      }
+    ]
+  }
+}

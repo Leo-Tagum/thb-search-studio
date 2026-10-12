@@ -1,0 +1,45 @@
+{
+  "article_id": "a90416b3-8bc3-4198-988d-817e22e97605",
+  "opportunity_id": "80c3e939-48e3-493d-875b-2746ed1f0fbb",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["cf183053250c96b14cd7e1e7a1b30a19ace85498fcefefe61b46324a9662517a"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "privacy:s2:seller_anecdote",
+      "severity": "required",
+      "note": "The paragraph 'A family in the Fruitvale neighborhood kept every newspaper from their late father's years in the garage, and the county inspector who came by was kind about it.' is a seller or family story with a neighborhood, a family relationship and an official's conduct. No seller story is cleared (packet open_items: first-party proof restricted, no seller story planned), no ledger claim or source supports it, and the neighborhood plus late father plus inspector visit is an identifying combination. It also implies an enforcement visit and an outcome, which is unsupported. Remove the whole paragraph."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [
+    "Delete the paragraph beginning 'A family in the Fruitvale neighborhood'. Do not replace it with another anecdote or any invented example of a family, neighborhood or inspector visit."
+  ],
+  "output_version_id": "v1-s2-cf183053-review-1",
+  "timestamp": "2026-10-12T00:00:00Z",
+  "result": {
+    "unit_key": "s2",
+    "version_hash": "cf183053250c96b14cd7e1e7a1b30a19ace85498fcefefe61b46324a9662517a",
+    "claim_checks": [],
+    "privacy_ok": false,
+    "legal_qualification_ok": true,
+    "block_kind": "BLOCKED_PRIVACY",
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "privacy:s2:seller_anecdote",
+        "section": "s2",
+        "issue": "Uncleared seller/family anecdote naming a neighborhood, a late father and an inspector's behavior; unsupported and identifying.",
+        "severity": "must fix",
+        "evidence": "Rule 4 privacy; packet open_items: no seller story, case study or testimonial is cleared; no ledger claim supports it",
+        "fix": "Delete the paragraph 'A family in the Fruitvale neighborhood ...'. Do not substitute another story or example.",
+        "blocking": true
+      }
+    ]
+  }
+}

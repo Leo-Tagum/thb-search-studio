@@ -18,7 +18,7 @@ import { saveEnvelope, type Envelope } from "./team-envelope";
 import { newTeamSection, reopen, splitSentences, type Collected, type CouncilRole, type TeamSectionState } from "../team/loop";
 import { snapshotKey } from "../team/snapshots";
 
-export const COUNCIL_OF_AGENT: Record<string, CouncilRole> = { "thb-05-fact-privacy-auditor": "V1", "thb-06-seo-aeo-geo-auditor": "V2", "thb-07-editorial-critic": "V3" };
+export const COUNCIL_OF_AGENT: Record<string, CouncilRole> = { "thb-05-fact-privacy-auditor": "V1", "thb-v1-fact-privacy": "V1", "thb-06-seo-aeo-geo-auditor": "V2", "thb-07-editorial-critic": "V3" };
 /** The directive a classic revision baseline sends to the writer for one unit: that unit's baseline findings, as the classic loop carries them (open issues of the human directive). */
 export function classicDirective(unit: string, findings: SeededFinding[]): string {
   const mine = findings.filter((f) => f.unit === unit);

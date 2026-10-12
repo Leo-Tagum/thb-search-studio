@@ -161,11 +161,12 @@ describe("smoke scripts flag their fixture articles", () => {
   it("every script that creates an article with approveBrief and acts as smoke-test marks it is_fixture right after", () => {
     const scripts = readdirSync("scripts").filter((f) => f.endsWith(".mts")).map((f) => `scripts/${f}`);
     const makers = scripts.filter((f) => { const t = readFileSync(f, "utf8"); return /approveBrief\(/.test(t) && /"smoke-test"/.test(t); });
-    expect(makers.sort()).toEqual(["scripts/studio-smoke.mts", "scripts/team-cli-smoke.mts", "scripts/team-smoke.mts", "scripts/team-view-smoke.mts"]);
+    expect(makers.sort()).toEqual(["scripts/adversarial-smoke.mts", "scripts/studio-smoke.mts", "scripts/team-cli-smoke.mts", "scripts/team-smoke.mts", "scripts/team-view-smoke.mts"]);
     for (const f of makers) {
       const t = readFileSync(f, "utf8");
       expect(t, f).toMatch(/update\(\{ is_fixture: true \}\)/);
-      expect(t.indexOf("is_fixture: true"), f).toBeLessThan(t.indexOf('"smoke-test")', t.indexOf("is_fixture: true")));   // the flag is set before the first fixture-actor call that needs it
+      const later = t.indexOf('"smoke-test")', t.indexOf("is_fixture: true"));
+      if (later !== -1) expect(t.indexOf("is_fixture: true"), f).toBeLessThan(later);   // the flag is set before the first fixture-actor call that needs it (a script with no later call, like the adversarial setup, only needs the flag to be set)
     }
   });
   it("the migration adds is_fixture as false by default, so every existing article is a real one", () => {

@@ -8,7 +8,8 @@ import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studi
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 import { sha256 } from "../src/lib/studio/hash";
 import type { Unit } from "../src/lib/studio/schema";
-import { STUDIO_AGENT_META, type StudioAgentKey } from "../src/lib/studio/agents";
+import { CLASSIC_V1_KEY, STUDIO_AGENT_META, V1_PROMPT_VERSION, type StudioAgentKey } from "../src/lib/studio/agents";
+import { declinesOfRow } from "../src/lib/studio/declines-view";
 import type { RoomRecord } from "../src/lib/studio/approvals";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
@@ -47,18 +48,24 @@ const env = (agent: string, decision: string, result: any, findings: any[] = [],
   article_id: art, opportunity_id: opp, agent_name: agent, agent_prompt_version: "1.0.0", model_version: "claude-code/smoke-script", input_version_ids: ["smoke"],
   decision, findings, evidence_ids: [], required_actions: required, output_version_id: `smoke-${Date.now()}-${Math.random()}`, timestamp: new Date().toISOString(), result,
 });
-async function step(agent: StudioAgentKey, unit: string, build: (ctx: { hash: string | null; cited: string[] }) => any, expectOk = true) {
+async function step(agent: StudioAgentKey | typeof CLASSIC_V1_KEY, unit: string, build: (ctx: { hash: string | null; cited: string[]; data: any }) => any, expectOk = true) {
   const { runId } = await queueStudioRun(db, agent, art, unit);
   const { data: run } = await db.from("agent_runs").select("task_packet").eq("id", runId).single();
   const hash = run!.task_packet.unit_hash as string | null;
+  const block = run!.task_packet.untrusted_data_block as string;
+  const data = JSON.parse(block.slice(block.indexOf("\n") + 1, block.lastIndexOf("\n<<<END")));
   const cur = hash ? (await db.from("section_versions").select("content").eq("content_hash", hash).limit(1).single()).data?.content : null;
   const cited: string[] = cur ? (cur.kind === "faq" ? [...new Set(cur.items.flatMap((i: any) => i.claim_ids))] : cur.claim_ids) as string[] : [];
-  const res = await submitStudio(db, runId, JSON.stringify({ ...build({ hash, cited }), agent_prompt_version: STUDIO_AGENT_META[agent].promptVersion }));
+  const res = await submitStudio(db, runId, JSON.stringify({ ...build({ hash, cited, data }), agent_prompt_version: agent === CLASSIC_V1_KEY ? V1_PROMPT_VERSION : STUDIO_AGENT_META[agent].promptVersion }));
   if (res.ok !== expectOk) fail(`${agent} ${unit}: ${res.ok ? "accepted" : "rejected: " + res.errors.join(" | ")}`);
   return res;
 }
-const writer = (unit: string, u: Unit | null, addresses: string[] = [], decision = "PASS", gap: string[] = []) => step("thb-04-section-writer", unit, () => env("Section Writer", decision, { unit_key: unit, ...(u ? { unit: u } : {}), addresses, change_note: "scripted fixture version" }, [], gap));
-const fact = (unit: string, decision = "PASS", findings: any[] = [], extra: any = {}) => step("thb-05-fact-privacy-auditor", unit, ({ hash, cited }) => env("Fact & Privacy Auditor", decision, { unit_key: unit, version_hash: hash, claim_checks: cited.map((c) => ({ claim_id: c, verdict: "supported_as_written", note: "ok" })), privacy_ok: true, legal_qualification_ok: true, ...extra }, findings));
+const writer = (unit: string, u: Unit | null, addresses: string[] = [], decision = "PASS", gap: string[] = [], declines: { key: string; reason: string }[] = []) => step("thb-04-section-writer", unit, () => env("Section Writer", decision, { unit_key: unit, ...(u ? { unit: u } : {}), addresses, change_note: "scripted fixture version", declines }, [], gap));
+// The fact gate is V1 (Phase 3d). Scripted: it rules every flagged sentence "proven" (the fixture units are clean) unless the test says otherwise.
+const fact = (unit: string, decision = "PASS", findings: any[] = [], extra: any = {}, cards: any[] = [], rulings?: any[]) => step(CLASSIC_V1_KEY, unit, ({ hash, cited, data }) => env("V1 Fact and Privacy", decision, { unit_key: unit, version_hash: hash, claim_checks: cited.map((c) => ({ claim_id: c, verdict: "supported_as_written", note: "ok" })), privacy_ok: true, legal_qualification_ok: true, cards, hedge_rulings: rulings ?? (data.hedge_flags ?? []).map((h: any) => ({ key: h.key, ruling: "proven", note: "clm:1 fixture ledger" })), ...extra }, findings));
+const v1Card = (unit: string, key: string, issue: string) => ({ ticket: "QUALITY_CORRECTION", from: ["V1"], to: "W1", key, section: unit, issue, severity: "must fix", evidence: "no ledger claim supports it", fix: "say only what the ledger supports", blocking: false });
+const v1Revision = (unit: string, key: string, quote: string) => fact(unit, "REVISION", [{ issue_key: key, severity: "required", note: `The sentence "${quote}" says more than the ledger supports.` }], {}, [v1Card(unit, key, `Unsupported: "${quote}"`)]);
+const issueKeys = async (k: string) => stateOf((await load(db, art)).sections.find((s) => s.section_key === k)).issues.map((i) => i.key);
 const seo = (unit: string, decision = "PASS", findings: any[] = []) => step("thb-06-seo-aeo-geo-auditor", unit, ({ hash }) => env("SEO/AEO/GEO Auditor", decision, { unit_key: unit, version_hash: hash, checks: { direct_answer_near_start: true, question_h2: true, local_modifiers_true_and_useful: true, keyword_natural_not_forced: true, short_direct_faq: true, citation_ready: true }, tested_http_or_schema: false }, findings));
 const ed = (unit: string, decision = "PASS", findings: any[] = [], revised?: Unit) => step("thb-07-editorial-critic", unit, ({ hash }) => env("Editorial Critic", decision, { unit_key: unit, version_hash: hash, voice_reference_used: true, copy_paste_test: { passed: true, flagged: [] }, authenticity: Object.fromEntries(Array.from({ length: 10 }, (_, i) => [`q${i + 1}`, true])), score: { voice: 18, education: 18, deal_logic: 18, local: 13, structure: 13, trust: 10, total: 90 }, ...(revised ? { revised_unit: revised } : {}) }, findings));
 const issue = (key: string, note = "scripted required finding for the fixture") => ({ issue_key: key, severity: "required", note });
@@ -111,7 +118,10 @@ try {
   const s4b = structuredClone(units.s4) as any; s4b.blocks[1].text = "Which items belong on the form is a question for your listing agent or an attorney.";
   await writer("s4", s4b, ["seo:keyword-forced"]);
   const s4after = await status("s4");
-  await seo("s4"); await ed("s4"); expect((await status("s4")) === "LOCKED", "s4 did not lock after the targeted fix");
+  expect(s4after === "NEEDS_FACT", `a changed sentence must go back through V1 (${s4after})`);
+  const s4scope = stateOf((await load(db, art)).sections.find((s) => s.section_key === "s4")).v1Scope;
+  expect(s4scope?.kind === "changed", `V1 should re-review changed sentences only (${JSON.stringify(s4scope)})`);
+  await fact("s4"); await seo("s4"); await ed("s4"); expect((await status("s4")) === "LOCKED", "s4 did not lock after the targeted fix");
   out.targetedFix = { afterWordingOnlyRevision: s4after, final: "LOCKED" };
 
   // s5: a changed material claim (claim ids) re-enters fact review even when SEO asked for the edit
@@ -123,6 +133,67 @@ try {
   await fact("s5"); await seo("s5"); await ed("s5"); expect((await status("s5")) === "LOCKED", "s5 did not lock");
   out.materialChange = { afterMaterialRevision: s5after };
 
+  // ---- Phase 3d: V1 is the fact gate (run while s7 is still open, so the article stays in DRAFTING and the orchestrator's article-level revision count is not used up) ----
+  const para = (u: Unit, i: number, text: string): Unit => { const c = structuredClone(u) as any; c.blocks[i].text = text; return c as Unit; };
+  const queueRefused = (agent: any, unit: string) => queueStudioRun(db, agent, art, unit).then(() => "queued", (e) => String(e.message).slice(0, 90));
+  const stOf = async (k: string) => stateOf((await load(db, art)).sections.find((s) => s.section_key === k));
+
+  // (a) Leo sends a locked unit through the gate with no text change: V1 passes identical text, so Agents 6 and 7 do not repeat. Agent 5 is retired.
+  const g6 = await resolveSection(db, art, "s6", { kind: "v1_gate" }, "smoke-test");
+  expect(g6.ok && (g6 as any).status === "NEEDS_FACT", "the v1_gate action did not send s6 through V1");
+  const agent5Refused = await queueRefused("thb-05-fact-privacy-auditor", "s6");
+  expect(agent5Refused.includes("retired"), `Agent 5 was queued under the V1 gate: ${agent5Refused}`);
+  await fact("s6");
+  expect((await status("s6")) === "LOCKED", "s6 did not lock again after V1 passed identical text");
+  out.gateOnly = { statusAfterGate: "NEEDS_FACT", agent5: agent5Refused, afterV1PassIdenticalText: "LOCKED" };
+
+  // (b) declines in classic: the writer's decline is stored, and the reviewer re-raising it under a new key and new words is counted once
+  const ANCHOR = "No local fact anchors this section to the Bay Area, so the local angle stays generic.";
+  const T8 = (units.s8 as any).blocks[0].text as string;
+  expect((await resolveSection(db, art, "s8", { kind: "reopen", text: "Leo: declines smoke" }, "smoke-test")).ok, "reopen s8 failed");
+  await writer("s8", para(units.s8, 0, T8 + " Ask who holds the keys."), ["human:directive"]); await fact("s8");
+  await seo("s8", "PASS", [{ issue_key: "seo:anchor", severity: "optional", note: ANCHOR }]);
+  await ed("s8", "REVISION", [issue("ed:tighten")]);
+  await writer("s8", para(units.s8, 0, T8 + " Ask who holds the keys, please."), ["ed:tighten"], "PASS", [], [{ key: "seo:anchor", reason: "No local fact exists in the ledger or the library." }]);
+  expect((await declinesOfRow((await load(db, art)).sections.find((s) => s.section_key === "s8")).declined).length === 1, "the writer's decline was not stored");
+  await fact("s8");
+  await seo("s8", "PASS", [{ issue_key: "seo:local-anchor-again", severity: "optional", note: ANCHOR + " Please add one." }]);
+  const dl = declinesOfRow((await load(db, art)).sections.find((s) => s.section_key === "s8"));
+  expect(dl.declined.length === 1 && dl.declined[0].raised === 2 && dl.open.length === 0, `a re-raised declined item was not counted once: ${JSON.stringify(dl)}`);
+  await ed("s8"); expect((await status("s8")) === "LOCKED", "s8 did not lock");
+  const afterRelock = declinesOfRow((await load(db, art)).sections.find((s) => s.section_key === "s8"));
+  expect(afterRelock.declined.length === 1, "the decline did not survive to the lock");
+  out.declines = { stored: dl.declined[0].key, reason: dl.declined[0].reason, raisedCount: dl.declined[0].raised, openAfter: dl.open.length };
+
+  // (c) the fix pass, the churn check, the round limit and the escalation to Leo (unit s3)
+  const T3 = (units.s3 as any).blocks[0].text as string;
+  const X = "Some owners wait until a notice arrives.";
+  const reopen3 = await resolveSection(db, art, "s3", { kind: "reopen", text: "Leo: V1 escalation smoke" }, "smoke-test");
+  expect(reopen3.ok, `reopen s3 failed: ${JSON.stringify(reopen3)} (status ${await status("s3")})`);
+  await writer("s3", para(units.s3, 0, `${T3} ${X}`), ["human:directive"]);
+  await v1Revision("s3", "fact:wait", X);                                    // V1 round 1
+  expect(((await stOf("s3")).fixCited ?? []).includes(X), "the cited sentence was not recorded");
+  await writer("s3", para(units.s3, 0, `${T3.replace("Clutter by itself is not a code violation.", "Clutter alone is not a violation.")} ${X}`), ["fact:wait"]);   // churn: an uncited sentence changed
+  const churnKeys = await issueKeys("s3");
+  expect((await status("s3")) === "NEEDS_REVISION" && churnKeys.includes("det:V1_FIX_CHURN"), `the churn check did not fire (${churnKeys.join(",")})`);
+  await writer("s3", units.s3, ["fact:wait"]);                              // the proper fix: only the cited sentence goes
+  expect((await status("s3")) === "NEEDS_FACT", "the fixed unit did not go back to V1");
+  const SENT = "Health and Safety Code section 17920.3 lists specific conditions that can make a building substandard, and the local enforcement authority decides whether a particular home meets them.";
+  await v1Revision("s3", "fact:law", SENT);                                  // V1 round 2
+  const NEW = "Health and Safety Code section 17920.3 lists specific conditions, and the local enforcement authority decides whether a home meets them.";
+  await writer("s3", para(units.s3, 0, T3.replace(SENT, NEW)), ["fact:law"]);   // only the cited sentence changes: no churn finding
+  expect(!(await issueKeys("s3")).includes("det:V1_FIX_CHURN") && (await status("s3")) === "NEEDS_FACT", "a clean fix pass was flagged as churn");
+  await v1Revision("s3", "fact:law2", NEW);                                  // V1 round 3: the limit
+  const escSt = await status("s3");
+  expect(escSt === "ESCALATED", `the third V1 REVISION did not escalate (${escSt})`);
+  const { data: escRows } = await db.from("escalations").select("issue_key,status").eq("article_id", art).eq("status", "OPEN");
+  const writerOnEscalated = await queueRefused("thb-04-section-writer", "s3");
+  expect((escRows ?? []).length >= 1 && writerOnEscalated.includes("cannot run"), `escalation not recorded or the writer was not refused (${writerOnEscalated})`);
+  expect((await resolveSection(db, art, "s3", { kind: "request_revision", text: "Leo: smoke resolution" }, "smoke-test")).ok, "Leo's resolution failed");
+  await writer("s3", units.s3, ["fact:law2"]); await fact("s3"); await seo("s3"); await ed("s3");
+  expect((await status("s3")) === "LOCKED", "s3 did not lock after Leo's resolution");
+  out.v1Loop = { churnFinding: "det:V1_FIX_CHURN", rounds: 3, escalated: escSt, escalations: (escRows ?? []).map((e) => e.issue_key), writerRefused: writerOnEscalated, final: "LOCKED" };
+
   // s7: an editor who swaps a claim cannot lock: back to fact review
   await writer("s7", units.s7); await fact("s7"); await seo("s7");
   const s7e = structuredClone(units.s7) as any; s7e.claim_ids = ["clm:1", "clm:5"];
@@ -131,6 +202,7 @@ try {
   expect(s7after === "NEEDS_FACT", `editor material change did not return to fact review (${s7after})`);
   await fact("s7"); await seo("s7"); await ed("s7"); expect((await status("s7")) === "LOCKED", "s7 did not lock");
   out.editorChangesFact = { statusAfterEditorMaterialChange: s7after };
+
 
   // Blocked cases through the real submit path: a section with an unsupported figure is BLOCKED_CLAIM and the article follows; Leo resolves it.
   const bad = structuredClone(units.s2) as any; bad.blocks[0].text += " You have 30 days to disclose under Civil Code section 1102.9.";
