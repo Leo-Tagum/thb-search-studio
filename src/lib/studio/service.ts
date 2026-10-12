@@ -409,3 +409,6 @@ export async function advanceArticle(db: SupabaseClient, articleId: string): Pro
   await db.from("articles").update({ locked_version_id: ver.id }).eq("id", articleId);
   return `article assembled (${hash.slice(0, 12)}…) and is in HUMAN_REVIEW`;
 }
+
+// Used by the team runtime (team-service.ts), which lives beside this module and moves state only through the same helpers.
+export { audit as auditArticle, blockArticle as blockArticleFor, newVersion as newSectionVersion, orch as orchestratorFor, safeJson, today as todayISO, slash as stripSlash };

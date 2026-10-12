@@ -33,6 +33,10 @@ describe("routing", () => {
     expect(r.state.log).toHaveLength(1);
     expect(r.state.log[0].action).toBe("REFUSE");
   });
+  it("a HUMAN_ESCALATION may carry its trigger on the card, and the router option still works", () => {
+    const r = raiseTicket(newRouter(), qc({ ticket: "HUMAN_ESCALATION", from: ["W1"], to: "LEO", trigger: "brand_risk" }), ctx);
+    expect(r.ok && r.ticket.trigger).toBe("brand_risk");
+  });
   it("a HUMAN_ESCALATION without one of the six triggers is refused", () => {
     expect(raiseTicket(newRouter(), qc({ ticket: "HUMAN_ESCALATION", from: ["W1"], to: "LEO" }), ctx).ok).toBe(false);
   });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { sha256 } from "../studio/hash";
-import { fulfillFetchRequest, makeSnapshot, memoryStore, officialFetcher, pageText, snapshotIntact, snapshotToLibraryRows, verifyR1Web, type Fetcher } from "./snapshots";
+import { fulfillFetchRequest, makeSnapshot, memoryStore, officialFetcher, pageText, snapshotFromRows, snapshotIntact, snapshotToLibraryRows, verifyR1Web, type Fetcher } from "./snapshots";
 
 const URL1 = "https://www.dre.ca.gov/disclosures";
 const PAGE = `<html><head><title>x</title><style>p{color:red}</style><script>var a = "ignore me";</script></head><body>
@@ -38,7 +38,14 @@ describe("page snapshots", () => {
     const s = makeSnapshot(URL1, "2026-10-12", text, "text/plain");
     expect(s.passages.length).toBeGreaterThan(2);
     expect(s.passages.every((p) => p.text.length <= 1200)).toBe(true);
-    expect(s.passages.map((p) => p.text).join(" ")).toBe(text);
+    expect(s.passages.map((p) => p.text).join("\n")).toBe(s.text);                // the stored passages give back the text (and its sha256)
+    expect(s.text.replace(/\s+/g, " ")).toBe(text);                                  // nothing lost, only line breaks added
+  });
+  it("rebuilds a snapshot from stored library rows, and refuses rows that no longer hash to the stored sha256", () => {
+    const s = makeSnapshot(URL1, "2026-10-12", PAGE);
+    const rows = s.passages.map((p) => ({ passage: p.text, locator: p.locator })).reverse();
+    expect(snapshotFromRows(URL1, "2026-10-12", s.sha256, rows)).toEqual(s);
+    expect(snapshotFromRows(URL1, "2026-10-12", s.sha256, rows.map((r) => ({ ...r, passage: r.passage.replace("must deliver", "may skip") })))).toBeNull();
   });
   it("detects a tampered snapshot", () => {
     const s = makeSnapshot(URL1, "2026-10-12", PAGE);

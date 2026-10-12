@@ -74,3 +74,6 @@ Output for a ROOT_CAUSE_NOTE (instead of the normal brief result):
   "tickets": []
 }
 ```
+
+## Escalation cards carry a trigger
+A HUMAN_ESCALATION card needs a `trigger` besides the usual fields: one of `conflicting_evidence` (conflicting evidence on a major claim), `brief_change` (a change would alter an approved brief or the target keyword), `legal_uncertain` (a legal or privacy point is uncertain), `brand_risk` (the decision could affect the brand, compliance or business risk). Example: `"trigger": "legal_uncertain"`. `round_limit` and `budget_limit` are set by the router, never by you, and no other ticket type has a trigger.

@@ -18,6 +18,7 @@ const oneIssue = text(600).refine((s) => !/[\r\n]/.test(s) && !/(^|\s)(\d+[.)]|[
 export const feedbackCard = z
   .strictObject({
     ticket: z.enum(TICKET_TYPES),
+    trigger: z.enum(["conflicting_evidence", "brief_change", "legal_uncertain", "round_limit", "brand_risk", "budget_limit"]).optional(),   // HUMAN_ESCALATION only: which of the six escalation triggers (proposal section 5) applies
     key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i).optional(),   // the reviewer's issue key; lets the council merge the same issue raised twice
     from: z.array(role).min(1).max(3).refine((a) => new Set(a).size === a.length, "duplicate roles in FROM"),  // "V2 + V3 (agreed)" is ["V2","V3"]
     to: z.union([role, z.literal("LEO")]),
@@ -29,6 +30,7 @@ export const feedbackCard = z
     blocking: z.boolean(),
   })
   .superRefine((c, ctx) => {
+    if (c.trigger && c.ticket !== "HUMAN_ESCALATION") ctx.addIssue({ code: "custom", path: ["trigger"], message: "trigger belongs to HUMAN_ESCALATION only" });
     if (c.blocking && !(c.from.length === 1 && c.from[0] === "V1")) ctx.addIssue({ code: "custom", path: ["blocking"], message: "BLOCKING: yes is accepted only from V1" });
     if (c.from.includes(c.to as TeamRole)) ctx.addIssue({ code: "custom", path: ["to"], message: "a ticket cannot be addressed to its own sender" });
     if ((c.ticket === "HUMAN_ESCALATION") !== (c.to === "LEO")) ctx.addIssue({ code: "custom", path: ["to"], message: "HUMAN_ESCALATION goes to LEO, and only HUMAN_ESCALATION does" });

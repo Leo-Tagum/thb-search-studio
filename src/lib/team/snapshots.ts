@@ -30,21 +30,31 @@ export function pageText(body: string, contentType: string): string {
   const raw = /html|xml/i.test(contentType) || /<html|<body|<p[ >]/i.test(body)
     ? decode(body.replace(/<(script|style|noscript)[\s\S]*?<\/\1>/gi, " ").replace(/<!--[\s\S]*?-->/g, " ").replace(/<\/(p|div|li|ul|ol|h[1-6]|tr|table|section|article|header|footer)>|<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, " "))
     : body;
-  return raw.split(/\r?\n/).map((l) => l.replace(/\s+/g, " ").trim()).filter(Boolean).join("\n");
+  // Canonical text: one line per block, and a line longer than a passage is broken at sentence ends into several lines. So the passages are
+  // exactly the text split into groups of lines, and the stored passages joined with a line break give back the text (and its sha256).
+  const lines: string[] = [];
+  for (const line of raw.split(/\r?\n/).map((l) => l.replace(/\s+/g, " ").trim()).filter(Boolean)) {
+    if (line.length <= PASSAGE_MAX) { lines.push(line); continue; }
+    let cur = "";
+    for (const sent of line.split(/(?<=[.;:!?])\s+/)) { if (cur && cur.length + sent.length + 1 > PASSAGE_MAX) { lines.push(cur); cur = ""; } cur = cur ? `${cur} ${sent}` : sent; }
+    if (cur) lines.push(cur);
+  }
+  return lines.join("\n");
 }
 
-/** Passages of at most ~1200 characters, split on line ends (long lines on sentence ends) and packed, so a quote of a normal length sits inside one passage. */
+/** Passages of at most ~1200 characters: whole lines packed together (joined by a line break), so a quote of a normal length sits inside one passage. */
 export function splitPassages(text: string, hash: string): Passage[] {
-  const parts: string[] = [];
-  for (const line of text.split("\n")) {
-    if (line.length <= PASSAGE_MAX) { parts.push(line); continue; }
-    let cur = "";
-    for (const sent of line.split(/(?<=[.;:!?])\s+/)) { if (cur && cur.length + sent.length + 1 > PASSAGE_MAX) { parts.push(cur); cur = ""; } cur = cur ? `${cur} ${sent}` : sent; }
-    if (cur) parts.push(cur);
-  }
   const packed: string[] = [];
-  for (const p of parts) { const last = packed[packed.length - 1]; if (last !== undefined && last.length + p.length + 1 <= PASSAGE_MAX) packed[packed.length - 1] = `${last} ${p}`; else packed.push(p); }
+  for (const line of text.split("\n")) { const last = packed[packed.length - 1]; if (last !== undefined && last.length + line.length + 1 <= PASSAGE_MAX) packed[packed.length - 1] = `${last}\n${line}`; else packed.push(line); }
   return packed.map((t, i) => ({ passageId: `snap:${hash.slice(0, 12)}:${i + 1}`, locator: `p${i + 1}`, text: t }));
+}
+
+/** Rebuilds a stored snapshot from its Evidence Library rows (passages in locator order); null when the rows do not hash to the stored sha256. */
+export function snapshotFromRows(url: string, retrievedDate: string, sha: string, passages: { passage: string; locator: string | null }[]): Snapshot | null {
+  const ordered = [...passages].sort((x, y) => Number((x.locator ?? "p0").slice(1)) - Number((y.locator ?? "p0").slice(1)));
+  const text = ordered.map((p) => p.passage).join("\n");
+  const snap: Snapshot = { url, retrievedDate, sha256: sha, text, passages: splitPassages(text, sha) };
+  return snapshotIntact(snap) ? snap : null;
 }
 
 export function makeSnapshot(url: string, retrievedDate: string, body: string, contentType = "text/html"): Snapshot {

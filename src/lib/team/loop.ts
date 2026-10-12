@@ -171,6 +171,18 @@ export function escalateGap(s: TeamSectionState, reason: string): Outcome {
   return { ok: true, state: { ...s, status: "ESCALATED", escalation: { issueKey: "writer:gap", reason } } };
 }
 
+/**
+ * The brief changed under this unit (S2 fixed a root cause, or S2 found the brief was not the cause and the point goes back to the writer).
+ * A locked unit goes back to the writer and through the full council; a unit in review returns to the writer; an unwritten unit just uses the new brief.
+ * The directive is a code-set must-fix, consumed by the next version. Escalated and blocked units wait for Leo first.
+ */
+export function briefRevised(s: TeamSectionState, d: { key: string; text: string }): Outcome {
+  if (HUMAN_STOPS.includes(s.status)) return fail(`section is ${s.status}; a human must resolve it first`);
+  if (s.status === "NEEDS_WRITE") return { ok: true, state: s, note: "unit not written yet: the writer uses the revised brief" };
+  const mustFix = [...s.mustFix.filter((i) => i.key !== d.key), { key: d.key, role: "LEO" as const, text: d.text, attempts: 0 }];
+  return { ok: true, state: { ...s, status: "NEEDS_REVISION", lockedHash: null, v1Passed: null, v1Scope: null, pending: [], mustFix }, note: s.status === "LOCKED" ? "locked unit reopened: the brief changed" : "unit returned to the writer: the brief changed" };
+}
+
 export const allLocked = (sections: TeamSectionState[]) => sections.length > 0 && sections.every((s) => s.status === "LOCKED");
 /** What goes to Leo with the finished section: open (not declined) should-fix and suggestions, and the declined ones with their reasons. */
 export const forLeo = (s: TeamSectionState) => ({ open: s.collected.filter((c) => !c.declined), declined: s.collected.filter((c) => c.declined) });

@@ -92,7 +92,7 @@ export function resolveRootCause(a: {
   for (const u of a.approved.protectedUrls) if (count(newAll, slash(u)) !== count(oldAll, slash(u))) changed.push(`protected / money page ${u} is touched differently (${count(oldAll, slash(u))} -> ${count(newAll, slash(u))} references)`);
   if (changed.length) {
     const reason = `A fix for ${a.ticket.id} would alter what was approved: ${changed.join("; ")}.`;
-    const card: FeedbackCard = { ticket: "HUMAN_ESCALATION", from: ["S2"], to: "LEO", section: a.ticket.unitKey ?? "brief", issue: reason.slice(0, 600), severity: "must fix", evidence: `ROOT_CAUSE_NOTE ${a.ticket.id}: ${out.root_cause}`.slice(0, 1000), fix: "Recommendation: approve the change only if the root cause cannot be fixed inside the approved brief.", blocking: false };
+    const card: FeedbackCard = { ticket: "HUMAN_ESCALATION", trigger: "brief_change", from: ["S2"], to: "LEO", section: a.ticket.unitKey ?? "brief", issue: reason.slice(0, 600), severity: "must fix", evidence: `ROOT_CAUSE_NOTE ${a.ticket.id}: ${out.root_cause}`.slice(0, 1000), fix: "Recommendation: approve the change only if the root cause cannot be fixed inside the approved brief.", blocking: false };
     return { kind: "escalate", trigger: "brief_change", changed, reason, card };
   }
 

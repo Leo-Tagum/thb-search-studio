@@ -203,7 +203,10 @@ describe("S1 and S2", () => {
   const legacy = { candidate: { covering_pages: [], overlap: { supported: false }, pages: [] } } as any;
   it("S1 may ask Research for evidence or escalate to Leo, and nothing else", async () => {
     await ok("S1", s1([card("S1", "R2", "EVIDENCE_REQUEST", { section: "topic" })]), { legacy });
-    await ok("S1", s1([card("S1", "LEO", "HUMAN_ESCALATION", { section: "brief" })]), { legacy });
+    await ok("S1", s1([card("S1", "LEO", "HUMAN_ESCALATION", { section: "brief", trigger: "brief_change" })]), { legacy });
+    await bad("S1", s1([card("S1", "LEO", "HUMAN_ESCALATION", { section: "brief" })]), /needs a trigger/, { legacy });
+    await bad("S1", s1([card("S1", "LEO", "HUMAN_ESCALATION", { section: "brief", trigger: "round_limit" })]), /set by the router/, { legacy });
+    await bad("S1", s1([card("S1", "R2", "EVIDENCE_REQUEST", { section: "topic", trigger: "brief_change" })]), /SCHEMA/, { legacy });
     await bad("S1", s1([card("S1", "W1", "QUALITY_CORRECTION")]), /may not raise QUALITY_CORRECTION/, { legacy });
     await bad("S1", s1([card("S1", "W1", "EVIDENCE_REQUEST")]), /SCHEMA|sends EVIDENCE_REQUEST to R1\/R2\/R3/, { legacy });
     await bad("S1", s1([card("S1", "R2", "EVIDENCE_REQUEST", { blocking: true })]), /SCHEMA/, { legacy });

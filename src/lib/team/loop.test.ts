@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { allLocked, applyDeterministic, decline, editLocked, escalateGap, forLeo, newTeamSection, recordReview, recordVersion, reopen, resolveByHuman, type CouncilReview, type Outcome, type ReviewItem, type TeamSectionState } from "./loop";
+import { allLocked, applyDeterministic, briefRevised, decline, editLocked, escalateGap, forLeo, newTeamSection, recordReview, recordVersion, reopen, resolveByHuman, type CouncilReview, type Outcome, type ReviewItem, type TeamSectionState } from "./loop";
 
 const ok = (o: Outcome): TeamSectionState => { if (!o.ok) throw new Error(o.error); return o.state; };
 const v = (hash: string, sig = "sigA") => ({ hash, sig });
@@ -311,3 +311,29 @@ describe("hedge phrases: flagged by code, V1 rules on each one", () => {
     expect(e.hedges.every((h) => h.ruling === null)).toBe(true);
   });
 });
+
+describe("briefRevised: the brief changed under a unit", () => {
+  it("reopens a locked unit through the full council, and the directive is consumed by the next version", () => {
+    let s = briefRevised2(passAll(written()));
+    expect(s.status).toBe("NEEDS_REVISION");
+    expect(s.lockedHash).toBeNull();
+    expect(s.mustFix).toEqual([expect.objectContaining({ key: "brief:T3", role: "LEO" })]);
+    s = ok(recordVersion(s, v("h2")));
+    expect(s.pending).toEqual(["V1", "V2", "V3"]);
+    expect(s.mustFix).toEqual([]);
+  });
+  it("sends a unit in review back to the writer, and leaves an unwritten unit alone", () => {
+    const inReview = ok(briefRevised(written(), { key: "brief:T3", text: "The brief changed." }));
+    expect(inReview).toMatchObject({ status: "NEEDS_REVISION", pending: [] });
+    const fresh = ok(briefRevised(newTeamSection("s9"), { key: "brief:T3", text: "x" }));
+    expect(fresh.status).toBe("NEEDS_WRITE");
+  });
+  it("a repeated directive replaces itself; escalated and blocked units wait for Leo", () => {
+    let s = ok(briefRevised(written(), { key: "brief:T3", text: "first" }));
+    s = ok(briefRevised(s, { key: "brief:T3", text: "second" }));
+    expect(s.mustFix.filter((i) => i.key === "brief:T3")).toHaveLength(1);
+    expect(s.mustFix[0].text).toBe("second");
+    expect(briefRevised(ok(escalateGap(newTeamSection("s1"), "gap")), { key: "brief:T3", text: "x" }).ok).toBe(false);
+  });
+});
+const briefRevised2 = (s: TeamSectionState) => ok(briefRevised(s, { key: "brief:T3", text: "The brief changed: the section purpose is now cost ranges." }));

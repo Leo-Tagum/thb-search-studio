@@ -27,7 +27,7 @@ export function diffRouter(before: RouterState, after: RouterState): DiffResult 
 export const ticketToRow = (t: TicketRec, ids: { id: string; runId: string; articleId: string; parentId: string | null }, at: string) => ({
   id: ids.id, team_run_id: ids.runId, article_id: ids.articleId, unit_key: t.unitKey || null, ticket_type: t.type, from_role: t.from[0], from_roles: t.from, to_role: t.to,
   issue: t.issue, severity: t.severity, evidence: t.evidence, suggested_fix: t.fix, blocking: t.blocking, status: t.status, round: t.round, parent_ticket_id: ids.parentId,
-  version_hash: t.versionHash, resolution: t.resolution, escalation_trigger: t.trigger, merged_from: t.mergedFrom,
+  version_hash: t.versionHash, resolution: t.resolution, escalation_trigger: t.trigger, issue_key: t.key, merged_from: t.mergedFrom,
   closed_at: t.status === "CLOSED" ? at : null,
 });
 
@@ -37,7 +37,7 @@ export function rowsToRouter(run: { ticket_budget: number; round_limit: number; 
   const tickets: TicketRec[] = sorted.map((r, i) => ({
     id: `T${i + 1}`, no: i + 1, type: r.ticket_type, from: r.from_roles ?? [r.from_role], to: r.to_role, unitKey: r.unit_key ?? "", issue: r.issue, severity: r.severity,
     evidence: r.evidence ?? "", fix: r.suggested_fix ?? null, blocking: !!r.blocking, status: r.status, round: r.round, parentId: r.parent_ticket_id ? routerId.get(r.parent_ticket_id) ?? null : null,
-    versionHash: r.version_hash ?? "", trigger: r.escalation_trigger ?? null, resolution: r.resolution ?? null, mergedFrom: r.merged_from ?? [],
+    versionHash: r.version_hash ?? "", trigger: r.escalation_trigger ?? null, resolution: r.resolution ?? null, key: r.issue_key ?? null, mergedFrom: r.merged_from ?? [],
   }));
   const log: LogRow[] = [...messages].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).map((m, i) => ({
     seq: i + 1, at: m.created_at, ticketId: routerId.get(m.ticket_id) ?? null, role: m.role, action: (m.action ?? "REPLY") as LogRow["action"], round: m.round, versionHash: m.version_hash ?? "", body: m.body,

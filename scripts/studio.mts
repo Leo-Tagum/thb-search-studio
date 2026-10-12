@@ -9,6 +9,15 @@
 //   npm run studio -- runs                              (lists runs)
 //   npm run studio -- article <article_id>              (sections, statuses, claims, state)
 //   npm run studio -- resolve <article_id> <unit_key> <request_revision|reopen|hold> [directive text]   (Leo: sends a blocked/escalated section back, or reopens a locked one)
+//   Team mode (Phase 3c; the article must run in team mode, see "mode"):
+//   npm run studio -- team-start <article_id>            (opens the team run: ticket budget 10, round limit 2)
+//   npm run studio -- team-plan <article_id> [unit]      (which roles can run next, and why; open tickets; unit states)
+//   npm run studio -- team-queue-next <article_id> [unit]   (queues every planned step)
+//   npm run studio -- team-queue <role R1..V3> <article_id> [unit] [ticket e.g. T3]   (queues one role, e.g. W2, or S1 for a demand request)
+//   npm run studio -- team-dump <dir>                    (writes every QUEUED team packet to <dir>/<ROLE>-<unit>[-<ticket>]-packet.json)
+//   npm run studio -- team-submit-dir <dir>              (submits every <ROLE>-...-out.json that has a matching packet; same 3-attempt rule)
+//   npm run studio -- team-submit <run_id> <file> | team-check <run_id> <file>   (submit one output / dry run)
+//   npm run studio -- team-log <article_id>              (tickets, rounds and the full router log: who, what, when, version)
 //   npm run studio -- mode <article_id> [classic|team]  (Leo: shows or switches the pipeline; switching is allowed only before any section is written, or on a team branch)
 //   npm run studio -- voice-approve                     (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
 //   npm run studio -- proposal <article_id> <out.json>  (creates the proposal and writes the Approval Room payload)
@@ -24,6 +33,9 @@ import { SupabaseBridgeStore, makeOrchestrator, queueRun, validationContext } fr
 import { STUDIO_AGENT_KEYS, isStudioAgent, type StudioAgentKey } from "../src/lib/studio/agents";
 import { load, queueStudioRun, resolveSection, setPipelineMode, stateOf, submitStudio, validateStudio } from "../src/lib/studio/service";
 import { modeOf } from "../src/lib/team/mode";
+import { checkTeam, dumpTeamQueued, queueNextTeam, queueTeamRun, submitTeam, submitTeamDir, teamPlan } from "../src/lib/studio/team-service";
+import { teamRoleOfAgentKey, isTeamRole } from "../src/lib/team/bridge";
+import { loadTeamView, startTeamRun } from "../src/lib/team/store";
 import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studio/proposals";
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 
@@ -84,7 +96,8 @@ if (cmd === "queue") {
   console.log(JSON.stringify({ run_id: run.id, attempts_used: run.retries, last_error: run.error, ...run.task_packet }, null, 2));
 } else if (cmd === "submit") {
   const { data: run } = await db.from("agent_runs").select("agent_key").eq("id", a).single();
-  if (isStudioAgent(run!.agent_key)) {
+  if (teamRoleOfAgentKey(run!.agent_key)) { console.log("this is a team role run: use  npm run studio -- team-submit <run_id> <file>"); process.exitCode = 2; }
+  else if (isStudioAgent(run!.agent_key)) {
     const res = await submitStudio(db, a, readFileSync(b, "utf8"));
     if (res.ok) console.log(`ACCEPTED run ${a}${res.note ? ` — ${res.note}` : ""}`);
     else {
@@ -106,7 +119,8 @@ if (cmd === "queue") {
   // Dry run: same validation as submit, but nothing is saved and no attempt is used.
   const { data: row } = await db.from("agent_runs").select("*").eq("id", a).single();
   let errors: string[] = [];
-  if (isStudioAgent(row!.agent_key)) errors = (await validateStudio(db, a, readFileSync(b, "utf8"))).errors;
+  if (teamRoleOfAgentKey(row!.agent_key)) errors = await checkTeam(db, a, readFileSync(b, "utf8"));
+  else if (isStudioAgent(row!.agent_key)) errors = (await validateStudio(db, a, readFileSync(b, "utf8"))).errors;
   else {
     const run = await new SupabaseBridgeStore(db).getRun(a);
     try {
@@ -117,6 +131,46 @@ if (cmd === "queue") {
   }
   console.log(errors.length ? `WOULD REJECT (${errors.length}); attempts used so far: ${row!.retries}/3` : `WOULD ACCEPT (attempts used so far: ${row!.retries}/3)`);
   for (const e of errors.slice(0, 20)) console.log("  -", e);
+} else if (cmd === "team-start") {
+  console.log(`team run ${await startTeamRun(db, a)} for article ${a}`);
+} else if (cmd === "team-plan") {
+  const p = await teamPlan(db, a, b);
+  console.log(`article ${p.article} — team run ${p.runStatus.toLowerCase().replace(/_/g, " ")}`);
+  for (const u of p.units.filter((x) => !b || x.key === b)) console.log(`  ${u.key.padEnd(4)} ${u.status}${u.pending.length ? ` waiting for ${u.pending.join(",")}` : ""}${u.issues ? ` must-fix=${u.issues}` : ""}${u.hedges ? ` unruled-hedges=${u.hedges}` : ""}${u.waitingOn.length ? ` waiting on ${u.waitingOn.join(",")}` : ""}`);
+  for (const t of p.tickets.filter((x) => x.status !== "CLOSED")) console.log(`  ticket ${t.id} ${t.type} ${t.from.join("+")}->${t.to} [${t.unitKey || "-"}] ${t.status} round ${t.round}: ${t.issue.slice(0, 80)}`);
+  console.log(p.steps.length ? "runnable next:" : "nothing runnable (everything is locked, waiting for Leo, or already queued)");
+  for (const st of p.steps) console.log(`  ${st.role}${st.unit ? ` ${st.unit}` : ""}${st.ticketId ? ` ${st.ticketId}` : ""} — ${st.reason}`);
+  if (p.queued.length) console.log(`already queued: ${p.queued.map((q) => `${q.role}${q.unit ? ` ${q.unit}` : ""}${q.ticketId ? ` ${q.ticketId}` : ""}`).join(", ")}`);
+} else if (cmd === "team-queue-next") {
+  const made = await queueNextTeam(db, a, b);
+  for (const m of made) console.log(`  ${m.duplicate ? "existing" : "queued"} run ${m.runId} ${m.step.role}${m.step.unit ? ` ${m.step.unit}` : ""}${m.step.ticketId ? ` ${m.step.ticketId}` : ""}`);
+  if (!made.length) console.log("nothing to queue");
+} else if (cmd === "team-queue") {
+  if (!isTeamRole(a)) throw new Error(`unknown team role ${a}`);
+  const [, , , article, unit, ticket] = process.argv.slice(2);
+  const r = await queueTeamRun(db, article, a, unit && unit !== "-" ? unit : null, ticket ?? null);
+  console.log(`${r.duplicate ? "existing" : "queued"} run ${r.runId} (${a})`);
+} else if (cmd === "team-dump") {
+  const lines = await dumpTeamQueued(db, a);
+  console.log(lines.length ? lines.join("\n") : "no queued team runs");
+} else if (cmd === "team-submit-dir") {
+  console.log((await submitTeamDir(db, a)).join("\n"));
+} else if (cmd === "team-submit") {
+  const res = await submitTeam(db, a, readFileSync(b, "utf8"));
+  if (res.ok) console.log(`ACCEPTED run ${a}${res.note ? ` — ${res.note}` : ""}`);
+  else { console.log(`REJECTED run ${a} (attempt ${res.attempt}/3)${res.final ? " — FINAL: article moved to INTEGRATION_ERROR" : " — fix and resubmit"}`); for (const e of res.errors.slice(0, 20)) console.log("  -", e); process.exitCode = 2; }
+} else if (cmd === "team-check") {
+  const errs = await checkTeam(db, a, readFileSync(b, "utf8"));
+  console.log(errs.length ? `WOULD REJECT (${errs.length})` : "WOULD ACCEPT");
+  for (const e of errs.slice(0, 20)) console.log("  -", e);
+} else if (cmd === "team-log") {
+  const v = await loadTeamView(db, a);
+  if (!v) console.log("no team run yet");
+  else {
+    console.log(`tickets used ${v.budget.used}/${v.budget.limit}${v.budget.stopped ? " STOPPED" : ""} · run ${v.runStatus}`);
+    for (const t of [...v.tickets].reverse()) { console.log(`${t.routerId} ${t.type} ${t.from.join("+")}->${t.to} [${t.unit || "-"}] ${t.status} round ${t.round}/${t.roundLimit}${t.trigger ? ` trigger=${t.trigger}` : ""}: ${t.issue}`); for (const m of t.messages) console.log(`    ${m.at} ${m.role} (r${m.round}): ${m.body.slice(0, 140)}`); }
+    console.log(`stuck for Leo: ${v.stuck.length}`);
+  }
 } else if (cmd === "mode") {
   if (!b) { const { data: art } = await db.from("articles").select("pipeline_mode,branch_of,title").eq("id", a).single(); console.log(`${art?.title}: ${modeOf(art ?? {})}${art?.branch_of ? ` (branch of ${art.branch_of})` : ""}`); }
   else {

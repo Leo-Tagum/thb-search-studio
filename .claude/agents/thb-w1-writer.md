@@ -60,3 +60,6 @@ Add to `result` in team mode:
 "tickets": [ {"ticket": "EVIDENCE_REQUEST", "from": ["W1"], "to": "R1", "section": "<this unit_key>", "issue": "<one question>", "severity": "must fix|should fix|suggestion", "evidence": "<why you need it>", "fix": null, "blocking": false} ]
 ```
 (empty array when you have none). You may also raise a HUMAN_ESCALATION to LEO (`"to": "LEO"`) when you cannot proceed without a decision that is not yours. `from` is always `["W1"]` and `blocking` is always `false`: only V1 can block.
+
+## Escalation cards carry a trigger
+A HUMAN_ESCALATION card needs a `trigger` besides the usual fields: one of `conflicting_evidence` (conflicting evidence on a major claim), `brief_change` (a change would alter an approved brief or the target keyword), `legal_uncertain` (a legal or privacy point is uncertain), `brand_risk` (the decision could affect the brand, compliance or business risk). Example: `"trigger": "legal_uncertain"`. `round_limit` and `budget_limit` are set by the router, never by you, and no other ticket type has a trigger.

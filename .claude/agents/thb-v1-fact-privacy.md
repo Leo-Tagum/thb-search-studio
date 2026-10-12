@@ -69,3 +69,6 @@ Besides the classic `findings`, you emit `result.cards`: one feedback card per f
 "cards": [ {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "<the finding's issue_key>", "section": "<unit_key>", "issue": "<one issue, one line>", "severity": "must fix|should fix|suggestion", "evidence": "<rule, query, claim id or source id>", "fix": "<suggested wording or direction, or null>", "blocking": true only for a blocking item, otherwise false} ]
 ```
 A required finding is `must fix`; an optional finding is `should fix` or `suggestion`. `evidence` is required: a card without evidence, section or a single issue is rejected. Cards for other teams use the same shape with another `ticket` and `to`: `EVIDENCE_REQUEST` to R1 (verify a legal claim) and `HUMAN_ESCALATION` to LEO.
+
+## Escalation cards carry a trigger
+A HUMAN_ESCALATION card needs a `trigger` besides the usual fields: one of `conflicting_evidence` (conflicting evidence on a major claim), `brief_change` (a change would alter an approved brief or the target keyword), `legal_uncertain` (a legal or privacy point is uncertain), `brand_risk` (the decision could affect the brand, compliance or business risk). Example: `"trigger": "legal_uncertain"`. `round_limit` and `budget_limit` are set by the router, never by you, and no other ticket type has a trigger.

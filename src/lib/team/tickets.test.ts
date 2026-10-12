@@ -47,6 +47,11 @@ describe("feedback card", () => {
     expect(ok({ to: "LEO" })).toBe(false);
     expect(ok({ to: "W2" })).toBe(false);   // QUALITY_CORRECTION goes to W1 only
   });
+  it("an escalation card may name its trigger; no other ticket type may", () => {
+    expect(ok({ ticket: "HUMAN_ESCALATION", from: ["W1"], to: "LEO", trigger: "legal_uncertain" })).toBe(true);
+    expect(ok({ ticket: "HUMAN_ESCALATION", from: ["W1"], to: "LEO", trigger: "made_up" })).toBe(false);
+    expect(ok({ trigger: "legal_uncertain" })).toBe(false);
+  });
   it("rejects a ticket addressed to its sender", () => expect(ok({ from: ["W1"], to: "W1" })).toBe(false));
   it("knows exactly the four starting ticket types", () => expect([...TICKET_TYPES]).toEqual(["EVIDENCE_REQUEST", "ROOT_CAUSE_NOTE", "QUALITY_CORRECTION", "HUMAN_ESCALATION"]));
 });

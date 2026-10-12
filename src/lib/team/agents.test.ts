@@ -66,3 +66,28 @@ describe("Research team files (R1, R2, R3)", () => {
     }
   });
 });
+
+describe("escalation cards carry a trigger", () => {
+  it("every role that may escalate tells the agent to name the trigger and that the router sets the limit triggers", () => {
+    for (const f of ["thb-s1-strategist", "thb-s2-architect", "thb-w1-writer", "thb-v1-fact-privacy", "thb-v2-seo-aeo-geo", "thb-v3-editorial"]) {
+      const t = readFileSync(join(dir, `${f}.md`), "utf8");
+      expect(t, f).toMatch(/## Escalation cards carry a trigger/);
+      expect(t, f).toMatch(/`round_limit` and `budget_limit` are set by the router/);
+    }
+  });
+});
+
+describe("the /thb-run-agent command knows the team roles and commands", () => {
+  const cmd = readFileSync(".claude/commands/thb-run-agent.md", "utf8");
+  it("names all ten team subagents and the team CLI verbs", () => {
+    for (const f of ["thb-r1-legal-official", "thb-r2-search", "thb-r3-experience", "thb-s1-strategist", "thb-s2-architect", "thb-w1-writer", "thb-w2-cowriter", "thb-v1-fact-privacy", "thb-v2-seo-aeo-geo", "thb-v3-editorial"]) expect(cmd, f).toContain(f);
+    for (const v of ["team-plan", "team-queue-next", "team-dump", "team-submit-dir", "team-check", "team-log"]) expect(cmd, v).toContain(v);
+  });
+  it("keeps the classic agents, the one-packet-at-a-time rule and the no-lock, no-resolve rule", () => {
+    for (const f of ["thb-01-seo-strategist", "thb-04-section-writer", "thb-07-editorial-critic"]) expect(cmd, f).toContain(f);
+    expect(cmd).toMatch(/one packet at a time/);
+    expect(cmd).toMatch(/never approve, lock, resolve, hold or reopen/i);
+    expect(cmd).toMatch(/Only Leo resolves them/);
+    expect(cmd).toMatch(/Never edit an agent's output yourself/);
+  });
+});
