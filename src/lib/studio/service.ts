@@ -13,6 +13,8 @@ import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
 import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../team/mode";
 import { agentLikeActor, resolveActorError } from "./actors";
+import { envelopeOf, saveEnvelope } from "./team-envelope";
+import { reopen as teamReopen, resolveByHuman as teamResolveByHuman } from "../team/loop";
 import { STUDIO_AGENT_META, isStudioAgent, studioOutputSchemas, studioSemanticChecks, type StudioAgentKey, type StudioValidationCtx } from "./agents";
 
 export const SYSTEM: Actor = { kind: "system", id: "studio" };
@@ -336,10 +338,23 @@ export async function resolveSection(db: SupabaseClient, articleId: string, unit
   if (denied) return { ok: false as const, reason: denied };
   const row = L.sections.find((s) => s.section_key === unitKey);
   if (!row) return { ok: false as const, reason: "no such section" };
-  const st = stateOf(row);
-  const o = action.kind === "reopen" ? reopen(st, action.text) : resolveByHuman(st, action.kind === "hold" ? { kind: "hold" } : { kind: "request_revision", issueText: action.text });
-  if (!o.ok) return { ok: false as const, reason: o.error };
-  await saveSection(db, row.id, o.state);
+  // A team article keeps its loop state in the team envelope: Leo's resolve goes through the team loop functions and never rewrites it in the classic shape.
+  const team = modeOf(L.article) === "team";
+  let newStatus: string;
+  const humanAction = action.kind === "hold" ? { kind: "hold" as const } : { kind: "request_revision" as const, issueText: action.text };
+  if (team) {
+    const env = envelopeOf(row);
+    const o = action.kind === "reopen" ? teamReopen(env.team, action.text) : teamResolveByHuman(env.team, humanAction);
+    if (!o.ok) return { ok: false as const, reason: o.error };
+    if (action.kind !== "hold") await saveEnvelope(db, row, { ...env, team: o.state, councilCards: {}, waitingOn: [] });
+    newStatus = o.state.status;
+  } else {
+    const st = stateOf(row);
+    const o = action.kind === "reopen" ? reopen(st, action.text) : resolveByHuman(st, humanAction);
+    if (!o.ok) return { ok: false as const, reason: o.error };
+    await saveSection(db, row.id, o.state);
+    newStatus = o.state.status;
+  }
   if (action.kind !== "hold") await db.from("escalations").update({ status: "RESOLVED", resolution: action.kind === "reopen" ? "reopened" : action.text, resolved_by: actorId, resolved_at: new Date().toISOString() }).eq("section_id", row.id).eq("status", "OPEN");
   await audit(db, articleId, `section_${action.kind}`, { unit: unitKey, text: "text" in action ? action.text : null }, actorId);
   // Anything that reopens work after assembly invalidates the old sign-off and returns the article to drafting.
@@ -361,7 +376,7 @@ export async function resolveSection(db: SupabaseClient, articleId: string, unit
     const t2 = await o2.transition("article", articleId, "DRAFTING", { kind: "human", id: actorId }, { unit: unitKey });
     if (!t2.ok) return { ok: false as const, reason: t2.reason };
   }
-  return { ok: true as const, status: o.state.status };
+  return { ok: true as const, status: newStatus };
 }
 
 // ---------- assembly ----------

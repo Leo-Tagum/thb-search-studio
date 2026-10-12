@@ -82,11 +82,30 @@ export function buildTeamView(input: TeamViewInput): TeamView {
   const teams: Record<string, { sent: number; received: number }> = {};
   const bump = (team: string, k: "sent" | "received") => { teams[team] ??= { sent: 0, received: 0 }; teams[team][k]++; };
   for (const t of tickets.filter((x) => x.from[0] !== "ORCHESTRATOR")) { for (const f of new Set(t.from.map(teamOf))) bump(f, "sent"); bump(teamOf(t.to), "received"); }
+  // Discussion counts too: a reply on a ticket is sent by the replier's team and received by the team on the other side.
+  for (const t of tickets.filter((x) => x.from[0] !== "ORCHESTRATOR")) {
+    for (const m of (msgs.get(t.id) ?? []).slice(1)) {
+      const author = teamOf(m.role);
+      if (author === "Orchestrator") continue;
+      bump(author, "sent");
+      const other = author === teamOf(t.to) ? t.from.map(teamOf) : [teamOf(t.to)];
+      for (const o of new Set(other)) if (o !== author) bump(o, "received");
+    }
+  }
 
   return {
     budget: { used, limit: input.run.ticketBudget, remaining: Math.max(0, input.run.ticketBudget - used), pct: Math.min(100, Math.round((used / input.run.ticketBudget) * 100)), stopped: input.run.status === "STOPPED_BUDGET" },
     roundLimit, runStatus: input.run.status, units, stuck,
     tickets: [...tickets].reverse().map((t) => ({ dbId: t.dbId, routerId: t.id, type: t.type, from: t.from, to: t.to, unit: t.unitKey, severity: t.severity, status: t.status, round: t.round, roundLimit, issue: t.issue, evidence: t.evidence, fix: t.fix, blocking: t.blocking, trigger: t.trigger, resolution: t.resolution, mergedFrom: t.mergedFrom, messages: msgs.get(t.id) ?? [] })),
     fired: { types, teams },
+  };
+}
+
+export const FOUR_TEAMS = ["Research", "Strategy", "Writing", "Review"] as const;
+/** What a run still has not exercised: ticket types that never fired, and teams that never both sent and received a ticket or a reply. */
+export function teamCoverage(view: Pick<TeamView, "fired">): { missingTypes: TicketType[]; missingTeams: string[] } {
+  return {
+    missingTypes: TICKET_TYPES.filter((k) => !(view.fired.types[k] > 0)),
+    missingTeams: FOUR_TEAMS.filter((t) => !((view.fired.teams[t]?.sent ?? 0) > 0 && (view.fired.teams[t]?.received ?? 0) > 0)),
   };
 }

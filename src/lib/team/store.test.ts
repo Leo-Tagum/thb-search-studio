@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { closeTicket, newRouter, raiseTicket, reopen, respond, runStatus, type Result, type RouterState } from "./router";
 import { diffRouter, rowsToRouter, ticketToRow } from "./store";
-import { buildTeamView, type ViewTicket } from "./view";
+import { buildTeamView, teamCoverage, type ViewTicket } from "./view";
 
 const ctx = (n = 0) => ({ at: `2026-10-12T12:00:${String(n).padStart(2, "0")}Z`, versionHash: "v1" });
 const qc = (o: Record<string, unknown> = {}) => ({ ticket: "QUALITY_CORRECTION", from: ["V3"], to: "W1", section: "s2", issue: "The H1 does not name the situation.", severity: "must fix", evidence: "authenticity q3", fix: null, blocking: false, ...o });
@@ -157,5 +157,21 @@ describe("the Team tab view: outcomes and escalations first", () => {
     const { fired } = toView(s);
     expect(fired.types).toEqual({ EVIDENCE_REQUEST: 1, ROOT_CAUSE_NOTE: 1, QUALITY_CORRECTION: 1, HUMAN_ESCALATION: 0 });
     expect(fired.teams).toEqual({ Writing: { sent: 1, received: 1 }, Research: { sent: 0, received: 1 }, Review: { sent: 2, received: 0 }, Strategy: { sent: 0, received: 1 } });
+  });
+  it("replies count as discussion: the replier's team sent, the other side received", () => {
+    let s = must(raiseTicket(newRouter(), qc({ ticket: "EVIDENCE_REQUEST", from: ["S1"], to: "R2" }), ctx(0)));
+    s = must(respond(s, "T1", "R2", "Evidence pack.", ctx(1)));
+    const { fired } = toView(s);
+    expect(fired.teams).toEqual({ Strategy: { sent: 1, received: 1 }, Research: { sent: 1, received: 1 } });
+  });
+  it("coverage lists the ticket types and teams a run has not exercised yet", () => {
+    let s = must(raiseTicket(newRouter(), qc({ ticket: "EVIDENCE_REQUEST", from: ["W1"], to: "R1" }), ctx(0)));
+    s = must(respond(s, "T1", "R1", "Pack.", ctx(1)));
+    expect(teamCoverage(toView(s))).toEqual({ missingTypes: ["ROOT_CAUSE_NOTE", "QUALITY_CORRECTION", "HUMAN_ESCALATION"], missingTeams: ["Strategy", "Review"] });
+    s = must(raiseTicket(s, qc({ ticket: "ROOT_CAUSE_NOTE", from: ["V2"], to: "S2" }), ctx(2)));
+    s = must(respond(s, "T2", "S2", "Brief fixed.", ctx(3)));
+    s = must(raiseTicket(s, qc(), ctx(4)));                                                                  // V3 -> W1
+    s = must(raiseTicket(s, qc({ ticket: "HUMAN_ESCALATION", from: ["V1"], to: "LEO" }), ctx(5), { trigger: "legal_uncertain" }));
+    expect(teamCoverage(toView(s))).toEqual({ missingTypes: [], missingTeams: [] });
   });
 });

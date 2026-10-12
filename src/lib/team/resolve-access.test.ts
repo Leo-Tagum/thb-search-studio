@@ -5,11 +5,12 @@ import { describe, expect, it } from "vitest";
 import { agentLikeActor, resolveActorError } from "../studio/actors";
 import { resolveSection, setPipelineMode } from "../studio/service";
 import { TEAM_AGENT_FILE } from "./bridge";
+import { escalateGap, newTeamSection } from "./loop";
 
 // resolveSection is Leo's action: reachable only from the Studio UI action and the operator CLI (both act as "leo"), audited, never by an agent role or the bridge.
 
 /** A minimal chainable fake of the Supabase client: reads return the table fixtures, inserts are recorded. */
-function fakeDb(tables: Record<string, any>, log: { inserts: { table: string; row: any }[]; updates: string[]; touched: string[] }) {
+function fakeDb(tables: Record<string, any>, log: { inserts: { table: string; row: any }[]; updates: string[]; touched: string[]; payloads?: { table: string; row: any }[] }) {
   return {
     from(table: string) {
       log.touched.push(table);
@@ -20,7 +21,7 @@ function fakeDb(tables: Record<string, any>, log: { inserts: { table: string; ro
           if (k === "then") return (res: any) => res(result());
           if (k === "single" || k === "maybeSingle") return () => Promise.resolve(single());
           if (k === "insert") return (row: any) => { log.inserts.push({ table, row }); return b; };
-          if (k === "update") return () => { log.updates.push(table); return b; };
+          if (k === "update") return (row: any) => { log.updates.push(table); log.payloads?.push({ table, row }); return b; };
           return () => b;
         },
       });
@@ -31,9 +32,9 @@ function fakeDb(tables: Record<string, any>, log: { inserts: { table: string; ro
 const tablesFor = (mode: "classic" | "team", status = "ESCALATED", fixture = false) => ({
   articles: [{ id: "a1", brief_id: "b1", pipeline_mode: mode, state: "DRAFTING", primary_keyword: "hoarded house", is_fixture: fixture }],
   briefs: [{ id: "b1", outline: { link_plan: [] } }],
-  article_sections: [{ id: "sec1", article_id: "a1", section_key: "s2", brief_h2: "What do you have to disclose?", status, locked: false, issues: { issues: [], meta: { versionNo: 1, versionHash: "h1", sig: "s", factPassedSig: null, resumeStage: "fact", lockedHash: null, escalation: { issueKey: "fact:x", reason: "stuck" }, blockedBy: null } } }],
+  article_sections: [{ id: "sec1", article_id: "a1", section_key: "s2", brief_h2: "What do you have to disclose?", status, locked: false, issues: mode === "team" ? { team: (escalateGap(newTeamSection("s2"), "stuck") as any).state } : { issues: [], meta: { versionNo: 1, versionHash: "h1", sig: "s", factPassedSig: null, resumeStage: "fact", lockedHash: null, escalation: { issueKey: "fact:x", reason: "stuck" }, blockedBy: null } } }],
 });
-const newLog = () => ({ inserts: [] as { table: string; row: any }[], updates: [] as string[], touched: [] as string[] });
+const newLog = () => ({ inserts: [] as { table: string; row: any }[], updates: [] as string[], touched: [] as string[], payloads: [] as { table: string; row: any }[] });
 
 describe("who counts as an agent-like actor", () => {
   it("every team role, agent key, the bridge, the orchestrator and agent:/system: ids", () => {
@@ -111,6 +112,17 @@ describe("resolveSection cannot be triggered by an agent role or the bridge", ()
       expect(audit?.row.detail).toMatchObject({ unit: "s2", text: "Write it without the figure." });
     }
   });
+  it("on a team article Leo's resolve rewrites the team envelope, never the classic issues shape", async () => {
+    const log = newLog();
+    const res = await resolveSection(fakeDb(tablesFor("team"), log), "a1", "s2", { kind: "request_revision", text: "Write it without the figure." }, "leo");
+    expect(res.ok).toBe(true);
+    expect((res as any).status).toBe("NEEDS_REVISION");
+    const save = log.payloads.find((p) => p.table === "article_sections" && p.row.issues);
+    expect(save?.row.issues.team).toMatchObject({ status: "NEEDS_REVISION" });
+    expect(save?.row.issues.team.mustFix[0]).toMatchObject({ role: "LEO", text: "Write it without the figure." });
+    expect(save?.row.issues.issues).toBeUndefined();                     // not the classic { issues, meta } shape
+    expect(save?.row).toMatchObject({ status: "NEEDS_REVISION", locked: false });
+  });
   it("a hold is audited too", async () => {
     const log = newLog();
     expect((await resolveSection(fakeDb(tablesFor("team"), log), "a1", "s2", { kind: "hold" }, "leo")).ok).toBe(true);
@@ -137,7 +149,7 @@ describe("smoke scripts flag their fixture articles", () => {
   it("every script that creates an article with approveBrief and acts as smoke-test marks it is_fixture right after", () => {
     const scripts = readdirSync("scripts").filter((f) => f.endsWith(".mts")).map((f) => `scripts/${f}`);
     const makers = scripts.filter((f) => { const t = readFileSync(f, "utf8"); return /approveBrief\(/.test(t) && /"smoke-test"/.test(t); });
-    expect(makers.sort()).toEqual(["scripts/studio-smoke.mts", "scripts/team-cli-smoke.mts", "scripts/team-view-smoke.mts"]);
+    expect(makers.sort()).toEqual(["scripts/studio-smoke.mts", "scripts/team-cli-smoke.mts", "scripts/team-smoke.mts", "scripts/team-view-smoke.mts"]);
     for (const f of makers) {
       const t = readFileSync(f, "utf8");
       expect(t, f).toMatch(/update\(\{ is_fixture: true \}\)/);
@@ -154,13 +166,13 @@ describe("the only call sites are Leo's: the UI action and the operator CLI", ()
   const files = [...walk("src"), ...walk("scripts")].filter((f) => /\.(ts|tsx|mts)$/.test(f)).map((f) => f.replace(/\\/g, "/"));
   const callers = files.filter((f) => !f.endsWith(".test.ts") && f !== "src/lib/studio/service.ts" && /resolveSection\s*\(/.test(readFileSync(f, "utf8")));
   it("resolveSection( is called only from the Studio UI action, the CLI and the fixture-only smoke scripts", () => {
-    expect(callers.sort()).toEqual(["scripts/studio-smoke.mts", "scripts/studio.mts", "src/app/studio/actions.ts"]);
+    expect(callers.sort()).toEqual(["scripts/studio-smoke.mts", "scripts/studio.mts", "scripts/team-smoke.mts", "src/app/studio/actions.ts"]);
   });
   it("the UI action and the CLI both act as leo; the smoke acts as smoke-test (on its fixture article only)", () => {
     expect(readFileSync("src/app/studio/actions.ts", "utf8")).toMatch(/const ACTOR = "leo"/);
     expect(readFileSync("src/app/studio/actions.ts", "utf8")).toMatch(/resolveSection\(supabaseAdmin\(\), articleId, unit, [^;]*, ACTOR\)/);
     expect(readFileSync("scripts/studio.mts", "utf8")).toMatch(/resolveSection\(db, a, b, [^;]*, "leo"\)/);
-    for (const m of readFileSync("scripts/studio-smoke.mts", "utf8").matchAll(/resolveSection\(db, art, [^\n]*?, "([^"]+)"\)/g)) expect(m[1]).toBe("smoke-test");
+    for (const f of ["scripts/studio-smoke.mts", "scripts/team-smoke.mts"]) for (const m of readFileSync(f, "utf8").matchAll(/resolveSection\(db, art, [^\n]*?, "([^"]+)"\)/g)) expect(m[1], f).toBe("smoke-test");
   });
   it("no agent, bridge, router or council code can reach it: nothing under src/lib/team or src/lib/agents imports the studio service or actions", () => {
     for (const f of files.filter((x) => (x.startsWith("src/lib/team/") || x.startsWith("src/lib/agents/")) && !x.endsWith(".test.ts"))) {

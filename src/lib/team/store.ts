@@ -5,7 +5,7 @@
 // tickets in creation order; the database ids are uuids. This module never writes a lock, a state, an approval or a ledger claim.
 import { randomUUID } from "node:crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { budgetUsed, newRouter, respond, runStatus, type LogRow, type Result, type RouterState, type TicketRec } from "./router";
+import { budgetUsed, closeTicket, newRouter, respond, runStatus, type LogRow, type Result, type RouterState, type TicketRec } from "./router";
 import { buildTeamView } from "./view";
 
 export type DiffResult = { newTickets: TicketRec[]; changedTickets: TicketRec[]; newLog: LogRow[]; newlyStopped: boolean };
@@ -125,5 +125,9 @@ export async function leoAnswerEscalation(db: SupabaseClient, articleId: string,
   const routerId = [...idByRouterId.entries()].find(([, id]) => id === dbTicketId)?.[0];
   if (!routerId) return { ok: false, reason: "ticket not found in its run" };
   const res = await runRouterOp(db, articleId, row.team_run_id, (s) => respond(s, routerId, "LEO", text, { at: now, versionHash: "" }), now);
-  return res.ok ? { ok: true } : { ok: false, reason: res.reason };
+  if (!res.ok) return { ok: false, reason: res.reason };
+  // The ticket this escalated (a round-limit hit) is decided too: Leo's words are its resolution.
+  const parent = res.ticket.parentId;
+  if (parent) await runRouterOp(db, articleId, row.team_run_id, (s) => { const p = s.tickets.find((x) => x.id === parent); return p && p.status === "ESCALATED" ? closeTicket(s, parent, "LEO", `decided by Leo: ${text}`, { at: new Date(Date.parse(now) + 1).toISOString(), versionHash: "" }) : { ok: true as const, state: s, ticket: p! }; }, now);
+  return { ok: true };
 }

@@ -17,22 +17,21 @@ import { modeOf, pipelineGuard } from "../team/mode";
 import { planSteps, type PlanStep } from "../team/plan";
 import { closeTicket, raiseTicket, reopen, respond, runStatus, type Result, type RouterState, type TicketRec } from "../team/router";
 import { dbSnapshotStore } from "../team/snapshot-db";
-import { fulfillFetchRequest, officialFetcher } from "../team/snapshots";
+import { fulfillFetchRequest, officialFetcher, type Fetcher } from "../team/snapshots";
+import { envelopeOf, saveEnvelope, type CouncilStored, type Envelope } from "./team-envelope";
 import { loadRouter, runRouterOp, startTeamRun } from "../team/store";
 import { briefSchema, resolveRootCause, type ApprovedIdentity } from "../team/strategy";
 import type { FeedbackCard, TeamRole } from "../team/tickets";
 
 const TEAM_KEYS: string[] = Object.values(TEAM_AGENT_FILE);
 
-// ---------- section envelope (the team loop state lives in article_sections.issues) ----------
-export type CouncilStored = { versionHash: string; decision: string; cards: FeedbackCard[]; findings: any[] };
-export type Envelope = { team: TeamSectionState; suggestions?: { versionHash: string; items: any[] }; councilCards?: Partial<Record<CouncilRole, CouncilStored>>; waitingOn?: string[]; disagreements?: any[] };
-export const envelopeOf = (row: any): Envelope => (row.issues && typeof row.issues === "object" && !Array.isArray(row.issues) && row.issues.team ? (row.issues as Envelope) : { team: newTeamSection(row.section_key) });
-async function saveEnvelope(db: SupabaseClient, row: any, env: Envelope, extra: Record<string, unknown> = {}) {
-  const { error } = await db.from("article_sections").update({ status: env.team.status, locked: env.team.status === "LOCKED", issues: env, ...extra }).eq("id", row.id);
-  if (error) throw error;
-  row.issues = env; row.status = env.team.status;
-}
+// ---------- section envelope (the team loop state lives in article_sections.issues; see team-envelope.ts) ----------
+export { envelopeOf };
+export type { Envelope, CouncilStored };
+
+/** R1 reads official pages through this fetcher (the official-domain allowlist is checked on every hop). The live smoke swaps in a fixture fetcher; nothing else does. */
+let r1Fetcher: Fetcher | null = null;
+export const setR1FetcherForTests = (f: Fetcher | null) => { r1Fetcher = f; };
 
 // ---------- context ----------
 type T = { db: SupabaseClient; articleId: string; runId: string; L: Loaded };
@@ -56,8 +55,8 @@ async function queuedRuns(db: SupabaseClient, articleId: string) {
   return (data ?? []).map((r: any) => ({ id: r.id as string, role: teamRoleOfAgentKey(r.agent_key)!, unit: (r.task_packet?.unit_key ?? null) as string | null, ticketId: (r.task_packet?.ticket_id ?? null) as string | null }));
 }
 
-export async function teamPlan(db: SupabaseClient, articleId: string, unit?: string) {
-  const t = await open(db, articleId);
+export async function teamPlan(db: SupabaseClient, articleId: string, unit?: string, shared?: T) {
+  const t = shared ?? (await open(db, articleId));
   const router = await routerOf(t);
   const queued = await queuedRuns(db, articleId);
   const units = t.L.sections.map((s) => { const e = envelopeOf(s); return { key: s.section_key as string, status: e.team.status, pending: e.team.pending, waitingOn: e.waitingOn ?? [], issues: e.team.mustFix.length, hedges: e.team.hedges.filter((h) => h.ruling !== "proven").length }; });
@@ -65,14 +64,15 @@ export async function teamPlan(db: SupabaseClient, articleId: string, unit?: str
   return { article: t.L.article.title as string, runStatus: runStatus(router), tickets: router.tickets, units, steps, queued };
 }
 
-export async function queueTeamRun(db: SupabaseClient, articleId: string, role: TeamRole, unit: string | null, ticketId: string | null, extra: Record<string, unknown> = {}): Promise<{ runId: string; duplicate: boolean }> {
-  const t = await open(db, articleId);
+export async function queueTeamRun(db: SupabaseClient, articleId: string, role: TeamRole, unit: string | null, ticketId: string | null, extra: Record<string, unknown> = {}, shared?: T): Promise<{ runId: string; duplicate: boolean }> {
+  const t = shared ?? (await open(db, articleId));
   const dup = (await queuedRuns(db, articleId)).find((q) => q.role === role && q.unit === unit && q.ticketId === ticketId);
   if (dup) return { runId: dup.id, duplicate: true };
   const router = await routerOf(t);
   const ticket = ticketId ? router.tickets.find((x) => x.id === ticketId) ?? null : null;
   if (ticketId && !ticket) throw new Error(`no ticket ${ticketId}`);
-  const cur = unit && unit !== "brief" ? await currentVersion(db, row(t, unit)) : null;
+  const isUnit = !!unit && t.L.sections.some((s) => s.section_key === unit);
+  const cur = isUnit ? await currentVersion(db, row(t, unit!)) : null;
   const data = await packetData(t, role, unit, ticket, router, cur, extra);
   const packet = buildTeamPacket(role, { articleId, opportunityId: t.L.article.opportunity_id, unitKey: unit, versionHash: cur?.content_hash ?? (unit ? `unit:${unit}:none` : "article"), ticketId }, data);
   const { data: ins, error } = await db.from("agent_runs").insert({ agent_key: TEAM_AGENT_FILE[role], subject_type: "article", subject_id: articleId, status: "QUEUED", task_packet: { ...packet, team_run_id: t.runId, unit_hash: cur?.content_hash ?? null }, prompt_version: packet.prompt_version }).select("id").single();
@@ -81,10 +81,12 @@ export async function queueTeamRun(db: SupabaseClient, articleId: string, role: 
   return { runId: ins.id, duplicate: false };
 }
 
-export async function queueNextTeam(db: SupabaseClient, articleId: string, unit?: string) {
-  const plan = await teamPlan(db, articleId, unit);
+export async function queueNextTeam(db: SupabaseClient, articleId: string, unit?: string, only?: (s: PlanStep) => boolean) {
+  const t = await open(db, articleId);                                   // one load of the article for the whole batch
+  const plan = await teamPlan(db, articleId, unit, t);
+  plan.steps = only ? plan.steps.filter(only) : plan.steps;
   const out: { step: PlanStep; runId: string; duplicate: boolean }[] = [];
-  for (const step of plan.steps) out.push({ step, ...(await queueTeamRun(db, articleId, step.role, step.unit, step.ticketId)) });
+  for (const step of plan.steps) out.push({ step, ...(await queueTeamRun(db, articleId, step.role, step.unit, step.ticketId, {}, t)) });
   return out;
 }
 
@@ -105,7 +107,7 @@ async function packetData(t: T, role: TeamRole, unit: string | null, ticket: Tic
   const answersFor = (r: TeamRole) => router.tickets.filter((x) => x.from.includes(r) && (x.unitKey === unit || !unit) && (x.status === "ANSWERED" || x.status === "CLOSED")).map((x) => ({ ticket: x.id, asked: x.issue, to: x.to, answer: router.log.filter((l) => l.ticketId === x.id && l.role === x.to).map((l) => l.body).join(" | ") }));
   const voice = async () => { const { data: vr } = await db.from("brand_facts").select("fact_value,status,provisional_by").eq("fact_key", "voice_reference").single(); return { status: vr?.provisional_by ? `provisionally approved by ${vr.provisional_by}; Juan confirms with the first article` : vr?.status, excerpts: safeJson(vr?.fact_value), note: "Examples of rhythm and stance, never text or facts to copy." }; };
 
-  if (unit && unit !== "brief" && ["W1", "W2", "V1", "V2", "V3"].includes(role)) {
+  if (unit && L.sections.some((s) => s.section_key === unit) && ["W1", "W2", "V1", "V2", "V3"].includes(role)) {
     const r = row(t, unit); const env = envelopeOf(r); const idx = L.sections.indexOf(r);
     const unitBlock = {
       unit_key: unit,
@@ -248,7 +250,7 @@ async function answerTickets(t: T, role: TeamRole, unit: string, keys: string[],
 /** An answered evidence request is consumed when the sender's next accepted run completes: code closes it (the sender had the answer in its packet). */
 async function closeConsumed(t: T, role: TeamRole, unit: string | null) {
   const s = await routerOf(t);
-  for (const x of s.tickets.filter((x) => x.type === "EVIDENCE_REQUEST" && x.status === "ANSWERED" && x.from.includes(role) && (x.unitKey === (unit ?? "") || !x.unitKey))) {
+  for (const x of s.tickets.filter((x) => x.type === "EVIDENCE_REQUEST" && x.status === "ANSWERED" && x.from.includes(role) && (unit === null || x.unitKey === unit || !x.unitKey))) {
     await op(t, (st) => closeTicket(st, x.id, "ORCHESTRATOR", `answer used by ${role}'s next run`, stamp()));
   }
 }
@@ -257,6 +259,16 @@ async function raiseAll(t: T, cards: FeedbackCard[], hash: string) {
   for (const c of cards) { const r = await raise(t, c, hash); out.push({ id: r.ok ? r.ticket.id : null, ok: r.ok }); }
   return out;
 }
+
+/** A Research answer to a request about a unit that is already locked: nobody will consume it, so code closes it right away (the answer stays on the ticket). */
+async function closeIfUnitLocked(t: T, ticketId: string | null) {
+  if (!ticketId) return;
+  const tk = findRouterTicket(await routerOf(t), ticketId);
+  if (!tk || tk.status !== "ANSWERED" || !tk.unitKey) return;
+  const rw = t.L.sections.find((s) => s.section_key === tk.unitKey);
+  if (rw && (await db0(t, rw)).status === "LOCKED") await op(t, (st) => closeTicket(st, ticketId, "ORCHESTRATOR", "unit already locked: the answer is recorded for Leo", stamp()));
+}
+const db0 = async (t: T, rw: any) => (await t.db.from("article_sections").select("status").eq("id", rw.id).single()).data as any;
 
 async function addClaimsToLedger(t: T, role: "R1" | "R3", pack: { sources: PackSource[]; claims: PackClaim[] }): Promise<{ added: { key: string; text: string }[]; notProven: string[] }> {
   const { db, L } = t;
@@ -302,12 +314,14 @@ export async function applyTeamAccepted(db: SupabaseClient, run: TeamRun, out: a
     const tk = findRouterTicket(await routerOf(t), p.ticket_id);
     const body = `R2 answer (strategy only): ${r.demand.length} demand row(s), ${r.questions.length} question(s), ${r.rankings.length} ranking(s). ${JSON.stringify({ demand: r.demand, questions: r.questions, rankings: r.rankings, unresolved: r.unresolved }).slice(0, 6000)}`;
     if (tk) await op(t, (s) => respond(s, tk.id, "R2", body, stamp()));
+    await closeIfUnitLocked(t, p.ticket_id);
     notes.push("R2 evidence pack recorded on the ticket");
   } else if (role === "R3") {
     const tk = findRouterTicket(await routerOf(t), p.ticket_id);
     const { added, notProven } = await addClaimsToLedger(t, "R3", { sources: r.sources, claims: r.claims });
     const extra = [r.facts.length ? `Approved brand facts (exact wording): ${r.facts.map((f: any) => `${f.fact_key}: "${f.wording}"`).join("; ")}.` : "", r.brand_facts_pending.length ? `Pending, not usable: ${r.brand_facts_pending.join("; ")}.` : "", "No seller story is cleared for publication."].filter(Boolean).join(" ");
     if (tk) await op(t, (s) => respond(s, tk.id, "R3", packSummary("R3", added, notProven, extra), stamp()));
+    await closeIfUnitLocked(t, p.ticket_id);
     notes.push(`R3 answered (${added.length} claim(s) added)`);
   } else if (role === "S1") {
     await raiseAll(t, r.tickets, p.input_version_ids[0]);
@@ -316,8 +330,9 @@ export async function applyTeamAccepted(db: SupabaseClient, run: TeamRun, out: a
     notes.push(`S1 decision ${out.decision}; ${r.tickets.length} ticket(s) raised`);
   } else if (role === "S2") notes.push(await applyS2(t, run, out));
 
-  const adv = await advanceArticle(db, t.articleId);
-  if (adv) notes.push(adv);
+  // Assemble only when every unit is locked (one cheap query before the full article load).
+  const { data: st } = await db.from("article_sections").select("status").eq("article_id", t.articleId);
+  if ((st ?? []).length && (st ?? []).every((x: any) => x.status === "LOCKED")) { const adv = await advanceArticle(db, t.articleId); if (adv) notes.push(adv); }
   return notes.filter(Boolean).join("; ");
 }
 
@@ -356,11 +371,18 @@ async function applyCouncil(t: T, role: CouncilRole, unit: string, run: TeamRun,
   const { db } = t;
   const rw = row(t, unit); const env = envelopeOf(rw); const r = out.result;
   const cards: FeedbackCard[] = r.cards;
+  // Loop items: every correction, and every other card that is a must-fix (a root cause for S2, an evidence request the unit cannot do without): the unit does not lock while one is open.
   const items = [
-    ...cards.filter((c) => c.ticket === "QUALITY_CORRECTION").map((c) => ({ key: c.key!, severity: c.severity, text: c.issue })),
+    ...cards.filter((c) => c.ticket === "QUALITY_CORRECTION" || (c.severity === "must fix" && c.ticket !== "HUMAN_ESCALATION")).map((c, i) => ({ key: c.key ?? `card:${c.ticket.toLowerCase()}:${i}`, severity: c.severity, text: c.issue })),
     ...(out.findings as any[]).filter((f) => f.severity === "optional" && !cards.some((c) => c.key === f.issue_key)).map((f) => ({ key: f.issue_key, severity: "should fix" as const, text: f.note })),
   ];
   const before = env.team;
+  // A review that arrives after the unit moved on (escalated, blocked, sent back, or this member already reported) is recorded but changes nothing.
+  if (before.status !== "NEEDS_COUNCIL" || r.version_hash !== before.versionHash || !before.pending.includes(role)) {
+    await db.from("section_reviews").insert({ section_id: rw.id, version_id: rw.current_version_id, agent_key: TEAM_AGENT_FILE[role], decision: out.decision, findings: out.findings, required_actions: out.required_actions, advisory_score: role === "V3" ? Math.round(r.score.total) : null, agent_run_id: run.id });
+    await auditArticle(db, t.articleId, "late_review_recorded", { unit, role, decision: out.decision, unit_status: before.status, pending: before.pending });
+    return `${role} review arrived when ${unit} was ${before.status}: recorded, not applied`;
+  }
   const rr = recordReview(before, { role, versionHash: r.version_hash, decision: out.decision, items, blockKind: r.block_kind, hedgeRulings: role === "V1" ? r.hedge_rulings : undefined });
   if (!rr.ok) throw new Error(rr.error);
   const stored: Envelope = { ...env, team: rr.state, councilCards: { ...(env.councilCards ?? {}), [role]: { versionHash: r.version_hash, decision: out.decision, cards, findings: out.findings } } };
@@ -427,13 +449,14 @@ async function applyR1(t: T, run: TeamRun, out: any): Promise<string> {
   const p = run.task_packet; const r = out.result;
   const tk = findRouterTicket(await routerOf(t), p.ticket_id);
   if ("fetch_request" in r) {
-    const fx = await fulfillFetchRequest(r, { store: dbSnapshotStore(t.db), fetcher: officialFetcher(), today: todayISO() });
+    const fx = await fulfillFetchRequest(r, { store: dbSnapshotStore(t.db), fetcher: r1Fetcher ?? officialFetcher(), today: todayISO() });
     const q = await queueTeamRun(t.db, t.articleId, "R1", p.unit_key, p.ticket_id, { official_snapshots: fx.snapshots, fetch_problems: fx.errors });
     await auditArticle(t.db, t.articleId, "r1_fetch", { ticket: p.ticket_id, fetched: fx.snapshots.map((s) => s.url), problems: fx.errors, next_run: q.runId });
     return `R1 asked for ${r.fetch_request.length} page(s); ${fx.snapshots.length} stored; R1 re-queued with the stored passages`;
   }
   const { added, notProven } = await addClaimsToLedger(t, "R1", { sources: r.sources, claims: r.claims });
   if (tk) await op(t, (s) => respond(s, tk.id, "R1", packSummary("R1", added, [...notProven, ...r.unresolved]), stamp()));
+  await closeIfUnitLocked(t, p.ticket_id);
   return `R1 answered ${p.ticket_id ?? "the opening request"} (${added.length} claim(s) added)`;
 }
 

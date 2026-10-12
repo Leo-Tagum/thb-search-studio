@@ -29,6 +29,8 @@
     "smoke:studio": "tsx --env-file=.env.local scripts/studio-smoke.mts",
     "smoke:team-view": "tsx --env-file=.env.local scripts/team-view-smoke.mts",
     "smoke:team-cli": "tsx --env-file=.env.local scripts/team-cli-smoke.mts",
+    "smoke:team": "tsx --env-file=.env.local scripts/team-smoke.mts",
+    "smoke:cleanup": "tsx --env-file=.env.local scripts/smoke-cleanup.mts",
     "voice:build": "tsx --env-file=.env.local scripts/build-voice-reference.mts",
     "verify:phase3": "tsx --env-file=.env.local scripts/phase3-verify.mts",
     "room:build": "tsx scripts/build-approval-room.mts"

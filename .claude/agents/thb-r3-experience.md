@@ -33,7 +33,7 @@ Write ONE JSON object (no prose, no code fence) to the output file path in your 
   "article_id": "", "opportunity_id": "<from packet>", "agent_name": "R3 Experience", "agent_prompt_version": "1.0.0",
   "model_version": "claude-code/<your model id>", "input_version_ids": ["..."],
   "decision": "PASS|REVISION|BLOCKED",
-  "findings": [{"claim": "...", "basis": "evidence_library|approved_brand_fact", "evidence_ids": ["src:1"]}],
+  "findings": [{"claim": "...", "basis": "evidence_library", "evidence_ids": ["src:1"]}],   // empty array when you report only brand facts (they go in result.facts, not findings)
   "evidence_ids": ["src:1"], "required_actions": ["..."], "output_version_id": "<unique string>", "timestamp": "<ISO-8601>",
   "result": {
     "ticket_id": "<ticket this answers, or null>",
