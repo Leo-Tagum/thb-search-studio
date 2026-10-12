@@ -5,6 +5,7 @@ import { citedSentences, fixChurn, splitSentences } from "./v1-gate";
 import { hedgeFlagsInText, checkUnit, type CheckCtx, type LedgerClaim } from "./checks";
 import { studioSemanticChecks, studioOutputSchemas, type StudioValidationCtx } from "./agents";
 import { buildTeamPacket, teamSchema, teamSemanticChecks } from "../team/bridge";
+import { stateOf, toRow } from "./service";
 
 const ok = (o: Outcome): SectionState => { if (!o.ok) throw new Error(o.error); return o.state; };
 const err = (o: Outcome): string => (o.ok ? "" : o.error);
@@ -125,6 +126,39 @@ describe("V1 gate: changed-sentence scope, the fix pass and the round limit", ()
   });
 });
 
+describe("escalation: the round limit stops for Leo, and nothing resolves it but Leo", () => {
+  const escalated = () => {
+    let s = written();
+    for (let i = 0; i < 3; i++) { s = ok(v1(s, "REVISION", { issues: [{ key: `fact:k${i}`, text: "Still unsupported." }] })); if (i < 2) s = ok(applyDeterministic(ok(recordVersion(s, { hash: `h${i + 2}`, sig, text: T1 + ` Edit ${i}.` })), [])); }
+    return s;
+  };
+  it("the third REVISION escalates; the writer, V1 and the other reviewers are refused until Leo resolves it", () => {
+    const s = escalated();
+    expect(s.status).toBe("ESCALATED");
+    expect(s.escalation?.issueKey).toBe("fact:k2");
+    expect(err(recordVersion(s, { hash: "x", sig, text: "t." }))).toMatch(/ESCALATED; a human must resolve it/);
+    expect(err(applyReview(s, { agent: "V1", versionHash: s.versionHash!, decision: "PASS", issues: [] }))).toMatch(/cannot review/);
+    expect(reviewerFor(s)).toBeNull();
+  });
+  it("a churn finding that repeats escalates the same way (the writer keeps changing sentences V1 did not cite)", () => {
+    let s = ok(v1(written(), "REVISION", { issues: [{ key: "fact:x", text: "Fix this one sentence." }] }));
+    const churn = [{ code: "V1_FIX_CHURN", severity: "REVISION" as const, detail: "uncited sentences changed" }];
+    for (let i = 0; i < 2; i++) s = ok(applyDeterministic(ok(recordVersion(s, { hash: `c${i}`, sig, text: T1 + ` Churn ${i}.` })), churn));
+    expect(s.status).toBe("NEEDS_REVISION");
+    s = ok(applyDeterministic(ok(recordVersion(s, { hash: "c2", sig, text: T1 + " Churn 2." })), churn));
+    expect(s.status).toBe("ESCALATED");
+    expect(s.escalation?.issueKey).toBe("det:V1_FIX_CHURN");
+  });
+  it("Leo's resolution gives the writer a fresh cycle and V1 still has to pass the result", () => {
+    let s = ok(resolveByHuman(escalated(), { kind: "request_revision", issueText: "Leo: cut the claim." }));
+    s = ok(applyDeterministic(ok(recordVersion(s, { hash: "r1", sig, text: "Ask a probate attorney who can sign." })), []));
+    expect(s.status).toBe("NEEDS_FACT");
+    expect(s.v1Rounds).toBe(0);
+    s = v1Pass(s);
+    expect(s.status).toBe("NEEDS_SEO");
+  });
+});
+
 describe("V1 gate: what goes back through V1, and what the churn check applies to", () => {
   it("only the writer's V1-fix pass is a fix pass: Agent 6 revisions, Agent 7 revisions, reopens and human edits are not", () => {
     const passed = v1Pass(written());
@@ -173,6 +207,26 @@ describe("V1 gate: what goes back through V1, and what the churn check applies t
     g = ok(applyDeterministic(ok(recordVersion(g, { hash: "h2", sig, text: T1.replace("Most owners want", "Many owners ask") })), []));
     g = v1Pass(g);
     expect(g.status).toBe("NEEDS_SEO");                                        // new text: Agents 6 and 7 review it
+  });
+});
+
+describe("V1 gate: the state is saved and loaded whole", () => {
+  it("every gate field survives toRow -> stateOf, in each stage of a unit's life", () => {
+    const stages: SectionState[] = [];
+    let s = written(); stages.push(s);
+    s = ok(v1(s, "REVISION", { issues: [{ key: "fact:x", text: 'The sentence "A cleanout takes planning." is not supported.' }] })); stages.push(s);
+    s = ok(applyDeterministic(ok(recordVersion(s, { hash: "h2", sig, text: T1 + " Added." })), [])); stages.push(s);
+    s = v1Pass(s); stages.push(s);
+    s = a7(a6(s)); stages.push(s);
+    for (const st of stages) {
+      const row = { section_key: st.key, ...toRow(st) };
+      expect(stateOf(JSON.parse(JSON.stringify(row)))).toEqual(st);
+    }
+  });
+  it("a state saved before Phase 3d (no v1 block) loads as a section without the gate", () => {
+    const old = stateOf({ section_key: "s1", status: "NEEDS_FACT", issues: { issues: [], meta: { versionNo: 1, versionHash: "h1", sig, factPassedSig: null, resumeStage: "fact", lockedHash: null, escalation: null, blockedBy: null } } });
+    expect(old.gate).toBeUndefined();
+    expect(reviewerFor(old)).toBe(5);
   });
 });
 

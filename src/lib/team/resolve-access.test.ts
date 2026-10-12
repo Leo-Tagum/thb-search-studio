@@ -63,7 +63,7 @@ describe("who counts as an agent-like actor", () => {
 });
 
 describe("resolveSection cannot be triggered by an agent role or the bridge", () => {
-  const actions = [{ kind: "hold" as const }, { kind: "request_revision" as const, text: "Write it without the figure." }, { kind: "reopen" as const, text: "Re-check the wording." }];
+  const actions = [{ kind: "hold" as const }, { kind: "request_revision" as const, text: "Write it without the figure." }, { kind: "reopen" as const, text: "Re-check the wording." }, { kind: "v1_gate" as const }];
   it("an agent-like actor is refused before anything is read or written, for every action and mode", async () => {
     for (const actor of ["W1", "V1", "S2", "R1", "agent:thb-w1-writer", "system:agent-bridge", "orchestrator", "thb-04-section-writer"]) for (const mode of ["classic", "team"] as const) for (const action of actions) {
       const log = newLog();
@@ -122,6 +122,18 @@ describe("resolveSection cannot be triggered by an agent role or the bridge", ()
     expect(save?.row.issues.team.mustFix[0]).toMatchObject({ role: "LEO", text: "Write it without the figure." });
     expect(save?.row.issues.issues).toBeUndefined();                     // not the classic { issues, meta } shape
     expect(save?.row).toMatchObject({ status: "NEEDS_REVISION", locked: false });
+  });
+  it("Leo sends a locked classic section through the V1 gate: audited, state NEEDS_FACT, gate recorded; a team article refuses the action", async () => {
+    const log = newLog();
+    const res = await resolveSection(fakeDb(tablesFor("classic", "LOCKED"), log), "a1", "s2", { kind: "v1_gate" }, "leo");
+    expect(res.ok).toBe(true);
+    expect((res as any).status).toBe("NEEDS_FACT");
+    expect(log.inserts.find((i) => i.table === "audit_events")?.row).toMatchObject({ actor: "leo", event_type: "section_v1_gate" });
+    const save = log.payloads.find((p) => p.table === "article_sections" && p.row.issues);
+    expect(save?.row.issues.meta.v1).toMatchObject({ gate: "v1", v1Passed: null, v1Scope: { kind: "full" } });          // the gate is part of the saved classic state
+    const team = await resolveSection(fakeDb(tablesFor("team", "LOCKED"), newLog()), "a1", "s2", { kind: "v1_gate" }, "leo");
+    expect(team.ok).toBe(false);
+    expect((team as any).reason).toMatch(/classic articles/);
   });
   it("a hold is audited too", async () => {
     const log = newLog();

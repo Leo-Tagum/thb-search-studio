@@ -104,7 +104,9 @@ export function applyDeterministic(s: SectionState, findings: Finding[]): Outcom
   const priv = findings.find((f) => f.severity === "BLOCKED_PRIVACY");
   const claim = findings.find((f) => f.severity === "BLOCKED_CLAIM");
   if (priv || claim) return { ok: true, state: { ...s, status: priv ? "BLOCKED_PRIVACY" : "BLOCKED_CLAIM", blockedBy: `${(priv ?? claim)!.code}: ${(priv ?? claim)!.detail}` } };
-  return withIssues({ ...s, issues: s.issues.filter((i) => !i.key.startsWith("det:")) }, "fact", findings.map((f) => ({ key: `det:${f.code}`, text: f.detail })));
+  // A finding that is still there keeps its attempt count (recordVersion counted this revision), so a repeating one escalates after 2 attempts instead of looping.
+  const still = new Set(findings.map((f) => `det:${f.code}`));
+  return withIssues({ ...s, issues: s.issues.filter((i) => !i.key.startsWith("det:") || still.has(i.key)) }, "fact", findings.map((f) => ({ key: `det:${f.code}`, text: f.detail })));
 }
 
 export type HedgeVerdict = { key: string; ruling: HedgeRuling; note?: string };

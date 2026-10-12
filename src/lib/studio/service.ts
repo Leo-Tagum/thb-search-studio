@@ -111,15 +111,18 @@ export async function load(db: SupabaseClient, articleId: string): Promise<Loade
 }
 
 // State columns kept inside the issues jsonb envelope, so no extra migration is needed for each loop field.
-type Envelope = { issues: SectionState["issues"]; meta: { versionNo: number; versionHash: string | null; sig: string | null; factPassedSig: string | null; resumeStage: string | null; lockedHash: string | null; escalation: SectionState["escalation"]; blockedBy: string | null; collected?: SectionState["collected"]; declines?: SectionState["declines"] } };
-const toRow = (s: SectionState): Record<string, unknown> => ({
+type Envelope = { issues: SectionState["issues"]; meta: { versionNo: number; versionHash: string | null; sig: string | null; factPassedSig: string | null; resumeStage: string | null; lockedHash: string | null; escalation: SectionState["escalation"]; blockedBy: string | null; collected?: SectionState["collected"]; declines?: SectionState["declines"]; v1?: V1Fields } };
+/** The V1 gate fields of a classic section (Phase 3d), stored beside the rest of the loop state. */
+type V1Fields = Pick<SectionState, "gate" | "sentences" | "v1Passed" | "v1Reviewed" | "v1Scope" | "hedges" | "fixCited" | "v1Rounds" | "seoPassedHash" | "edPassedHash">;
+const v1Of = (s: SectionState): V1Fields => ({ gate: s.gate, sentences: s.sentences ?? null, v1Passed: s.v1Passed ?? null, v1Reviewed: s.v1Reviewed ?? null, v1Scope: s.v1Scope ?? null, hedges: s.hedges ?? [], fixCited: s.fixCited ?? [], v1Rounds: s.v1Rounds ?? 0, seoPassedHash: s.seoPassedHash ?? null, edPassedHash: s.edPassedHash ?? null });
+export const toRow = (s: SectionState): Record<string, unknown> => ({
   status: s.status, locked: s.status === "LOCKED",
-  issues: { issues: s.issues, meta: { versionNo: s.versionNo, versionHash: s.versionHash, sig: s.sig, factPassedSig: s.factPassedSig, resumeStage: s.resumeStage, lockedHash: s.lockedHash, escalation: s.escalation, blockedBy: s.blockedBy, collected: s.collected ?? [], declines: s.declines ?? [] } } satisfies Envelope,
+  issues: { issues: s.issues, meta: { versionNo: s.versionNo, versionHash: s.versionHash, sig: s.sig, factPassedSig: s.factPassedSig, resumeStage: s.resumeStage, lockedHash: s.lockedHash, escalation: s.escalation, blockedBy: s.blockedBy, collected: s.collected ?? [], declines: s.declines ?? [], v1: v1Of(s) } } satisfies Envelope,
 });
 export const stateOf = (row: any): SectionState => {
   const env = (row.issues ?? {}) as Partial<Envelope>;
   const m = env.meta;
-  return { key: row.section_key, status: row.status, versionNo: m?.versionNo ?? 0, versionHash: m?.versionHash ?? null, sig: m?.sig ?? null, factPassedSig: m?.factPassedSig ?? null, resumeStage: (m?.resumeStage as any) ?? null, issues: env.issues ?? [], lockedHash: m?.lockedHash ?? null, escalation: m?.escalation ?? null, blockedBy: m?.blockedBy ?? null, collected: m?.collected ?? [], declines: m?.declines ?? [] };
+  return { key: row.section_key, status: row.status, versionNo: m?.versionNo ?? 0, versionHash: m?.versionHash ?? null, sig: m?.sig ?? null, factPassedSig: m?.factPassedSig ?? null, resumeStage: (m?.resumeStage as any) ?? null, issues: env.issues ?? [], lockedHash: m?.lockedHash ?? null, escalation: m?.escalation ?? null, blockedBy: m?.blockedBy ?? null, collected: m?.collected ?? [], declines: m?.declines ?? [], ...(m?.v1 ?? {}) };
 };
 
 // ---------- queue ----------
