@@ -45,6 +45,7 @@ describe("feedback card", () => {
     expect(ok({ ticket: "HUMAN_ESCALATION", from: ["W1"], to: "LEO" })).toBe(true);
     expect(ok({ ticket: "HUMAN_ESCALATION", from: ["W1"], to: "S1" })).toBe(false);
     expect(ok({ to: "LEO" })).toBe(false);
+    expect(ok({ to: "W2" })).toBe(false);   // QUALITY_CORRECTION goes to W1 only
   });
   it("rejects a ticket addressed to its sender", () => expect(ok({ from: ["W1"], to: "W1" })).toBe(false));
   it("knows exactly the four starting ticket types", () => expect([...TICKET_TYPES]).toEqual(["EVIDENCE_REQUEST", "ROOT_CAUSE_NOTE", "QUALITY_CORRECTION", "HUMAN_ESCALATION"]));

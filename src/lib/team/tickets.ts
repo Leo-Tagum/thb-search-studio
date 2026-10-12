@@ -33,7 +33,7 @@ export const feedbackCard = z
     if ((c.ticket === "HUMAN_ESCALATION") !== (c.to === "LEO")) ctx.addIssue({ code: "custom", path: ["to"], message: "HUMAN_ESCALATION goes to LEO, and only HUMAN_ESCALATION does" });
     if (c.ticket === "ROOT_CAUSE_NOTE" && c.to !== "S2") ctx.addIssue({ code: "custom", path: ["to"], message: "ROOT_CAUSE_NOTE goes to S2 (the brief owner)" });
     if (c.ticket === "EVIDENCE_REQUEST" && !["R1", "R2", "R3"].includes(c.to)) ctx.addIssue({ code: "custom", path: ["to"], message: "EVIDENCE_REQUEST goes to Research (R1, R2 or R3)" });
-    if (c.ticket === "QUALITY_CORRECTION" && !["W1", "W2"].includes(c.to)) ctx.addIssue({ code: "custom", path: ["to"], message: "QUALITY_CORRECTION goes to Writing (W1 or W2)" });
+    if (c.ticket === "QUALITY_CORRECTION" && c.to !== "W1") ctx.addIssue({ code: "custom", path: ["to"], message: "QUALITY_CORRECTION goes to W1 only (W2 suggests, it never receives corrections)" });
   });
 export type FeedbackCard = z.infer<typeof feedbackCard>;
 
