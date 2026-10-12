@@ -101,5 +101,60 @@ Phase 3 accepted as PARTIAL (commit `1cea6ca`, STATUS.md). The hoarder guide is 
 ## Handoff
 ```text
 PHASE: 3c — Team Model
-STATUS: NOT STARTED (task list approved by Leo, 2026-10-10; build begins at Task 1)
+STATUS: IN PROGRESS. Tasks 1-13 DONE, committed and pushed (origin/main at f4af090). Task 14 is NEXT: PLAN ONLY, run nothing until Leo approves the plan.
+UPDATED: 2026-10-12
+
+DONE (Tasks 1-13; commit per task)
+  1  3ce2e6c  migration 0015 team tables (tickets, ticket_messages, team_runs, articles.pipeline_mode, articles.branch_of)
+  2  a90b5fa  ticket types + feedback card (only V1 may block)
+  3  1987eb7  router: 2 rounds per ticket, 10 tickets per article, escalation to Leo, full log
+  4  2f236bf  team section loop (V1 veto; only code locks); e2b9d7a V1 re-reviews every changed version, scoped to changed sentences
+  5  39c5ab3  research files R1-R3 (+ 5f6f242 role-specific prohibited actions; R1 official-source allowlist)
+  6  a238fda  strategy files S1/S2; ROOT_CAUSE_NOTE brief revision; approved identity escalates (5e04e0f)
+  7  5468ec9  writing files W1/W2 (W2 suggestions only; W1 cannot add claims)
+  8  85d9bb1  council files V1-V3; combined feedback set keeps every V1 item and links merged cards to their originals
+  9  1d4b0af  team bridge: packets, strict schemas, submit checks, retry then INTEGRATION_ERROR
+  10 08f91b7  pipeline_mode switch (service, CLI, UI); classic and team refuse each other's runs
+  11 6966dcd  persisted router, Team tab, Stuck inbox, Leo-only resolve
+  12 253486d  team runtime + operator runner (team-plan, team-queue-next, team-dump, team-submit-dir, team-log); /thb-run-agent updated
+  13 f4af090  team-mode regression fixtures + live smoke:team; resolveSection made team-aware; smoke:cleanup
+  Also: 5c0eada hedge-phrase flag (V1 must rule proven/reword/drop on each flagged sentence); 78a62fa R1 requests URLs, code fetches and
+  stores them, R1 quotes only stored passages by id; 1193e93 and 7863ccb Leo-only resolve and mode switch (see standing rules).
+
+VERIFIED AT f4af090: full Vitest (42 files, 592 tests), tsc, eslint (one old warning in scripts/bundle-scan.ts), next build, db:check; live smokes
+  smoke:studio (classic), smoke:team-view, smoke:team-cli, smoke:team all pass. smoke:team forces: R1 fetch -> stored snapshot -> quote -> ledger claim;
+  R3 approved facts verbatim; S1 -> R2 demand request; V1 -> R1; V2 -> S2 ROOT_CAUSE_NOTE (only the affected unit redone); a V3 -> S2 note whose only fix
+  changes the approved keyword (escalated to Leo, not applied); a ticket at the round limit (round 3 refused, escalated); the ticket budget (ticket 11
+  stops the article); the Phase 3 hard rules through real submits (unsupported figure, privacy gate, PENDING JUAN, "founder", rating text); assembly,
+  forged Approval Room records, the operator-is-not-an-approver rule, and an edit after approval. All four ticket types fired; all four teams sent and received.
+
+MIGRATIONS 0015-0019: all APPLIED to the live database, all additive, all approved by Leo (0016, 0017, 0018, 0019 each approved when proposed).
+  0015 team tables and articles.pipeline_mode ('classic' default), articles.branch_of
+  0016 tickets.merged_from (links a combined council card to its original cards)
+  0017 tickets.from_roles, tickets.escalation_trigger
+  0018 articles.is_fixture (default false: every existing article is a real one)
+  0019 tickets.issue_key
+  agent_runs.agent_key is free text, so the team agent keys need no migration (a test guards that). Existing article: still 'classic', is_fixture false.
+
+STANDING RULES (keep following them)
+  - Only "leo" acts on a real article: resolving a section and switching the pipeline are refused for any other actor. The "smoke-test" actor is accepted
+    only on an article flagged is_fixture (a throwaway the smoke scripts create), never on a real one. Agent roles, agent keys, the bridge and the
+    orchestrator are refused outright. The Task 14 branch is a real article (is_fixture = false), so every human action on it runs as leo.
+  - No approvals, no publishing, no WordPress writes, no Approval Room clicks. Code sets locks; no agent output can set a lock, an approval or a state.
+  - Classic stays the default and is unchanged. The classic hoarder article (version 4db42fea93cc, HUMAN_REVIEW, 50 optional findings) must stay untouched.
+  - Never force-push. Push only when asked. Apply a migration only when Leo approves it.
+  - Approved identity (keyword, working title, H2 questions, slug/URL, action and target page, required links, never-target list, protected pages) is
+    never changed by S2: a change escalates to Leo.
+  - A stuck situation (escalation, round-limit hit, budget stop) stops for Leo; the runner never resolves anything.
+  - Run smoke:team in the background (about 15 minutes against the live database). If a smoke is killed, npm run smoke:cleanup removes only fixture rows.
+
+NEXT: Task 14 (comparison setup: a team-mode BRANCH of the hoarder guide, starting from the 9 locked units of 4db42fea93cc, with the 50 open findings
+  loaded as the starting QUALITY_CORRECTION set; count verified to be 50 or stop and report). PLAN ONLY first: report what tables and rows the run creates,
+  whether the branch reuses the approved brief and evidence or reruns R1-R3 and S1/S2, how team vs classic will be measured (findings fixed / still present /
+  new; V1 blocks; tickets used of 10; escalations to Leo; Claude usage), the cost estimate (the plan assumed 3-6x classic; confirm or correct), stop points
+  (every escalation and HUMAN_REVIEW), and rollback (delete the branch without touching the original). Wait for Leo's approval before running anything.
+  Tasks 15 (run the team revision), 16 (comparison report) and 17 (phase3c-verify script, final Handoff, STATUS.md) follow.
+
+NOT YET DONE: Tasks 14-17; Done-when items "team revision ran on a branch, classic version byte-identical" and "comparison report exists and Leo has read it".
+  STATUS.md has not been updated for Phase 3c (Task 17).
 ```
