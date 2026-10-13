@@ -143,13 +143,15 @@ button, input, textarea { font: inherit; color: inherit; }
 
   // ---- state: the Studio plan comes from the payload; Lawrence's work (status, uploads, notes) is kept in the db capability when this page has it, in memory otherwise ----
   var S = {}; P.cards.forEach(function (c) { S[c.card_id] = { state: c.state, uploads: (c.uploads || []).slice(), notes: (c.notes || []).slice() }; });
-  var DB = null, ME = 'Lawrence';
+  var DB = null, ME = 'Someone';
   function docFor(id) { return DB && DB.doc('board/' + P.board.article_id + '/work/' + id.replace(':', '-')); }
   function save(id) { try { var d = docFor(id); if (d) d.set({ state: S[id].state, uploads: S[id].uploads.map(function (u) { return { v: u.v, for_card_version: u.for_card_version, file_name: u.file_name, date: u.date, asset_id: u.asset_id || null }; }), notes: S[id].notes }); } catch (e) { /* the page keeps working in memory */ } }
   function load() {
     return Promise.resolve(window.claude && window.claude.use ? window.claude.use('db') : null).then(function (db) {
       DB = db; if (!db) return;
-      return Promise.all(P.cards.map(function (c) { return docFor(c.card_id).get().then(function (d) { var v = d && (d.data ? d.data() : d); if (v && v.state) { S[c.card_id].state = v.state; S[c.card_id].uploads = v.uploads || []; S[c.card_id].notes = v.notes || []; } }).catch(function () {}); }));
+      return Promise.all(P.cards.map(function (c) { return docFor(c.card_id).get().then(function (d) { var v = d && d.exists ? d.data() : null; if (v && v.state) { S[c.card_id].state = v.state; S[c.card_id].uploads = (v.uploads || []).map(function (u) { return Object.assign({}, u, { thumb: u.asset_id ? '/_blob/' + u.asset_id : (u.thumb || null) }); }); S[c.card_id].notes = v.notes || []; } }).catch(function () {}); }));
+    }).then(function () {
+      return Promise.resolve(window.claude && window.claude.use ? window.claude.use('user') : null).then(function (u) { if (!u) return; return u.me().then(function (m) { if (m && m.name) ME = m.name; else return u.isOwner().then(function (o) { ME = o ? 'Owner' : 'Editor'; }); }); });
     }).catch(function () {});
   }
   function today() { return new Date().toISOString().slice(0, 10); }
