@@ -276,6 +276,22 @@ V1 had ruled the same type of unsupported assertion must-fix elsewhere, indicati
 
 Proof that v2 equals the v1 baseline: v2 on today's data is byte-for-byte the v1 baseline value, and it equals v1 computed the canonical way. From now on both are reported side by side.
 
+### Evidence for 3e: Bay Area focus and the two layers of law (Juan's direction, relayed by Leo, 2026-10-13)
+
+Juan (CEO) set the company focus: the San Francisco Bay Area, including San Francisco and San Mateo local law. Recorded as a standing rule for every article (also in `docs/references/editorial-standards.md`, section 7b):
+- **Default geography: SF Bay Area.**
+- **State-level law is cited as California law; local rules only with official city or county prints.**
+- **State and local law are always separate layers, each with its own source.**
+- **Local examples and links only where they are real and sourced.**
+
+**Where it goes (plan, nothing changed yet; no prompt or code edited):**
+- **Agent 1 / S1** (strategy, `thb-01-seo-strategist.md`, `thb-s1-strategist.md`): default the opportunity geography to the Bay Area; check a Bay Area framing against existing pages for cannibalization (for example the existing post on selling a Bay Area house full of belongings) before a CREATE.
+- **Agent 3 / S2** (architects) and **the brief template:** a "geography and law layers" field: state-law points (each tied to a claim) and local-law points (each tied to its own city or county claim) listed separately; a local section only when its claims exist; a plain "local rules vary; check with your city or county" line otherwise.
+- **Keyword research** (the GSC-based candidate builder, `scripts/build-candidates.mts` and Agent 1's packet): Bay Area modifiers (Bay Area, San Francisco, San Mateo County) considered as keyword variants; county and city terms only with data behind them.
+- **Agent 4 / W1** (writers): "California law" wording for state-level law; never present a city or county rule as California law or as the same as another city's; no service-area claims.
+- **Agent 2 / R1 / V1:** the legal-claims rules already planned for Phase 3e cover local law: a local provision needs the official city or county print and its own claim; V1 flags a sentence that blends the layers.
+- **Phase 3e regression test (to add):** a sentence that presents a local rule as California law, or one city's rule as another's, must be flagged.
+
 ## Editorial polish items for Juan's review: NOT applied (s7, 2026-10-13)
 
 These are optional reviewer findings, not release fixes. Leo rejected the first s7 rewrite and authorized one surgical correction only (the opening's first sentence); none of the items below was applied. They are listed for Juan.

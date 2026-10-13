@@ -102,6 +102,14 @@ Studio Brand Facts hold the live statuses (the /brand screen and the brand_facts
 
 **PERMANENT RULE (Leo, 2026-10-10): ratings and reviews.** The site's rating badge is a live Google widget. Agents never write a star rating, a score such as 4.8/5, or a review count in any text, and this is never lifted. It replaces the earlier pending item "4.8/5 (115 reviews)". The submit check rejects it anywhere in an agent output, including open items.
 
+## 7b. Geography and the two layers of law (Juan's direction, relayed by Leo, 2026-10-13)
+Juan (CEO): the focus is the San Francisco Bay Area, including San Francisco and San Mateo local law. Standing rules for every article from now on:
+- **Default geography: the SF Bay Area.** Address Bay Area readers. This is not a service-area claim: exact cities THB buys in are PENDING JUAN (section 7), so say who the guide is for, never where THB buys.
+- **State-level law is cited as California law.** Local rules are stated only from the official city or county print and their own claim, attributed to that city or county.
+- **State law and local law are always separate layers, each with its own source.** Never imply a city or county rule is the same as California law, or that one city's or county's rule matches another's (San Francisco and San Mateo included). Where a local rule is not verified, say "local rules vary; check with your city or county" and do not fill the gap.
+- **Local examples and links only where they are real and sourced** (a real THB page, a real official page).
+- Legal claims keep the standing "no guessing" rule (3e doc, Evidence for 3e): official text, exact quote, section, URL, date, MATCH / NARROWER / BROADER / WRONG.
+
 ## 8. Content Quality Scorecard (Agent 7): ADAPTED, advisory
 - Agent 7 scores every draft: Juan voice 20 · Seller education 20 · Deal logic 20 · Local context 15 · SEO/AEO/GEO structure 15 · Trust and honesty 10.
 - ADAPTED: Under 85 is flagged "revise recommended". It never blocks or approves by itself; Leo makes the final call. (The SOP's hard "under 85 must be revised" rule is not automated.)
