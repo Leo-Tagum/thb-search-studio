@@ -261,6 +261,21 @@ V1 had ruled the same type of unsupported assertion must-fix elsewhere, indicati
 
 **Disposition:** rule recorded only. No agent prompt and no code changed. First application: the hoarder guide check of clm:1-7 (reported to Leo 2026-10-13; the official live pages returned HTTP 403 to automated fetches, so the check used the authenticated leginfo prints Leo stored on 2026-10-10).
 
+### Evidence for 3e: fingerprint v2 (Leo approved, 2026-10-13)
+
+**Why.** The v1 fingerprint (`npm run studio -- fingerprint`, `src/lib/studio/branch.ts`) hashes whole rows (`select *`). Migration 0020 added columns, so v1 on the original article moved from `23f8dd72…4611` to `7ea7f5e2c470…` although no value changed. v1 is kept as is (historical baseline, not edited or replaced).
+
+**v2** (`npm run studio -- fingerprint-v2`, `src/lib/studio/fingerprint-v2.ts`): rows ordered by primary key (`id`), and only the columns listed in `FP2_COLUMNS` (the column set the v1 baseline was taken on, every column that existed before migration 0020, listed explicitly in code). A column added later is never read. The list includes `articles.is_fixture` and `tickets.merged_from / from_roles / escalation_trigger / issue_key`, added by migrations 0016-0019 on 2026-10-12, after the 2026-10-11 date: they are in because the v1 baseline value includes them (a list restricted to 2026-10-11 could not reproduce `23f8dd72…4611`). Test: `fingerprint-v2.test.ts` (adding a nullable column, even filled, does not change v2; row order does not change v2; a real value change does).
+
+| | Original article `e2b915e3…` today |
+|---|---|
+| v1 baseline (historical, taken before migration 0020) | `23f8dd722ed7bc26a6f5f10568cf6fb6053596a678980d223ab65dd31dea4611` |
+| v1 recomputed today (tool as is, after migration 0020) | `7ea7f5e2c47043602c717da643071c29a29cc41a4239f202a7d1ed65b79f3b28` (columns added, content unchanged) |
+| v1 computed the canonical way today (the same v1 rows with the eight columns added by 0020 removed, ordered by id) | `23f8dd722ed7bc26a6f5f10568cf6fb6053596a678980d223ab65dd31dea4611` |
+| **v2 today** | **`23f8dd722ed7bc26a6f5f10568cf6fb6053596a678980d223ab65dd31dea4611`** |
+
+Proof that v2 equals the v1 baseline: v2 on today's data is byte-for-byte the v1 baseline value, and it equals v1 computed the canonical way. From now on both are reported side by side.
+
 ## Editorial polish items for Juan's review: NOT applied (s7, 2026-10-13)
 
 These are optional reviewer findings, not release fixes. Leo rejected the first s7 rewrite and authorized one surgical correction only (the opening's first sentence); none of the items below was applied. They are listed for Juan.

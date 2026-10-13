@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- DB rows in a one-off script */
 // Second one-time, owner-approved exception to the article revision limit, for ONE branch only (Leo, 2026-10-13).
 // Reason: legal accuracy: missing statutory threshold and decider (clm:8 added, clm:2 and clm:3 updated; s3 and s7 edited).
 // It does NOT change REVISION_LIMIT (src/lib/orchestrator/states.ts stays 2). It sets this branch's revision_count 2 -> 1, supersedes the open

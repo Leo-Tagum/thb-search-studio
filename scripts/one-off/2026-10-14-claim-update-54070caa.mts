@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- DB rows in a one-off script */
 // One-off, owner-approved ledger change for ONE branch (Leo, 2026-10-13): legal accuracy, missing statutory threshold and decider.
 // Adds clm:8 (H&S 17920.3 opening paragraph threshold) and updates clm:2 and clm:3 (code enforcement officer alternative).
 // Every quote below was compared word for word with the authenticated leginfo print Leo stored on 2026-10-10 (evidence source 6904fefb…, HSC_17920.3.pdf).

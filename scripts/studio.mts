@@ -24,6 +24,7 @@
 //   npm run studio -- mode <article_id> [classic|team]  (Leo: shows or switches the pipeline; switching is allowed only before any section is written, or on a team branch)
 //   npm run studio -- branch <article_id> <expected_findings> [--classic] [--dry-run]   (Leo: creates a BRANCH of a classic article for a comparison, team mode by default, or a classic revision baseline with --classic; reads the original only)
 //   npm run studio -- fingerprint <article_id>          (read-only fingerprint of an article and everything attached to it)
+//   npm run studio -- fingerprint-v2 <article_id>       (read-only; stable: fixed column list, ordered by id; a column added later cannot change it. Report it next to v1)
 //   npm run studio -- branch-delete <branch_id> --yes   (Leo: removes one branch and what it created; refuses anything that is not a branch)
 //   npm run studio -- voice-approve                    (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
 //   npm run studio -- proposal <article_id> <out.json>  (creates the proposal and writes the Approval Room payload)
@@ -47,6 +48,7 @@ import { leoAnswerEscalationAs, loadTeamView, raiseTicketBudget, startTeamRun } 
 import { parseTeamQueueArgs } from "../src/lib/studio/cli-args";
 import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studio/proposals";
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
+import { fingerprintV2 } from "../src/lib/studio/fingerprint-v2";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
 const [cmd, a, b, c] = process.argv.slice(2);
@@ -215,6 +217,9 @@ if (cmd === "queue") {
   }
 } else if (cmd === "fingerprint") {
   const f = await fingerprint(db, a);
+  console.log(`${f.total}\n${Object.entries(f.parts).map(([k, v]) => `  ${k}: ${v.count} rows ${v.hash.slice(0, 12)}`).join("\n")}`);
+} else if (cmd === "fingerprint-v2") {
+  const f = await fingerprintV2(db, a);
   console.log(`${f.total}\n${Object.entries(f.parts).map(([k, v]) => `  ${k}: ${v.count} rows ${v.hash.slice(0, 12)}`).join("\n")}`);
 } else if (cmd === "branch-delete") {
   const res = await branchDelete(db, a, { actor: "leo", yes: process.argv.includes("--yes") });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- DB rows in a one-off script */
 // One-off backfill of the legal-claim verification record (migration 0020) for ONE branch: 54070caa… (the hoarder guide, hybrid branch). Leo, 2026-10-13.
 // The original article e2b915e3… is NEVER touched (its claim rows are part of its fingerprint 23f8dd72…4611), and neither is the team comparison branch.
 // Every quote was compared word for word with the authenticated leginfo prints Leo stored on 2026-10-10 (evidence library PDFs); the live site blocks automated fetches (HTTP 403).
@@ -44,7 +45,7 @@ const ROWS: Record<string, Row> = {
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 const refuse = (why: string): never => { console.error(`REFUSED: ${why}`); process.exit(1); };
-if (BRANCH === ORIGINAL) refuse("never the original");
+if ((BRANCH as string) === ORIGINAL) refuse("never the original");
 const { data: a } = await db.from("articles").select("id,branch_of,state").eq("id", BRANCH).single();
 if (!a || !a.branch_of) refuse("not a branch");
 const { data: claims } = await db.from("claims").select("id,claim_key,verification_label,reader_impact").eq("article_id", BRANCH);
