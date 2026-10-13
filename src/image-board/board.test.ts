@@ -70,6 +70,11 @@ describe("the image board template: one card, one task, one next action", () => 
     expect(template).toContain("The words on this card changed.");
     expect(template).not.toMatch(/uploads\.(splice|pop|shift)\(|uploads = \[\]/);   // an older version is never deleted or overwritten
   });
+  it("puts the next-action box under the idea for step 1 only, and reads change requests from the owner-only collection", () => {
+    expect(template).toContain("if (nextEl && cur === 1) body.appendChild(nextEl);");
+    expect(template).toContain("if (nextEl && cur !== 1) body.appendChild(nextEl);");
+    expect(template).toContain("'board2/' + P.board.article_id + '/requests'");
+  });
   it("separates handing in from approval", () => {
     expect(template).toContain("Handed in. Leo checks it next.");
     expect(template).toContain("Done does not mean approved");

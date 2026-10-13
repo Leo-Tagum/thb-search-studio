@@ -157,7 +157,7 @@ details[open] > summary::after { content: "\2212"; }
   // ---- state: the plan comes from the payload; Lawrence's work lives in the db capability when the page has it (shared, kept across reloads), in memory otherwise ----
   var W = {};
   P.cards.forEach(function (c) { var w = c.work || {}; W[c.card_id] = { read: !!w.read, made: !!w.made, words: !!w.words, done: !!w.done, base: w.base || 0, handled: w.handled || null, uploads: (c.uploads || []).slice(), notes: (c.notes || []).slice() }; });
-  var DB = null, ME = 'Someone', OPEN = {}, DET = {};
+  var DB = null, ME = 'Someone', OPEN = {}, DET = {}, REQ = {};      // REQ: change requests written by Leo (only the owner can write them), newest per card
   var path = function (id) { return 'board2/' + P.board.article_id + '/work/' + id.replace(':', '-'); };
   function save(id) { try { if (!DB) return; var w = W[id]; DB.doc(path(id)).set({ read: w.read, made: w.made, words: w.words, done: w.done, base: w.base, handled: w.handled, uploads: w.uploads.map(function (u) { return { v: u.v, for_card_version: u.for_card_version, file_name: u.file_name, date: u.date, asset_id: u.asset_id || null }; }), notes: w.notes }); } catch (e) { /* the page keeps working in memory */ } }
   function load() {
@@ -165,13 +165,16 @@ details[open] > summary::after { content: "\2212"; }
       DB = db; if (!db) return;
       return Promise.all(P.cards.map(function (c) { return db.doc(path(c.card_id)).get().then(function (d) { var v = d && d.exists ? d.data() : null; if (!v) return; var w = W[c.card_id]; ['read', 'made', 'words', 'done'].forEach(function (k) { w[k] = !!v[k]; }); w.base = v.base || 0; w.handled = v.handled || null; w.uploads = (v.uploads || []).map(function (u) { return Object.assign({}, u, { thumb: u.asset_id ? '/_blob/' + u.asset_id : null }); }); w.notes = v.notes || []; }).catch(function () {}); }));
     }).then(function () {
+      if (!DB) return;
+      return DB.collection('board2/' + P.board.article_id + '/requests').get().then(function (snap) { snap.docs.forEach(function (d) { var v = d.data(); if (v && v.card_id && v.id && v.text && (!REQ[v.card_id] || String(v.at) >= String(REQ[v.card_id].at))) REQ[v.card_id] = v; }); }).catch(function () {});
+    }).then(function () {
       return Promise.resolve(window.claude && window.claude.use ? window.claude.use('user') : null).then(function (u) { if (!u) return; return u.me().then(function (m) { if (m && m.name) ME = m.name; else return u.isOwner().then(function (o) { ME = o ? 'Owner' : 'Editor'; }); }); });
     }).catch(function () {});
   }
   var today = function () { return new Date().toISOString().slice(0, 10); };
 
   // ---- what is true about a card, from verified actions and explicit confirmations ----
-  function pending(c) { var r = c.changes_requested; return r && r.id !== W[c.card_id].handled ? r : null; }
+  function pending(c) { var r = REQ[c.card_id] || c.changes_requested; return r && r.id !== W[c.card_id].handled ? r : null; }
   function hasImage(c) { var w = W[c.card_id]; return w.uploads.some(function (u) { return u.for_card_version === c.card_version && u.v > w.base; }); }
   function latest(c) { var w = W[c.card_id]; var x = w.uploads.filter(function (u) { return u.for_card_version === c.card_version; }); return x.length ? x[x.length - 1] : null; }
   function stepsOf(c) { var w = W[c.card_id]; var up = hasImage(c); return [w.read, w.made, w.words, up, w.done && up]; }
@@ -235,7 +238,8 @@ details[open] > summary::after { content: "\2212"; }
     if (outdated) body.appendChild(el('div', { class: 'banner' }, [el('b', { text: 'The words on this card changed.' }), el('p', { text: 'Your earlier image no longer matches, so please make a new one. The old one is kept in the version history.' })]));
     if (cur === 6) body.appendChild(el('div', { class: 'banner ok' }, [el('b', { text: 'Handed in. Leo checks it next.' }), el('p', { text: 'Thank you. This is not an approval yet. If something needs to change you will see it here.' })]));
 
-    // the one next action
+    // the one next action: at the top, except for step 1, where it sits right under the idea so "Got it" comes after the idea has been shown
+    var nextEl = null;
     if (cur !== 6) {
       var act;
       if (cur === 0) act = el('button', { class: 'btn go', type: 'button', onclick: function () { w.handled = req.id; w.base = w.uploads.length; w.read = true; w.made = false; w.words = false; w.done = false; save(c.card_id); render(); } }, ['Start version ' + (w.uploads.length + 1)]);
@@ -244,11 +248,13 @@ details[open] > summary::after { content: "\2212"; }
         act = el('span', {}, [fin, el('label', { class: 'btn go', for: 'f-' + i, text: GO[3] })]);
       } else act = el('button', { class: 'btn go', type: 'button', onclick: function () { if (cur === 1) w.read = true; else if (cur === 2) w.made = true; else if (cur === 3) w.words = true; else if (cur === 5) w.done = true; save(c.card_id); render(); } }, [GO[cur - 1]]);
       var say = cur === 0 ? 'Start the next version of this image.' : SAY[cur - 1];
-      body.appendChild(el('div', { class: 'next' }, [el('div', { class: 'say' }, [cur === 0 ? 'Next: start the new version' : 'Next: ' + STEP[cur - 1].toLowerCase(), el('small', { text: say })]), act]));
+      nextEl = (el('div', { class: 'next' }, [el('div', { class: 'say' }, [cur === 0 ? 'Next: start the new version' : 'Next: ' + STEP[cur - 1].toLowerCase(), el('small', { text: say })]), act]));
     }
 
+    if (nextEl && cur !== 1) body.appendChild(nextEl);
     body.appendChild(el('div', { class: 'sec' }, [el('p', { class: 'purpose', text: c.purpose }), el('p', { class: 'where', text: c.placement })]));
     body.appendChild(el('div', { class: 'sec' }, [el('h3', { text: 'The idea' }), el('div', { class: 'idea', text: c.design_brief })]));
+    if (nextEl && cur === 1) body.appendChild(nextEl);
     body.appendChild(el('div', { class: 'sec' }, [el('h3', { text: 'Example prompt (optional)' }), el('div', { class: 'sample', text: c.generation_prompt }), el('p', { class: 'hint', style: 'margin-top:6px', text: 'A suggestion for an AI image tool. Use it, change it or ignore it.' }), el('div', { class: 'row' }, copyBtn('Copy example prompt', c.generation_prompt + '\n\nAvoid: ' + c.avoid.join(', ')))]));
     var lines = c.text_overlay.map(function (l) { return l.text; });
     body.appendChild(el('div', { class: 'sec' }, [el('h3', { text: 'The exact words to add' }), el('div', { class: 'lock' }, [el('ul', {}, lines.map(function (t) { return el('li', { text: t }); })), el('div', { class: 'note' }, [lockSvg(), el('span', { text: 'Locked. Add these words yourself, exactly as written. They cannot be changed here.' })])]), el('div', { class: 'row' }, copyBtn('Copy words', lines.join('\n')))]));

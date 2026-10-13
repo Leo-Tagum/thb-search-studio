@@ -16,6 +16,8 @@ export const IMAGE_PLAN_STATUSES = ["PLANNED", "V1_CHECKED", "ON_BOARD", "IN_PRO
 export const IMAGE_CARD_STATES = ["PLANNED", "V1_CHECKED", "ON_BOARD", "IN_PROGRESS", "DONE", "STALE", "SUPERSEDED"] as const;
 export const MAX_CARDS = 6;
 export const MAX_MUST_HAVE = 3;
+/** Short phrases on images (Leo, 2026-10-14): aim for at most this many words per overlay line. */
+export const MAX_OVERLAY_WORDS = 12;
 
 const txt = (max: number) => z.string().trim().min(1).max(max);
 /** Where a line comes from: "h2", "capsule", "block:<i>" (a block of a section, i from 0) or "faq:<i>:q" / "faq:<i>:a". */
@@ -153,6 +155,12 @@ export function imagePlanFindings(plan: ImagePlanResult, ctx: ImageCtx): Finding
         if (!whole) out.push(F("IMAGE_LEGAL_FRAGMENT", "BLOCKED_CLAIM", `${at}: "${t.slice(0, 100)}" is a legal line but only a fragment of the locked sentence; a threshold, condition or decider could be dropped (SR-5, SR-12). Use the whole sentence, table cell or list item`));
         if (legalKindsOf(t).some((k) => k !== "LEGAL_ABSENCE")) out.push(F("IMAGE_LAYER_BLEND", "BLOCKED_CLAIM", `${at}: "${t.slice(0, 100)}" puts a local rule and California law, or two cities or counties, in one line; split it into lines with their own claims (SR-2, SR-14)`));
         if (legalKindsOf(t).includes("LEGAL_ABSENCE")) out.push(F("IMAGE_LEGAL_ABSENCE", "BLOCKED_CLAIM", `${at}: "${t.slice(0, 100)}" states what a law does not say; it needs its own statute_absence claim (SR-6) and is not put in an image`));
+      }
+      const words = t.split(/\s+/).length;
+      if (words > MAX_OVERLAY_WORDS) {
+        const reading = /full[- ]width/i.test(c.design_brief) && /\b(large|big|easy to read|readable)\b/i.test(c.design_brief);
+        if (!legal) out.push(F("IMAGE_LINE_TOO_LONG", "REVISION", `${at}: "${t.slice(0, 80)}…" has ${words} words; prefer short phrases on images (at most ${MAX_OVERLAY_WORDS} words per line): use a heading, a list item or a shorter sentence from the locked text`));
+        else if (!reading) out.push(F("IMAGE_LINE_TOO_LONG", "REVISION", `${at}: the legal line "${t.slice(0, 80)}…" has ${words} words; avoid legal sentences on images. If it must appear, the idea must describe a layout made for it: one full-width panel with large type that is easy to read`));
       }
       lineSentences.push({ text: t, legal });
     }

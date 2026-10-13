@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { imageCard, imagePlanFindings, imagePlanResult, MAX_CARDS, type ImageCard, type ImageCtx, type ImagePlanResult } from "./image-cards";
+import { imageCard, imagePlanFindings, imagePlanResult, MAX_CARDS, MAX_OVERLAY_WORDS, type ImageCard, type ImageCtx, type ImagePlanResult } from "./image-cards";
 import type { LedgerClaim } from "./checks";
 import type { Unit } from "./schema";
 
@@ -25,6 +25,7 @@ const claims = new Map<string, LedgerClaim>([
 const ctx: ImageCtx = { units, unitHashes: { s1: "h1", s2: "h2", s3: "h3", s4: "h4", s5: "h5", faq: "hf" }, claims };
 
 const BRIEF = "A plain checklist graphic with three empty rows, flat simple shapes in calm navy with orange accents on a light background. Wide 16:9 composition with clear empty space on the right of each row where the words will go. Calm and reassuring, tidy and simple.";
+const READING = BRIEF + " Everything sits in one full-width panel with large type that is easy to take in.";
 const card = (over: Partial<ImageCard> = {}): ImageCard => ({
   card_id: "img:1", unit_key: "s1", unit_hash: "h1", anchor: { after: "Can you sell a packed house?", block_index: 1 }, type: "checklist_graphic",
   purpose: "Help the reader see the three first questions at a glance.", design_brief: BRIEF,
@@ -37,7 +38,7 @@ const card = (over: Partial<ImageCard> = {}): ImageCard => ({
 const skipsFor = (keys: string[]) => keys.map((unit_key) => ({ unit_key, reason: "No image helps this unit more than its text." }));
 const plan = (cards: ImageCard[], skipped?: string[]): ImagePlanResult => ({ cards, skipped_units: skipsFor(skipped ?? units.map((u) => u.key).filter((k) => !cards.some((c) => c.unit_key === k))) });
 const codes = (p: ImagePlanResult) => imagePlanFindings(p, ctx).map((f) => f.code);
-const legalCard = (over: Partial<ImageCard> = {}) => card({ card_id: "img:2", unit_key: "s2", unit_hash: "h2", anchor: { after: "What does state law list?", block_index: 0 }, type: "comparison_graphic", purpose: "Show the law's wording next to its condition.", design_brief: BRIEF, text_overlay: [{ text: SENT1, source_unit: "s2", source_block: "block:0" }, { text: SENT2, source_unit: "s2", source_block: "block:0" }], claim_ids: ["clm:1"], alt_text: "State law lists conditions that can make a building substandard, only when they endanger people or property.", ...over });
+const legalCard = (over: Partial<ImageCard> = {}) => card({ card_id: "img:2", unit_key: "s2", unit_hash: "h2", anchor: { after: "What does state law list?", block_index: 0 }, type: "comparison_graphic", purpose: "Show the law's wording next to its condition.", design_brief: READING, text_overlay: [{ text: SENT1, source_unit: "s2", source_block: "block:0" }, { text: SENT2, source_unit: "s2", source_block: "block:0" }], claim_ids: ["clm:1"], alt_text: "State law lists conditions that can make a building substandard, only when they endanger people or property.", ...over });
 
 describe("the card schema is strict and read-only", () => {
   it("accepts a clean plan and a plan that skips every unit", () => {
@@ -252,6 +253,28 @@ describe("the idea (design_brief): the main instruction, in an art director's wo
     expect(brief(BRIEF + " A smiling family at the door.")).toContain("IMAGE_PEOPLE");
     expect(brief(BRIEF + " The house with its street address visible.")).toContain("IMAGE_IDENTIFYING");
     expect(brief(BRIEF + " No people and no addresses.")).toEqual([]);
+  });
+});
+
+describe("short phrases on images (at most 12 words a line; legal sentences avoided)", () => {
+  const LONG = "Start with who holds title, then list who can sign, what is owed and what the house needs next.";
+  const withLong = (u: Unit[]) => u.map((x) => (x.key === "s1" && x.kind === "section" ? { ...x, blocks: [{ t: "p" as const, text: LONG }, ...x.blocks] } : x));
+  const longCard = (over: Partial<ImageCard> = {}) => card({ text_overlay: [{ text: LONG, source_unit: "s1", source_block: "block:0" }], anchor: { after: "x", block_index: 1 }, ...over });
+  const longCtx: ImageCtx = { ...ctx, units: withLong(units) };
+  it("a plain line over 12 words is flagged, even with a reading layout; 12 words or fewer pass", () => {
+    expect(LONG.split(" ").length).toBeGreaterThan(12);
+    expect(imagePlanFindings(plan([longCard()]), longCtx).map((f) => f.code)).toContain("IMAGE_LINE_TOO_LONG");
+    expect(imagePlanFindings(plan([longCard({ design_brief: READING })]), longCtx).map((f) => f.code)).toContain("IMAGE_LINE_TOO_LONG");
+    expect(codes(plan([card()]))).not.toContain("IMAGE_LINE_TOO_LONG");
+  });
+  it("a long legal sentence is flagged unless the idea describes a full-width, large-type layout made for it", () => {
+    const bare = legalCard({ design_brief: BRIEF });
+    expect(codes(plan([bare]))).toContain("IMAGE_LINE_TOO_LONG");
+    expect(codes(plan([legalCard()]))).not.toContain("IMAGE_LINE_TOO_LONG");           // READING layout
+    expect(codes(plan([legalCard({ design_brief: BRIEF + " One full-width panel." })]))).toContain("IMAGE_LINE_TOO_LONG");     // full width but no large type
+  });
+  it("the limit is the constant", () => {
+    expect(MAX_OVERLAY_WORDS).toBe(12);
   });
 });
 

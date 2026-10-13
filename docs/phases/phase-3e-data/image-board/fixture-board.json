@@ -8,91 +8,292 @@
  },
  "cards": [
   {
-   "card_id": "img:1", "title": "Three questions to settle first", "type": "checklist_graphic", "priority": "must_have",
+   "card_id": "img:1",
+   "title": "Three questions to settle first",
+   "type": "checklist_graphic",
+   "priority": "must_have",
    "purpose": "Helps the reader see the three first questions at a glance.",
    "placement": "Goes in section 1, after the numbered list.",
    "design_brief": "A plain checklist picture with three empty rows, drawn as simple flat shapes in calm navy with orange accents on a light background. Each row has a small empty box on the left and a long blank bar on the right, with clear empty space on the right of each row where the words will go. Mood: calm, tidy and reassuring, like a well-organized folder.",
    "generation_prompt": "A plain checklist graphic with three empty rows, flat simple shapes in calm navy with orange accents on a light background, wide 16:9 composition with clear empty space on the right of each row where the words will go. Calm, reassuring mood. No text, no letters, no people.",
-   "avoid": ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image"],
-   "text_overlay": [
-    { "text": "Who has authority to sign?", "source": "section 1, list item 1" },
-    { "text": "What is owed?", "source": "section 1, list item 2" },
-    { "text": "What does the house need?", "source": "section 1, list item 3" }
+   "avoid": [
+    "people or faces",
+    "real-looking identifiable house exteriors",
+    "addresses",
+    "street numbers or street signs",
+    "logos",
+    "documents",
+    "any text or letters in the image"
    ],
-   "aspect_ratio": { "ratio": "16:9", "width_px": 1600, "height_px": 900 },
+   "text_overlay": [
+    {
+     "text": "Who has authority to sign?",
+     "source": "section 1, list item 1"
+    },
+    {
+     "text": "What is owed?",
+     "source": "section 1, list item 2"
+    },
+    {
+     "text": "What does the house need?",
+     "source": "section 1, list item 3"
+    }
+   ],
+   "aspect_ratio": {
+    "ratio": "16:9",
+    "width_px": 1600,
+    "height_px": 900
+   },
    "alt_text": "A checklist of three first questions: authority to sign, what is owed, what the house needs.",
    "base_file_name": "fixture-article_section-1_first-questions",
    "card_version": 1,
-   "text_changes": [ { "card_version": 1, "date": "2026-10-13", "change": "First plan." } ],
-   "work": { "read": true, "made": true, "words": true, "done": true, "base": 0 },
-   "uploads": [ { "v": 1, "for_card_version": 1, "file_name": "fixture-article_section-1_first-questions_v1.png", "date": "2026-10-13", "thumb": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'><rect width='160' height='90' fill='%23f4f6fb'/><g fill='%2314213d'><rect x='14' y='14' width='9' height='9' rx='2'/><rect x='14' y='39' width='9' height='9' rx='2'/><rect x='14' y='64' width='9' height='9' rx='2'/></g><g fill='%23e8590c'><rect x='30' y='16' width='90' height='5' rx='2'/><rect x='30' y='41' width='70' height='5' rx='2'/><rect x='30' y='66' width='80' height='5' rx='2'/></g></svg>" } ],
+   "text_changes": [
+    {
+     "card_version": 1,
+     "date": "2026-10-13",
+     "change": "First plan."
+    }
+   ],
+   "work": {
+    "read": true,
+    "made": true,
+    "words": true,
+    "done": true,
+    "base": 0
+   },
+   "uploads": [
+    {
+     "v": 1,
+     "for_card_version": 1,
+     "file_name": "fixture-article_section-1_first-questions_v1.png",
+     "date": "2026-10-13",
+     "thumb": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'><rect width='160' height='90' fill='%23f4f6fb'/><g fill='%2314213d'><rect x='14' y='14' width='9' height='9' rx='2'/><rect x='14' y='39' width='9' height='9' rx='2'/><rect x='14' y='64' width='9' height='9' rx='2'/></g><g fill='%23e8590c'><rect x='30' y='16' width='90' height='5' rx='2'/><rect x='30' y='41' width='70' height='5' rx='2'/><rect x='30' y='66' width='80' height='5' rx='2'/></g></svg>"
+    }
+   ],
    "changes_requested": null,
-   "notes": [ { "who": "Lawrence", "at": "2026-10-13", "text": "Handed in. Navy boxes, orange lines." }, { "who": "Leo", "at": "2026-10-13", "text": "Looks right, thank you." } ]
+   "notes": [
+    {
+     "who": "Lawrence",
+     "at": "2026-10-13",
+     "text": "Handed in. Navy boxes, orange lines."
+    },
+    {
+     "who": "Leo",
+     "at": "2026-10-13",
+     "text": "Looks right, thank you."
+    }
+   ]
   },
   {
-   "card_id": "img:2", "title": "The law's list and the condition it sets", "type": "comparison_graphic", "priority": "must_have",
-   "purpose": "Shows the law's list of conditions next to the one threshold that decides whether they count.",
+   "card_id": "img:2",
+   "title": "The law's list and the condition it sets",
+   "type": "comparison_graphic",
+   "priority": "must_have",
+   "purpose": "Shows the law's list of conditions and the one threshold that decides whether they count, in a layout made for reading two sentences.",
    "placement": "Goes in section 2, right after the opening paragraph.",
-   "design_brief": "Two parts side by side. On the left, a stack of three plain horizontal bars. On the right, one larger rounded panel that feels like the main point, with generous room inside for a long sentence. Flat simple shapes in navy with orange accents on a light background. Leave clear empty space inside the bars and the panel where the words will go. Mood: careful and reassuring.",
-   "generation_prompt": "A calm two-part layout: on the left a simple stack of three plain horizontal bars, on the right one larger rounded panel, flat shapes in navy with orange accents on a light background, wide 16:9 composition with clear empty space inside the bars and the panel where the words will go. Reassuring, careful mood. No text, no letters, no people.",
-   "avoid": ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image", "heavy shadows", "clutter"],
-   "text_overlay": [
-    { "text": "California's Health and Safety Code lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards.", "source": "section 2, paragraph 1, sentence 1" },
-    { "text": "The law counts them only when they endanger life, limb, health, property, safety or welfare.", "source": "section 2, paragraph 1, sentence 2" }
+   "design_brief": "One full-width panel across the whole picture, made so two sentences are easy to take in. Flat simple shapes in navy with orange accents on a light background, with a thin orange line between two stacked areas inside the panel. Leave generous clear empty space in each area where the words will go, for large, clear type. Mood: careful and reassuring.",
+   "generation_prompt": "A single full-width panel with two stacked areas separated by a thin orange line, flat simple shapes in navy with orange accents on a light background, wide 16:9 composition with generous clear empty space in each area where the words will go, for large clear type. Careful, reassuring mood. No text, no letters, no people.",
+   "avoid": [
+    "people or faces",
+    "real-looking identifiable house exteriors",
+    "addresses",
+    "street numbers or street signs",
+    "logos",
+    "documents",
+    "any text or letters in the image",
+    "heavy shadows",
+    "clutter"
    ],
-   "aspect_ratio": { "ratio": "16:9", "width_px": 1600, "height_px": 900 },
+   "text_overlay": [
+    {
+     "text": "California's Health and Safety Code lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards.",
+     "source": "section 2, paragraph 1, sentence 1"
+    },
+    {
+     "text": "The law counts them only when they endanger life, limb, health, property, safety or welfare.",
+     "source": "section 2, paragraph 1, sentence 2"
+    }
+   ],
+   "aspect_ratio": {
+    "ratio": "16:9",
+    "width_px": 1600,
+    "height_px": 900
+   },
    "alt_text": "A list of conditions on the left and, on the right, the condition that must be met for them to count.",
    "base_file_name": "fixture-article_section-2_law-and-condition",
    "card_version": 1,
-   "text_changes": [ { "card_version": 1, "date": "2026-10-13", "change": "First plan." } ],
-   "work": { "read": true, "made": true, "words": true, "done": true, "base": 0 },
-   "uploads": [ { "v": 1, "for_card_version": 1, "file_name": "fixture-article_section-2_law-and-condition_v1.png", "date": "2026-10-13", "thumb": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'><rect width='160' height='90' fill='%23f4f6fb'/><g fill='%2314213d'><rect x='12' y='14' width='60' height='14' rx='3'/><rect x='12' y='38' width='60' height='14' rx='3'/><rect x='12' y='62' width='60' height='14' rx='3'/></g><rect x='84' y='14' width='64' height='62' rx='8' fill='%23e8590c'/></svg>" } ],
-   "changes_requested": { "id": "cr-1", "at": "2026-10-14", "by": "Leo", "text": "Give the right-hand panel more room. The second sentence is too small to read.", "for_image_v": 1 },
-   "notes": [ { "who": "Lawrence", "at": "2026-10-13", "text": "Handed in. The long sentence is small on the right." } ]
+   "text_changes": [
+    {
+     "card_version": 1,
+     "date": "2026-10-13",
+     "change": "First plan."
+    }
+   ],
+   "work": {
+    "read": true,
+    "made": true,
+    "words": true,
+    "done": true,
+    "base": 0
+   },
+   "uploads": [
+    {
+     "v": 1,
+     "for_card_version": 1,
+     "file_name": "fixture-article_section-2_law-and-condition_v1.png",
+     "date": "2026-10-13",
+     "thumb": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'><rect width='160' height='90' fill='%23f4f6fb'/><g fill='%2314213d'><rect x='12' y='14' width='60' height='14' rx='3'/><rect x='12' y='38' width='60' height='14' rx='3'/><rect x='12' y='62' width='60' height='14' rx='3'/></g><rect x='84' y='14' width='64' height='62' rx='8' fill='%23e8590c'/></svg>"
+    }
+   ],
+   "changes_requested": {
+    "id": "cr-1",
+    "at": "2026-10-14",
+    "by": "Leo",
+    "text": "Give the right-hand panel more room. The second sentence is too small to read.",
+    "for_image_v": 1
+   },
+   "notes": [
+    {
+     "who": "Lawrence",
+     "at": "2026-10-13",
+     "text": "Handed in. The long sentence is small on the right."
+    }
+   ]
   },
   {
-   "card_id": "img:3", "title": "Your options at a glance", "type": "diagram_flowchart", "priority": "must_have",
+   "card_id": "img:3",
+   "title": "Your options at a glance",
+   "type": "diagram_flowchart",
+   "priority": "must_have",
    "purpose": "Shows the three routes side by side so the reader sees they have a choice, not a single path.",
    "placement": "Goes in section 3, after the bulleted list.",
    "design_brief": "A simple flow picture: one starting shape on the left that branches into three equal rounded boxes on the right, joined by thin orange arrows. Flat shapes in navy on a light background, with orange used only for the arrows. Leave clear empty space inside the start shape and every box where the words will go. Mood: calm and balanced, showing that there is a choice.",
    "generation_prompt": "A simple flow diagram with one starting shape on the left that branches into three equal rounded boxes on the right, flat shapes in navy with orange arrows on a light background, wide 16:9 composition with clear empty space inside every box and the start shape where the words will go. Calm, balanced mood. No text, no letters, no people.",
-   "avoid": ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image"],
-   "text_overlay": [
-    { "text": "Keep the house for now", "source": "section 3, list item 1" },
-    { "text": "Clear it first", "source": "section 3, list item 2" },
-    { "text": "Sell it as it is", "source": "section 3, list item 3" }
+   "avoid": [
+    "people or faces",
+    "real-looking identifiable house exteriors",
+    "addresses",
+    "street numbers or street signs",
+    "logos",
+    "documents",
+    "any text or letters in the image"
    ],
-   "aspect_ratio": { "ratio": "16:9", "width_px": 1600, "height_px": 900 },
+   "text_overlay": [
+    {
+     "text": "Keep the house for now",
+     "source": "section 3, list item 1"
+    },
+    {
+     "text": "Clear it first",
+     "source": "section 3, list item 2"
+    },
+    {
+     "text": "Sell it as it is",
+     "source": "section 3, list item 3"
+    }
+   ],
+   "aspect_ratio": {
+    "ratio": "16:9",
+    "width_px": 1600,
+    "height_px": 900
+   },
    "alt_text": "One starting point leading to three options: keep the house, clear it first, sell it as it is.",
    "base_file_name": "fixture-article_section-3_options",
    "card_version": 2,
-   "text_changes": [ { "card_version": 1, "date": "2026-10-13", "change": "First plan." }, { "card_version": 2, "date": "2026-10-14", "change": "One of the words changed. The earlier image no longer matches." } ],
-   "work": { "read": false, "made": false, "words": false, "done": false, "base": 1 },
-   "uploads": [ { "v": 1, "for_card_version": 1, "file_name": "fixture-article_section-3_options_v1.png", "date": "2026-10-13", "thumb": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'><rect width='160' height='90' fill='%23f4f6fb'/><rect x='10' y='34' width='34' height='22' rx='6' fill='%2314213d'/><g fill='%2314213d'><rect x='84' y='8' width='64' height='20' rx='6'/><rect x='84' y='35' width='64' height='20' rx='6'/><rect x='84' y='62' width='64' height='20' rx='6'/></g><g stroke='%23e8590c' stroke-width='3' fill='none'><path d='M44 45 L84 18'/><path d='M44 45 L84 45'/><path d='M44 45 L84 72'/></g></svg>" } ],
+   "text_changes": [
+    {
+     "card_version": 1,
+     "date": "2026-10-13",
+     "change": "First plan."
+    },
+    {
+     "card_version": 2,
+     "date": "2026-10-14",
+     "change": "One of the words changed. The earlier image no longer matches."
+    }
+   ],
+   "work": {
+    "read": false,
+    "made": false,
+    "words": false,
+    "done": false,
+    "base": 1
+   },
+   "uploads": [
+    {
+     "v": 1,
+     "for_card_version": 1,
+     "file_name": "fixture-article_section-3_options_v1.png",
+     "date": "2026-10-13",
+     "thumb": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 90'><rect width='160' height='90' fill='%23f4f6fb'/><rect x='10' y='34' width='34' height='22' rx='6' fill='%2314213d'/><g fill='%2314213d'><rect x='84' y='8' width='64' height='20' rx='6'/><rect x='84' y='35' width='64' height='20' rx='6'/><rect x='84' y='62' width='64' height='20' rx='6'/></g><g stroke='%23e8590c' stroke-width='3' fill='none'><path d='M44 45 L84 18'/><path d='M44 45 L84 45'/><path d='M44 45 L84 72'/></g></svg>"
+    }
+   ],
    "changes_requested": null,
    "notes": []
   },
   {
-   "card_id": "img:4", "title": "Paperwork to gather", "type": "icon_set", "priority": "nice_to_have",
+   "card_id": "img:4",
+   "title": "Paperwork to gather",
+   "type": "icon_set",
+   "priority": "nice_to_have",
    "purpose": "Gives the reader a simple visual for the short list of things to gather this week.",
    "placement": "Goes in section 4, after the paragraph.",
    "design_brief": "A tidy row of three simple flat icons on a light background: a folder, a clipboard and a handshake outline. Draw them in navy with one small orange accent on each. Leave clear empty space under every icon where the words will go. Mood: organized and encouraging.",
    "generation_prompt": "A row of three simple flat icons on a light background: a folder, a clipboard and a handshake outline, drawn in navy with a single orange accent each, wide 16:9 composition with clear empty space under each icon where the words will go. Tidy, encouraging mood. No text, no letters, no people.",
-   "avoid": ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image"],
-   "text_overlay": [
-    { "text": "List the people who can sign.", "source": "section 4, paragraph 1, sentence 1" },
-    { "text": "Gather the paperwork.", "source": "section 4, paragraph 1, sentence 2" },
-    { "text": "Talk to a professional.", "source": "section 4, paragraph 1, sentence 3" }
+   "avoid": [
+    "people or faces",
+    "real-looking identifiable house exteriors",
+    "addresses",
+    "street numbers or street signs",
+    "logos",
+    "documents",
+    "any text or letters in the image"
    ],
-   "aspect_ratio": { "ratio": "16:9", "width_px": 1600, "height_px": 900 },
+   "text_overlay": [
+    {
+     "text": "List the people who can sign.",
+     "source": "section 4, paragraph 1, sentence 1"
+    },
+    {
+     "text": "Gather the paperwork.",
+     "source": "section 4, paragraph 1, sentence 2"
+    },
+    {
+     "text": "Talk to a professional.",
+     "source": "section 4, paragraph 1, sentence 3"
+    }
+   ],
+   "aspect_ratio": {
+    "ratio": "16:9",
+    "width_px": 1600,
+    "height_px": 900
+   },
    "alt_text": "Three simple icons for the three things to do this week.",
    "base_file_name": "fixture-article_section-4_paperwork",
    "card_version": 1,
-   "text_changes": [ { "card_version": 1, "date": "2026-10-14", "change": "First plan." } ],
-   "work": { "read": true, "made": true, "words": false, "done": false, "base": 0 },
+   "text_changes": [
+    {
+     "card_version": 1,
+     "date": "2026-10-14",
+     "change": "First plan."
+    }
+   ],
+   "work": {
+    "read": true,
+    "made": true,
+    "words": false,
+    "done": false,
+    "base": 0
+   },
    "uploads": [],
    "changes_requested": null,
-   "notes": [ { "who": "Lawrence", "at": "2026-10-14", "text": "Started the icons. Will add the words next." } ]
+   "notes": [
+    {
+     "who": "Lawrence",
+     "at": "2026-10-14",
+     "text": "Started the icons. Will add the words next."
+    }
+   ]
   }
  ]
 }
