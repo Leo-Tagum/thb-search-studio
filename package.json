@@ -38,6 +38,7 @@
     "calibrate": "tsx --env-file=.env.local scripts/calibration-smoke.mts",
     "calibrate-context": "tsx --env-file=.env.local scripts/calibration-context-smoke.mts",
     "legal-miss": "tsx --env-file=.env.local scripts/legal-miss-smoke.mts",
+    "compare-print": "tsx --env-file=.env.local scripts/compare-print.mts",
     "room:build": "tsx scripts/build-approval-room.mts"
   },
   "dependencies": {

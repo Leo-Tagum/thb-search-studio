@@ -1,7 +1,7 @@
 <title>THB Approval Room</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Public+Sans:wght@400;600;700&display=swap">
 <style>
-/* Display only. Three parts: (1) the top, a 30-second decision in plain English; (2) the article as readers will see it; (3) one collapsed section of notes
+/* Display only. Three parts: (1) the top, a 30-second decision in plain English; (2) the article as readers will see it, then the one-time voice question; (3) one collapsed section of notes
    for AI and the team (everything technical lives there). The decision records, the version check and the approval logic are unchanged. */
 :root{
   --ink:#0d1b2e; --ink-2:#4a5568; --paper:#f6f4f0; --card:#ffffff; --line:#d9d5cc; --accent:#c2410c; --accent-ink:#ffffff;
@@ -54,8 +54,8 @@ details.notes .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:
 
 <div class="wrap">
   <section class="top" id="top" aria-label="Decision"></section>
-  <section id="voice-sec"></section>
   <section id="article-sec"></section>
+  <section id="voice-sec"></section>
   <details class="notes" id="notes"><summary>Notes for AI and the team</summary><div class="inner" id="notes-body"></div></details>
 </div>
 
@@ -115,6 +115,7 @@ details.notes .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:
   top.appendChild(ac.row); top.appendChild(ac.note);
   top.appendChild(el('p',{class:'fine',text:T.fine_print || "Your approval is for this exact version. If anything changes later, we'll ask you again. Approving doesn't publish it."}));
   top.appendChild(ac.status);
+  if (voice) top.appendChild(el('p',{class:'fine',text:'One more quick question is at the bottom of this page: does the writing sound like you? (Asked once.)'}));
 
   // The version check is unchanged: the browser recomputes the article's hash; the server checks it again on sync.
   if (art.hash) sha256Hex(P.html).then(function(h){
@@ -123,7 +124,7 @@ details.notes .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:
     else { art.browserHash = h; art.mismatch = true; alertBox.hidden = false; }
   });
 
-  // The one-time voice question, below the approval buttons (shown only while the voice reference is still unapproved).
+  // The one-time voice question, below the article (shown only while the voice reference is still unapproved).
   if (voice) {
     voice.browserHash = voice.hash;
     var vs = document.getElementById('voice-sec');

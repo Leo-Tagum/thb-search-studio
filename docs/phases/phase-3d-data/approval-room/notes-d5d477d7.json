@@ -1,0 +1,42 @@
+[
+ {
+  "title": "Legal verification",
+  "intro": "Legal claims checked against the official statute text (leginfo prints of 2026-10-10); fresh print pending before publishing.",
+  "items": [
+   "Claims changed in this version: clm:2 and clm:3 now include the code enforcement officer alternative in H&S 17920.3(a)(12) and (a)(16); clm:8 is new and states the threshold in the opening paragraph of H&S 17920.3 (a listed condition counts when it exists \"to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public\"). Every unit that cites clm:1-4 (s3, s7 and FAQ answer 3) also cites clm:8 and states the threshold.",
+   "clm:6 (Civil Code 1102(a)) says \"sale\" only, where the statute also lists exchange, real property sales contracts, leases with an option to purchase, other options and ground leases. Leo accepted this as NARROWER for a guide written for sellers; the article uses the statute's own words (\"single-family residential property\")."
+  ]
+ },
+ {
+  "title": "Polish items for Juan (not applied)",
+  "intro": "Optional reviewer findings and Leo's notes. None of these is a release fix, and none was applied.",
+  "items": [
+   "Civil Code 1102.2 / single-family sentence in the answer box reads like legal text.",
+   "\"A lot of it comes from the paperwork and the people\" (s7): keepable, slightly abstract; flagged again by Agent 6 and Agent 7 as an unsupported-sounding amount.",
+   "Warmth sentence acknowledging the family's situation: optional; Leo does not think it is needed (Agent 7 again suggests one respectful line about the occupant in s7).",
+   "More Bay Area detail: only if specific and useful (local context is the weakest score in s3 and s7).",
+   "\"Stall\" is repeated, mostly in s7: mild.",
+   "s7: the run of \"So is...\" statute sentences is accurate but dense for a worried homeowner (Agent 7).",
+   "s3: \"That is where the law starts to care.\" is vague, and \"This does not mean the house can't sell. Knowing where it stands first keeps more of your options open.\" echoes voice-reference lines v8 and v10 (Agents 6 and 7).",
+   "s3: the combustible waste table row ends \"is listed.\" without saying what it is listed as (Agents 6 and 7).",
+   "FAQ: answer 4 (\"Whoever has legal authority to sign.\") is thin and generic (Agents 6 and 7).",
+   "FAQ: \"a direct buyer prices in the condition\" (answer 2) has no claim id (Agent 6).",
+   "FAQ: it does not mention keeping the house as an option (Agent 7).",
+   "Agent 7 editorial scores (advisory, below its 85 reference line; the decision was PASS): s3 83, s7 78, FAQ 72."
+  ]
+ },
+ {
+  "title": "Legal sentences without their own ledger claim (general or inferred from clm:1-8, kept by Leo; V1 passed)",
+  "intro": "These sentences state or lean on a legal point that no single ledger claim states word for word. Leo reviewed them and kept them; V1 passed every unit. The threshold (clm:8) and the code enforcement officer alternative (clm:2, clm:3) are now in the ledger, so those points are no longer on this list.",
+  "items": [
+   "s2: \"The person who holds title, or who has the legal authority to sell for the owner, has to sign.\"",
+   "s2: \"Title can sit with an individual, a trust, an estate or an LLC. Each one changes who has to agree.\"",
+   "s5: \"Clearing the house out is your choice, and it does not change the disclosure rules that apply to your sale, if your sale is covered.\" and \"Clearing the house does not turn the disclosure paperwork into something optional.\"",
+   "s1: \"The disclosure rules in the capsule above do not change with your answers. Plan to disclose, not to skip it.\"",
+   "s3: \"Local rules differ by city and county, so treat it as background and not as the rule for your address.\"",
+   "\"Local authority\" wording for junk and debris (H&S 17920.3(j), clm:1, names no decider): s3 table row 1 (\"The local enforcement authority\") and the paragraph after the table, s7 (\"Whether your house meets any of them is for the local authority.\"), and the FAQ answer on the city or county (\"Whether a home meets them is for the local authority.\").",
+   "FAQ: \"Whoever has legal authority to sign.\"",
+   "s4: \"Do not plan around skipping or hiding disclosure. The waiver rule means that route is not open.\" (clm:7 covers waivers; \"hiding\" goes slightly beyond it.)"
+  ]
+ }
+]

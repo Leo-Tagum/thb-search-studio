@@ -37,8 +37,12 @@
    "items": [
     "Juan's answer on the as-is question: can Twin Home Buyer say it buys houses as-is without the seller cleaning out first? The guide does not say so for now. If the answer is yes, wording can be added later with its source.",
     "Leo's fresh printouts of the three statute sections (Health and Safety Code 17920.3, Civil Code 1102 and 1102.6) before publishing, so the record carries a fresh date. The checks so far used the printouts of 2026-10-10.",
-    "The voice reference (the short style guide that says how articles should sound) is a one-time question below the approval buttons: \"does this sound like you?\". Approving it once means future proposals will not include it. It is stored in the studio's brand facts record under the key voice_reference (status proposed, provisionally approved by Leo on 2026-10-10) and in a snapshot attached to this proposal. No decision on it has been recorded yet."
+    "The voice reference (the short style guide that says how articles should sound) is a one-time question below the guide: \"does this sound like you?\". Approving it once means future proposals will not include it. It is stored in the studio's brand facts record under the key voice_reference (status proposed, provisionally approved by Leo on 2026-10-10) and in a snapshot attached to this proposal. No decision on it has been recorded yet."
    ]
+  },
+  {
+   "title": "What is next",
+   "text": "This version is California-wide. A Bay Area update with San Francisco and San Mateo local rules is planned next (Juan's direction). Known wording point for the update: s3 'the local enforcement authority' → 'a local official'."
   }
  ]
 }
