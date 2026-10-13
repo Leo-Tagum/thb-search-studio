@@ -253,3 +253,11 @@ s7 locked as `713d65b59dfc…` after Leo's explicit approval. All nine units are
 
 ## Open for Leo
 s7 is closed (see Final state above). The assembled article version `204aa5725284` can go to Juan for review; the polish items above are for his review.
+
+## 3e backlog: UI/UX audit (2026-10-13)
+
+Batch 1 (UI and config only) is done: dev server bound to 127.0.0.1, Preview iframe white background, markdown rendered in Draft and Diff, Approvals message, hybrid article labelled "classic + V1", dark-mode contrast, Blog audit table padding, banner wording. Planned, not started:
+
+- **Batch 2 (read-only views):** (1) Studio list: label each article with its variant, version hash, unit status counts and "waiting on you: N"; (2) a "needs you" panel at the top of the article page (open escalations, declines, next step); (5) Agent critiques grouped by unit, newest first, labelled with version and round, superseded cards collapsed; (6) render V1 `hedge_rulings` per unit; (7) Diff defaults to latest vs previous (and vs the branch-copy baseline), older versions collapsed, each change linked to the critique behind it.
+- **Batch 3 (new buttons, each leo-only and keeping every existing rule):** Keep / Send back for should-fix declines (needs a new service function: none records "keep" today); "Send through V1, no text change" on LOCKED classic units (service already refuses it on team articles; after assembly it supersedes the proposal, clears `approved_hash` and invalidates approvals, so confirm first); Create proposal (database part only; republishing the Approval Room stays with Claude Code). No buttons for `submit` or `lock`: submit is the agent hand-in, and lock only happens when a reviewer PASS is accepted.
+- **Real login** instead of the hard-coded `ACTOR = "leo"` with the service-role key. Until then the dev server stays on 127.0.0.1.

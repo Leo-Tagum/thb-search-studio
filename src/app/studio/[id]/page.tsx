@@ -9,9 +9,17 @@ import { lineDiff } from "@/lib/studio/diff";
 import { modeAction, sectionAction } from "../actions";
 import { loadTeamView } from "@/lib/team/store";
 import { StuckInbox, TeamTab } from "./team-panel";
+import { Inline } from "./inline-text";
 import { modeChangeRule, modeOf } from "@/lib/team/mode";
 
 const TABS = [["brief", "Brief"], ["draft", "Draft"], ["evidence", "Evidence"], ["critiques", "Agent critiques"], ["seo", "SEO/AEO/GEO"], ["diff", "Diff"], ["approvals", "Approvals"], ["preview", "Preview"], ["team", "Team"]] as const;
+
+/** Wording of the green banner: the action redirects with done=<section status>, done=<mode>-mode or done=escalation-closed. */
+function doneText(done: string): string {
+  if (done === "escalation-closed") return "Recorded. The escalation is closed with your decision.";
+  if (done.endsWith("-mode")) return `Recorded. The pipeline is now ${done.replace(/-mode$/, "")}.`;
+  return `Recorded. Section is now ${done}.`;
+}
 
 function Actions({ article, unit, status }: { article: string; unit: string; status: string }) {
   const kinds = status === "LOCKED" ? [["reopen", "Reopen for revision"]] : ["ESCALATED", "BLOCKED_CLAIM", "BLOCKED_PRIVACY"].includes(status) ? [["request_revision", "Send back to writer with this directive"], ["hold", "Hold"]] : [];
@@ -41,6 +49,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
   const mode = modeOf(L.article);
   const teamView = mode === "team" ? await loadTeamView(db, id) : null;
   const otherMode = mode === "classic" ? "team" : "classic";
+  const hybrid = !!L.article.branch_of && mode === "classic"; // classic + V1 revision of the classic article
   const change = modeChangeRule({ current: mode, next: otherMode, isBranch: !!L.article.branch_of, sectionsWritten: L.sections.filter((s) => s.status !== "NEEDS_WRITE" || s.current_version_id).length, hasProposal: (props ?? []).length > 0 });
   const blockers = L.sections.map((s) => ({ s, st: stateOf(s) })).filter((x) => ["ESCALATED", "BLOCKED_CLAIM", "BLOCKED_PRIVACY"].includes(x.st.status));
   return (
@@ -48,11 +57,11 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
       <p><Link className="underline" href="/studio">← Content Studio</Link></p>
       <h1 className="text-xl font-semibold">{L.article.title}</h1>
       {typeof sp.error === "string" && <p className="border border-red-600 p-2">Not done: {sp.error}</p>}
-      {typeof sp.done === "string" && <p className="border border-green-700 p-2">Recorded. Section is now {sp.done}.</p>}
+      {typeof sp.done === "string" && <p className="border border-green-700 p-2">{doneText(sp.done)}</p>}
       <form action={modeAction} className="flex flex-wrap items-center gap-2 border p-2">
         <input type="hidden" name="article" value={id} /><input type="hidden" name="mode" value={otherMode} />
-        <span>Pipeline: <b>{mode}</b>{L.article.branch_of ? " (team branch)" : ""}</span>
-        {change.ok ? <button className="border px-2">Switch to {otherMode} mode</button> : <span className="text-neutral-600">Mode locked: {change.reason}</span>}
+        <span>Pipeline: <b>{hybrid ? "classic + V1" : mode}</b>{hybrid ? " (revision of the classic article)" : L.article.branch_of ? " (team branch)" : ""}</span>
+        {hybrid ? null : change.ok ? <button className="border px-2">Switch to {otherMode} mode</button> : <span className="text-neutral-600 dark:text-neutral-400">Mode locked: {change.reason}</span>}
       </form>
       <p>State <b>{L.article.state}</b> · slug {L.article.slug} · keyword &quot;{L.article.primary_keyword}&quot; · version {L.article.version_hash ? L.article.version_hash.slice(0, 12) : "not assembled"} · approved {L.article.approved_hash ? "yes (hash matches)" : "no"}</p>
       {blockers.length > 0 && (
@@ -86,7 +95,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
                 <h2 className="font-semibold">{st.key}: {s.brief_h2} <span className="font-normal">— {st.status}{st.versionNo ? ` · v${st.versionNo}` : ""}{st.status === "LOCKED" ? " (locked)" : ""}</span></h2>
                 {st.issues.length > 0 && <ul className="list-disc pl-5 text-xs">{st.issues.map((i) => <li key={i.key}>open issue <b>{i.key}</b> (revision attempts {i.attempts} of 2): {i.text}</li>)}</ul>}
                 {(() => { const dl = declinesOfRow(s); return dl.declined.length > 0 ? <div className="mt-1 text-xs"><b>Declined by the writer (for Leo)</b><ul className="list-disc pl-5">{dl.declined.map((d) => <li key={d.key}><b>{d.key}</b> (raised {d.raised}x): {d.text} <i>Writer&apos;s reason: {d.reason}</i></li>)}</ul></div> : null; })()}
-                {cur ? <div className="mt-2 space-y-1 whitespace-pre-wrap">{unitStrings(cur.content as Unit).slice((cur.content as Unit).kind === "faq" ? 0 : 1).map((t, i) => <p key={i}>{t}</p>)}</div> : <p className="text-xs">Not written yet.</p>}
+                {cur ? <div className="mt-2 space-y-1 whitespace-pre-wrap">{unitStrings(cur.content as Unit).slice((cur.content as Unit).kind === "faq" ? 0 : 1).map((t, i) => <p key={i}><Inline text={t} /></p>)}</div> : <p className="text-xs">Not written yet.</p>}
                 <Actions article={id} unit={st.key} status={st.status} />
               </section>
             );
@@ -125,7 +134,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
                 {vs.map((v, i) => {
                   const prev = i ? unitStrings(vs[i - 1].content) : [];
                   const d = lineDiff(prev, unitStrings(v.content));
-                  return <div key={v.id} className="mt-1 text-xs"><div>v{v.version_no} by {v.created_by}: {v.reason}</div>{d.map((l, j) => <div key={j} className={l.kind === "add" ? "text-green-800" : l.kind === "del" ? "text-red-700 line-through" : "opacity-60"}>{l.kind === "add" ? "+ " : l.kind === "del" ? "- " : "  "}{l.text}</div>)}</div>;
+                  return <div key={v.id} className="mt-1 text-xs"><div>v{v.version_no} by {v.created_by}: {v.reason}</div>{d.map((l, j) => <div key={j} className={l.kind === "add" ? "text-green-800 dark:text-green-400" : l.kind === "del" ? "text-red-700 line-through dark:text-red-400" : "opacity-60"}>{l.kind === "add" ? "+ " : l.kind === "del" ? "- " : "  "}<Inline text={l.text} /></div>)}</div>;
                 })}
               </section>
             );
@@ -137,14 +146,14 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
         <div className="space-y-2">
           <p>Final sign-off comes from Juan through the THB Approval Room. Create the proposal with <code>npm run studio -- proposal {id} &lt;file&gt;</code> (Claude Code republishes the Approval Room), then read the decisions back with <code>sync-approvals</code>. A decision counts only for a confirmed approver, on the exact stored version.</p>
           <ul className="list-disc pl-5">{(props ?? []).map((p) => <li key={p.id}>proposal {p.id} · {p.status} · created {p.created_at}{p.voice_snapshot ? " · includes the voice reference" : ""}</li>)}</ul>
-          {!(props ?? []).length && <p>No proposal yet (the article must be in HUMAN_REVIEW).</p>}
+          {!(props ?? []).length && <p>{L.article.state !== "HUMAN_REVIEW" ? `Not ready to hand to Juan: the article is in ${L.article.state}; it must reach HUMAN_REVIEW first.` : !L.article.version_hash ? "Not ready to hand to Juan: the article is not assembled yet." : "Not handed to Juan yet: no proposal has been created. The article is ready; run the proposal command above."}</p>}
         </div>
       )}
 
       {tab === "team" && (mode === "team" ? <TeamTab view={teamView} /> : <p>This article runs in classic mode. The Team tab appears for team-mode articles.</p>)}
 
       {tab === "preview" && (
-        ver ? <iframe title="Preview" sandbox="" srcDoc={ver.body.html} className="h-[80vh] w-full border" /> : <p>The preview appears when every section is locked and the article is assembled.</p>
+        ver ? <iframe title="Preview" sandbox="" srcDoc={ver.body.html} className="h-[80vh] w-full border bg-white" /> : <p>The preview appears when every section is locked and the article is assembled.</p>
       )}
     </main>
   );

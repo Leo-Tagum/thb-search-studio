@@ -45,7 +45,7 @@ async function Queue({ searchParams }: { searchParams: Promise<Record<string, st
         <button className="border px-2">Filter</button>
       </form>
       <form action={bulkApproveAction} className="space-y-2">
-        <table className="w-full text-xs">
+        <table className="w-full text-xs [&_td]:py-1 [&_td]:pr-3 [&_th]:py-1 [&_th]:pr-3">
           <thead><tr className="text-left"><th></th><th>Post</th><th>Proposed</th><th>Status</th><th>Conf.</th><th>Clicks / impr. (16 mo)</th><th>Why</th></tr></thead>
           <tbody>
             {rows.map((r) => (

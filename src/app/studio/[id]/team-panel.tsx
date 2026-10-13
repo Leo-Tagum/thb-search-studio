@@ -40,7 +40,7 @@ function Discussion({ t }: { t: TicketView }): ReactNode {
         {t.trigger && <p><b>Trigger:</b> {t.trigger}</p>}
         {t.resolution && <p><b>Resolution:</b> {t.resolution}</p>}
         {t.mergedFrom.length > 0 && <p><b>Merged from original cards:</b> {t.mergedFrom.join(", ")} (check a merge by wording against these)</p>}
-        <ol className="list-decimal pl-5">{t.messages.map((m, i) => <li key={i}><b>{m.role}</b> (round {m.round}): {m.body} <span className="text-neutral-500">{m.at}</span></li>)}</ol>
+        <ol className="list-decimal pl-5">{t.messages.map((m, i) => <li key={i}><b>{m.role}</b> (round {m.round}): {m.body} <span className="text-neutral-500 dark:text-neutral-400">{m.at}</span></li>)}</ol>
       </div>
     </details>
   );
@@ -59,7 +59,7 @@ export function TeamTab({ view }: { view: TeamView | null }) {
       <table className="border-collapse text-left">
         <thead><tr>{["Unit", "Outcome", "Resolved", "Open", "Must-fix open", "Escalations", "V1"].map((h) => <th key={h} className="border px-2">{h}</th>)}</tr></thead>
         <tbody>{view.units.map((u) => (
-          <tr key={u.key}><td className="border px-2"><b>{u.key}</b> <span className="text-neutral-600">{u.title}</span></td><td className="border px-2">{u.outcome}</td><td className="border px-2">{u.resolved}</td><td className="border px-2">{u.open}</td><td className="border px-2">{u.mustFixOpen}</td><td className="border px-2">{u.escalations}</td><td className="border px-2">{u.v1}</td></tr>
+          <tr key={u.key}><td className="border px-2"><b>{u.key}</b> <span className="text-neutral-600 dark:text-neutral-400">{u.title}</span></td><td className="border px-2">{u.outcome}</td><td className="border px-2">{u.resolved}</td><td className="border px-2">{u.open}</td><td className="border px-2">{u.mustFixOpen}</td><td className="border px-2">{u.escalations}</td><td className="border px-2">{u.v1}</td></tr>
         ))}</tbody>
       </table>
       <p>Ticket types so far: {Object.entries(view.fired.types).map(([k, n]) => `${k.replace(/_/g, " ").toLowerCase()} ${n}`).join(" · ")}</p>

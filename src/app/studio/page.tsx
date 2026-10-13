@@ -17,7 +17,7 @@ async function Studio({ searchParams }: { searchParams: Promise<Record<string, s
       {typeof sp.error === "string" && <p className="border border-red-600 p-2">Not done: {sp.error}</p>}
       {sp.done === "voice" && <p className="border border-green-700 p-2">Voice reference provisionally approved.</p>}
       <h2 className="font-semibold">Articles</h2>
-      <ul className="list-disc pl-5">{(arts ?? []).map((a) => <li key={a.id}><Link className="underline" href={`/studio/${a.id}`}>{a.title}</Link> — {a.state}{a.branch_of ? " · team branch of the classic article (comparison run)" : ""}</li>)}</ul>
+      <ul className="list-disc pl-5">{(arts ?? []).map((a) => <li key={a.id}><Link className="underline" href={`/studio/${a.id}`}>{a.title}</Link> — {a.state}{a.branch_of ? (a.pipeline_mode === "team" ? " · team branch of the classic article (comparison run)" : " · classic + V1 revision of the classic article") : ""}</li>)}</ul>
       {!arts?.length && <p>No article yet. Approve a brief on an opportunity in BRIEF_REVIEW to start one.</p>}
       <p><Link className="underline" href="/studio/approvers">Approval Room accounts</Link>{pending ? ` (${pending} waiting for your confirmation)` : ""}</p>
 
