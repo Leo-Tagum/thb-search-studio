@@ -2,7 +2,7 @@
 // checks Agent 2 passes; here the new claims get fresh keys (they must never overwrite an existing clm:N) and become rows shaped like the ones
 // the brief approval creates. Only supported claims enter the ledger; the rest are reported back to the requester as "cannot prove".
 import { verificationColumns, type Gate, type ReaderImpact, type VerificationLabel } from "../studio/legal-claims";
-export type PackClaim = { id: string; text: string; source_ids: string[]; support: string; jurisdiction: string; risk: string; quote?: string; passage_ids?: string[]; note?: string; section?: string; verification?: { label: VerificationLabel; reason?: string; against: string; reader_impact: ReaderImpact }; gates?: Gate[] };
+export type PackClaim = { id: string; text: string; source_ids: string[]; support: string; jurisdiction: string; risk: string; quote?: string; passage_ids?: string[]; note?: string; claim_type?: "statute" | "statute_absence"; section?: string; verification?: { label: VerificationLabel; reason?: string; against: string; reader_impact: ReaderImpact }; gates?: Gate[] };
 export type PackSource = { id: string; kind: string; url?: string; library_source_id?: string; effective_date: string | null };
 
 /** Fresh keys for new claims: clm:<max existing + 1>, +2 ... in the order given. Returns old id -> new key. */
@@ -17,7 +17,7 @@ export function supportedClaims(claims: PackClaim[]) { return claims.filter((c) 
 /** A claims-table row for a supported claim from a Research pack. sourceDbId: the evidence_sources id of its first source (a library source or a stored page snapshot). */
 export function claimRow(articleId: string, key: string, c: PackClaim, sourceDbId: string | null, effectiveDate: string | null, declaredBy: string, today: string, textHash: string) {
   return {
-    article_id: articleId, claim_key: key, claim_text: c.text, claim_type: "statute", risk_level: c.risk, source_id: sourceDbId, supporting_passage: c.quote ?? null, jurisdiction: c.jurisdiction,
+    article_id: articleId, claim_key: key, claim_text: c.text, claim_type: c.claim_type ?? "statute", risk_level: c.risk, source_id: sourceDbId, supporting_passage: c.quote ?? null, jurisdiction: c.jurisdiction,
     applicability: "California residential sale", effective_or_verified_date: effectiveDate, checked_date: today, confidence_status: c.support, publication_permission: "public_law", requires_human_review: false,
     support: c.support, declared_by: declaredBy, text_hash: textHash, ...verificationColumns(c),
   };

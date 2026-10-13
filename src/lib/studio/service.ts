@@ -66,7 +66,7 @@ export async function approveBrief(db: SupabaseClient, oppId: string, actorId: s
   const claims = (ep.claims as any[]).map((c) => {
     const src = (ep.sources as any[]).find((s) => s.id === c.source_ids[0]);
     return {
-      article_id: art.id, claim_key: c.id, claim_text: c.text, claim_type: "statute", risk_level: c.risk, source_id: src?.library_source_id ?? null,
+      article_id: art.id, claim_key: c.id, claim_text: c.text, claim_type: c.claim_type ?? "statute", risk_level: c.risk, source_id: src?.library_source_id ?? null,
       supporting_passage: c.quote ?? null, jurisdiction: c.jurisdiction, applicability: "California residential sale", effective_or_verified_date: src?.effective_date ?? null,
       checked_date: today(), confidence_status: c.support, publication_permission: "public_law", requires_human_review: false, support: c.support, declared_by: "thb-02-research-evidence",
       text_hash: sha256(c.text), ...verificationColumns(c),

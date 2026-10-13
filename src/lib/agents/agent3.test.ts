@@ -22,7 +22,7 @@ const brief = (over: Record<string, unknown> = {}) => ({
   ...over,
 });
 const out = (b: Record<string, unknown>) => ({
-  article_id: "", opportunity_id: "o1", agent_name: "Content Architect", agent_prompt_version: "1.0.0", model_version: "claude-code/test",
+  article_id: "", opportunity_id: "o1", agent_name: "Content Architect", agent_prompt_version: "1.1.0", model_version: "claude-code/test",
   input_version_ids: ["h1"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-10T12:00:00Z",
   result: { brief: b },
 });

@@ -7,9 +7,9 @@ export const AGENT_KEYS = ["thb-01-seo-strategist", "thb-02-research-evidence", 
 export type AgentKey = (typeof AGENT_KEYS)[number];
 
 export const AGENT_META: Record<AgentKey, { n: 1 | 2 | 3; name: string; promptVersion: string; decisions: readonly string[] }> = {
-  "thb-01-seo-strategist": { n: 1, name: "SEO Strategist", promptVersion: "1.0.0", decisions: ["CREATE", "UPDATE", "MERGE", "HOLD", "REJECT"] },
-  "thb-02-research-evidence": { n: 2, name: "Research & Evidence", promptVersion: "1.0.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
-  "thb-03-content-architect": { n: 3, name: "Content Architect", promptVersion: "1.0.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
+  "thb-01-seo-strategist": { n: 1, name: "SEO Strategist", promptVersion: "1.1.0", decisions: ["CREATE", "UPDATE", "MERGE", "HOLD", "REJECT"] },
+  "thb-02-research-evidence": { n: 2, name: "Research & Evidence", promptVersion: "1.1.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
+  "thb-03-content-architect": { n: 3, name: "Content Architect", promptVersion: "1.1.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
 };
 
 const finding = z.strictObject({
@@ -56,6 +56,7 @@ const claim = z.strictObject({
   // For claims supported by an Evidence Library source: the passage ids and a short verbatim quote (checked against the stored text).
   passage_ids: z.array(z.string()).optional(),
   quote: z.string().max(QUOTE_MAX).optional(),
+  claim_type: z.enum(["statute", "statute_absence"]).optional(),   // statute_absence: a claim that a law does NOT say something, with proof (the full official text read, the term absent)
   ...verificationFields,   // Phase 3e: section, verification {label, reason, against, reader_impact}, gates (required for high-risk legal claims by the stage 2 submit check)
   note: z.string().optional(),
 });

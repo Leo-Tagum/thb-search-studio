@@ -2,6 +2,8 @@
 
 Source: "SOP: Lawrence Content Takeover — Juan Voice Content Standard". **The SOP is a voice guide only. None of its facts count** (for example its "27 years" is not a fact the Studio may use; facts come only from Brand Facts, section 7). The SOP's old page template is superseded by the new THB template; its standards below were reviewed rule by rule with Leo on 2026-10-10.
 
+**Standing rules:** `docs/references/standing-rules.md` (owner Leo) binds every agent and the operator and wins over anything here that conflicts with it.
+
 Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's change · **PENDING JUAN** = blocked until Juan decides (see section 7 for current brand-fact statuses) · **HUMAN PROCESS** = team process, not an agent rule
 
 ## 1. Voice (Agent 4 writes to it, Agent 7 checks it)
@@ -60,6 +62,7 @@ Tags: **KEEP** = agents follow as written · **ADAPTED** = kept with Leo's chang
 - KEEP: No claim that sounds legal, tax or title-specific unless the article tells the seller to confirm with a professional.
 - KEEP: If Juan's exact position on a topic is unknown, write from the seller problem and do not pretend.
 - KEEP: If a draft starts sounding generic, rewrite the opening, examples and conclusion first.
+- **KEEP (Leo, 2026-10-13): legal claims, no guessing** (standing rules SR-4 to SR-6, `docs/references/standing-rules.md`). Every legal claim is checked against the OFFICIAL text, as Leo's print in the Evidence Library, and recorded with the exact quote, section, URL, date and a MATCH / NARROWER / BROADER / WRONG label. A rule is stated with its threshold and its deciders (never a closed list the law does not make). NARROWER is acceptable only if the omission does not change what a reader would believe or do; otherwise fix it. No claim that a law does not say something without proof. If the official text cannot be reached or is unclear: stop and ask Leo for a print; do not guess or soften. State law is cited as California law and local rules only from their own city or county print: the two layers stay separate (SR-2).
 
 ## 6. SEO / AEO / GEO (Agent 6)
 - ADAPTED: Main keyword in the title, the H1, the 40–60 word answer capsule, and one question-style H2. Natural only, never forced. (Replaces the SOP's "title, H1, intro, one H2, conclusion".)

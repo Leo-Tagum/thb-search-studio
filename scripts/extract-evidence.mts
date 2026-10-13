@@ -2,6 +2,7 @@
 // Usage: npm run evidence:extract            (all PDF sources with no passages yet)
 //        npm run evidence:extract -- --rename <source_id> "<new title>"   (title change, written to the audit log)
 //        npm run evidence:extract -- --recheck <source_id> <yyyy-mm-dd>    (sets the recheck-by date, written to the audit log)
+//        npm run evidence:extract -- --jurisdiction <source_id> "<value>"   (sets the jurisdiction, written to the audit log)
 // Files are untrusted: they are downloaded to a fresh temp directory and only passed to pdftotext as an argument.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -10,6 +11,19 @@ import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
+
+if (process.argv[2] === "--jurisdiction") {
+  // Sets the jurisdiction of one source to an exact value (legal claims are matched to a jurisdiction, so these values are kept uniform). Audited.
+  const [id, value] = [process.argv[3], process.argv[4]];
+  if (!id || !value?.trim()) throw new Error('usage: npm run evidence:extract -- --jurisdiction <source_id> "<jurisdiction>"');
+  const { data: before } = await db.from("evidence_sources").select("title,jurisdiction").eq("id", id).single();
+  if (!before) throw new Error("source not found");
+  const { error } = await db.from("evidence_sources").update({ jurisdiction: value.trim() }).eq("id", id);
+  if (error) throw error;
+  await db.from("audit_events").insert({ actor: "leo", subject_type: "evidence_source", subject_id: id, event_type: "evidence_jurisdiction_set", accepted: true, detail: { title: before.title, old: before.jurisdiction, new: value.trim() } });
+  console.log(`"${before.title}": jurisdiction ${before.jurisdiction ?? "(none)"} -> ${value.trim()} (audited)`);
+  process.exit(0);
+}
 
 if (process.argv[2] === "--recheck") {
   // Sets the "recheck by" date of one source (Agents 2 and R1 refuse a legal claim whose source has none, or one that has passed). Audited.

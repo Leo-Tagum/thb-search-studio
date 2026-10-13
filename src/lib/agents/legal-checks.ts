@@ -7,7 +7,7 @@
 import { QUOTE_MAX } from "../studio/legal-claims";
 
 export type LegalClaim = {
-  id?: string; support?: string; risk?: string; source_ids?: string[]; passage_ids?: string[]; quote?: string | null; section?: string | null;
+  id?: string; support?: string; risk?: string; claim_type?: string; source_ids?: string[]; passage_ids?: string[]; quote?: string | null; section?: string | null;
   verification?: { label?: string; reason?: string | null; against?: string; reader_impact?: string } | null;
   gates?: { kind?: string; text?: string; stated_in_claim?: boolean; carried_by?: string }[] | null;
 };
@@ -45,6 +45,7 @@ export function legalStaticErrors(claims: LegalClaim[], sources: LegalSource[]):
     if (!(v.against ?? "").trim()) errs.push(`${at}: verification needs "against": what the quote was read from`);
     if (!v.reader_impact) errs.push(`${at}: verification needs reader_impact (none or changes)`);
     if (!Array.isArray(c.gates)) errs.push(`${at}: a legal claim needs a gates list (the thresholds, exceptions, alternative deciders and scopes of the quoted section; an empty list says it has none)`);
+    if (c.claim_type === "statute_absence" && (v.reason ?? "").trim().length < 20) errs.push(`${at}: an absence-of-law claim (statute_absence) needs in verification.reason the search done: which official text was read in full, on what date, and that the term does not appear`);
     if (v.label === "BROADER" || v.label === "WRONG") errs.push(`${at}: labelled ${v.label}: it says more than, or contradicts, the official text; fix the claim or mark it unsupported`);
     if (v.reader_impact === "changes") errs.push(`${at}: reader_impact is "changes": what the claim omits changes what a reader would believe or do; fix the claim (or carry the gate in another claim) before it can be supported`);
     if (v.label === "MATCH" && v.reader_impact === "changes") errs.push(`${at}: MATCH cannot have reader_impact "changes"`);

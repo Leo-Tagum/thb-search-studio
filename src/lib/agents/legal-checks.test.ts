@@ -38,6 +38,15 @@ describe("a supported high-risk legal claim needs its whole verification record"
   });
 });
 
+describe("an absence-of-law claim (statute_absence) carries the proof of the search", () => {
+  const absence = (reason?: string) => full({ id: "clm:20", claim_type: "statute_absence", quote: "17920.3. Any building or portion thereof ... shall be deemed and hereby is declared to be a substandard building:", section: "H&S 17920.3 (full text)", verification: { label: "MATCH", against: "authenticated leginfo print stored 2026-10-10", reader_impact: "none", reason } });
+  it("needs a recorded reason: which official text was read in full, when, and that the term does not appear", () => {
+    expect(errs([absence(undefined)])).toMatch(/needs in verification\.reason the search done/);
+    expect(errs([absence("read it")])).toMatch(/needs in verification\.reason the search done/);
+    expect(legalStaticErrors([absence("Read the full text of H&S 17920.3 in the 2026-10-10 print on 2026-10-13; the word hoarding does not appear.")], [lib])).toEqual([]);
+  });
+});
+
 describe("library only: a fetched web page cannot support a high-risk legal claim", () => {
   it("is refused with a pointer to ask Leo for a print", () => expect(errs([full({ source_ids: ["src:2"] })], [lib, web])).toMatch(/must rest on an Evidence Library source.*ask Leo for a print/));
   it("a library source is accepted", () => expect(legalStaticErrors([full()], [lib])).toEqual([]));
@@ -105,7 +114,7 @@ describe("the quote is verbatim in the stored official print, and its source is 
 describe("wired into Agent 2's submit check", () => {
   const packet = buildTaskPacket("thb-02-research-evidence", { id: "o1", versionHash: "h1" }, {}, "agent-defined");
   const out = (claims: unknown[], sources: unknown[] = [{ id: "src:1", kind: "library", library_source_id: "L1", title: "H&S 17920.3", tier: 1, jurisdiction: "California", effective_date: "2025-01-01", retrieved_date: "2026-10-10", locality_matches: true }]) => ({
-    article_id: "", opportunity_id: "o1", agent_name: "Research & Evidence", agent_prompt_version: "1.0.0", model_version: "claude-code/test", input_version_ids: ["h1"],
+    article_id: "", opportunity_id: "o1", agent_name: "Research & Evidence", agent_prompt_version: "1.1.0", model_version: "claude-code/test", input_version_ids: ["h1"],
     decision: "PASS", findings: [], evidence_ids: ["src:1"], required_actions: [], output_version_id: "v1", timestamp: "2026-10-13T12:00:00Z",
     result: { sources, claims, brand_facts_pending: [], first_party_proof: "restricted", unresolved: [] },
   });

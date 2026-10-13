@@ -28,8 +28,8 @@ export const TEAM_DECISIONS: Record<TeamRole, readonly string[]> = {
   S1: ["CREATE", "UPDATE", "MERGE", "HOLD", "REJECT"], S2: ["PASS", "REVISION", "BLOCKED"],
   W1: ["PASS", "BLOCKED"], W2: ["PASS"], V1: ["PASS", "REVISION", "BLOCKED"], V2: ["PASS", "REVISION"], V3: ["PASS", "REVISION"],
 };
-/** Prompt versions per role. 1.1.0 (Phase 3d): declines wording in W1, V1, V2 and V3. Every other role is unchanged at 1.0.0. */
-export const TEAM_PROMPT_VERSIONS: Record<TeamRole, string> = { R1: "1.0.0", R2: "1.0.0", R3: "1.0.0", S1: "1.0.0", S2: "1.0.0", W1: "1.1.0", W2: "1.0.0", V1: V1_PROMPT_VERSION, V2: "1.1.0", V3: "1.1.0" };
+/** Prompt versions per role. 1.1.0 (Phase 3d): declines wording in W1, V1, V2 and V3. Phase 3e: every prompt loads the standing rules; R1, V1, W1 (and the architect and strategist roles) carry the legal-claims and geography rules. */
+export const TEAM_PROMPT_VERSIONS: Record<TeamRole, string> = { R1: "1.1.0", R2: "1.1.0", R3: "1.1.0", S1: "1.1.0", S2: "1.1.0", W1: "1.2.0", W2: "1.1.0", V1: V1_PROMPT_VERSION, V2: "1.2.0", V3: "1.2.0" };
 export const teamPromptVersion = (role: TeamRole): string => TEAM_PROMPT_VERSIONS[role];
 export const isTeamRole = (k: string): k is TeamRole => k in TEAM_AGENT_FILE;
 export const teamRoleOfAgentKey = (k: string): TeamRole | null => (Object.entries(TEAM_AGENT_FILE).find(([, f]) => f === k)?.[0] as TeamRole | undefined) ?? null;
