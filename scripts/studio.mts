@@ -25,13 +25,16 @@
 //   npm run studio -- branch <article_id> <expected_findings> [--classic] [--dry-run]   (Leo: creates a BRANCH of a classic article for a comparison, team mode by default, or a classic revision baseline with --classic; reads the original only)
 //   npm run studio -- fingerprint <article_id>          (read-only fingerprint of an article and everything attached to it)
 //   npm run studio -- fingerprint-v2 <article_id>       (read-only; stable: fixed column list, ordered by id; a column added later cannot change it. Report it next to v1)
+//   npm run studio -- images-pull <dir> [--out <dir2>]  (read-only on the database: checks Lawrence's finished images from a folder the operator downloaded from the Image board, strips metadata, and prints the report; --out writes the cleaned files and records.json. <dir> holds plan.json, work.json and files/<asset id>)
 //   npm run studio -- branch-delete <branch_id> --yes   (Leo: removes one branch and what it created; refuses anything that is not a branch)
 //   npm run studio -- voice-approve                    (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
 //   npm run studio -- proposal <article_id> <out.json>  (creates the proposal and writes the Approval Room payload)
 //   npm run studio -- sync-approvals <records.json>     (records read from the Approval Room with ArtifactData)
 //   npm run studio -- approvers                         (accounts that clicked; pending ones need Leo's confirmation)
 //   npm run studio -- confirm-approver <viewer_id> <approver|secondary|operator> <label>
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { pullImages } from "../src/lib/studio/image-pull";
 import { createClient } from "@supabase/supabase-js";
 import { AGENT_KEYS, type AgentKey } from "../src/lib/agents/schemas";
 import { semanticChecks, submitOutput } from "../src/lib/agents/bridge";
@@ -231,6 +234,22 @@ if (cmd === "queue") {
 } else if (cmd === "fingerprint-v2") {
   const f = await fingerprintV2(db, a);
   console.log(`${f.total}\n${Object.entries(f.parts).map(([k, v]) => `  ${k}: ${v.count} rows ${v.hash.slice(0, 12)}`).join("\n")}`);
+} else if (cmd === "images-pull") {
+  // No database or bucket is touched: the folder is the input, the printed report (and --out) the output.
+  const dir = a; if (!dir || !existsSync(join(dir, "plan.json"))) throw new Error("usage: images-pull <dir> [--out <dir2>]; <dir> needs plan.json, work.json and files/");
+  const plan = JSON.parse(readFileSync(join(dir, "plan.json"), "utf8")); const work = JSON.parse(readFileSync(join(dir, "work.json"), "utf8"));
+  const files = new Map<string, Uint8Array>(); const fdir = join(dir, "files");
+  if (existsSync(fdir)) for (const f of readdirSync(fdir)) files.set(f.replace(/\.[^.]+$/, ""), new Uint8Array(readFileSync(join(fdir, f))));
+  const res = pullImages({ articleId: plan.article_id, cards: plan.cards, work, files });
+  for (const c of res.cards) console.log(`${c.card_id}  ${c.status}${c.image ? `  v${c.image.version_no}  ${c.image.width}x${c.image.height}  ${c.image.mime}  sha256 ${c.image.sha256.slice(0, 12)}` : ""}${c.reasons.length ? `\n    ${c.reasons.join("\n    ")}` : ""}`);
+  console.log(`${res.ready.length} of ${res.cards.length} card(s) ready to place`);
+  const outIdx = process.argv.indexOf("--out");
+  if (outIdx > 0 && process.argv[outIdx + 1]) {
+    const out = process.argv[outIdx + 1];
+    for (const [path, bytes] of res.files) { const full = join(out, path); mkdirSync(dirname(full), { recursive: true }); writeFileSync(full, bytes); }
+    writeFileSync(join(out, "records.json"), JSON.stringify(res.ready, null, 1));
+    console.log(`wrote ${res.files.size} cleaned file(s) and records.json to ${out}`);
+  }
 } else if (cmd === "branch-delete") {
   const res = await branchDelete(db, a, { actor: "leo", yes: process.argv.includes("--yes") });
   console.log(res.ok ? `branch ${a} deleted: ${res.summary}\n${res.originalChanged?.length ? `ORIGINAL CHANGED: ${res.originalChanged.join("; ")}` : "original fingerprint unchanged"}` : `NOT DELETED: ${res.reason}`);
