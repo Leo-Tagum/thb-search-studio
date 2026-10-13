@@ -8,6 +8,8 @@ import { agent1Result, agent2Result, agent3Result, outputSchemas } from "../agen
 import { MAX_ATTEMPTS, ratingRuleHits, semanticChecks, wrapUntrusted, norm, type TaskPacket, type ValidationContext } from "../agents/bridge";
 import { officialUrl } from "../agents/official-sources";
 import { studioOutputSchemas, studioSemanticChecks, V1_PROMPT_VERSION, type StudioValidationCtx } from "../studio/agents";
+import { v1ImageCheckErrors, v1ImageCheckOutput } from "../studio/image-agents";
+import type { ImagePlanResult } from "../studio/image-cards";
 import { HEDGE_RULINGS, rulingGuard, rulingNoteError } from "../studio/hedge-rulings";
 import { READER_IMPACTS, VERIFICATION_LABELS } from "../studio/legal-claims";
 import { legalKindsOf } from "../studio/legal-flags";
@@ -73,6 +75,7 @@ const SCHEMAS = {
   W1: w1Output,
   W2: w2Output,
   V1: s5.extend({ result: s5.shape.result.extend({ claim_checks: z.array(v1ClaimCheck), cards, hedge_rulings: z.array(hedgeRuling).max(30), leo_reference_needed: z.array(leoReferenceNeeded).max(5).default([]) }) }),
+  V1_IMAGE: v1ImageCheckOutput,                         // Phase 3e: V1's image text check has its own result shape (prompt 1.5.0)
   V2: s6.extend({ result: s6.shape.result.extend({ cards }) }),
   V3: s7.extend({ result: s7.shape.result.extend({ cards }) }),
 } as const;
@@ -82,6 +85,7 @@ export type TeamSchemaKey = keyof typeof SCHEMAS;
 export function teamSchemaKey(role: TeamRole, raw: any): TeamSchemaKey {
   if (role === "R1") return raw?.result && "fetch_request" in raw.result ? "R1_FETCH" : "R1_EVIDENCE";
   if (role === "S2") return raw?.result && "root_cause" in raw.result ? "S2_ROOT" : "S2_BRIEF";
+  if (role === "V1" && raw?.result && "card_checks" in raw.result) return "V1_IMAGE";
   return role;
 }
 export const teamSchema = (key: TeamSchemaKey): z.ZodType<any> => SCHEMAS[key] as any;
@@ -123,6 +127,7 @@ export type TeamCtx = {
   rootCause?: { ticket: { id: string; type: string; to: string; unitKey: string | null }; approved: ApprovedIdentity; supportedClaimIds: ReadonlySet<string> };   // S2
   pendingHedgeKeys?: string[];                          // V1: flagged sentences that still need a ruling
   pendingHedges?: { key: string; sentence: string }[];   // the same sentences, so the ruling guard can read them
+  image?: { plan: ImagePlanResult; textHash: string };    // V1 image text check: the plan being checked and the locked text version it is for
 };
 
 const ROUTES: Record<"S1" | "S2" | "W1" | "V1" | "V2" | "V3", Record<string, string[]>> = {
@@ -172,6 +177,11 @@ export async function teamSemanticChecks(role: TeamRole, out: any, ctx: TeamCtx)
     semanticChecks(agent, out, { ...ctx.legacy, packet: { ...shim(), ...(ctx.legacy?.packet ?? {}) } as TaskPacket })
       .filter((e) => !/^decision |^agent_prompt_version|^opportunity_id/.test(e));        // already checked above against the team tables
 
+  if (role === "V1" && out.result && "card_checks" in out.result) {      // V1's image text check: its own shape, its own checks
+    if (!ctx.image) errs.push("internal: no image plan supplied for the image text check");
+    else errs.push(...v1ImageCheckErrors(out, ctx.image.plan, ctx.image.textHash));
+    return errs;
+  }
   switch (role) {
     case "R1": {
       if ("fetch_request" in out.result) {

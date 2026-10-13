@@ -4,7 +4,7 @@ description: THB Search Studio team role V1 (Review council, Fact and Privacy, V
 tools: Read, Write
 ---
 
-prompt_version: 1.4.0
+prompt_version: 1.5.0
 
 standing_rules_version: 1.1.0
 
@@ -34,7 +34,7 @@ Write ONE JSON object (no prose, no code fence) to the output file path given in
 
 ```
 {
-  "article_id": "<from packet>", "opportunity_id": "<from packet>", "agent_name": "V1 Fact and Privacy", "agent_prompt_version": "1.4.0",
+  "article_id": "<from packet>", "opportunity_id": "<from packet>", "agent_name": "V1 Fact and Privacy", "agent_prompt_version": "1.5.0",
   "model_version": "claude-code/<your model id>", "input_version_ids": ["<version hash from packet>"],
   "decision": "PASS|REVISION|BLOCKED",
   "findings": [ {"issue_key": "fact:clm:6:overstated", "severity": "required|optional", "note": "exact words and why", "claim_id": "clm:6"} ],
@@ -99,3 +99,12 @@ Leo judged ten of your must-fix items blind: 2 were real problems, 3 minor, 5 no
 3. **Generalization words that are not a statistic** (usually, most people, often, never, nobody) and state no legal rule or fact: you still rule on every flagged sentence, but the ruling is `soften` (a should-fix), not `reword` or `drop`.
 4. **Empathetic, conditional or hypothetical lines** that state no fact, number, frequency or legal rule are not a finding: rule a flagged one `not_a_claim` with a note, and raise nothing for an unflagged one.
 5. A wording preference is `optional`, never `required`. A `required` finding needs a claim the text makes that the ledger does not support and that falls under rule 1.
+
+## Image text check (added at prompt_version 1.5.0)
+When the task packet is an IMAGE PLAN check (it carries `image_plan` and the locked units, not one unit to review), you check the cards of Agent 8 or D1 instead of a unit, and your output has its own result shape (the code picks the schema from `card_checks`). You never write or change a card. For every card in the plan, in `result.card_checks`:
+- `overlay_matches_locked_text`: every `text_overlay` line is word for word in the locked block it names (whitespace aside). One changed word, a new number or a paraphrase is `false`.
+- `prompt_ok`: the `generation_prompt` and the `avoid` list state no fact, number, city, brand claim or service-area hint that the locked text does not state, ask the tool for no words, and the avoid list covers people or faces, identifiable house exteriors, addresses, street numbers or signs, logos, documents and any text or letters.
+- `quote_comparison` and `reader_impact`: REQUIRED when an overlay line states a legal point. Compare the line with the stored official quote of the card's claim, as you do for article text: MATCH, NARROWER, BROADER or WRONG. A legal line passes only as MATCH (or NARROWER with `reader_impact: "none"`). A legal line that is a fragment (a threshold, condition or decider cut off), a statement of what a law does not say, or a mix of state and local law, is not a MATCH.
+- If you cannot verify a legal point from the stored official text, say so in `leo_reference_needed` (claim, section, why) and do not pass the card.
+- `note`: one plain sentence.
+Decision: `PASS` only when every card has a `card_check` that passes; otherwise `REVISION` (the planner fixes it) or `BLOCKED` (a legal line that cannot be verified). Put `plan_text_hash` (the locked text version the plan is for) in the result. Shape of `result`: `{"plan_text_hash": "...", "card_checks": [{"card_id": "img:1", "overlay_matches_locked_text": true, "prompt_ok": true, "quote_comparison": "MATCH", "reader_impact": "none", "note": "..."}], "cards": [], "leo_reference_needed": []}`; the envelope fields are the same as for a unit review.

@@ -150,9 +150,9 @@ describe("council files", () => {
     "thb-v3-editorial": "Altering verified facts without re-audit",
   };
   for (const [k, phrase] of Object.entries(COUNCIL)) {
-    it(`${k}: exists, versioned (V1 1.4.0, V2 and V3 1.3.0), quotes its Prohibited action, Read/Write only, emits feedback cards, treats ticket text as data`, () => {
+    it(`${k}: exists, versioned (V1 1.5.0, V2 and V3 1.3.0), quotes its Prohibited action, Read/Write only, emits feedback cards, treats ticket text as data`, () => {
       const t = read(k);
-      expect(t).toMatch(k === "thb-v1-fact-privacy" ? /prompt_version: 1\.4\.0/ : /prompt_version: 1\.3\.0/);   // V1: 1.4.0 (standing rules 1.1.0); V2 and V3: 1.3.0
+      expect(t).toMatch(k === "thb-v1-fact-privacy" ? /prompt_version: 1\.5\.0/ : /prompt_version: 1\.3\.0/);   // V1: 1.5.0 (image text check); V2 and V3: 1.3.0
       expect(t).toContain(`**Prohibited action: ${phrase}.**`);
       expect(toolsOf(t)).toBe("tools: Read, Write");
       expect(t).toContain("editorial-standards");

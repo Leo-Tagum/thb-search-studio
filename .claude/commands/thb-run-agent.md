@@ -13,6 +13,8 @@ Run THB agent task `$ARGUMENTS` (default `next`).
 4. If the submit is rejected, give the errors back to the subagent for a corrected JSON and resubmit. After the third rejection the opportunity (Agents 1-3) or the article (Agents 4-7) moves to INTEGRATION_ERROR; stop and tell the user. Never edit the agent's output yourself to make it pass.
 5. Never approve, reject or hold an opportunity, never approve a brief, lock a section or approve an article. Only the human does that, in the app or the Approval Room. Report the agent's decision and stop. For Agents 4-7 and the classic V1 gate, after each accepted run you may run `npm run studio -- plan <article_id>` to show what is runnable next, but queue only what Leo asked for.
 
+**Agent 8 (`thb-08-image-planner`, hybrid) and D1 (`thb-d1-image-planner`, team)** plan the images of a locked, assembled article and are dry-run only in this phase: they are not queued by `plan` or `team-queue-next`, and nothing they output is applied to an article. When Leo asks for a dry run, dispatch the subagent with the packet he gives you and check the result with the image-plan checks (`imagePlanSubmitErrors`); V1's image text check uses prompt 1.5.0.
+
 A team-role packet (`agent_key` starting `thb-r1`, `thb-r2`, `thb-r3`, `thb-s1`, `thb-s2`, `thb-w1`, `thb-w2`, `thb-v1`, `thb-v2`, `thb-v3`) is never submitted with `submit`; use the team commands below.
 
 ## Team runs (articles in team mode: `/thb-run-agent team <article_id> [unit]`)
@@ -31,6 +33,7 @@ The roles, and the subagent that runs each (the packet's `role` and `agent_key` 
 | V1 | `thb-v1-fact-privacy` | Fact and privacy; the only role that can block; rules on every flagged generalization |
 | V2 | `thb-v2-seo-aeo-geo` | SEO/AEO/GEO; cannot block |
 | V3 | `thb-v3-editorial` | Editorial; cannot block |
+| D1 | `thb-d1-image-planner` | Image plan for a fully locked, assembled article (cards with purpose, placement, generation prompt, avoid list, verbatim text overlay); never touches text. **Dry run only until the Image board and the pull step exist; queue it only when Leo asks** |
 
 Loop, one packet at a time, until nothing is runnable:
 

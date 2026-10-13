@@ -28,7 +28,12 @@ export const imageCard = z.strictObject({
   type: z.enum(IMAGE_TYPES),
   purpose: txt(300),
   designer_description: txt(1200),
-  image_text: z.array(z.strictObject({ text: txt(400), source_unit: z.string().regex(/^(s\d{1,2}|faq)$/), source_block: blockRef })).max(12),
+  /** A ready-to-paste prompt for an AI image tool (tool-neutral): subject, style, composition, mood, brand palette (navy and orange on a light background), the aspect ratio, and clear empty space where the overlay text goes. It never asks the tool to draw words. */
+  generation_prompt: txt(1800),
+  /** The negative prompt: what the tool must not draw. Always covers the REQUIRED_AVOID items. */
+  avoid: z.array(txt(160)).min(6).max(30),
+  /** The exact text for the image, copied word for word from the locked article. Lawrence adds it himself in his design tool; AI tools never generate the words. */
+  text_overlay: z.array(z.strictObject({ text: txt(400), source_unit: z.string().regex(/^(s\d{1,2}|faq)$/), source_block: blockRef })).max(12),
   claim_ids: z.array(z.string()).max(12),
   alt_text: txt(250),
   aspect_ratio: z.strictObject({ ratio: z.string().regex(/^\d{1,2}:\d{1,2}$/), width_px: z.number().int().min(200).max(4000), height_px: z.number().int().min(200).max(4000) }),
@@ -79,6 +84,25 @@ const NO_PEOPLE = /\b(no|without|never|nobody)\b[^.;]{0,40}\b(faces?|people|pers
 const IDENTIFYING = /\b(house numbers?|street numbers?|addresses|address|license plates?|licence plates?|real home|real house|actual home|actual house|client'?s? home|seller'?s? home|\d{2,5}\s+[A-Z][a-z]+\s+(?:st|street|ave|avenue|blvd|rd|road|dr|drive|way|ln|lane|ct|court)\b)/i;
 const LEGAL_CUES = /\b(statute|laws?|code|section|ordinance|civil code|health (?:and|&) safety|requires?|required|prohibits?|prohibited|void|substandard|waiver|enforce\w*|officers?|officials?)\b/i;
 const NUMBER = /\d[\d,.]*/g;
+const NEGATION = /\b(?:no|not|without|avoid|never|nothing|none)\b[^.;\n]*/gi;
+const EMPTY_SPACE = /\b(?:empty|blank|clear|open|negative)\s+(?:space|area|room)\b/i;
+const QUOTED_STRING = /"[^"]{3,}"|“[^”]{3,}”|‘[^’]{3,}’/;
+const DRAW_WORDS = /\b(?:write|writes|written|spell|spells|spelling|caption(?:ed)?|headline|label(?:l?ed)?|reads|reading|saying|says|titled|slogan|banner text)\b/i;
+/** What a generation prompt must carry: the palette (navy, orange, light background) and a plain "no text" instruction. */
+const PROMPT_NEEDS: [string, RegExp][] = [
+  ["name the brand palette: navy", /\bnavy\b/i], ["name the brand palette: orange", /\borange\b/i], ["ask for a light background", /\blight\b[^.]{0,30}\bbackground\b|\bbackground\b[^.]{0,30}\blight\b|\bwhite background\b/i],
+  ['say "no text" (no letters or words drawn by the tool)', /\bno\s+(?:any\s+)?(?:text|letters?|words?|typography|lettering)\b/i],
+];
+/** The negative prompt always covers these (Leo, 2026-10-13). */
+const REQUIRED_AVOID: [string, RegExp][] = [
+  ["people or faces", /\b(?:people|persons?|faces?)\b/i], ["real-looking identifiable house exteriors", /\bexteriors?\b/i],
+  ["addresses", /\baddress(?:es)?\b/i], ["street numbers or signs", /\bstreet\s+(?:numbers?|signs?)|\bhouse\s+numbers?|\bsigns?\b/i],
+  ["logos", /\blogos?\b/i], ["documents", /\bdocuments?\b/i], ["any text or letters in the image", /\b(?:text|letters?|words?|lettering|typography)\b/i],
+];
+
+/** A line is a legal point if it raises a legal flag or uses legal wording; it then needs a whole sentence, its claim, and V1's quote comparison. */
+export const isLegalLine = (text: string): boolean => legalKindsOf(norm(text)).length > 0 || LEGAL_CUES.test(norm(text));
+export const legalOverlayLines = (c: ImageCard) => c.text_overlay.filter((l) => isLegalLine(l.text));
 
 const F = (code: string, severity: Finding["severity"], detail: string): Finding => ({ code, severity, detail });
 
@@ -115,13 +139,13 @@ export function imagePlanFindings(plan: ImagePlanResult, ctx: ImageCtx): Finding
 
     // SR-11: text inside the image is the locked text
     const lineSentences: { text: string; legal: boolean }[] = [];
-    for (const l of c.image_text) {
+    for (const l of c.text_overlay) {
       const src = byKey.get(l.source_unit); const strs = src ? blockStrings(src, l.source_block) : undefined;
       if (!src || !strs) { out.push(F("IMAGE_TEXT_SOURCE_MISSING", "REVISION", `${at}: "${l.text.slice(0, 60)}" names ${l.source_unit}/${l.source_block}, which does not exist`)); continue; }
       const t = norm(l.text);
       const home = strs.find((s) => s.includes(t));
       if (!home) { out.push(F("IMAGE_TEXT_NOT_VERBATIM", "BLOCKED_CLAIM", `${at}: "${t.slice(0, 100)}" is not word for word in ${l.source_unit}/${l.source_block} (no paraphrase, no new words, no new numbers)`)); continue; }
-      const legal = legalKindsOf(t).length > 0 || LEGAL_CUES.test(t);
+      const legal = isLegalLine(t);
       if (legal) {
         // SR-12: a legal line is a whole sentence, table cell or list item
         const whole = strs.some((s) => s === t) || strs.some((s) => sentencesOf(s).includes(t));
@@ -139,7 +163,7 @@ export function imagePlanFindings(plan: ImagePlanResult, ctx: ImageCtx): Finding
       for (const id of c.claim_ids) {
         const claim = ctx.claims.get(id);
         if (!claim) out.push(F("IMAGE_CLAIM_UNKNOWN", "BLOCKED_CLAIM", `${at}: ${id} is not in the claim ledger`));
-        else { cited.push(claim); if (!unitIds.has(id) && !c.image_text.some((l) => byKey.get(l.source_unit) && unitClaimIds(byKey.get(l.source_unit)!).includes(id))) out.push(F("IMAGE_CLAIM_NOT_CITED_BY_TEXT", "BLOCKED_CLAIM", `${at}: ${id} is not cited by the unit the line comes from`)); }
+        else { cited.push(claim); if (!unitIds.has(id) && !c.text_overlay.some((l) => byKey.get(l.source_unit) && unitClaimIds(byKey.get(l.source_unit)!).includes(id))) out.push(F("IMAGE_CLAIM_NOT_CITED_BY_TEXT", "BLOCKED_CLAIM", `${at}: ${id} is not cited by the unit the line comes from`)); }
       }
       out.push(...legalRecordFindings(cited).map((f) => ({ ...f, detail: `${at}: ${f.detail}` })));
       for (const cl of cited) if (cl.verification?.label && cl.verification.label !== "MATCH" && !(cl.verification.label === "NARROWER" && cl.verification.readerImpact === "none")) out.push(F("IMAGE_CLAIM_NOT_MATCH", "BLOCKED_CLAIM", `${at}: ${cl.id} is labelled ${cl.verification.label}; an image may only rest on a MATCH claim (or NARROWER with no reader impact)`));
@@ -148,11 +172,13 @@ export function imagePlanFindings(plan: ImagePlanResult, ctx: ImageCtx): Finding
       for (const l of legalLines) for (const n of localNamesIn(l.text)) if (!cited.some((cl) => cl.jurisdiction.toLowerCase().includes(n))) out.push(F("IMAGE_LOCAL_NO_CLAIM", "BLOCKED_CLAIM", `${at}: the line names ${n} but no cited claim is for ${n}'s own official code (SR-2)`));
     }
 
-    // free text of the card: description, alt text, purpose
-    const free = [c.designer_description, c.alt_text, c.purpose].join("\n");
-    const everything = [free, c.image_text.map((l) => l.text).join("\n")].join("\n");
+    // free text of the card: description, alt text, purpose, and the generation prompt (negations stripped: "no address" is the instruction we want)
+    const promptPos = c.generation_prompt.replace(NEGATION, " ");
+    const free = [c.designer_description, c.alt_text, c.purpose, promptPos].join("\n");
+    const allowedNumbers = new Set<string>([...c.aspect_ratio.ratio.split(":"), String(c.aspect_ratio.width_px), String(c.aspect_ratio.height_px)]);
+    const everything = [free, c.text_overlay.map((l) => l.text).join("\n")].join("\n");
     // SR-11: no figure that is not in the locked text
-    for (const n of new Set(free.match(NUMBER) ?? [])) { const k = n.replace(/[.,]+$/, ""); if (k && !articleNumbers.has(k) && !articleNumbers.has(n)) out.push(F("IMAGE_NEW_NUMBER", "BLOCKED_CLAIM", `${at}: the number ${k} in the description, alt text or purpose is not in the locked text (SR-11)`)); }
+    for (const n of new Set(free.match(NUMBER) ?? [])) { const k = n.replace(/[.,]+$/, ""); if (k && !articleNumbers.has(k) && !articleNumbers.has(n) && !allowedNumbers.has(k)) out.push(F("IMAGE_NEW_NUMBER", "BLOCKED_CLAIM", `${at}: the number ${k} in the description, alt text or purpose is not in the locked text (SR-11)`)); }
     // SR-13: brand and service area
     if (MAP_OR_COVERAGE.test(free)) out.push(F("IMAGE_BRAND_COVERAGE", "BLOCKED_CLAIM", `${at}: a map, skyline, landmark, coverage or "serving X" badge, or a BBB/accreditation badge, is not allowed in an image (SR-13)`));
     for (const n of localNamesIn(free)) if (!articleText.toLowerCase().includes(n)) out.push(F("IMAGE_CITY_NOT_IN_TEXT", "BLOCKED_CLAIM", `${at}: ${n} appears in the description or alt text but not in the locked text; no place names that imply coverage (SR-3, SR-13)`));
@@ -162,12 +188,25 @@ export function imagePlanFindings(plan: ImagePlanResult, ctx: ImageCtx): Finding
     for (const h of experienceYearViolations(wrap)) out.push(F("IMAGE_EXPERIENCE", "BLOCKED_CLAIM", `${at}: experience wording ${h} is not approved`));
     for (const h of sourcedFactViolations(wrap)) out.push(F("IMAGE_SOURCED_FACT", "BLOCKED_CLAIM", `${at}: ${h}`));
     // SR-15 / SR-16
-    const peopleFree = c.designer_description.replace(NO_PEOPLE, " ");     // what the picture shows; alt text may quote locked text about people ("endanger people")
+    const peopleFree = `${c.designer_description}\n${promptPos}`.replace(NO_PEOPLE, " ");     // what the picture shows; alt text may quote locked text about people ("endanger people")
     if (PEOPLE.test(peopleFree)) out.push(F("IMAGE_PEOPLE", "BLOCKED_PRIVACY", `${at}: the description mentions people, a seller, a family or faces; images are generic with no identifiable people (SR-15). Say "no people" if that is what you mean`));
     if (IDENTIFYING.test(free) || IDENTIFYING.test(c.privacy_notes.replace(/\b(no|without|never)\b[^.;]{0,40}/gi, " "))) out.push(F("IMAGE_IDENTIFYING", "BLOCKED_PRIVACY", `${at}: an address, house number, license plate or a real home is named (SR-15)`));
     if (c.type === "stock_photo" && !/\bgeneric\b/i.test(c.designer_description)) out.push(F("IMAGE_STOCK_NOT_GENERIC", "REVISION", `${at}: a stock photo must be described as generic`));
     if (BANNED_IMAGERY.test(free)) out.push(F("IMAGE_BANNED_IMAGERY", "BLOCKED_CLAIM", `${at}: speech bubbles, quotation marks, before-and-after or testimonial framing are banned (SR-16)`));
     if (INVENTED_DATA.test(free) || (c.type === "infographic" && /\b(chart|graph)\b/i.test(free))) out.push(F("IMAGE_INVENTED_DATA", "BLOCKED_CLAIM", `${at}: charts, statistics and data values are not allowed unless the locked text states them (SR-11, SR-16)`));
+
+    // the generation prompt and the avoid list (Leo, 2026-10-13): ready to paste, no words drawn by the tool, no fact the article does not state
+    const gp = c.generation_prompt;
+    for (const [name, re] of PROMPT_NEEDS) if (!re.test(gp)) out.push(F("IMAGE_PROMPT_INCOMPLETE", "REVISION", `${at}: the generation prompt must ${name}`));
+    if (!gp.includes(c.aspect_ratio.ratio)) out.push(F("IMAGE_PROMPT_INCOMPLETE", "REVISION", `${at}: the generation prompt must state the aspect ratio ${c.aspect_ratio.ratio}`));
+    if (c.text_overlay.length && !EMPTY_SPACE.test(gp)) out.push(F("IMAGE_PROMPT_INCOMPLETE", "REVISION", `${at}: the generation prompt must ask for clear empty space where the overlay text will go`));
+    if (QUOTED_STRING.test(gp) || DRAW_WORDS.test(promptPos) || c.text_overlay.some((l) => gp.toLowerCase().includes(norm(l.text).toLowerCase()) || c.avoid.some((a) => a.toLowerCase().includes(norm(l.text).toLowerCase())))) out.push(F("IMAGE_PROMPT_HAS_TEXT", "BLOCKED_CLAIM", `${at}: the generation prompt asks the tool to draw words, or contains the overlay text; AI tools never generate the words (Lawrence adds text_overlay himself)`));
+    const avoidText = c.avoid.join("\n");
+    for (const [name, re] of REQUIRED_AVOID) if (!re.test(avoidText)) out.push(F("IMAGE_AVOID_INCOMPLETE", "REVISION", `${at}: the avoid list must always include ${name}`));
+    for (const n of new Set(avoidText.match(NUMBER) ?? [])) { const k = n.replace(/[.,]+$/, ""); if (k && !articleNumbers.has(k) && !allowedNumbers.has(k)) out.push(F("IMAGE_NEW_NUMBER", "BLOCKED_CLAIM", `${at}: the number ${k} in the avoid list is not in the locked text`)); }
+    for (const n of localNamesIn(avoidText)) if (!articleText.toLowerCase().includes(n)) out.push(F("IMAGE_CITY_NOT_IN_TEXT", "BLOCKED_CLAIM", `${at}: ${n} appears in the avoid list but not in the locked text`));
+    const avoidWrap = { text: avoidText };
+    for (const h of [...pendingJuanHits(avoidWrap), ...ratingRuleHits(avoidWrap), ...experienceYearViolations(avoidWrap)]) out.push(F("IMAGE_BRAND_CLAIM", "BLOCKED_CLAIM", `${at}: a brand claim in the avoid list: ${h}`));
   }
   return out;
 }

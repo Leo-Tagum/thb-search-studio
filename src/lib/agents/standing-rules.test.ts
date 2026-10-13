@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { AGENT_META } from "./schemas";
 import { STANDING_RULES_FILE, STANDING_RULES_VERSION } from "./standing-rules";
 import { STUDIO_AGENT_META, V1_PROMPT_VERSION } from "../studio/agents";
+import { IMAGE_AGENT_META } from "../studio/image-agents";
 import { TEAM_AGENT_FILE, TEAM_PROMPT_VERSIONS } from "../team/bridge";
 
 // The code check Leo asked for (Phase 3e stage 4): every agent prompt loads the standing rules at their CURRENT version, and carries the version the code expects.
@@ -16,6 +17,7 @@ const rules = readFileSync(join(process.cwd(), STANDING_RULES_FILE), "utf8").rep
 const expected: Record<string, string> = {};
 for (const [k, m] of Object.entries(AGENT_META)) expected[k] = m.promptVersion;
 for (const [k, m] of Object.entries(STUDIO_AGENT_META)) expected[k] = m.promptVersion;
+for (const [k, m] of Object.entries(IMAGE_AGENT_META)) expected[k] = m.promptVersion;
 for (const [role, file] of Object.entries(TEAM_AGENT_FILE)) expected[file] = (TEAM_PROMPT_VERSIONS as Record<string, string>)[role];
 expected["thb-v1-fact-privacy"] = V1_PROMPT_VERSION;
 
@@ -55,7 +57,7 @@ describe("every agent prompt loads the current standing rules and carries the ve
     });
   }
   it("a standing-rules change that is not carried everywhere would fail: the check reads the constant, the file and all prompts", () => {
-    expect(files.length).toBe(17);
+    expect(files.length).toBe(19);
   });
 });
 
