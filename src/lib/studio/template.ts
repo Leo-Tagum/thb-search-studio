@@ -61,15 +61,40 @@ function renderBlock(b: Block): string {
       return `<div class="thb-table-wrap">\n<table>\n<thead>\n<tr>${b.headers.map((h) => `<th>${il(h)}</th>`).join("")}</tr>\n</thead>\n<tbody>\n${b.rows.map((r) => `<tr>${r.map((c) => `<td>${il(c)}</td>`).join("")}</tr>`).join("\n")}\n</tbody>\n</table>\n</div>`;
   }
 }
-function renderSection(s: Section): string {
-  return [`<h2>${il(s.h2)}</h2>`, ...(s.capsule ? [`<div class="thb-callout">\n<p>${il(s.capsule)}</p>\n</div>`] : []), ...s.blocks.map(renderBlock)].join("\n\n");
+// ---------- images (Phase 3e, build step 4) ----------
+/**
+ * An image placed in the article. The stored HTML never holds a URL: `src` is the token `studio-image:<image id>#<sha256 of the exact bytes>`, so the version hash
+ * pins the file. Real URLs are resolved only for the preview and at publish (resolveImageTokens); the hash does not depend on them.
+ */
+export type PlacedImage = { unitKey: string; afterBlock: number; imageId: string; sha256: string; alt: string; caption?: string; width?: number; height?: number };
+export const IMAGE_SRC_RE = /^studio-image:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}#[0-9a-f]{64}$/;
+const FIGURE_RE = /\n\n<figure class="thb-figure">[\s\S]*?<\/figure>/g;
+function renderFigure(i: PlacedImage): string {
+  const dims = i.width && i.height ? ` width="${Math.round(i.width)}" height="${Math.round(i.height)}"` : "";
+  return `<figure class="thb-figure">\n<img src="studio-image:${i.imageId}#${i.sha256}" alt="${esc(i.alt)}"${dims}>${i.caption ? `\n<figcaption>${esc(i.caption)}</figcaption>` : ""}\n</figure>`;
+}
+/** The article HTML with every figure removed: byte for byte what the same article renders without images (the "text proof"). */
+export const stripFigures = (html: string): string => html.replace(FIGURE_RE, "");
+/** Real URLs for the tokens, for the preview and for publish only. The stored version keeps the tokens. */
+export const resolveImageTokens = (html: string, urlFor: (imageId: string, sha256: string) => string): string =>
+  html.replace(/src="studio-image:([0-9a-f-]{36})#([0-9a-f]{64})"/g, (_m, id: string, sha: string) => `src="${esc(urlFor(id, sha))}"`);
+
+function renderSection(s: Section, figures: PlacedImage[] = []): string {
+  const blocks = s.blocks.flatMap((b, idx) => [renderBlock(b), ...figures.filter((f) => f.afterBlock === idx).map(renderFigure)]);
+  return [`<h2>${il(s.h2)}</h2>`, ...(s.capsule ? [`<div class="thb-callout">\n<p>${il(s.capsule)}</p>\n</div>`] : []), ...blocks].join("\n\n");
 }
 function renderFaq(f: Faq): string {
   return ["<h2>Frequently Asked Questions</h2>", ...f.items.map((i) => `<h3>${il(i.q)}</h3>\n<p>${il(i.a)}</p>`)].join("\n\n");
 }
 
-export function renderBody(draft: Draft, c: Composed): string {
-  const sections = draft.units.filter((u): u is Section => u.kind === "section").map(renderSection);
+export function renderBody(draft: Draft, c: Composed, images: PlacedImage[] = []): string {
+  for (const i of images) {
+    const u = draft.units.find((x) => x.key === i.unitKey);
+    if (!u || u.kind !== "section" || i.afterBlock < 0 || i.afterBlock >= u.blocks.length) throw new Error(`image ${i.imageId} is placed after block ${i.afterBlock} of ${i.unitKey}, which does not exist`);
+    if (!IMAGE_SRC_RE.test(`studio-image:${i.imageId}#${i.sha256}`)) throw new Error(`image ${i.imageId} has an id or sha256 that is not the token form`);
+    if (!i.alt.trim()) throw new Error(`image ${i.imageId} has no alt text`);
+  }
+  const sections = draft.units.filter((u): u is Section => u.kind === "section").map((u) => renderSection(u, images.filter((i) => i.unitKey === u.key)));
   const faq = draft.units.filter((u): u is Faq => u.kind === "faq").map(renderFaq);
   const author = `<div class="thb-author">\n<h2>About ${esc(c.author.name)}</h2>\n<p>${esc(c.author.sentence)} ${esc(c.author.homes)} <a href="${esc(c.author.url)}">Read more from Juan</a>.</p>\n</div>`;
   const related = `<h2>Related Guides</h2>\n<ul>\n${c.related.map((r) => `<li><a href="${esc(r.url)}">${esc(r.text)}</a></li>`).join("\n")}\n</ul>`;
@@ -79,8 +104,8 @@ export function renderBody(draft: Draft, c: Composed): string {
 }
 
 /** Hard allowlist over the produced HTML: nothing outside the pattern's own tags and classes can appear. */
-const TAGS = new Set(["div", "p", "h2", "h3", "ul", "ol", "li", "table", "thead", "tbody", "tr", "th", "td", "a", "strong"]);
-const CLASSES = new Set(["thb-article", "thb-callout", "thb-note", "thb-table-wrap", "thb-questions", "thb-author", "thb-sources", "thb-cta-box", "thb-cta", "thb-button"]);
+const TAGS = new Set(["div", "p", "h2", "h3", "ul", "ol", "li", "table", "thead", "tbody", "tr", "th", "td", "a", "strong", "figure", "figcaption", "img"]);
+const CLASSES = new Set(["thb-article", "thb-callout", "thb-note", "thb-table-wrap", "thb-questions", "thb-author", "thb-sources", "thb-cta-box", "thb-cta", "thb-button", "thb-figure"]);
 export function auditHtml(html: string): string[] {
   const errs: string[] = [];
   const body = html.replace(STYLE_BLOCK, "");
@@ -89,6 +114,19 @@ export function auditHtml(html: string): string[] {
     if (!TAGS.has(tag)) errs.push(`tag <${tag}> is not allowed`);
     for (const c of m[2].matchAll(/class="([^"]*)"/g)) for (const cls of c[1].split(/\s+/)) if (cls && !CLASSES.has(cls)) errs.push(`class ${cls} is not in the pattern`);
     if (/\sstyle=|\son[a-z]+=|javascript:/i.test(m[2])) errs.push("inline style or event handler found");
+    if (tag === "img" && !m[0].startsWith("</")) {
+      // an image carries only the token src, a non-empty alt and optional pixel size: never a URL, srcset, style or handler
+      const attrs = [...m[2].matchAll(/([a-zA-Z-]+)="([^"]*)"/g)].map((a) => [a[1].toLowerCase(), a[2]] as const);
+      const stripped = m[2].replace(/([a-zA-Z-]+)="([^"]*)"/g, "").replace(/[\s/]/g, "");
+      if (stripped) errs.push("img has an attribute that is not name=\"value\"");
+      for (const [name, value] of attrs) {
+        if (!["src", "alt", "width", "height"].includes(name)) errs.push(`img attribute ${name} is not allowed`);
+        if (name === "src" && !IMAGE_SRC_RE.test(value)) errs.push("img src must be a studio-image token (studio-image:<id>#<sha256>), never a URL");
+        if ((name === "width" || name === "height") && !/^\d{2,4}$/.test(value)) errs.push(`img ${name} must be a pixel number`);
+      }
+      if (!attrs.some(([n, v]) => n === "src" && v)) errs.push("img has no src");
+      if (!attrs.some(([n, v]) => n === "alt" && v.trim())) errs.push("img has no alt text");
+    }
   }
   return errs;
 }

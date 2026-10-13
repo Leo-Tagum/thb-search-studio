@@ -9,7 +9,7 @@ import { STYLE_BLOCK } from "./style-block";
 const entity = (s: string) => s.replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;|&#x27;/g, "'").replace(/&amp;/g, "&");
 /** The reader-visible text of an assembled article: the style block and every tag removed, entities decoded, blocks on their own lines. */
 export function htmlPlainText(html: string): string {
-  const body = html.replace(STYLE_BLOCK, "");
+  const body = html.replace(STYLE_BLOCK, "").replace(/<img\b[^>]*\balt="([^"]*)"[^>]*>/gi, "\n$1\n");       // alt text is reader-visible text too (screen readers, search)
   return entity(body.replace(/<(?:\/?(?:p|div|h[1-6]|li|tr|ul|ol|table|thead|tbody)\b)[^>]*>/gi, "\n").replace(/<[^>]+>/g, " ")).replace(/[ \t ]+/g, " ").replace(/\n\s*/g, "\n").trim();
 }
 
