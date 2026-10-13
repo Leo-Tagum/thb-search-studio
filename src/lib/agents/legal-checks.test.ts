@@ -76,6 +76,12 @@ describe("the label is a verdict, not decoration (the hoarder guide's NARROWER a
     expect(errs([carried])).toMatch(/clm:8, which is not a claim in this packet/);
     expect(legalStaticErrors([carried, clm8({ support: "unsupported" })], [lib]).join(" ")).toMatch(/not supported/);
   });
+  it("a gate may be both stated in the claim and carried by another claim (the dry run's redundant case is accepted); the carrier is still validated", () => {
+    const both = full({ id: "clm:2", gates: [{ kind: "threshold", text: THRESHOLD, stated_in_claim: true, carried_by: "clm:8" }] });
+    expect(legalStaticErrors([both, clm8()], [lib])).toEqual([]);
+    expect(errs([both])).toMatch(/clm:8, which is not a claim in this packet/);                       // a missing carrier is still refused
+    expect(legalStaticErrors([both, clm8({ support: "unsupported" })], [lib]).join(" ")).toMatch(/not supported/);   // so is an unsupported one
+  });
   it("NARROWER with reader impact 'none' needs the recorded reason; with it, it is accepted (clm:6, 'sale only', Leo's ruling)", () => {
     const six = full({ id: "clm:6", verification: { label: "NARROWER", against: "a", reader_impact: "none" }, gates: [{ kind: "scope", text: "also exchange, lease with an option to purchase", stated_in_claim: false }] });
     expect(errs([six])).toMatch(/NARROWER needs a recorded reason/);

@@ -56,7 +56,7 @@ export function legalStaticErrors(claims: LegalClaim[], sources: LegalSource[]):
       const other = packet.get(g.carried_by);
       if (!other) errs.push(`${at}: gate "${(g.text ?? "").slice(0, 40)}" is carried by ${g.carried_by}, which is not a claim in this packet`);
       else if (other.support !== "supported") errs.push(`${at}: gate carried by ${g.carried_by}, which is not supported`);
-      if (g.stated_in_claim) errs.push(`${at}: a gate cannot be both stated in the claim and carried by ${g.carried_by}`);
+      // a gate may be both stated in the claim and carried by another claim (redundant, not wrong): the carrier is still validated above
     }
     // an omitted gate (neither stated in the claim nor carried by another claim) needs the recorded reason
     const omitted = (c.gates ?? []).filter((g) => !g.stated_in_claim && !g.carried_by);

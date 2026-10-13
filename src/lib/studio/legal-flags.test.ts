@@ -97,6 +97,12 @@ describe("the verification record of the cited claims (REAL MISS: clm:1-3 withou
     expect(codes([claim("clm:6", rec("(a) Except as provided ...", { label: "NARROWER", reason: null }))])).toEqual(["LEGAL_NARROWER_UNRECORDED:BLOCKED_CLAIM"]);
     expect(codes([claim("clm:6", rec("(a) Except as provided ...", { label: "NARROWER", reason: "a guide for sellers; the omitted transfer types change nothing for its reader" }))])).toEqual([]);
   });
+  it("a gate that is both stated in the claim and carried by clm:8 does not force the unit to cite clm:8 (the claim states it itself)", () => {
+    const stated = claim("clm:1", rec("(j) ...", { label: "NARROWER", reason: "threshold stated in the claim and carried by clm:8", gates: [{ ...carried, stated_in_claim: true }] }));
+    expect(codes([stated])).toEqual([]);
+    const only = claim("clm:1", rec("(j) ...", { label: "NARROWER", reason: "carried by clm:8", gates: [carried] }));
+    expect(codes([only])).toEqual(["GATE_CLAIM_NOT_CITED:REVISION"]);                                   // carried only: the unit must still cite the carrier
+  });
   it("REAL MISS (FAQ 3): clm:1 with its threshold carried by clm:8 is fine when the unit cites clm:8, and sent back when it does not", () => {
     const one = claim("clm:1", rec("(j) ...", { label: "NARROWER", reason: "threshold carried by clm:8", gates: [carried] }));
     const eight = claim("clm:8", rec("in which there exists any of the following listed conditions " + THRESHOLD));

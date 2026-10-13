@@ -111,7 +111,7 @@ export function legalRecordFindings(cited: LedgerClaim[]): Finding[] {
     if (v.label === "BROADER" || v.label === "WRONG") out.push({ code: "LEGAL_CLAIM_NOT_MATCHING", severity: "BLOCKED_CLAIM", detail: `claim ${c.id} is labelled ${v.label}: it says more than, or contradicts, the official text` });
     else if (v.readerImpact === "changes") out.push({ code: "LEGAL_GATE_UNCARRIED", severity: "BLOCKED_CLAIM", detail: `claim ${c.id} leaves out a gate of the quoted section that changes what a reader would believe or do and no cited claim states it; fix the claim or cite the claim that carries it` });
     else if (v.label === "NARROWER" && (!v.reason?.trim() || v.readerImpact !== "none")) out.push({ code: "LEGAL_NARROWER_UNRECORDED", severity: "BLOCKED_CLAIM", detail: `claim ${c.id} is NARROWER without a recorded reason and a reader impact of "none"` });
-    for (const g of v.gates) if (g.carried_by && !ids.has(g.carried_by)) out.push({ code: "GATE_CLAIM_NOT_CITED", severity: "REVISION", detail: `claim ${c.id}: its gate "${g.text.slice(0, 60)}" is carried by ${g.carried_by}, which this unit does not cite; cite ${g.carried_by} and state the gate` });
+    for (const g of v.gates) if (g.carried_by && !g.stated_in_claim && !ids.has(g.carried_by)) out.push({ code: "GATE_CLAIM_NOT_CITED", severity: "REVISION", detail: `claim ${c.id}: its gate "${g.text.slice(0, 60)}" is carried by ${g.carried_by}, which this unit does not cite; cite ${g.carried_by} and state the gate` });
   }
   return out;
 }
