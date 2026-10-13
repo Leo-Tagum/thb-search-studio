@@ -9,7 +9,7 @@ import type { ClaimVerification } from "../studio/legal-claims";
 const ver = (over: Partial<ClaimVerification> = {}): ClaimVerification => ({ quote: "(c) Any waiver of the requirements of this article is void as against public policy.", section: "Civil Code 1102(c)", label: "MATCH", reason: null, against: "print", gates: [], readerImpact: "none", ...over });
 const claim = (id: string, v: ClaimVerification | undefined, over: Partial<LedgerClaim> = {}): LedgerClaim => ({ id, text: "t", risk: "high", support: "supported", sourceId: "s", sourceRecheckBy: null, jurisdiction: "California", verification: v, ...over });
 const studio = (claims: LedgerClaim[], legalRecord = true, cite: string[] = claims.map((c) => c.id)): StudioValidationCtx => ({
-  packet: { agent_key: "thb-05-fact-privacy-auditor", prompt_version: "1.8.0", unit_key: "s3", unit_hash: "h1", allowed_claim_ids: claims.map((c) => c.id), opportunity_id: "o1", article_id: "a1" },
+  packet: { agent_key: "thb-05-fact-privacy-auditor", prompt_version: "1.9.0", unit_key: "s3", unit_hash: "h1", allowed_claim_ids: claims.map((c) => c.id), opportunity_id: "o1", article_id: "a1" },
   currentUnit: { kind: "section", key: "s3", h2: "Q?", blocks: [{ t: "p", text: "x" }], claim_ids: cite, roles: [] } as any, currentHash: "h1",
   check: { today: "2026-10-13", claims: new Map(claims.map((c) => [c.id, c])), approvedFactTexts: [], allowedLinks: [], sourceUrls: [], internalPassages: [], allowedJurisdictions: ["California"], blockedPhrases: [], briefH2: {}, keyword: "x", legalRecord },
   voiceUsable: true, requiredIssuesOpen: [],
@@ -18,7 +18,7 @@ const out = (decision: string, over: Record<string, unknown> = {}, checks: any[]
 const errs = (o: any, c: StudioValidationCtx, rulings: any[] = [], sentences: [string, string][] = []) => v1LegalErrors(o, c, rulings, new Map(sentences)).join(" | ");
 
 describe("V1 output schema (Phase 3e): quote_comparison, reader_impact and leo_reference_needed", () => {
-  const base = { article_id: "a1", opportunity_id: "o1", agent_name: "V1 Fact and Privacy", agent_prompt_version: "1.8.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v", timestamp: "2026-10-13T12:00:00Z" };
+  const base = { article_id: "a1", opportunity_id: "o1", agent_name: "V1 Fact and Privacy", agent_prompt_version: "1.9.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v", timestamp: "2026-10-13T12:00:00Z" };
   const res = (extra: Record<string, unknown> = {}, check: Record<string, unknown> = {}) => ({ ...base, result: { unit_key: "s3", version_hash: "h1", claim_checks: [{ claim_id: "clm:7", verdict: "supported_as_written", note: "ok", ...check }], privacy_ok: true, legal_qualification_ok: true, cards: [], hedge_rulings: [], ...extra } });
   it("accepts the new per-claim fields, and the old shape without them (they are required by the check, not the schema)", () => {
     expect(teamSchema("V1").safeParse(res({}, { quote_comparison: "MATCH", reader_impact: "none" })).success).toBe(true);

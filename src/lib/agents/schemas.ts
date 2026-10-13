@@ -8,7 +8,7 @@ export type AgentKey = (typeof AGENT_KEYS)[number];
 
 export const AGENT_META: Record<AgentKey, { n: 1 | 2 | 3; name: string; promptVersion: string; decisions: readonly string[] }> = {
   "thb-01-seo-strategist": { n: 1, name: "SEO Strategist", promptVersion: "1.4.0", decisions: ["CREATE", "UPDATE", "MERGE", "HOLD", "REJECT"] },
-  "thb-02-research-evidence": { n: 2, name: "Research & Evidence", promptVersion: "1.4.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
+  "thb-02-research-evidence": { n: 2, name: "Research & Evidence", promptVersion: "1.5.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
   "thb-03-content-architect": { n: 3, name: "Content Architect", promptVersion: "1.4.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
 };
 
@@ -60,9 +60,19 @@ const claim = z.strictObject({
   ...verificationFields,   // Phase 3e: section, verification {label, reason, against, reader_impact}, gates (required for high-risk legal claims by the stage 2 submit check)
   note: z.string().optional(),
 });
+// Stage 6 part A: what Agent 2 and R1 hand Leo INSTEAD of a guess when the official text is not in the Evidence Library: the exact section to print and where to find it.
+const printRequest = z.strictObject({
+  jurisdiction: z.string().trim().min(2),
+  code: z.string().trim().min(2),                       // e.g. "San Francisco Housing Code"
+  section: z.string().trim().min(1).max(120),           // the section number, or "find by title" when the number is not known
+  title: z.string().trim().min(3).max(200),
+  url: z.string().nullable().default(null),             // the official page, if known (an official host or a known code publisher)
+  why: z.string().trim().min(15).max(400),              // which legal point of the article needs it
+});
 export const agent2Result = z.strictObject({
   sources: z.array(source),
   claims: z.array(claim),
+  print_requests: z.array(printRequest).max(12).default([]),
   brand_facts_pending: z.array(z.string()),
   first_party_proof: z.enum(["available", "restricted", "unavailable"]),
   unresolved: z.array(z.string()),

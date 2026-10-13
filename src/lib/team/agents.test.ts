@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { TEAM_PROMPT_VERSIONS } from "./bridge";
 
 // Phase 3c task 5 (as Phase 2 task 9): the team role files exist, carry a version and their Prohibited action, and have the specified tools.
 const dir = ".claude/agents";
@@ -17,9 +18,9 @@ const RESEARCH: Record<string, { tools: string; prohibited: string; own: string 
 describe("Research team files (R1, R2, R3)", () => {
   for (const [k, spec] of Object.entries(RESEARCH)) {
     const text = readFileSync(join(dir, `${k}.md`), "utf8");
-    it(`${k}: exists, versioned 1.4.0, quotes its Prohibited action, has the specified tools`, () => {
+    it(`${k}: exists, versioned as the code requires, quotes its Prohibited action, has the specified tools`, () => {
       expect(text).toMatch(/^name: /m);
-      expect(text).toMatch(/prompt_version: 1\.4\.0/);
+      expect(text).toMatch(new RegExp(`^prompt_version: ${TEAM_PROMPT_VERSIONS[k === "thb-r1-legal-official" ? "R1" : k === "thb-r2-search" ? "R2" : "R3"].replace(/\./g, "\.")}$`, "m"));
       expect(text).toContain(`**Prohibited action: ${spec.prohibited}.**`);
       expect(text).toContain(spec.own);
       expect(toolsOf(text)).toBe(spec.tools);

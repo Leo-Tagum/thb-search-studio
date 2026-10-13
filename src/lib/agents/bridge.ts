@@ -3,6 +3,7 @@
 // The orchestrator, not the agent, decides state. An agent output can never set an approval or a state.
 import { randomBytes } from "node:crypto";
 import { legalLibraryErrors, legalStaticErrors } from "./legal-checks";
+import { jurisdictionErrors, printRequestErrors } from "../studio/jurisdictions";
 import { type Actor, type Orchestrator } from "../orchestrator";
 import { buildScore } from "../engine/score";
 import { AGENT_KEYS, AGENT_META, SITUATION_ROWS, outputSchemas, type AgentKey } from "./schemas";
@@ -145,7 +146,7 @@ export type ValidationContext = {
   agent2Claims?: { id: string; support: string }[]; // Agent 3
   agent2SourceIds?: string[]; // Agent 3
   libraryPassages?: Map<string, { source_id: string; text: string }>; // Agent 2: stored text of Evidence Library passages
-  legal?: { librarySources?: Map<string, { recheck_by: string | null }>; today?: string; skip?: boolean }; // Phase 3e: legal-claim checks (skip: roles that carry no legal claims, e.g. R3)
+  legal?: { librarySources?: Map<string, { recheck_by: string | null }>; today?: string; skip?: boolean; allowedJurisdictions?: string[]; library?: { title: string; jurisdiction: string }[] }; // Phase 3e: legal-claim checks (skip: roles that carry no legal claims, e.g. R3); Stage 6: the article's allowed-jurisdiction list and the stored sources (for print requests)
 };
 
 export const norm = (t: string) => t.toLowerCase().replace(/\s+/g, " ").trim();
@@ -208,6 +209,9 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
     for (const id of ids) if (!declared.has(id)) errs.push(`evidence_ids must list every source id (missing ${id})`);
     if (out.decision === "PASS" && out.result.claims.some((c: any) => c.support !== "supported" && c.risk === "high")) errs.push("PASS is not allowed while a high-risk claim is unsupported/conflicting");
     // Phase 3e: a supported high-risk (legal) claim carries its full verification record, rests on Evidence Library prints, and its quote is verbatim.
+    // Stage 6 part A: every claim is for a jurisdiction on this article's list, and a print request is for a section not already stored (no guessing: a missing print is a request, never a claim).
+    if (ctx.legal?.allowedJurisdictions) errs.push(...jurisdictionErrors(out.result.claims, ctx.legal.allowedJurisdictions));
+    if (!ctx.legal?.skip && (out.result.print_requests ?? []).length) errs.push(...printRequestErrors(out.result.print_requests, { allowed: ctx.legal?.allowedJurisdictions, library: ctx.legal?.library, officialUrl }));
     if (!ctx.legal?.skip) errs.push(...legalStaticErrors(out.result.claims, out.result.sources), ...legalLibraryErrors(out.result.claims, out.result.sources, { libraryPassages: ctx.libraryPassages, librarySources: ctx.legal?.librarySources, today: ctx.legal?.today }));
   }
 

@@ -13,6 +13,7 @@ import { needsRuling } from "./hedge-rulings";
 import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { brandRuleFindings } from "./brand-check";
+import { allowedJurisdictionsOf } from "./jurisdictions";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
 import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../team/mode";
 import { agentLikeActor, resolveActorError } from "./actors";
@@ -107,7 +108,7 @@ export async function load(db: SupabaseClient, articleId: string): Promise<Loade
   const links = (brief.outline.link_plan as { to_url: string }[]).map((l) => l.to_url);
   const check: CheckCtx = {
     today: today(), claims, approvedFactTexts, allowedLinks: [...links, MONEY_URL, AUTHOR_URL], sourceUrls: [...sources.values()].map((s: any) => s.source_url).filter(Boolean),
-    internalPassages: (internal ?? []).map((p: any) => ({ text: p.text, reasons: p.internal_reasons ?? [] })), allowedJurisdictions: ["California"], blockedPhrases: ARTICLE_BLOCKED,
+    internalPassages: (internal ?? []).map((p: any) => ({ text: p.text, reasons: p.internal_reasons ?? [] })), allowedJurisdictions: allowedJurisdictionsOf(brief.outline), blockedPhrases: ARTICLE_BLOCKED,
     briefH2: Object.fromEntries((sections ?? []).filter((s: any) => s.section_key !== "faq").map((s: any) => [s.section_key, s.brief_h2])), keyword: article.primary_keyword ?? "",
     legalRecord: true,      // Phase 3e: a cited high-risk legal claim needs its exact quote, section and label; deciders are not shown as a closed list
   };
@@ -161,6 +162,7 @@ export async function queueStudioRun(db: SupabaseClient, agent: ClassicAgent, ar
     unit_key: unitKey,
     brief_for_this_unit: unitKey === "faq" ? { note: "FAQ unit: 5-7 short question-and-answer items drawn from the brief's fan_out hypotheses and the sections; answers 60 words or fewer; cite claim_ids only from the ledger.", fan_out: brief.fan_out } : { ...brief.outline[outlineIdx], section_key: unitKey, is_first_section: outlineIdx === 0 },
     brief_global: { target_reader: brief.target_reader, answer_first: brief.answer_first, honest_options: brief.honest_options, real_world_warnings: brief.real_world_warnings, professional_confirmation: brief.professional_confirmation, seller_situation_map: brief.seller_situation_map, link_plan: brief.link_plan, open_items: brief.open_items, outline_h2s: brief.outline.map((s: any, i: number) => ({ key: `s${i + 1}`, h2: s.h2 })) },
+    allowed_jurisdictions: allowedJurisdictionsOf(L.brief.outline),   // Stage 6: the layers of law this article may speak about (SR-2); a claim for any other jurisdiction is refused
     claim_ledger: ledger,
     approved_brand_facts: approvedFacts.map((f: any) => ({ key: f.fact_key, value: f.fact_value })),
     pending_juan_blocked: "hours/24h, closing time, ownership/founder/title, contractor license, address vs service area, Equity Track, $32M+, 100% on time, East Oakland roots; and any statement that THB buys as-is or without a cleanout. Never write a rating or review count.",

@@ -2,6 +2,7 @@
 // Phase 3c task 12: the team runtime on Supabase. Plans what can run next, queues role packets, validates and applies submissions, and keeps the
 // section loop (team/loop.ts), the ticket router (team/router.ts via team/store.ts) and the claim ledger consistent. Only code moves state:
 // no role output sets a lock, an approval or a state, and nothing here can resolve a section: that stays Leo's action.
+import { allowedJurisdictionsOf } from "./jurisdictions";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { ledgerRecord } from "./legal-claims";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -101,7 +102,7 @@ async function packetData(t: T, role: TeamRole, unit: string | null, ticket: Tic
   const approvedFacts = L.facts.filter((f: any) => f.status === "approved");
   const base: Record<string, unknown> = {
     article: { id: t.articleId, title: L.article.title, slug: L.article.slug, primary_keyword: L.article.primary_keyword },
-    claim_ledger: ledger, approved_brand_facts: approvedFacts.map((f: any) => ({ key: f.fact_key, value: f.fact_value })),
+    allowed_jurisdictions: allowedJurisdictionsOf(L.brief.outline), claim_ledger: ledger, approved_brand_facts: approvedFacts.map((f: any) => ({ key: f.fact_key, value: f.fact_value })),
     pending_juan_blocked: "hours/24h, closing time, ownership/founder/title, contractor license, address vs service area, Equity Track, $32M+, 100% on time, East Oakland roots; and any statement that THB buys as-is or without a cleanout. Never write a star rating, a score such as 4.8/5 or a review count.",
     editorial_rules: "docs/references/editorial-standards.md",
   };
@@ -183,8 +184,8 @@ async function teamCtxFor(db: SupabaseClient, run: TeamRun): Promise<TeamCtx> {
   const opp = await opportunityOf(db, L);
   if (role === "R1" || role === "R3") {
     const { data: pas } = await db.from("evidence_passages").select("id,source_id,passage").limit(4000);
-    const { data: lib } = await db.from("evidence_sources").select("id,recheck_by");
-    ctx.legacy = { libraryPassages: new Map((pas ?? []).map((x: any) => [x.id, { source_id: x.source_id, text: x.passage }])), legal: role === "R3" ? { skip: true } : { librarySources: new Map((lib ?? []).map((x: any) => [x.id, { recheck_by: x.recheck_by ?? null }])) } };
+    const { data: lib } = await db.from("evidence_sources").select("id,recheck_by,title,jurisdiction");
+    ctx.legacy = { libraryPassages: new Map((pas ?? []).map((x: any) => [x.id, { source_id: x.source_id, text: x.passage }])), legal: role === "R3" ? { skip: true } : { librarySources: new Map((lib ?? []).map((x: any) => [x.id, { recheck_by: x.recheck_by ?? null }])), library: (lib ?? []).map((x: any) => ({ title: x.title, jurisdiction: x.jurisdiction })), allowedJurisdictions: allowedJurisdictionsOf(L.brief.outline) } };
     if (role === "R1") ctx.snapshotStore = dbSnapshotStore(db);
     if (role === "R3") { ctx.approvedFacts = new Map(L.facts.filter((f: any) => f.status === "approved").map((f: any) => [f.fact_key, f.fact_value])); ctx.clearedStories = new Map(); }
   }

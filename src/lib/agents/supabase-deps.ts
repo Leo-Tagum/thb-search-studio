@@ -68,8 +68,9 @@ export function validationContext(db: SupabaseClient) {
     if (run.agent_key === "thb-02-research-evidence") {
       const { data: pas } = await db.from("evidence_passages").select("id,source_id,passage").limit(2000);
       ctx.libraryPassages = new Map((pas ?? []).map((p: any) => [p.id, { source_id: p.source_id, text: p.passage }]));
-      const { data: lib } = await db.from("evidence_sources").select("id,recheck_by");
-      ctx.legal = { librarySources: new Map((lib ?? []).map((x: any) => [x.id, { recheck_by: x.recheck_by ?? null }])) };
+      const { data: lib } = await db.from("evidence_sources").select("id,recheck_by,title,jurisdiction");
+      const allowed = (o!.packet as any)?.allowed_jurisdictions;      // Stage 6: set on the opportunity by Leo; absent = no list check at this stage (the brief carries it from then on)
+      ctx.legal = { librarySources: new Map((lib ?? []).map((x: any) => [x.id, { recheck_by: x.recheck_by ?? null }])), library: (lib ?? []).map((x: any) => ({ title: x.title, jurisdiction: x.jurisdiction })), ...(Array.isArray(allowed) && allowed.length ? { allowedJurisdictions: allowed as string[] } : {}) };
     }
     if (run.agent_key === "thb-03-content-architect") {
       const { data: b } = await db.from("briefs").select("evidence_packet").eq("opportunity_id", run.subject_id).single();

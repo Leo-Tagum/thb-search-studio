@@ -118,7 +118,7 @@ describe("subagent files", () => {
     it(`${f}: exists, versioned, quotes its prohibition, web tools only for Agent 2`, () => {
       expect(existsSync(join(dir, f))).toBe(true);
       const t = readFileSync(join(dir, f), "utf8");
-      expect(t).toMatch(/prompt_version: 1\.4\.0/);
+      expect(t).toMatch(new RegExp(`^prompt_version: ${AGENT_META[f.replace(/\.md$/, "") as keyof typeof AGENT_META].promptVersion.replace(/\./g, "\.")}$`, "m"));      // the version the code expects of that agent
       expect(t).toContain(prohibited);
       const tools = /^tools:\s*(.*)$/m.exec(t)?.[1] ?? "";
       expect(/WebFetch|WebSearch/.test(tools)).toBe(web);
