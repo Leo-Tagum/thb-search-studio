@@ -25,8 +25,9 @@ export async function createProposal(db: SupabaseClient, articleId: string, acto
   if (a.state !== "HUMAN_REVIEW") throw new Error(`A proposal needs the article in HUMAN_REVIEW (it is ${a.state}).`);
   const { data: ver } = await db.from("article_versions").select("*").eq("id", a.locked_version_id).single();
   if (sha256(ver.body.html) !== a.version_hash) throw new Error("the stored version does not match the article's current hash");
-  const { data: vr } = await db.from("brand_facts").select("fact_value,status").eq("fact_key", "voice_reference").single();
-  const voice = vr?.status === "approved" ? null : (voiceHash(vr?.fact_value) ? JSON.parse(vr!.fact_value) : null);
+  // The voice reference is Juan's to confirm and is no longer part of an article proposal (Leo, 2026-10-14): the approver of articles (Cherry) cannot confirm Juan's voice.
+  // Juan confirms it once on a separate page (voice-approval.ts). Proposals made before this change may still carry a voice item; they are read as before.
+  const voice = null;
   await db.from("proposals").update({ status: "SUPERSEDED" }).eq("article_id", articleId).eq("status", "OPEN");
   const { data: p, error } = await db.from("proposals").insert({ article_id: articleId, article_version_id: ver.id, voice_snapshot: voice, requires_secondary: !!opts.requiresSecondary, created_by: actorId }).select("*").single();
   if (error) throw error;

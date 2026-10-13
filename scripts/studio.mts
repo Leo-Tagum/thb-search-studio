@@ -30,6 +30,7 @@
 //   npm run studio -- voice-approve                    (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
 //   npm run studio -- proposal <article_id> <out.json>  (creates the proposal and writes the Approval Room payload)
 //   npm run studio -- sync-approvals <records.json>     (records read from the Approval Room with ArtifactData)
+//   npm run studio -- sync-voice <records.json>         (records read from the one-time Voice Check page: only a confirmed account labelled Juan counts; it is not an article approval)
 //   npm run studio -- approvers                         (accounts that clicked; pending ones need Leo's confirmation)
 //   npm run studio -- confirm-approver <viewer_id> <approver|secondary|operator> <label>
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -50,6 +51,7 @@ import { teamRoleOfAgentKey, isTeamRole } from "../src/lib/team/bridge";
 import { leoAnswerEscalationAs, loadTeamView, raiseTicketBudget, startTeamRun } from "../src/lib/team/store";
 import { parseTeamQueueArgs } from "../src/lib/studio/cli-args";
 import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studio/proposals";
+import { syncVoiceApproval } from "../src/lib/studio/voice-approval";
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 import { fingerprintV2 } from "../src/lib/studio/fingerprint-v2";
 
@@ -295,6 +297,10 @@ if (cmd === "queue") {
   const records = JSON.parse(readFileSync(a, "utf8"));
   const rep = await syncApprovals(db, records);
   console.log(JSON.stringify(rep, null, 1));
+} else if (cmd === "sync-voice") {
+  const records = JSON.parse(readFileSync(a, "utf8"));
+  const rep = await syncVoiceApproval(db, records);
+  console.log(JSON.stringify(rep, null, 1));
 } else if (cmd === "approvers") {
   const { data } = await db.from("approver_registry").select("*").order("first_seen_at");
   for (const r of data ?? []) console.log(`${r.viewer_id}  name="${r.display_name}"  ${r.status}${r.role ? ` ${r.role}` : ""}${r.label ? ` (${r.label})` : ""}`);
@@ -304,5 +310,5 @@ if (cmd === "queue") {
   console.log(res.ok ? `confirmed ${a} as ${b} (${c})` : `REFUSED: ${res.error}`);
   if (!res.ok) process.exitCode = 2;
 } else {
-  console.log("commands: queue | plan | queue-next | packet | submit | check | runs | article | voice-approve | proposal | sync-approvals | approvers | confirm-approver");
+  console.log("commands: queue | plan | queue-next | packet | submit | check | runs | article | voice-approve | proposal | sync-approvals | sync-voice | approvers | confirm-approver");
 }
