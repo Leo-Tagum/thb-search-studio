@@ -230,6 +230,20 @@ Agent 6 failed an unchanged s7 opening paragraph (`seo:direct-answer-not-first`)
 
 There is no direct Leo-edit path for a section in NEEDS_EDITORIAL. A small owner-directed edit had to go through Agent 7's replacement path.
 
+### Evidence for 3e — V1 absence-of-law detection gap
+
+**Article:** Hoarder guide, version `204aa5725284`
+
+**Finding:** V1 passed s3 without ruling on an unsupported absence-of-law claim: "The statute does not mention hoarding."
+
+V1 had ruled the same type of unsupported assertion must-fix elsewhere, indicating inconsistent handling of claims about what legislation does not say.
+
+**Required for Phase 3e:** Explicitly check absence-of-law claims during V1 review. Claims that a law or statute does not mention, require, prohibit, or address something must have appropriate evidence, or be removed or revised.
+
+**Regression requirement:** Add a test that verifies V1 detects unsupported statutory-absence claims, including when they appear alongside correctly supported legal statements.
+
+**Current disposition:** Proposed removal from s3. No revision authorized yet. Awaiting owner approval of the complete removal list and a documented one-time third-revision exception.
+
 ## Editorial polish items for Juan's review: NOT applied (s7, 2026-10-13)
 
 These are optional reviewer findings, not release fixes. Leo rejected the first s7 rewrite and authorized one surgical correction only (the opening's first sentence); none of the items below was applied. They are listed for Juan.
@@ -247,12 +261,25 @@ Final-version optional items (also not applied): Agent 6 `seo:a-lot-unsupported`
 
 The only **required** finding in the s7 pass was Agent 6's `seo:direct-answer-not-first` (the opening must answer first). It is the one release fix, and Leo's exact sentence addresses it.
 
-## Final state: article assembled, HUMAN_REVIEW (2026-10-13)
+## Final state: closed, proposal open for Juan (2026-10-13)
 
-s7 locked as `713d65b59dfc…` after Leo's explicit approval. All nine units are LOCKED and the article assembled as version **`204aa5725284`** on branch `54070caa…`, state HUMAN_REVIEW, revision count 2 (the limit was not changed or overridden), not approved. V1 PASS is recorded on the exact locked version of all six changed units: s1 `42a6cc0df835`, s2 `0157370ba4ea`, s4 `9e2884cd2271`, s6 `aa9761273e58`, faq `625b8fe417d9`, s7 `713d65b59dfc`. s3, s5 and s8 are untouched and their V1 PASS is on their locked versions. The original article's fingerprint `23f8dd72…4611` is unchanged. No proposal, approval, publication or WordPress write. The article has not gone to Juan yet.
+**Version 204aa5725284 was superseded.** After Leo's review, a sweep of all nine locked units found one sentence stating what a statute does not say with no ledger claim: s3 "The statute does not mention hoarding." (V1 had passed s3 without ruling on it; see "V1 absence-of-law detection gap" above). Leo approved removing that one sentence and a **one-time, owner-approved third-revision exception**.
+
+**The revision exception.** `REVISION_LIMIT` stays 2 (`src/lib/orchestrator/states.ts` unchanged). The one-off script `scripts/one-off/2026-10-14-revision-exception-54070caa.mts` (commit `08e7962`) refused to run unless the branch was HUMAN_REVIEW, revision_count 2, version 204aa5725284, with no proposal and no approval. It wrote the audit row (`revision_exception`, actor and approver leo, reason "Remove unsupported absence-of-law sentence in s3 (V1 gap); owner-approved one-time exception", from 2 to 1, limit unchanged) and set this branch's count 2 to 1. The reopen then took it back to 2. The original article was not touched.
+
+**The edit.** s3 was reopened as `leo` with the directive to remove only that sentence. The writer's output was compared byte for byte with the previous version: only that sentence differed (exact match to the intended text). V1, Agent 6 and Agent 7 then ran on the new version `97e6f04c89cf`: V1 PASS (no findings), Agent 6 PASS (2 optional), Agent 7 PASS, 82 advisory (1 optional). It locked and the article assembled as version **`43cf7d36afd0`** on branch `54070caa…`, HUMAN_REVIEW, revision count 2, not approved.
+
+**Current locked versions, each with V1 PASS on that exact version:** s1 `42a6cc0df835`, s2 `0157370ba4ea`, s3 `97e6f04c89cf`, s4 `9e2884cd2271`, s6 `aa9761273e58`, s7 `713d65b59dfc`, faq `625b8fe417d9` (the seven changed units); s5 `e8d58083ae9a` and s8 `39dac2424e88` are untouched, with V1 PASS on their locked versions. The original article's fingerprint `23f8dd72…4611` is unchanged at every check.
+
+**Proposal.** `8316f146-1789-4c20-ae36-409fd98d6f40`, created as leo for version `43cf7d36afd0`, with Leo's review ("content ready; no release blockers"), the polish list for Juan (not applied) and the list of legal sentences without their own ledger claim (general or inferred from clm:1-7, kept by Leo; V1 passed). The Approval Room (https://claude.ai/artifact/RPkAXuaU1Lby64rALBH71K, version 3) was republished with it; the room template gained a small "notes for Juan" block. No approval, no publication, no WordPress write.
+
+### Three statuses
+- **Technically gated:** yes. Every locked unit has V1 PASS on its exact locked version, with Agents 6 and 7 passing.
+- **Editorially approved:** pending Juan.
+- **Unattended:** not shown. This phase was driven by the operator by hand, needed Leo's decisions, an owner-approved exception and a Leo-directed editor replacement.
 
 ## Open for Leo
-s7 is closed (see Final state above). The assembled article version `204aa5725284` can go to Juan for review; the polish items above are for his review.
+Phase 3d is closed. Juan reviews proposal `8316f146…` (article version `43cf7d36afd0`) in the Approval Room; the polish items above are for his review.
 
 ## 3e backlog: UI/UX audit (2026-10-13)
 
@@ -261,3 +288,4 @@ Batch 1 (UI and config only) is done: dev server bound to 127.0.0.1, Preview ifr
 - **Batch 2 (read-only views):** (1) Studio list: label each article with its variant, version hash, unit status counts and "waiting on you: N"; (2) a "needs you" panel at the top of the article page (open escalations, declines, next step); (5) Agent critiques grouped by unit, newest first, labelled with version and round, superseded cards collapsed; (6) render V1 `hedge_rulings` per unit; (7) Diff defaults to latest vs previous (and vs the branch-copy baseline), older versions collapsed, each change linked to the critique behind it.
 - **Batch 3 (new buttons, each leo-only and keeping every existing rule):** Keep / Send back for should-fix declines (needs a new service function: none records "keep" today); "Send through V1, no text change" on LOCKED classic units (service already refuses it on team articles; after assembly it supersedes the proposal, clears `approved_hash` and invalidates approvals, so confirm first); Create proposal (database part only; republishing the Approval Room stays with Claude Code). No buttons for `submit` or `lock`: submit is the agent hand-in, and lock only happens when a reviewer PASS is accepted.
 - **Real login** instead of the hard-coded `ACTOR = "leo"` with the service-role key. Until then the dev server stays on 127.0.0.1.
+- **V1 absence-of-law regression test (not built):** a test that checks V1 detects unsupported statutory-absence claims (a law "does not mention, require, prohibit or address" something), including when they sit alongside correctly supported legal statements (for example the s3 paragraph that cites clm:1-4 and also says "The statute does not mention hoarding."). See "Evidence for 3e: V1 absence-of-law detection gap".

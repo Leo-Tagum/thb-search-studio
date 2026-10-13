@@ -125,6 +125,8 @@ ul{margin:4px 0 8px;padding-left:20px}
   cl.appendChild(el('div',{class:'scroll'},[ct]));
   main.appendChild(cl);
 
+  if (P.notes_for_juan && P.notes_for_juan.length) { P.notes_for_juan.forEach(function(n){ var nc = el('section',{class:'card'}); nc.appendChild(el('h2',{text:n.title})); if (n.intro) nc.appendChild(el('p',{class:'meta',text:n.intro})); var nl=el('ul'); (n.items||[]).forEach(function(t){nl.appendChild(el('li',{text:t}));}); nc.appendChild(nl); main.appendChild(nc); }); }
+
   if (P.open_items && P.open_items.length) { var oi = el('section',{class:'card'}); oi.appendChild(el('h2',{text:'Open items from the brief'})); var ul=el('ul'); P.open_items.forEach(function(t){ul.appendChild(el('li',{text:t}));}); oi.appendChild(ul); main.appendChild(oi); }
 
   if (P.voice_reference) {
