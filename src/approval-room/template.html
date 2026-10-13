@@ -155,8 +155,13 @@ details.notes .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:
   var asec = document.getElementById('article-sec');
   var pv = el('section',{class:'card'}); pv.appendChild(el('h2',{text:'The guide, as readers will see it'}));
   pv.appendChild(el('p',{class:'meta',text:'The text only. The site header, footer, menus and review widget are added by the website.'}));
+  var imgs = P.images && P.images.length ? P.images : null;
+  if (imgs) { var allChecked = imgs.every(function(i){ return !!i.leo_check; }); pv.appendChild(el('p',{class:'meta',text:'This version includes '+imgs.length+' image'+(imgs.length===1?'':'s')+'. Your approval covers the words and the images together. '+(allChecked ? 'Leo has checked every image.' : 'Leo has not finished checking the images.')})); }
   var host = el('div',{class:'preview'}); pv.appendChild(host);
-  try { var root = host.attachShadow({mode:'open'}); var wrapper=document.createElement('div'); wrapper.innerHTML = P.html; root.appendChild(wrapper); } catch(e){ host.textContent='Preview unavailable in this view.'; }
+  // Images are stored in the article as tokens (the version hash pins the exact files); the web addresses below are for this preview only and are not part of any hash.
+  var shown = P.html;
+  if (P.image_urls) shown = shown.replace(/src="studio-image:([0-9a-f-]{36})#([0-9a-f]{64})"/g, function(m,id,sha){ var u = P.image_urls[id+'#'+sha]; return u ? 'src="'+String(u).replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"' : m; });
+  try { var root = host.attachShadow({mode:'open'}); var wrapper=document.createElement('div'); wrapper.innerHTML = shown; root.appendChild(wrapper); } catch(e){ host.textContent='Preview unavailable in this view.'; }
   asec.appendChild(pv);
 
   // ---------- 3. NOTES FOR AI AND THE TEAM (collapsed) ----------
@@ -187,6 +192,25 @@ details.notes .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:
   cl.appendChild(el('div',{class:'scroll'},[ct]));
   nb.appendChild(cl);
 
+  if (imgs) {
+    var is = el('div',{class:'notes-sec'});
+    is.appendChild(el('h2',{text:'Images in this version'}));
+    is.appendChild(el('p',{class:'meta',text:P.images_statement || ''}));
+    var itb = el('table'); itb.appendChild(el('thead',{},[el('tr',{},['Image','File','Exact image text, and the sentence it was copied from','Claim and legal label','Same words as the article'].map(function(h){return el('th',{text:h});}))]));
+    var itbody = el('tbody');
+    imgs.forEach(function(i){
+      var words = el('td'); i.text_lines.forEach(function(l){ words.appendChild(el('div',{text:'\u201c'+l.text+'\u201d'})); words.appendChild(el('div',{class:'fine',text:'From '+l.source})); });
+      var cl2 = el('td'); i.text_lines.forEach(function(l){ cl2.appendChild(el('div',{text:l.claim_ids.length ? l.claim_ids.join(', ')+(l.label ? ' ('+l.label+')' : '') : 'no legal claim'})); });
+      itbody.appendChild(el('tr',{},[el('td',{text:i.title}), el('td',{},[el('div',{text:i.file_name}), el('div',{class:'fine',text:'Version '+i.version_no+' · '+i.size}), el('div',{class:'fine mono',text:'sha-256 '+i.fingerprint+'…'})]), words, cl2, el('td',{text:i.matches_locked_text ? 'yes' : 'NO'})]));
+    });
+    itb.appendChild(itbody); is.appendChild(el('div',{class:'scroll'},[itb]));
+    var chk = el('ul'); imgs.forEach(function(i){
+      chk.appendChild(el('li',{text:i.title+': picture check '+(!i.vision_run ? 'not run' : (i.vision_flags.length ? 'flagged: '+i.vision_flags.join('; ') : 'raised no flags'))+'. '+(i.leo_check ? 'Leo checked it ('+i.leo_check.at+'): '+i.leo_check.note : 'Leo has not checked it yet.')+(i.stripped && i.stripped.length ? ' Removed from the file: '+i.stripped.join(', ')+'.' : '')}));
+    });
+    is.appendChild(chk);
+    if (P.image_history && P.image_history.length) { is.appendChild(el('h3',{text:'Who did what'})); var hl = el('ul'); P.image_history.forEach(function(h){ hl.appendChild(el('li',{text:h.at+' · '+h.who+' · '+h.step+': '+h.detail})); }); is.appendChild(hl); }
+    nb.appendChild(is);
+  }
   if (P.open_items && P.open_items.length) { var oi = el('div',{class:'notes-sec'}); oi.appendChild(el('h2',{text:'Open items from the brief'})); var ul=el('ul'); P.open_items.forEach(function(t){ul.appendChild(el('li',{text:t}));}); oi.appendChild(ul); if (P.open_items_note) oi.appendChild(el('p',{class:'fine',text:P.open_items_note})); nb.appendChild(oi); }
 
   var ids = el('div',{class:'notes-sec'});

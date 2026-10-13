@@ -249,6 +249,11 @@ describe("the idea (design_brief): the main instruction, in an art director's wo
     expect(brief(BRIEF + " Mood of 27 years of experience.")).toContain("IMAGE_EXPERIENCE");
     expect(brief(BRIEF + " Convey that we close in 7 days.")).toContain("IMAGE_PENDING_JUAN");
   });
+  it("real planner output, first dry run: 'reads easily on a phone' is about legibility and a long privacy note of negations is fine", () => {
+    expect(brief(BRIEF + " Keep the layout airy so it reads easily on a phone.")).toEqual([]);
+    expect(codes(plan([card({ privacy_notes: "No people, faces, addresses, house numbers, documents or license plates. No real home shown." })]))).toEqual([]);
+    expect(brief(BRIEF + " Add a sign that reads Welcome.")).toEqual([]);           // not drawing a quoted word; the quote and overlay-text checks still catch real text
+  });
   it("it shows no people, addresses or real homes ('no people' is fine)", () => {
     expect(brief(BRIEF + " A smiling family at the door.")).toContain("IMAGE_PEOPLE");
     expect(brief(BRIEF + " The house with its street address visible.")).toContain("IMAGE_IDENTIFYING");

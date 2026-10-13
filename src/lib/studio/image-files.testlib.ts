@@ -1,3 +1,4 @@
+import { deflateSync } from "node:zlib";
 // Synthetic image files for tests and the fixture dry run. Nothing here is a real picture and no real photo is ever used in a test.
 const enc = (s: string) => new TextEncoder().encode(s);
 const cat = (...p: Uint8Array[]) => { const o = new Uint8Array(p.reduce((n, x) => n + x.length, 0)); let i = 0; for (const x of p) { o.set(x, i); i += x.length; } return o; };
@@ -11,3 +12,16 @@ export const makeJpeg = (w: number, h: number, extra: Uint8Array[] = [], seed = 
 export const jpegSegment = jseg;
 export const makeSvg = (inner = "", attrs = 'width="1600" height="900"') => enc(`<svg xmlns="http://www.w3.org/2000/svg" ${attrs}><rect width="10" height="10"/>${inner}</svg>`);
 export const textBytes = enc;
+
+const crcTable = (() => { const t: number[] = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+const crc32 = (b: Uint8Array) => { let c = 0xffffffff; for (const x of b) c = crcTable[(c ^ x) & 255] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; };
+const realChunk = (type: string, data: Uint8Array) => { const body = cat(enc(type), data); return cat(be32(data.length), body, be32(crc32(body))); };
+export type Rect = { x: number; y: number; w: number; h: number; color: [number, number, number] };
+/** A REAL, decodable PNG (so a browser shows it): a flat light background with simple colored rectangles. Synthetic: it is a drawing of boxes, not a photo. */
+export function makeDrawnPng(w: number, h: number, rects: Rect[], extra: Uint8Array[] = []): Uint8Array {
+  const rows = new Uint8Array((w * 3 + 1) * h);
+  for (let y = 0; y < h; y++) { const o = y * (w * 3 + 1); rows[o] = 0; for (let x = 0; x < w; x++) { rows[o + 1 + x * 3] = 244; rows[o + 2 + x * 3] = 246; rows[o + 3 + x * 3] = 251; } }
+  for (const r of rects) for (let y = r.y; y < Math.min(h, r.y + r.h); y++) for (let x = r.x; x < Math.min(w, r.x + r.w); x++) { const o = y * (w * 3 + 1) + 1 + x * 3; rows[o] = r.color[0]; rows[o + 1] = r.color[1]; rows[o + 2] = r.color[2]; }
+  return cat(new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), realChunk("IHDR", cat(be32(w), be32(h), new Uint8Array([8, 2, 0, 0, 0]))), ...extra, realChunk("IDAT", new Uint8Array(deflateSync(rows))), realChunk("IEND", new Uint8Array(0)));
+}
+export const realTextChunk = (text: string) => realChunk("tEXt", enc(text));

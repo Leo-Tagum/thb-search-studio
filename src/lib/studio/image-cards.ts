@@ -90,7 +90,7 @@ const NUMBER = /\d[\d,.]*/g;
 const NEGATION = /\b(?:no|not|without|avoid|never|nothing|none)\b[^.;\n]*/gi;
 const EMPTY_SPACE = /\b(?:empty|blank|clear|open|negative)\s+(?:space|area|room)\b/i;
 const QUOTED_STRING = /"[^"]{3,}"|“[^”]{3,}”|‘[^’]{3,}’/;
-const DRAW_WORDS = /\b(?:write|writes|written|spell|spells|spelling|caption(?:ed)?|headline|label(?:l?ed)?|reads|reading|saying|says|titled|slogan|banner text)\b/i;
+const DRAW_WORDS = /\b(?:write|writes|written|spell|spells|spelling|caption(?:ed)?|headline|label(?:l?ed)?|saying|titled|slogan|banner text)\b/i;
 /** What a generation prompt must carry: the palette (navy, orange, light background) and a plain "no text" instruction. */
 const PROMPT_NEEDS: [string, RegExp][] = [
   ["name the brand palette: navy", /\bnavy\b/i], ["name the brand palette: orange", /\borange\b/i], ["ask for a light background", /\blight\b[^.]{0,30}\bbackground\b|\bbackground\b[^.]{0,30}\blight\b|\bwhite background\b/i],
@@ -200,7 +200,7 @@ export function imagePlanFindings(plan: ImagePlanResult, ctx: ImageCtx): Finding
     // SR-15 / SR-16
     const peopleFree = `${briefPos}\n${promptPos}`.replace(NO_PEOPLE, " ");     // what the picture shows; alt text may quote locked text about people ("endanger people")
     if (PEOPLE.test(peopleFree)) out.push(F("IMAGE_PEOPLE", "BLOCKED_PRIVACY", `${at}: the description mentions people, a seller, a family or faces; images are generic with no identifiable people (SR-15). Say "no people" if that is what you mean`));
-    if (IDENTIFYING.test(free) || IDENTIFYING.test(c.privacy_notes.replace(/\b(no|without|never)\b[^.;]{0,40}/gi, " "))) out.push(F("IMAGE_IDENTIFYING", "BLOCKED_PRIVACY", `${at}: an address, house number, license plate or a real home is named (SR-15)`));
+    if (IDENTIFYING.test(free) || IDENTIFYING.test(c.privacy_notes.replace(NEGATION, " "))) out.push(F("IMAGE_IDENTIFYING", "BLOCKED_PRIVACY", `${at}: an address, house number, license plate or a real home is named (SR-15)`));
     if (c.type === "stock_photo" && !/\bgeneric\b/i.test(c.design_brief)) out.push(F("IMAGE_STOCK_NOT_GENERIC", "REVISION", `${at}: a stock photo must be described as generic`));
     if (BANNED_IMAGERY.test(free)) out.push(F("IMAGE_BANNED_IMAGERY", "BLOCKED_CLAIM", `${at}: speech bubbles, quotation marks, before-and-after or testimonial framing are banned (SR-16)`));
     if (INVENTED_DATA.test(free) || (c.type === "infographic" && /\b(chart|graph)\b/i.test(free))) out.push(F("IMAGE_INVENTED_DATA", "BLOCKED_CLAIM", `${at}: charts, statistics and data values are not allowed unless the locked text states them (SR-11, SR-16)`));

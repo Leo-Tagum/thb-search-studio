@@ -1,0 +1,88 @@
+{
+  "article_id": "dryrun-article",
+  "opportunity_id": "dryrun-opportunity",
+  "agent_name": "Image Planner",
+  "agent_prompt_version": "1.2.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["8e4628c22ec26d37f02fd2afc6f6b2cd802ce2e372d69872da6db5bbf2c1731f"],
+  "decision": "PASS",
+  "findings": [
+    {"issue_key": "image:s3-list-item-wording", "severity": "optional", "note": "Card img:2 uses the locked list item that ends 'as it is'. It is copied verbatim as one of the article's options, not as a promise from the company. Leo should confirm he is comfortable with it when he checks the image (SR-13, SR-17)."}
+  ],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "dryrun-a8-image-plan-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "cards": [
+      {
+        "card_id": "img:1",
+        "unit_key": "s1",
+        "unit_hash": "ce8aafc905d419bc2edba73018daff0aae73f9aa07097cade03d62295d4b90dd",
+        "anchor": {"after": "Start with who holds title and what is owed. Then look at what the house needs.", "block_index": 0},
+        "type": "checklist_graphic",
+        "purpose": "Give the reader a quick visual checklist of the questions to answer first, so the order is easy to take in at a glance.",
+        "design_brief": "A clean, calm checklist graphic. Show a simple clipboard-style card in the middle with a short column of empty tick boxes down the left side, each with a thin line beside it where the words will go. Keep the layout airy and tidy, with plenty of space between rows so it reads easily on a phone. The mood is reassuring and organized, not stressful. Flat, modern vector style with soft rounded corners. Use navy for the clipboard and tick marks, with small orange accents on the tick boxes, all on a light background. Leave the right two thirds of the picture as clear empty space for Lawrence to set the words, one line per row. No people, no house photos, no drawn words.",
+        "generation_prompt": "Flat vector illustration of a tidy clipboard-style card with a short column of empty tick boxes on the left, thin blank lines beside each box, rounded corners, calm and reassuring mood, navy and orange accents on a light background, 16:9, clear empty space on the right side where the words will go. No text, no letters, no people.",
+        "avoid": ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image", "heavy shadows", "clutter"],
+        "text_overlay": [
+          {"text": "Who has authority to sign?", "source_unit": "s1", "source_block": "block:1"},
+          {"text": "What is owed?", "source_unit": "s1", "source_block": "block:1"},
+          {"text": "What does the house need?", "source_unit": "s1", "source_block": "block:1"}
+        ],
+        "claim_ids": [],
+        "alt_text": "A simple checklist card with empty tick boxes in a column, drawn in navy and orange on a light background.",
+        "aspect_ratio": {"ratio": "16:9", "width_px": 1600, "height_px": 900},
+        "priority": "must_have",
+        "privacy_notes": "No people, faces, addresses, house numbers, documents or license plates. No real home shown."
+      },
+      {
+        "card_id": "img:2",
+        "unit_key": "s3",
+        "unit_hash": "67885a560fbaba064ce6df2b4b7562e18b5bcfb89293821f332d8407900bdddb",
+        "anchor": {"after": "What are your options?", "block_index": 0},
+        "type": "comparison_graphic",
+        "purpose": "Lay the routes side by side as equal choices so the reader sees them as alternatives, none ranked above the others.",
+        "design_brief": "A side-by-side layout of equal panels, one per route, each panel the same size so no route looks favored. Put a simple abstract icon at the top of each panel, such as a plain outline of a door key, a stack of boxes and a simple tag, drawn as generic shapes and not as a real home. Under each icon leave a clear empty band where the words will go. The mood is neutral, calm and respectful, with no pressure. Flat vector style with rounded corners. Use navy for the outlines and orange for small accents on the icons, on a light background. Keep the bottom third of each panel empty for Lawrence to add the words. No people, no drawn words.",
+        "generation_prompt": "Flat vector layout of equal side-by-side rounded panels, each with a simple generic outline icon at the top (a key, a stack of boxes, a price tag), neutral calm mood, navy outlines with orange accents on a light background, 16:9, clear empty space at the bottom of each panel where the words will go. No text, no letters, no people.",
+        "avoid": ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image", "heavy shadows", "clutter", "arrows or rankings that favor one panel"],
+        "text_overlay": [
+          {"text": "Keep the house for now", "source_unit": "s3", "source_block": "block:0"},
+          {"text": "Clear it first", "source_unit": "s3", "source_block": "block:0"},
+          {"text": "Sell it as it is", "source_unit": "s3", "source_block": "block:0"}
+        ],
+        "claim_ids": [],
+        "alt_text": "Equal side-by-side panels, each with a simple outline icon, in navy and orange on a light background.",
+        "aspect_ratio": {"ratio": "16:9", "width_px": 1600, "height_px": 900},
+        "priority": "must_have",
+        "privacy_notes": "No people, faces, addresses, house numbers, documents or license plates. Icons are generic shapes, not a real home."
+      },
+      {
+        "card_id": "img:3",
+        "unit_key": "s4",
+        "unit_hash": "438de7fa9a101e5f63492a179fd9eb3fdcc4890f6510aa9506fa12146f3bcbd9",
+        "anchor": {"after": "What can you do this week?", "block_index": 0},
+        "type": "checklist_graphic",
+        "purpose": "Turn the short list of next steps into an easy action list the reader can screenshot or remember.",
+        "design_brief": "A friendly step-by-step graphic: a row of simple rounded stepping stones leading gently to the right, each stone with a small empty circle on it where a step will sit. The feel is encouraging and doable, a small first move and not a big leap. Flat, light vector style with soft edges. Use navy for the stones and orange for a small accent on each circle, on a light background. Leave generous clear empty space above or beside each stone for Lawrence to add the words. No people, no drawn words.",
+        "generation_prompt": "Flat vector illustration of a row of simple rounded stepping stones leading to the right, each with a small empty circle, encouraging and calm mood, navy and orange on a light background, 16:9, clear empty space above each stone where the words will go. No text, no letters, no people.",
+        "avoid": ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image", "heavy shadows", "clutter"],
+        "text_overlay": [
+          {"text": "List the people who can sign.", "source_unit": "s4", "source_block": "block:0"},
+          {"text": "Gather the paperwork.", "source_unit": "s4", "source_block": "block:0"},
+          {"text": "Talk to a professional.", "source_unit": "s4", "source_block": "block:0"}
+        ],
+        "claim_ids": [],
+        "alt_text": "A row of rounded stepping stones leading to the right, in navy and orange on a light background.",
+        "aspect_ratio": {"ratio": "16:9", "width_px": 1600, "height_px": 900},
+        "priority": "nice_to_have",
+        "privacy_notes": "No people, faces, addresses, house numbers, documents or license plates. Nothing resembling a real paper or form."
+      }
+    ],
+    "skipped_units": [
+      {"unit_key": "s2", "reason": "Legal section: its legal sentences are long and cannot be shortened without dropping the threshold or decider, so no image."},
+      {"unit_key": "s5", "reason": "Advice in plain prose; a picture would add nothing the words do not already say."},
+      {"unit_key": "faq", "reason": "The FAQ gets no card."}
+    ]
+  }
+}

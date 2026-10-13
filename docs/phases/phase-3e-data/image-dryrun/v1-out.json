@@ -1,0 +1,39 @@
+{
+  "article_id": "dryrun-article",
+  "opportunity_id": "dryrun-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.6.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["8e4628c22ec26d37f02fd2afc6f6b2cd802ce2e372d69872da6db5bbf2c1731f"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "v1-imgcheck-dryrun-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "plan_text_hash": "8e4628c22ec26d37f02fd2afc6f6b2cd802ce2e372d69872da6db5bbf2c1731f",
+    "card_checks": [
+      {
+        "card_id": "img:1",
+        "overlay_matches_locked_text": true,
+        "prompt_ok": true,
+        "note": "All three lines are word for word the ol items of s1 (block:1); questions only, no legal point, brief and prompt add no fact and the avoid list covers all required items."
+      },
+      {
+        "card_id": "img:2",
+        "overlay_matches_locked_text": true,
+        "prompt_ok": true,
+        "note": "All three lines are word for word the ul items of s3 (block:0); 'Sell it as it is' is locked option text shown as an equal choice, not a Twin Home Buyer as-is promise, and the prompts add no fact."
+      },
+      {
+        "card_id": "img:3",
+        "overlay_matches_locked_text": true,
+        "prompt_ok": true,
+        "note": "All three lines are whole sentences of the s4 paragraph (block:0), word for word; no legal conclusion, and the prompts add no fact."
+      }
+    ],
+    "cards": [],
+    "leo_reference_needed": []
+  }
+}

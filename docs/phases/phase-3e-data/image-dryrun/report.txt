@@ -1,0 +1,25 @@
+Agent 8 output: decision PASS, 3 card(s), 3 skipped unit(s): ACCEPTED by the production checks
+   img:1 s1 checklist_graphic [must_have] "Give the reader a quick visual checklist of the questions to answer first, so the order is easy to take in at a glance."
+      overlay: "Who has authority to sign?" | "What is owed?" | "What does the house need?"
+   img:2 s3 comparison_graphic [must_have] "Lay the routes side by side as equal choices so the reader sees them as alternatives, none ranked above the others."
+      overlay: "Keep the house for now" | "Clear it first" | "Sell it as it is"
+   img:3 s4 checklist_graphic [nice_to_have] "Turn the short list of next steps into an easy action list the reader can screenshot or remember."
+      overlay: "List the people who can sign." | "Gather the paperwork." | "Talk to a professional."
+   direct card checks: 0 finding(s)
+V1 image text check: decision PASS: ACCEPTED by the production checks
+   img:1: overlay matches, prompt ok
+   img:2: overlay matches, prompt ok
+   img:3: overlay matches, prompt ok
+
+Pull: 3 of 3 card(s) ready
+   img:1 READY 1600x900 image/png stripped: PNG tEXt | stripped: PNG tEXt
+   img:2 READY 1600x900 image/svg+xml stripped: SVG comments, SVG metadata | stripped: SVG comments, SVG metadata
+   img:3 READY 1600x900 image/png stripped: PNG tEXt | stripped: PNG tEXt
+   stored files that still contain the fake GPS text: 0
+
+Placement: 3 figure(s); text-only hash 84979e3ae640, image-bearing hash abaf72616a10; stripping the figures gives the text-only render byte for byte: yes (checked in code)
+   text-only render equals the plain render of the article: true
+
+Approval Room images block: 3 image(s); same words as the article: true, true, true
+   statement: NOT CONFIRMED: the picture check (a model reading each image) has not been run on every image.
+   wrote room-payload.json (8513 chars of article HTML, version hash abaf72616a10); build the page with: npx tsx scripts/build-approval-room.mts C:\Users\IRIGAO~1\AppData\Local\Temp\claude\c--Users-Iriga-Office-Documents-Leo-Code-thb-search-studio\7e261296-e4a6-4681-bef8-a9854c4c26ca\scratchpad\image-dryrun\room-payload.json C:\Users\IRIGAO~1\AppData\Local\Temp\claude\c--Users-Iriga-Office-Documents-Leo-Code-thb-search-studio\7e261296-e4a6-4681-bef8-a9854c4c26ca\scratchpad\image-dryrun\room.html
