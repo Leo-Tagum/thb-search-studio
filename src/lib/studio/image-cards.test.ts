@@ -24,9 +24,10 @@ const claims = new Map<string, LedgerClaim>([
 ]);
 const ctx: ImageCtx = { units, unitHashes: { s1: "h1", s2: "h2", s3: "h3", s4: "h4", s5: "h5", faq: "hf" }, claims };
 
+const BRIEF = "A plain checklist graphic with three empty rows, flat simple shapes in calm navy with orange accents on a light background. Wide 16:9 composition with clear empty space on the right of each row where the words will go. Calm and reassuring, tidy and simple.";
 const card = (over: Partial<ImageCard> = {}): ImageCard => ({
   card_id: "img:1", unit_key: "s1", unit_hash: "h1", anchor: { after: "Can you sell a packed house?", block_index: 1 }, type: "checklist_graphic",
-  purpose: "Help the reader see the three first questions at a glance.", designer_description: "A plain checklist graphic with three rows, calm navy and white, no people.",
+  purpose: "Help the reader see the three first questions at a glance.", design_brief: BRIEF,
   generation_prompt: "A plain checklist graphic with three empty rows, flat simple shapes in calm navy with orange accents on a light background, wide 16:9 composition with clear empty space on the right where the text will go. Calm, reassuring mood. No text, no letters, no people.",
   avoid: ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image"],
   text_overlay: [{ text: "Who has authority to sign?", source_unit: "s1", source_block: "block:1" }, { text: "What is owed?", source_unit: "s1", source_block: "block:1" }, { text: "What does the house need?", source_unit: "s1", source_block: "block:1" }],
@@ -36,7 +37,7 @@ const card = (over: Partial<ImageCard> = {}): ImageCard => ({
 const skipsFor = (keys: string[]) => keys.map((unit_key) => ({ unit_key, reason: "No image helps this unit more than its text." }));
 const plan = (cards: ImageCard[], skipped?: string[]): ImagePlanResult => ({ cards, skipped_units: skipsFor(skipped ?? units.map((u) => u.key).filter((k) => !cards.some((c) => c.unit_key === k))) });
 const codes = (p: ImagePlanResult) => imagePlanFindings(p, ctx).map((f) => f.code);
-const legalCard = (over: Partial<ImageCard> = {}) => card({ card_id: "img:2", unit_key: "s2", unit_hash: "h2", anchor: { after: "What does state law list?", block_index: 0 }, type: "comparison_graphic", purpose: "Show the law's wording next to its condition.", designer_description: "A two-part graphic: the list on the left, the condition on the right, plain colors.", text_overlay: [{ text: SENT1, source_unit: "s2", source_block: "block:0" }, { text: SENT2, source_unit: "s2", source_block: "block:0" }], claim_ids: ["clm:1"], alt_text: "State law lists conditions that can make a building substandard, only when they endanger people or property.", ...over });
+const legalCard = (over: Partial<ImageCard> = {}) => card({ card_id: "img:2", unit_key: "s2", unit_hash: "h2", anchor: { after: "What does state law list?", block_index: 0 }, type: "comparison_graphic", purpose: "Show the law's wording next to its condition.", design_brief: BRIEF, text_overlay: [{ text: SENT1, source_unit: "s2", source_block: "block:0" }, { text: SENT2, source_unit: "s2", source_block: "block:0" }], claim_ids: ["clm:1"], alt_text: "State law lists conditions that can make a building substandard, only when they endanger people or property.", ...over });
 
 describe("the card schema is strict and read-only", () => {
   it("accepts a clean plan and a plan that skips every unit", () => {
@@ -74,7 +75,7 @@ describe("SR-11: the text in an image is the locked text, word for word", () => 
   it("a paraphrase, one changed word and a new number are refused", () => {
     expect(codes(plan([card({ text_overlay: [{ text: "Who can sign for the owner?", source_unit: "s1", source_block: "block:1" }] })]))).toContain("IMAGE_TEXT_NOT_VERBATIM");
     expect(codes(plan([card({ text_overlay: [{ text: "Who has the authority to sign?", source_unit: "s1", source_block: "block:1" }] })]))).toContain("IMAGE_TEXT_NOT_VERBATIM");
-    expect(codes(plan([card({ designer_description: "A checklist with 5 rows, calm colors, no people." })]))).toContain("IMAGE_NEW_NUMBER");
+    expect(codes(plan([card({ design_brief: BRIEF + " It shows 5 rows." })]))).toContain("IMAGE_NEW_NUMBER");
     expect(codes(plan([card({ alt_text: "Three questions; 90 percent of sellers skip them." })]))).toEqual(expect.arrayContaining(["IMAGE_NEW_NUMBER", "IMAGE_INVENTED_DATA"]));
   });
   it("a source that does not exist is refused", () => {
@@ -82,7 +83,7 @@ describe("SR-11: the text in an image is the locked text, word for word", () => 
     expect(codes(plan([card({ text_overlay: [{ text: "What is owed?", source_unit: "s1", source_block: "block:7" }] })]))).toContain("IMAGE_TEXT_SOURCE_MISSING");
   });
   it("a number that IS in the locked text is fine in the description", () => {
-    expect(codes(plan([card({ designer_description: "A plain graphic with three rows and no people." })]))).not.toContain("IMAGE_NEW_NUMBER");
+    expect(codes(plan([card({ design_brief: BRIEF })]))).not.toContain("IMAGE_NEW_NUMBER");
   });
 });
 
@@ -123,21 +124,21 @@ describe("SR-12: a legal line is a whole sentence with its claim (and must not d
 describe("SR-2 and SR-14: layers of law stay apart in an image", () => {
   it("a line with a local rule and California law, or two cities, is refused; each local line needs its own claim", () => {
     const u2 = units.map((u) => (u.key === "s5" && u.kind === "section" ? { ...u, blocks: [...u.blocks, { t: "p" as const, text: "Under California law and San Francisco's code, the same rule applies." }, { t: "p" as const, text: "San Francisco and San Mateo have the same rule under their housing law." }] } : u));
-    const base = { card_id: "img:3", unit_key: "s5", unit_hash: "h5", type: "comparison_graphic" as const, designer_description: "A two-column comparison, plain colors, no people.", claim_ids: ["clm:2", "clm:3"], anchor: { after: "Local rules", block_index: 0 } };
+    const base = { card_id: "img:3", unit_key: "s5", unit_hash: "h5", type: "comparison_graphic" as const, design_brief: BRIEF, claim_ids: ["clm:2", "clm:3"], anchor: { after: "Local rules", block_index: 0 } };
     const a = card({ ...base, text_overlay: [{ text: "Under California law and San Francisco's code, the same rule applies.", source_unit: "s5", source_block: "block:2" }] });
     const b = card({ ...base, text_overlay: [{ text: "San Francisco and San Mateo have the same rule under their housing law.", source_unit: "s5", source_block: "block:3" }] });
     expect(imagePlanFindings(plan([a]), { ...ctx, units: u2 }).map((f) => f.code)).toContain("IMAGE_LAYER_BLEND");
     expect(imagePlanFindings(plan([b]), { ...ctx, units: u2 }).map((f) => f.code)).toContain("IMAGE_LAYER_BLEND");
   });
   it("a line that names a city whose own claim is not cited is refused; with its own claim it passes", () => {
-    const sf = card({ card_id: "img:3", unit_key: "s5", unit_hash: "h5", type: "comparison_graphic", designer_description: "A simple two-column graphic, plain colors, no people.", anchor: { after: "Local rules", block_index: 0 }, text_overlay: [{ text: "San Francisco keeps its own housing code, and San Mateo County has its own ordinances.", source_unit: "s5", source_block: "block:0" }], claim_ids: ["clm:2"] });
+    const sf = card({ card_id: "img:3", unit_key: "s5", unit_hash: "h5", type: "comparison_graphic", design_brief: BRIEF, anchor: { after: "Local rules", block_index: 0 }, text_overlay: [{ text: "San Francisco keeps its own housing code, and San Mateo County has its own ordinances.", source_unit: "s5", source_block: "block:0" }], claim_ids: ["clm:2"] });
     expect(codes(plan([sf]))).toContain("IMAGE_LOCAL_NO_CLAIM");
     expect(codes(plan([{ ...sf, claim_ids: ["clm:2", "clm:3"] }]))).not.toContain("IMAGE_LOCAL_NO_CLAIM");
   });
 });
 
 describe("SR-13, SR-15, SR-16: brand, service area, privacy and banned imagery", () => {
-  const bad = (text: string, field: "designer_description" | "alt_text" | "purpose" | "privacy_notes" = "designer_description") => codes(plan([card({ [field]: text } as Partial<ImageCard>)]));
+  const bad = (text: string, field: "design_brief" | "alt_text" | "purpose" | "privacy_notes" = "design_brief") => codes(plan([card({ [field]: field === "design_brief" ? `${BRIEF} ${text}` : text } as Partial<ImageCard>)]));
   it("maps, skylines, landmarks, coverage badges and accreditation badges are refused", () => {
     for (const t of ["A map of the Bay Area with pins, no people.", "The San Francisco skyline behind a house, no people.", "The Golden Gate Bridge in the background, no people.", "A badge reading Serving Oakland, no people.", "A BBB accredited badge, no people."]) expect(bad(t), t).toContain("IMAGE_BRAND_COVERAGE");
   });
@@ -156,7 +157,7 @@ describe("SR-13, SR-15, SR-16: brand, service area, privacy and banned imagery",
     expect(bad("A clean checklist, no people and no faces.")).toEqual([]);
   });
   it("a stock photo must be described as generic", () => {
-    const stock = (d: string) => codes(plan([card({ type: "stock_photo", text_overlay: [], designer_description: d })]));
+    const stock = (d: string) => codes(plan([card({ type: "stock_photo", text_overlay: [], design_brief: `${BRIEF} ${d}` })]));
     expect(stock("A living room with boxes stacked on the floor, no people.")).toContain("IMAGE_STOCK_NOT_GENERIC");
     expect(stock("A generic living room with boxes stacked, no people.")).toEqual([]);
   });
@@ -218,6 +219,39 @@ describe("the generation prompt and the avoid list (Lawrence's ready-to-paste fi
     const { generation_prompt: _g, ...noPrompt } = card(); void _g;
     expect(imageCard.safeParse(noPrompt).success).toBe(false);
     expect(imageCard.safeParse({ ...card(), avoid: ["people"] }).success).toBe(false);          // fewer than six items
+  });
+});
+
+describe("the idea (design_brief): the main instruction, in an art director's words", () => {
+  const brief = (design_brief: string, over: Partial<ImageCard> = {}) => codes(plan([card({ design_brief, ...over })]));
+  it("the default idea passes; a short note is not a brief (schema)", () => {
+    expect(brief(BRIEF)).toEqual([]);
+    expect(imageCard.safeParse(card({ design_brief: "A checklist, navy and orange." })).success).toBe(false);
+  });
+  it("it must name the brand colors, a light background, and where the words will go", () => {
+    expect(brief(BRIEF.replace("navy", "blue"))).toContain("IMAGE_BRIEF_INCOMPLETE");
+    expect(brief(BRIEF.replace("orange", "red"))).toContain("IMAGE_BRIEF_INCOMPLETE");
+    expect(brief(BRIEF.replace("on a light background", "on a plain field"))).toContain("IMAGE_BRIEF_INCOMPLETE");
+    expect(brief(BRIEF.replace("with clear empty space on the right of each row where the words will go", "with a busy layout"))).toContain("IMAGE_BRIEF_INCOMPLETE");
+    expect(brief(BRIEF.replace("with clear empty space on the right of each row where the words will go", "with a simple layout"), { text_overlay: [] })).toEqual([]);   // no words, no place for words
+  });
+  it("it never asks for words to be drawn, quotes text, or contains the overlay text", () => {
+    expect(brief(BRIEF + ' A banner that reads "Who has authority to sign?"')).toContain("IMAGE_PROMPT_HAS_TEXT");
+    expect(brief(BRIEF + " Write the title across the top.")).toContain("IMAGE_PROMPT_HAS_TEXT");
+    expect(brief(BRIEF + " The rows are Who has authority to sign? and What is owed?")).toContain("IMAGE_PROMPT_HAS_TEXT");
+  });
+  it("it states no fact the article does not: numbers, cities, coverage, ratings, experience, pending items", () => {
+    expect(brief(BRIEF + " Show 7 rows.")).toContain("IMAGE_NEW_NUMBER");
+    expect(brief(BRIEF + " Set in Oakland.")).toContain("IMAGE_CITY_NOT_IN_TEXT");
+    expect(brief(BRIEF + " Add a map of the Bay Area.")).toContain("IMAGE_BRAND_COVERAGE");
+    expect(brief(BRIEF + " Five stars at the top.")).toContain("IMAGE_RATING");
+    expect(brief(BRIEF + " Mood of 27 years of experience.")).toContain("IMAGE_EXPERIENCE");
+    expect(brief(BRIEF + " Convey that we close in 7 days.")).toContain("IMAGE_PENDING_JUAN");
+  });
+  it("it shows no people, addresses or real homes ('no people' is fine)", () => {
+    expect(brief(BRIEF + " A smiling family at the door.")).toContain("IMAGE_PEOPLE");
+    expect(brief(BRIEF + " The house with its street address visible.")).toContain("IMAGE_IDENTIFYING");
+    expect(brief(BRIEF + " No people and no addresses.")).toEqual([]);
   });
 });
 

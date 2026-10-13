@@ -14,15 +14,16 @@ const units: Unit[] = [
 ];
 const claims = new Map<string, LedgerClaim>([["clm:1", { id: "clm:1", text: "t", risk: "high", support: "supported", sourceId: "s", sourceRecheckBy: null, jurisdiction: "California", verification: { quote: "q", section: "H&S 17920.3", label: "MATCH", reason: null, against: "p", gates: [], readerImpact: "none" } }]]);
 const ctx: ImageCtx = { units, unitHashes: { s1: "h1", s2: "h2" }, claims };
+const BRIEF = "A plain checklist graphic with three empty rows, flat simple shapes in calm navy with orange accents on a light background. Wide 16:9 composition with clear empty space on the right of each row where the words will go. Calm and reassuring, tidy and simple.";
 const base = (over: Partial<ImageCard> = {}): ImageCard => ({
   card_id: "img:1", unit_key: "s1", unit_hash: "h1", anchor: { after: "Can you sell a packed house?", block_index: 1 }, type: "checklist_graphic", purpose: "Show the three first questions at a glance.",
-  designer_description: "A plain checklist with three rows, no people.", generation_prompt: "A plain checklist graphic, flat shapes in navy with orange accents on a light background, wide 16:9 composition with clear empty space on the right where the text will go. Calm mood. No text, no letters, no people.",
+  design_brief: BRIEF, generation_prompt: "A plain checklist graphic, flat shapes in navy with orange accents on a light background, wide 16:9 composition with clear empty space on the right where the text will go. Calm mood. No text, no letters, no people.",
   avoid: ["people or faces", "real-looking identifiable house exteriors", "addresses", "street numbers or street signs", "logos", "documents", "any text or letters in the image"],
   text_overlay: [{ text: "Who has authority to sign?", source_unit: "s1", source_block: "block:1" }], claim_ids: [], alt_text: "A checklist of three first questions.", aspect_ratio: { ratio: "16:9", width_px: 1600, height_px: 900 }, priority: "must_have", privacy_notes: "No people or addresses.", ...over,
 });
 const plan = (cards: ImageCard[]): ImagePlanResult => ({ cards, skipped_units: units.filter((u) => !cards.some((c) => c.unit_key === u.key)).map((u) => ({ unit_key: u.key, reason: "No image helps this unit more than its text." })) });
 const legal = base({ card_id: "img:2", unit_key: "s2", unit_hash: "h2", type: "comparison_graphic", anchor: { after: "What does state law list?", block_index: 0 }, text_overlay: [{ text: SENT, source_unit: "s2", source_block: "block:0" }], claim_ids: ["clm:1"] });
-const out = (over: Record<string, unknown> = {}, result: ImagePlanResult = plan([base()])) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "Image Planner", agent_prompt_version: "1.0.0", model_version: "claude-code/test", input_version_ids: ["th"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-13T12:00:00Z", result, ...over });
+const out = (over: Record<string, unknown> = {}, result: ImagePlanResult = plan([base()])) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "Image Planner", agent_prompt_version: "1.1.0", model_version: "claude-code/test", input_version_ids: ["th"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-13T12:00:00Z", result, ...over });
 const sctx = { ...ctx, agent: "thb-08-image-planner" as const, opportunityId: "o1", articleId: "a1", textVersionHash: "th" };
 
 describe("the two image planner prompt files share one rules body", () => {
@@ -37,7 +38,7 @@ describe("the two image planner prompt files share one rules body", () => {
     for (const k of IMAGE_AGENT_KEYS) {
       const t = read(k);
       expect(t).toMatch(new RegExp(`^name: ${k}$`, "m"));
-      expect(t).toMatch(/^prompt_version: 1\.0\.0$/m);
+      expect(t).toMatch(/^prompt_version: 1\.1\.0$/m);
       expect(t).toMatch(/^tools: Read, Write$/m);
       expect(t).toContain("**Prohibited action: Changing, adding or paraphrasing article text");
       expect(t).toContain(`"agent_prompt_version": "${IMAGE_AGENT_META[k].promptVersion}"`);
@@ -45,7 +46,7 @@ describe("the two image planner prompt files share one rules body", () => {
   });
   it("the output example uses every field name the strict schema needs", () => {
     const t = read("thb-08-image-planner");
-    for (const f of ["card_id", "unit_key", "unit_hash", "anchor", "type", "purpose", "designer_description", "generation_prompt", "avoid", "text_overlay", "claim_ids", "alt_text", "aspect_ratio", "priority", "privacy_notes", "skipped_units"]) expect(t, f).toContain(`"${f}"`);
+    for (const f of ["card_id", "unit_key", "unit_hash", "anchor", "type", "purpose", "design_brief", "generation_prompt", "avoid", "text_overlay", "claim_ids", "alt_text", "aspect_ratio", "priority", "privacy_notes", "skipped_units"]) expect(t, f).toContain(`"${f}"`);
   });
 });
 
@@ -75,7 +76,7 @@ describe("the planner's output: envelope and card checks together", () => {
 describe("V1's image text check", () => {
   const p = plan([base(), legal]);
   const check = (c: string, over: Record<string, unknown> = {}) => ({ card_id: c, overlay_matches_locked_text: true, prompt_ok: true, note: "Matches the locked block.", ...over });
-  const v1 = (cardChecks: object[], decision = "PASS", result: Record<string, unknown> = {}) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "V1", agent_prompt_version: "1.5.0", model_version: "claude-code/test", input_version_ids: ["th"], decision, findings: [], evidence_ids: [], required_actions: [], output_version_id: "v", timestamp: "2026-10-13T12:00:00Z", result: { plan_text_hash: "th", card_checks: cardChecks, cards: [], leo_reference_needed: [], ...result } });
+  const v1 = (cardChecks: object[], decision = "PASS", result: Record<string, unknown> = {}) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "V1", agent_prompt_version: "1.6.0", model_version: "claude-code/test", input_version_ids: ["th"], decision, findings: [], evidence_ids: [], required_actions: [], output_version_id: "v", timestamp: "2026-10-13T12:00:00Z", result: { plan_text_hash: "th", card_checks: cardChecks, cards: [], leo_reference_needed: [], ...result } });
   it("has its own schema key, picked from card_checks", () => {
     expect(teamSchemaKey("V1", v1([]))).toBe("V1_IMAGE");
     expect(v1ImageCheckOutput.safeParse(v1([check("img:1")])).success).toBe(true);

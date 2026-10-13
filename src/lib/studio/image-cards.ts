@@ -27,8 +27,9 @@ export const imageCard = z.strictObject({
   anchor: z.strictObject({ after: txt(200), block_index: z.number().int().min(0).max(40) }),   // the figure goes after this heading or block
   type: z.enum(IMAGE_TYPES),
   purpose: txt(300),
-  designer_description: txt(1200),
-  /** A ready-to-paste prompt for an AI image tool (tool-neutral): subject, style, composition, mood, brand palette (navy and orange on a light background), the aspect ratio, and clear empty space where the overlay text goes. It never asks the tool to draw words. */
+  /** "The idea": the main instruction. An art director's brief in plain words: what the picture shows, composition, mood, style, the brand colors (navy and orange on a light background) and where the words will go. */
+  design_brief: txt(1500).refine((b) => b.length >= 120, "write a real brief (at least a few sentences)"),
+  /** An OPTIONAL example prompt for an AI image tool (tool-neutral): Lawrence may use it, change it or ignore it. Same rules as the idea: subject, style, composition, mood, brand palette, the aspect ratio, clear empty space where the words go; no facts, and it never asks the tool to draw words. */
   generation_prompt: txt(1800),
   /** The negative prompt: what the tool must not draw. Always covers the REQUIRED_AVOID items. */
   avoid: z.array(txt(160)).min(6).max(30),
@@ -174,7 +175,8 @@ export function imagePlanFindings(plan: ImagePlanResult, ctx: ImageCtx): Finding
 
     // free text of the card: description, alt text, purpose, and the generation prompt (negations stripped: "no address" is the instruction we want)
     const promptPos = c.generation_prompt.replace(NEGATION, " ");
-    const free = [c.designer_description, c.alt_text, c.purpose, promptPos].join("\n");
+    const briefPos = c.design_brief.replace(NEGATION, " ");
+    const free = [briefPos, c.alt_text, c.purpose, promptPos].join("\n");
     const allowedNumbers = new Set<string>([...c.aspect_ratio.ratio.split(":"), String(c.aspect_ratio.width_px), String(c.aspect_ratio.height_px)]);
     const everything = [free, c.text_overlay.map((l) => l.text).join("\n")].join("\n");
     // SR-11: no figure that is not in the locked text
@@ -188,14 +190,19 @@ export function imagePlanFindings(plan: ImagePlanResult, ctx: ImageCtx): Finding
     for (const h of experienceYearViolations(wrap)) out.push(F("IMAGE_EXPERIENCE", "BLOCKED_CLAIM", `${at}: experience wording ${h} is not approved`));
     for (const h of sourcedFactViolations(wrap)) out.push(F("IMAGE_SOURCED_FACT", "BLOCKED_CLAIM", `${at}: ${h}`));
     // SR-15 / SR-16
-    const peopleFree = `${c.designer_description}\n${promptPos}`.replace(NO_PEOPLE, " ");     // what the picture shows; alt text may quote locked text about people ("endanger people")
+    const peopleFree = `${briefPos}\n${promptPos}`.replace(NO_PEOPLE, " ");     // what the picture shows; alt text may quote locked text about people ("endanger people")
     if (PEOPLE.test(peopleFree)) out.push(F("IMAGE_PEOPLE", "BLOCKED_PRIVACY", `${at}: the description mentions people, a seller, a family or faces; images are generic with no identifiable people (SR-15). Say "no people" if that is what you mean`));
     if (IDENTIFYING.test(free) || IDENTIFYING.test(c.privacy_notes.replace(/\b(no|without|never)\b[^.;]{0,40}/gi, " "))) out.push(F("IMAGE_IDENTIFYING", "BLOCKED_PRIVACY", `${at}: an address, house number, license plate or a real home is named (SR-15)`));
-    if (c.type === "stock_photo" && !/\bgeneric\b/i.test(c.designer_description)) out.push(F("IMAGE_STOCK_NOT_GENERIC", "REVISION", `${at}: a stock photo must be described as generic`));
+    if (c.type === "stock_photo" && !/\bgeneric\b/i.test(c.design_brief)) out.push(F("IMAGE_STOCK_NOT_GENERIC", "REVISION", `${at}: a stock photo must be described as generic`));
     if (BANNED_IMAGERY.test(free)) out.push(F("IMAGE_BANNED_IMAGERY", "BLOCKED_CLAIM", `${at}: speech bubbles, quotation marks, before-and-after or testimonial framing are banned (SR-16)`));
     if (INVENTED_DATA.test(free) || (c.type === "infographic" && /\b(chart|graph)\b/i.test(free))) out.push(F("IMAGE_INVENTED_DATA", "BLOCKED_CLAIM", `${at}: charts, statistics and data values are not allowed unless the locked text states them (SR-11, SR-16)`));
 
-    // the generation prompt and the avoid list (Leo, 2026-10-13): ready to paste, no words drawn by the tool, no fact the article does not state
+    // the idea (design_brief): the main instruction, held to the same rules as the example prompt (Leo, 2026-10-13)
+    const br = c.design_brief;
+    for (const [name, re] of PROMPT_NEEDS.slice(0, 3)) if (!re.test(br)) out.push(F("IMAGE_BRIEF_INCOMPLETE", "REVISION", `${at}: the idea must ${name}`));
+    if (c.text_overlay.length && !(EMPTY_SPACE.test(br) || /\bwhere the (?:words|text)\b/i.test(br))) out.push(F("IMAGE_BRIEF_INCOMPLETE", "REVISION", `${at}: the idea must say where the words will go (clear empty space)`));
+    if (QUOTED_STRING.test(br) || DRAW_WORDS.test(briefPos) || c.text_overlay.some((l) => br.toLowerCase().includes(norm(l.text).toLowerCase()))) out.push(F("IMAGE_PROMPT_HAS_TEXT", "BLOCKED_CLAIM", `${at}: the idea asks for words to be drawn, quotes text, or contains the overlay text; the words are added by Lawrence, never generated`));
+    // the example prompt and the avoid list (Leo, 2026-10-13): ready to paste, no words drawn by the tool, no fact the article does not state
     const gp = c.generation_prompt;
     for (const [name, re] of PROMPT_NEEDS) if (!re.test(gp)) out.push(F("IMAGE_PROMPT_INCOMPLETE", "REVISION", `${at}: the generation prompt must ${name}`));
     if (!gp.includes(c.aspect_ratio.ratio)) out.push(F("IMAGE_PROMPT_INCOMPLETE", "REVISION", `${at}: the generation prompt must state the aspect ratio ${c.aspect_ratio.ratio}`));

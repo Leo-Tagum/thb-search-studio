@@ -1,51 +1,89 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { imagePlanFindings, type ImageCard, type ImageCtx } from "../lib/studio/image-cards";
+import type { LedgerClaim } from "../lib/studio/checks";
+import type { Unit } from "../lib/studio/schema";
 
-// Build step 5: the Image board page (a local template and a fixture payload; nothing is published or shared).
+// Build step 5: the Image board page for Lawrence (a local template and a fixture payload). One card, one task, one next action.
 const template = readFileSync("src/image-board/template.html", "utf8");
 const fixture = JSON.parse(readFileSync("docs/phases/phase-3e-data/image-board/fixture-board.json", "utf8"));
 
 describe("the image board fixture", () => {
-  it("is marked as fixture data, with four cards and all three statuses", () => {
+  it("is marked as fixture data, with four cards that show finished, changes requested, outdated and in progress", () => {
     expect(fixture.board.fixture).toBe(true);
     expect(fixture.cards).toHaveLength(4);
-    expect(new Set(fixture.cards.map((c: { state: string }) => c.state))).toEqual(new Set(["todo", "prog", "done"]));
+    const c = fixture.cards;
+    expect(c[0].work.done).toBe(true);
+    expect(c[1].changes_requested?.text).toBeTruthy();
+    expect(c[2].card_version).toBe(2);
+    expect(c[2].uploads.every((u: { for_card_version: number }) => u.for_card_version < c[2].card_version)).toBe(true);
+    expect(c[3].work.made).toBe(true);
+    expect(c[3].work.words).toBe(false);
   });
-  it("every card carries what Lawrence needs: purpose, placement, prompt, avoid list, overlay text, size, versions", () => {
+  it("every card carries the idea, an optional example prompt, the avoid list, the locked words, an automatic file name and its history", () => {
     for (const c of fixture.cards) {
-      for (const k of ["purpose", "placement", "generation_prompt", "avoid", "text_overlay", "aspect_ratio", "alt_text", "suggested_file_name", "versions", "card_version"]) expect(c[k], `${c.card_id} ${k}`).toBeTruthy();
-      expect(c.generation_prompt).toContain("No text, no letters, no people");
-      expect(c.generation_prompt).toContain(c.aspect_ratio.ratio);
-      expect(c.avoid.join("|")).toMatch(/people or faces/);
-      expect(c.avoid.join("|")).toMatch(/any text or letters/);
-      expect(c.text_overlay.length).toBeGreaterThan(0);
-      expect(c.versions.some((v: { v: number }) => v.v === c.card_version)).toBe(true);
+      for (const k of ["purpose", "placement", "design_brief", "generation_prompt", "avoid", "text_overlay", "aspect_ratio", "alt_text", "base_file_name", "card_version", "text_changes"]) expect(c[k], `${c.card_id} ${k}`).toBeTruthy();
+      expect(c.base_file_name).toMatch(/^[a-z0-9_-]+$/);                    // Lawrence never types a technical name
+      expect(c.design_brief.length).toBeGreaterThan(120);
     }
   });
-  it("shows a card whose image is outdated (the card changed after the upload)", () => {
-    const c = fixture.cards.find((x: { card_id: string }) => x.card_id === "img:2");
-    expect(c.card_version).toBe(2);
-    expect(c.uploads.every((u: { for_card_version: number }) => u.for_card_version < c.card_version)).toBe(true);
+  it("the fixture's idea, example prompt, avoid list and words obey the real image-card rules (no facts, no drawn words, whole sentences)", () => {
+    const units: Unit[] = fixture.cards.map((c: { text_overlay: { text: string }[] }, i: number) => ({ kind: "section", key: `s${i + 1}`, h2: `Section ${i + 1}`, blocks: [{ t: "ul", items: c.text_overlay.map((l) => l.text) }], claim_ids: i === 1 ? ["clm:1"] : [], roles: [] }) as Unit);
+    const claims = new Map<string, LedgerClaim>([["clm:1", { id: "clm:1", text: "t", risk: "high", support: "supported", sourceId: "s", sourceRecheckBy: null, jurisdiction: "California", verification: { quote: "q", section: "H&S 17920.3", label: "MATCH", reason: null, against: "p", gates: [], readerImpact: "none" } }]]);
+    const ctx: ImageCtx = { units, unitHashes: Object.fromEntries(units.map((u) => [u.key, `h-${u.key}`])), claims };
+    const cards: ImageCard[] = fixture.cards.map((c: any, i: number) => ({ // eslint-disable-line @typescript-eslint/no-explicit-any
+      card_id: c.card_id, unit_key: `s${i + 1}`, unit_hash: `h-s${i + 1}`, anchor: { after: `Section ${i + 1}`, block_index: 0 }, type: c.type, purpose: c.purpose, design_brief: c.design_brief, generation_prompt: c.generation_prompt, avoid: c.avoid,
+      text_overlay: c.text_overlay.map((l: { text: string }) => ({ text: l.text, source_unit: `s${i + 1}`, source_block: "block:0" })), claim_ids: i === 1 ? ["clm:1"] : [], alt_text: c.alt_text, aspect_ratio: c.aspect_ratio, priority: c.priority, privacy_notes: "No people, no addresses.",
+    }));
+    // four units are carded here, so the proportion cap (half the units) is not what this test is about: give the context two extra uncarded units
+    const extra: Unit[] = [5, 6].map((n) => ({ kind: "section", key: `s${n}`, h2: `Section ${n}`, blocks: [{ t: "p", text: "Plain text." }], claim_ids: [], roles: [] }) as Unit);
+    const ctx2: ImageCtx = { ...ctx, units: [...units, ...extra], unitHashes: { ...ctx.unitHashes, s5: "h-s5", s6: "h-s6" } };
+    const findings = imagePlanFindings({ cards, skipped_units: [{ unit_key: "s5", reason: "No image helps this unit." }, { unit_key: "s6", reason: "No image helps this unit." }] }, ctx2).filter((f) => !["IMAGE_TOO_MANY_CARDS", "IMAGE_TOO_MANY_MUST_HAVE"].includes(f.code));
+    expect(findings).toEqual([]);
   });
 });
 
-describe("the image board template", () => {
-  it("shows the overlay text read-only: no input, textarea or editable element in the overlay box", () => {
+describe("the image board template: one card, one task, one next action", () => {
+  it("has the five steps and exactly one orange control class, used only for the next action", () => {
+    for (const s of ["Read the idea", "Make the image", "Add the words", "Upload", "Mark done"]) expect(template, s).toContain(`'${s}'`);
+    for (const g of ["Got it", "I've made the image", "I've added the words", "Upload finished image", "Mark done"]) expect(template, g).toContain(g);
+    expect(template).toContain("Start version ");
+    expect([...template.matchAll(/class: 'btn go'/g)].length).toBe(3);        // start the new version, the upload label, and the confirm buttons: one of them is drawn at a time
+    expect(template).not.toMatch(/btn primary/);
+  });
+  it("shows the idea first, the example prompt as optional, the locked words with a copy button, and keeps the rest collapsed", () => {
+    for (const s of ["'The idea'", "'Example prompt (optional)'", "Copy example prompt", "'The exact words to add'", "Copy words", "'What to avoid'", "'Details'", "'Version history'", "'Notes'"]) expect(template, s).toContain(s);
+    expect(template.indexOf("'The idea'")).toBeLessThan(template.indexOf("'Example prompt (optional)'"));
+    expect(template.indexOf("'Example prompt (optional)'")).toBeLessThan(template.indexOf("'The exact words to add'"));
+    expect(template).toContain("'\\n\\nAvoid: '");                              // the example prompt is copied together with the avoid list
+  });
+  it("keeps the words locked and never edits the page through markup strings", () => {
     expect(template).not.toMatch(/contenteditable/i);
-    const lock = template.slice(template.indexOf("var lines = el("), template.indexOf("var spec = el("));
-    expect(lock).not.toMatch(/'input'|'textarea'/);
-    expect(lock).toContain("Locked. Add these words yourself");
-  });
-  it("writes page text with textContent, never innerHTML, so card text cannot inject markup", () => {
     expect(template).not.toMatch(/innerHTML|insertAdjacentHTML|document\.write/);
+    expect(template).toContain("They cannot be changed here.");
   });
-  it("has copy buttons for the prompt and the avoid list, version history, a note thread and the three statuses", () => {
-    for (const s of ["Copy prompt", "Copy avoid list", "Version history", "Notes on this card", "To do", "In progress", "Done", "Upload a new version"]) expect(template, s).toContain(s);
+  it("completes steps only from real actions: the upload step comes from an uploaded file, Mark done needs it, a request restarts the steps", () => {
+    expect(template).toContain("return [w.read, w.made, w.words, up, w.done && up];");
+    expect(template).toContain("function hasImage(c)");
+    expect(template).toContain("Changes requested: please update this image.");
+    expect(template).toContain("w.handled = req.id; w.base = w.uploads.length;");     // starting the next version keeps the old uploads
+    expect(template).toContain("The words on this card changed.");
+    expect(template).not.toMatch(/uploads\.(splice|pop|shift)\(|uploads = \[\]/);   // an older version is never deleted or overwritten
   });
-  it("only allows Done once an image exists for the current card version, and limits uploads to 10 MB and the four formats", () => {
-    expect(template).toContain("var disabled = k === 'done' && !img;");
+  it("separates handing in from approval", () => {
+    expect(template).toContain("Handed in. Leo checks it next.");
+    expect(template).toContain("Done does not mean approved");
+    expect(template).toContain("Juan approves the article before anything is published");
+  });
+  it("accepts only PNG, JPEG, WebP and SVG up to 10 MB, and names files for Lawrence", () => {
     expect(template).toContain("10 * 1024 * 1024");
     expect(template).toContain("image/png,image/jpeg,image/webp,image/svg+xml");
+    expect(template).toContain("c.base_file_name + '_v' + v + ext");
+  });
+  it("uses plain words: no hashes, database terms or technical identifiers in anything Lawrence reads", () => {
+    const strings = [...template.matchAll(/(?:text: |\[|\(|\+ )'([^'\n]{8,}?)'/g)].map((m) => m[1]).filter((s) => /[A-Za-z]{3,} [A-Za-z]{2,}/.test(s));
+    expect(strings.length).toBeGreaterThan(20);
+    for (const s of strings) expect(s, s).not.toMatch(/\b(hash|sha-?256|database|json|uuid|schema|asset id|card version|payload)\b/i);
   });
   it("defines every color as a token with a dark theme, and loads fonts only from Google Fonts", () => {
     expect(template).toContain("@media (prefers-color-scheme: dark)");
