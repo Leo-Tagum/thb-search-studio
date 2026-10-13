@@ -1,0 +1,53 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "Section Writer",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["8b86f13cfb3b1c9c4d7e29ae4d7919e37c4ac8828cd93a79ff675efe000dcec8"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "s2-v2-human-directive-2026-10-13",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s2",
+    "addresses": ["human:directive"],
+    "change_note": "Applied Leo's two edits only: removed the confirm sentence from the first paragraph and the depends-on-documents sentence from the authority paragraph. Everything else, including the closing note, links, table, claim ids and roles, is unchanged.",
+    "declines": [
+      {"key": "seo:s2-optional-first-person-voice", "reason": "Leo's directive says apply exactly these edits and nothing else; the optional voice change is not applied."},
+      {"key": "ed:s2-repeated-confirm-pointer", "reason": "Already handled by Leo's two sentence removals; the closing note stays exactly as it is."},
+      {"key": "ed:s2-opening-order", "reason": "Leo's directive says do not change any other sentence, so the opening order is kept."}
+    ],
+    "unit": {
+      "kind": "section",
+      "key": "s2",
+      "h2": "Who has to sign, and who else is affected?",
+      "blocks": [
+        {"t": "p", "text": "The person who holds title, or who has the legal authority to sell for the owner, has to sign. Others are affected too: the person living in the house, co-owners and heirs, any tenant or other occupant, and neighbors."},
+        {"t": "p", "text": "Before cleanout, before price, before anything else, I ask one question. Who actually holds title to the house?"},
+        {"t": "p", "text": "It sounds like paperwork. It is really the foundation of the sale. The answer decides who can sign, and who has to be involved. With a packed house, the person living there is often not the person on title. The home may have been a parent's or a relative's, and the family may be sorting out who decides while the house sits full."},
+        {"t": "h3", "text": "Start with who holds title"},
+        {"t": "p", "text": "Title can sit with an individual, a trust, an estate or an LLC. Each one changes who has to agree. You may not know which one applies yet. That is normal, and it is the first thing to find out."},
+        {"t": "h3", "text": "Then ask who has the authority to sell"},
+        {"t": "p", "text": "Holding the keys is not the same as having the authority to sign."},
+        {"t": "p", "text": "I am not going to tell you which rules apply to your family. If the house was inherited, [find out first whether you can legally sell it](https://www.twinhomebuyer.com/inherited-property-bay-area-legal-authority-to-sell/). A trust, a will, a probate case or several heirs can all change the process."},
+        {"t": "h3", "text": "Then look at who else is affected"},
+        {"t": "p", "text": "A packed or hoarded house is often tied to family. The seller may be an adult child, an heir or a relative. The person living there may be reluctant to leave, unwell, or not ready. Treat that person with respect. Most families are not looking for judgment. They are looking for time and a clear next step."},
+        {"t": "table", "headers": ["Who", "Why they matter"], "rows": [
+          ["The person living in the home", "Their health, wishes and timing shape what is realistic."],
+          ["Co-owners and heirs", "If more than one person has a say, they may all need to agree before anyone can move ahead."],
+          ["A tenant or other occupant", "Anyone else living there affects access, timing and what you can promise a buyer."],
+          ["Neighbors", "They may already be worried about the property, which can matter if a local office gets involved."],
+          ["A professional organizer or cleanout crew", "They can help the family sort, keep and clear, and they need clear direction from whoever has authority."]
+        ]},
+        {"t": "p", "text": "If you are handling a parent's home, [this guide on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/) speaks to that situation directly."},
+        {"t": "callout", "text": "Settle who holds title and who can sign before you spend money on cleanout or talk price with anyone. Answering that first keeps your choices open."},
+        {"t": "note", "text": "Confirm with a real estate attorney or a title company who holds title, who has authority to sell, and who must sign. This guide does not state probate or trust rules."}
+      ],
+      "claim_ids": [],
+      "roles": []
+    }
+  }
+}

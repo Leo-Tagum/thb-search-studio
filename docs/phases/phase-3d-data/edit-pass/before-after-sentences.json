@@ -1,0 +1,137 @@
+{
+ "s1": {
+  "removed": [
+   "Getting clear early usually creates more options, not fewer."
+  ],
+  "added": [
+   "Getting clear early can keep more options open."
+  ],
+  "hashpre": "39c0cae5bb58",
+  "hashpost": "42a6cc0df835",
+  "status": "LOCKED",
+  "versions": [
+   4,
+   5
+  ]
+ },
+ "s2": {
+  "removed": [
+   "Who that is depends on the documents and the facts, and an attorney or title company can confirm it.",
+   "That depends on the documents and the facts, and it is a question for a real estate attorney or a title company."
+  ],
+  "added": [],
+  "hashpre": "8b86f13cfb3b",
+  "hashpost": "0157370ba4ea",
+  "status": "LOCKED",
+  "versions": [
+   4,
+   5
+  ]
+ },
+ "s3": {
+  "removed": [],
+  "added": [],
+  "hashpre": "db2209b17508",
+  "hashpost": "db2209b17508",
+  "status": "LOCKED",
+  "versions": [
+   3,
+   3
+  ]
+ },
+ "s4": {
+  "removed": [
+   "When the house is full, this is often the question that makes people freeze.",
+   "Many owners think the clutter has to be explained away, or that it might be better not to mention it at all."
+  ],
+  "added": [
+   "When the house is full, this can be the question that makes you freeze.",
+   "You may feel you have to explain the clutter, or that it would be better not to mention it at all."
+  ],
+  "hashpre": "d19ee304a1f0",
+  "hashpost": "9e2884cd2271",
+  "status": "LOCKED",
+  "versions": [
+   3,
+   4
+  ]
+ },
+ "s5": {
+  "removed": [],
+  "added": [],
+  "hashpre": "e8d58083ae9a",
+  "hashpost": "e8d58083ae9a",
+  "status": "LOCKED",
+  "versions": [
+   4,
+   4
+  ]
+ },
+ "s6": {
+  "removed": [
+   "The real question is usually not which route is best.",
+   "It is which route fits your situation."
+  ],
+  "added": [
+   "The real question is which route fits your situation."
+  ],
+  "hashpre": "ea44cab5d3bb",
+  "hashpost": "aa9761273e58",
+  "status": "LOCKED",
+  "versions": [
+   4,
+   5
+  ]
+ },
+ "s7": {
+  "removed": [
+   "The real question is usually whether the house or the paperwork is the bigger risk to the sale.",
+   "The statute doesn't mention hoarding, and a full house is not automatically one of these conditions."
+  ],
+  "added": [
+   "The real question is whether the house or the paperwork is the bigger risk to the sale.",
+   "A full house is not automatically one of these conditions."
+  ],
+  "hashpre": "d5b0d54c69fa",
+  "hashpost": "c543a2bd937f",
+  "status": "NEEDS_REVISION",
+  "versions": [
+   5,
+   6
+  ]
+ },
+ "s8": {
+  "removed": [],
+  "added": [],
+  "hashpre": "39dac2424e88",
+  "hashpost": "39dac2424e88",
+  "status": "LOCKED",
+  "versions": [
+   2,
+   2
+  ]
+ },
+ "faq": {
+  "removed": [
+   "Only someone with legal authority to sign.",
+   "Confirm who can sign with an attorney or title company before you plan anything else.",
+   "[item] What are my realistic options for a packed or hoarded house?",
+   "It depends on your time, your money and who can sign.",
+   "Keep it while you sort out care and decisions.",
+   "Clear it out, then list it with an agent.",
+   "Get professional help first on authority, title and tax.",
+   "Or sell directly if you want to avoid cleanout and showings, accepting that the price reflects the condition."
+  ],
+  "added": [
+   "Whoever has legal authority to sign.",
+   "An attorney or title company can confirm who that is."
+  ],
+  "hashpre": "9a48b44c16e2",
+  "hashpost": "625b8fe417d9",
+  "status": "LOCKED",
+  "versions": [
+   4,
+   5
+  ]
+ }
+}

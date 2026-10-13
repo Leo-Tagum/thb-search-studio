@@ -1,0 +1,73 @@
+[
+  {
+    "case": "legal-claim",
+    "unit": "s4",
+    "sentence": "California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.",
+    "statusNow": "BLOCKED_CLAIM",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  },
+  {
+    "case": "generalization",
+    "unit": "s5",
+    "sentence": "Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.",
+    "statusNow": "NEEDS_REVISION",
+    "reachedLock": false,
+    "v1Decision": "REVISION",
+    "v1RequiredFindings": [
+      {
+        "key": "fact:s5:unsupported_outcome_claim",
+        "text": "Paragraph 2: 'Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.' States a frequency about owners and a cost outcome (paying more over time) as fact, plus an absolute instruction. No ledger claim supports any of it, and it contradicts the brief's honest option to keep the home when there is no time pressure. Remove the sentence, or replace it with a conditional, unquantified line (for example, that waiting can add cost or pressure depending on the situation, and that the seller should weigh timing against their own situation)."
+      },
+      {
+        "key": "hedge:2ec4a34da675",
+        "text": "reword the unsourced generalization (most owners): \"Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.\" - Asserts an owner frequency, a cost outcome and an absolute instruction as fact with no ledger support. Replace with a conditional line that promises or quantifies nothing."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "sentence": "Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.",
+        "ruling": "reword",
+        "note": "Asserts an owner frequency, a cost outcome and an absolute instruction as fact with no ledger support. Replace with a conditional line that promises or quantifies nothing."
+      }
+    ],
+    "caughtByCode": false,
+    "caughtByV1": true,
+    "caught": true,
+    "citesTheSentence": true
+  },
+  {
+    "case": "local-fact",
+    "unit": "s3",
+    "sentence": "The Alameda County code enforcement office inspects every hoarded house before a sale closes and blocks the closing until the house is cleared.",
+    "statusNow": "BLOCKED_CLAIM",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  },
+  {
+    "case": "seller-anecdote",
+    "unit": "s2",
+    "sentence": "A family in the Fruitvale neighborhood kept every newspaper from their late father's years in the garage, and the county inspector who came by was kind about it.",
+    "statusNow": "BLOCKED_PRIVACY",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  }
+]

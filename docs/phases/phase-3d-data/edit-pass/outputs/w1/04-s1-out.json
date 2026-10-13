@@ -1,0 +1,44 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "Section Writer",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["39c0cae5bb58ec5519c11155a384610a253f5f5c10985a2d18a490125b92538f"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "s1-v2-human-directive-2026-10-13",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s1",
+    "addresses": ["human:directive", "fact:s1:usually:soften", "soften:hedge:de986bc437c2"],
+    "change_note": "Applied Leo's edit only: replaced the sentence Getting clear early usually creates more options, not fewer. with Getting clear early can keep more options open. Nothing else changed.",
+    "declines": [],
+    "unit": {
+      "kind": "section",
+      "key": "s1",
+      "h2": "What should you know first about a packed or hoarded house before you sell?",
+      "capsule": "Yes, you can sell a hoarded house in California. The route depends on who has authority, the condition, the people involved, what is owed and your timeline. For a transfer by sale of single-family residential property, California's disclosure article applies, except as provided in Civil Code Section 1102.2, and a waiver of its requirements is void.",
+      "blocks": [
+        {"t": "p", "text": "The house is full. Maybe it is your parent's home, maybe a relative's, maybe your own. Every room is packed, and the idea of selling feels impossible. You do not know whether to clear it out first, and you do not know what you are required to tell a buyer."},
+        {"t": "p", "text": "Many people in this spot are not avoiding the problem. The house just feels too heavy to deal with. If someone you love is still living there, the decision is harder. A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it."},
+        {"t": "p", "text": "A full house does not mean the house cannot be sold. It means you want the right information before you pick a path. Getting clear early can keep more options open."},
+        {"t": "p", "text": "The usual first question is how fast the house can be emptied. The real question is what situation you are actually in. I'd want five things answered first:"},
+        {"t": "ol", "items": [
+          "**Who has authority?** Who holds title, and who is allowed to sign? If the person living in the house is not that person, the sale can stall.",
+          "**What is the condition?** What is in the house, whether any rooms or exits are blocked, and whether there may be damage hidden behind the belongings.",
+          "**Who is affected?** The occupant, co-owners, heirs, anyone else who lives there. All of them matter to the plan.",
+          "**What is owed?** Loans, back taxes, liens and unpaid bills, set against the cost of cleanout and repairs and what the house can sell for.",
+          "**How soon do you need this done?** Whether speed, certainty, privacy or the highest price matters most to you."
+        ]},
+        {"t": "p", "text": "Your answers decide the route. Keeping the home for now, clearing it and listing it, bringing in professional help, or selling directly can each be the right choice. Which one fits depends on you, not on what a buyer wants to hear."},
+        {"t": "p", "text": "The disclosure rules in the capsule above do not change with your answers. Plan to disclose, not to skip it. What goes on the form is a question for your agent or attorney, and a later section covers it."},
+        {"t": "note", "text": "Authority, title, liens and disclosure are legal questions. Confirm them with a real estate attorney or a title company before you commit to a route."}
+      ],
+      "claim_ids": ["clm:6", "clm:7"],
+      "roles": ["opening"]
+    }
+  }
+}

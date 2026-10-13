@@ -32,6 +32,30 @@ describe("Leo's ten cards: verdicts and which the hedge flag sees", () => {
   });
 });
 
+describe("card 1: Leo's verdict stays B; V1's difference is a documented exception, not a relabel", () => {
+  const card1 = LEO_CARDS.find((c) => c.card === 1)!;
+  it("the verdict is Leo's B and the expected machinery outcome is should-fix", () => {
+    expect(card1.leo).toBe("B");
+    expect(card1.sentence).toBe("Living in the house alone does not give you that authority.");
+  });
+  it("the exception records what the real V1 does (must-fix), why (the nearby role list), who accepted it and where the evidence is", () => {
+    const x = card1.documentedException!;
+    expect(x.observedV1).toBe("must");
+    expect(x.reason).toMatch(/lists legal roles/);
+    expect(x.reason).toMatch(/executor/);
+    expect(x.approved).toMatch(/documented exception/);
+    expect(x.evidence).toMatch(/calibration-card1-in-context/);
+  });
+  it("no other card carries an exception", () => {
+    expect(LEO_CARDS.filter((c) => c.documentedException).map((c) => c.card)).toEqual([1]);
+  });
+  it("the in-context regression is runnable against the real V1: npm run calibrate-context (setup, dispatch V1 on each packet, submit-dir, verify)", async () => {
+    const { readFileSync } = await import("node:fs");
+    expect(JSON.parse(readFileSync("package.json", "utf8")).scripts["calibrate-context"]).toMatch(/calibration-context-smoke/);
+    expect(readFileSync("scripts/calibration-context-smoke.mts", "utf8")).toMatch(/documentedException/);
+  });
+});
+
 describe("each card gets the outcome Leo judged", () => {
   for (const c of LEO_CARDS) {
     if (c.leo === "A") {

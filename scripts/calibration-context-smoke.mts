@@ -79,6 +79,12 @@ if (cmd === "setup") {
   for (const r of rows) console.log(`run ${r.run}: V1 ${r.decision}; card 1 sentence -> ${r.card1.toUpperCase()}; ${r.card1Findings.length} finding(s) cite it, ${r.otherFindings.length} about other text`);
   const should = rows.filter((r) => r.card1 === "should").length, none = rows.filter((r) => r.card1 === "none").length, must = rows.filter((r) => r.card1 === "must").length;
   console.log(`card 1 in context: should-fix ${should}, no finding ${none}, must-fix ${must} of ${rows.length}`);
+  // Regression verdict. Leo's verdict for card 1 is B (should-fix) and is never relabeled; the documented exception records what V1 is known to do.
+  const card1 = LEO_CARDS.find((c) => c.card === 1)!;
+  const exception = card1.documentedException!;
+  const status = must >= 2 ? `DOCUMENTED EXCEPTION HOLDS: V1 returns must-fix in ${must} of ${rows.length} (${exception.approved}). Leo's verdict stays ${card1.leo}.` : should + none >= 2 ? `V1 NOW MATCHES LEO'S VERDICT (${card1.leo}) in ${should + none} of ${rows.length}: the documented exception can be retired.` : "V1 IS UNSTABLE on card 1 (no majority): review the exception.";
+  console.log(`regression: ${status}`);
+  console.log(`exception on record: ${exception.reason}`);
 } else if (cmd === "cleanup") {
   const state = JSON.parse(readFileSync(stateFile, "utf8"));
   for (const { art, opp } of state.arts) {

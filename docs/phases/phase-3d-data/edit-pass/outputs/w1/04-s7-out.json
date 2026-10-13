@@ -1,0 +1,77 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "Section Writer",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["d5b0d54c69faab65b5b457410c3962264a0b9aecda4fc9b71a59da1f022e0cfc"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "s7-v2-leo-directive-2026-10-13",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s7",
+    "addresses": ["human:directive"],
+    "change_note": "Applied Leo's two edits only: removed the unledgered statute-silence sentence from the Notice who decides paragraph (now A full house is not automatically one of these conditions.), and dropped the word usually from the first sentence of the opening paragraph. No other text, link, claim id or role changed.",
+    "declines": [],
+    "unit": {
+      "kind": "section",
+      "key": "s7",
+      "h2": "What can delay or block the sale?",
+      "blocks": [
+        {
+          "t": "p",
+          "text": "The real question is whether the house or the paperwork is the bigger risk to the sale. Some of it comes from the house. A lot of it comes from the paperwork and the people. Sort those apart early and you can plan around them instead of being surprised by them. Three things can stall the sale of a packed house."
+        },
+        {
+          "t": "h3",
+          "text": "A local official takes an interest in the property"
+        },
+        {
+          "t": "p",
+          "text": "California's Health & Safety Code lists conditions that can make a building substandard. Some of them can apply to a house with a lot of accumulated belongings. Premises where junk, debris, garbage and similar materials add up to a fire, health or safety hazard are on the list. So is infestation of insects, vermin or rodents, as determined by a health officer. So is a lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer. And so is combustible waste or vegetation that, in the opinion of the fire chief or the chief's deputy, could cause a fire or explosion or provide ready fuel to spread fire."
+        },
+        {
+          "t": "p",
+          "text": "Notice who decides. It is the health officer or the fire official, not you and not me. A full house is not automatically one of these conditions. Whether your house meets any of them is for the local authority. So find out whether there is an open notice or violation on the property before you choose a route. For background on how this works near Oakland, see [Oakland code violations](https://www.twinhomebuyer.com/oakland-code-violations-2026/)."
+        },
+        {
+          "t": "h3",
+          "text": "A disclosure shortcut"
+        },
+        {
+          "t": "p",
+          "text": "Do not plan to skip disclosure or play it down because the house is hard to see. The disclosures are made on the Real Estate Transfer Disclosure Statement form. And any waiver of the requirements is void as against public policy. A buyer who agrees to skip disclosures has not changed that. Go through the form with an agent or an attorney, and let them tell you what belongs on it for your house."
+        },
+        {
+          "t": "h3",
+          "text": "The wrong person, the wrong paperwork, or a late surprise"
+        },
+        {
+          "t": "p",
+          "text": "A sale can stall when the person living in the house is not the person with authority to sell. It can stall when heirs disagree. It can stall when a lien or an unpaid bill turns up late in escrow. None of that is a cleanout problem. It is a paperwork and people problem, and it is better to find these problems early."
+        },
+        {
+          "t": "ul",
+          "items": [
+            "Who holds title: an individual, a trust, an estate or an LLC?",
+            "Who has the legal authority to sign, and who else has to agree?",
+            "Is there anything recorded against the property that a buyer or title company will find?"
+          ]
+        },
+        {
+          "t": "p",
+          "text": "If the home came from a parent or relative, start with [whether you can legally sell it](https://www.twinhomebuyer.com/inherited-property-bay-area-legal-authority-to-sell/). Then read about [title issues and liens](https://www.twinhomebuyer.com/bay-area-title-issues-and-liens/). For the common slowdowns on an as-is sale, see [what can delay an as-is home sale](https://www.twinhomebuyer.com/what-can-delay-as-is-home-sale-bay-area/)."
+        },
+        {
+          "t": "note",
+          "text": "Confirm with the right professional: a real estate attorney for authority to sell and what goes on the disclosure form, a title company for liens and who must sign, and the city or county building, health or fire department for any enforcement notice on the property."
+        }
+      ],
+      "claim_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:7"],
+      "roles": ["real_world_warning", "professional_confirmation"]
+    }
+  }
+}

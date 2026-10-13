@@ -168,5 +168,61 @@ Observations: (1) s1's single sentence appears as two should-fix items (an optio
 
 Data: `phase-3d-data/task10/` (every agent output by round, V1 rows, rulings, usage, final state). Report script: `scripts/phase3d-task10-report.mts`.
 
+## Edit pass on the Task 10 should-fix items (2026-10-13): five of six units relocked, s7 waiting on Leo
+
+Leo's decisions on the should-fix items were applied to branch `54070caa…` as `leo`, exactly as listed, then the changed units were gated through V1 again. **It did not reach HUMAN_REVIEW: s7 is held at `NEEDS_REVISION` by a required Agent 6 finding that would need an edit Leo did not authorize. The article is in DRAFTING.** No proposal, approval, publication or WordPress write. The original article's fingerprint `23f8dd72…4611` was compared before and after every step and never changed.
+
+### How the decisions were applied
+- Six units were reopened as `leo` (`studio resolve <branch> <unit> reopen "<Leo's edit>"`) before any relock, for the reason recorded under Task 10 (the article-level revision limit): s1, s2, s4, s6, s7, faq. s3, s5 and s8 were not touched. **The article's revision count is now 2, the limit: any further reopen of this branch is refused until Leo decides.**
+- The real writer (Agent 4) applied each edit from Leo's exact wording (the packet's open directive). Before anything was submitted, each writer output was compared with the intended result built independently from the pre-edit version: **s1, s2, s6, s7 and the FAQ matched the intended edit exactly (deep equality of the whole unit)**; s4 matched everywhere except the two sentences Leo asked to be reworded, which contain none of the banned words. No retry was needed.
+- Two interpretations, both because Leo's replacement text already contains the surrounding sentence: (a) s6 (item 11): the replacement "The real question is which route fits your situation." replaces both "The real question is usually not which route is best." and the next sentence "It is which route fits your situation.", otherwise the paragraph would say the same thing twice. (b) FAQ item 4 (item 4): the answer became exactly "Whoever has legal authority to sign. An attorney or title company can confirm who that is.", replacing the old trailing pointer "Confirm who can sign with an attorney or title company before you plan anything else." as well, for the same reason. Choices where Leo allowed either: s7 (item 1) the first clause was removed, keeping "A full house is not automatically one of these conditions."; s2 (item 2) the closing note was kept as the one pointer; FAQ item 6 (item 5) was removed, not merged.
+
+### 1. Before and after (every FIX and SOFTEN sentence), checked by text comparison against the pre-edit version
+
+| # | Unit | Before | After |
+|---|---|---|---|
+| 1 | s7 | The statute doesn't mention hoarding, and a full house is not automatically one of these conditions. | A full house is not automatically one of these conditions. |
+| 2 | s2 | (three confirm pointers) "Who that is depends on the documents and the facts, and an attorney or title company can confirm it." / "That depends on the documents and the facts, and it is a question for a real estate attorney or a title company." / the closing note | the first two sentences removed; the closing note kept as the one pointer |
+| 3 | s4 | When the house is full, this is often the question that makes people freeze. Many owners think the clutter has to be explained away, or that it might be better not to mention it at all. | When the house is full, this can be the question that makes you freeze. You may feel you have to explain the clutter, or that it would be better not to mention it at all. |
+| 4 | faq item 4 | Only someone with legal authority to sign. Confirm who can sign with an attorney or title company before you plan anything else. | Whoever has legal authority to sign. An attorney or title company can confirm who that is. |
+| 5 | faq item 6 | "What are my realistic options for a packed or hoarded house?" with its five-sentence answer | removed (the FAQ has five items) |
+| 10 | s1 | Getting clear early usually creates more options, not fewer. | Getting clear early can keep more options open. (handled once) |
+| 11 | s6 | The real question is usually not which route is best. It is which route fits your situation. | The real question is which route fits your situation. |
+| 12 | s7 | The real question is usually whether the house or the paperwork is the bigger risk to the sale. | The real question is whether the house or the paperwork is the bigger risk to the sale. |
+
+**KEEP and LEAVE, checked by text comparison with the pre-edit version: all unchanged.** Item 6 (s6 "None of them is wrong for everyone, and most of them have nothing to do with Twin Home Buyer."), item 7 (FAQ "Not always."), item 8 (s2 "Title can sit with an individual, a trust, an estate or an LLC. Each one changes who has to agree."), item 9 (s2 "Most families are not looking for judgment."), item 13 (s2's first-person opening "Before cleanout, before price, before anything else, I ask one question." and the opening paragraph's first sentence) and item 14 (the FAQ's local wording, "Ask the city or county whether any notice is open.") are all present word for word. s3, s5 and s8 are byte-identical (same content hash). Nothing else in any edited unit changed: the only removed or added sentences are the ones in the table.
+
+### 2. Final version and V1's result on each changed unit
+V1 (1.2.1, same dispatch prompt as before, changed-sentence scope) returned **PASS with no findings, no hedge rulings pending, on the exact edited version of all six units** (must-fix 0, should-fix 0). Agent 6 and Agent 7 then reviewed the five relocked units:
+
+| Unit | Locked version | V1 | Agent 6 | Agent 7 |
+|---|---|---|---|---|
+| s1 | v5 `42a6cc0df835` | PASS | PASS | PASS (78) |
+| s2 | v5 `0157370ba4ea` | PASS | PASS | PASS (80) |
+| s4 | v4 `9e2884cd2271` | PASS | PASS | PASS (75) |
+| s6 | v5 `aa9761273e58` | PASS | PASS | PASS (77) |
+| faq | v5 `625b8fe417d9` | PASS | PASS | PASS (73) |
+| **s7** | v6 `c543a2bd937f`, **not locked** | PASS | **REVISION** (required, `seo:direct-answer-not-first`) | not run |
+
+**There is no final article version to send to Juan yet** (the article is assembled only when every unit is locked). The last assembled version, before this pass, is `81de13358a74`; it is superseded by these edits.
+
+**The blocker (s7):** Agent 6 requires the opening to name the three causes in its first sentence ("Change the opening so the first sentence answers directly, for example by naming the three causes … then keep the house-versus-paperwork framing after it"). The opening paragraph has the same structure as the one Agent 6 passed in Phase 3c and carried through Task 10 (the carried pass came from the earlier review); the only change is that "usually" is gone. So this looks like reviewer variance, not a result of Leo's edit. The classic loop would send it to the writer, which would restructure the opening: an edit Leo did not authorize. A required finding cannot be declined in code. **Options for Leo:** (a) authorize the writer to restructure the s7 opening as Agent 6 asks; (b) give an exact replacement opening for s7 as a directive (`resolve … request_revision`), which V1 and Agents 6 and 7 then review; (c) keep the s7 text as edited and accept Agent 6's finding as a documented disagreement (needs a code or process decision: required findings cannot be declined today). Note a writer run for s7 is already queued by the plan step and was deliberately not dispatched.
+
+### 3. Card 1 in its FAQ context as a regression test
+It is runnable: `npm run calibrate-context` (setup, dispatch the real V1 on each packet, `studio submit-dir`, verify). It now records **Leo's verdict B unchanged**, V1's reason (the nearby role list) and the documented exception in `scripts/fixtures/leo-v1-cards.ts` (`documentedException`, approved by Leo 2026-10-13), and its verify step reports whether the exception still holds. Four Vitest tests pin the record (verdict stays B; exception recorded with the role-list reason, approver and evidence; only card 1 carries one; the live command exists). **Re-run results (real V1): card 1 in context must-fix in 3 of 3 runs: the documented exception holds. The four adversarial fixtures: 4 of 4 caught** (legal claim blocked, local fact blocked, seller anecdote blocked on privacy, generalization sent back with a `reword` ruling). Vitest, tsc and eslint pass.
+
+### 4. Tokens
+Task 10 as reported: 912,687 tokens across all categories, 421,059 excluding cache reads (measured from the session transcripts); no savings percentage is claimed. This pass, separately: **edit pass 23 agents (6 writer, 6 V1, 6 Agent 6, 5 Agent 7): 1,077,675 all categories, 515,483 excluding cache reads, 5.8 minutes**; **regression tests 7 V1 runs: 419,695 all categories, 180,446 excluding cache reads**. Output tokens are a lower bound (see the evidence audit). 23 runs for six one- or two-sentence edits is a data point about how many agents a small edit costs in this loop: V1 reviewed and found nothing, and four fifths of the tokens are the packet and the agent file being read again each run.
+
+### 5. Three statuses
+- **Technically gated:** partial. Five of the six changed units are V1-passed on their exact locked versions, Agent 6 and 7 passed. s7 is V1-passed on its edited version but not locked (Agent 6 required finding). Article not assembled, not at HUMAN_REVIEW.
+- **Editorially approved (pending Juan):** not claimed. Nothing has gone to Juan; there is no final version yet.
+- **Unattended:** not shown. This pass was driven by the operator by hand, needed Leo's decisions as input, and ended on a decision only Leo can make.
+
+### 6. Original fingerprint
+Unchanged: checked before the pass, after every reopen, after every round and after the cleanups.
+
+Data: `phase-3d-data/edit-pass/` (every agent output, the intended edits, the before/after comparison, usage, regression results).
+
 ## Open for Leo
-Review the 9 open should-fix items and the 5-item hedge spot-check list in the Task 10 section. The branch `54070caa…` is at HUMAN_REVIEW with no proposal, approval or publication.
+One decision blocks closing 3d: s7 (Agent 6 requires restructuring the opening; see the edit-pass section, options a, b and c). After that the assembled article version can go to Juan. The should-fix items Leo left alone (items 13 and 14, the first-person opening and the FAQ's light local wording, plus the items under KEEP) stay listed for Juan's review.

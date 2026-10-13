@@ -1,0 +1,56 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "Section Writer",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["9a48b44c16e2b6e486d5769cf4559c7160b02ec0a9b7a4610aa72f5309fdbcf1"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "faq-v2-leo-directive-20261013",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "addresses": ["human:directive"],
+    "change_note": "Applied Leo's directive only: item 4 answer replaced with the exact wording given; item 6 removed. Items 1, 2, 3 and 5 unchanged. Five items remain.",
+    "declines": [
+      {
+        "key": "ed:faq-local-light",
+        "reason": "Leo's directive says apply only his two edits, and no sourced local fact exists in the ledger to add."
+      }
+    ],
+    "unit": {
+      "kind": "faq",
+      "key": "faq",
+      "items": [
+        {
+          "q": "Do I have to disclose the condition of a packed or hoarded house when I sell in California?",
+          "a": "Generally yes, for a sale of single-family residential property. California's disclosure article applies, with an exception. The disclosures are made on the Real Estate Transfer Disclosure Statement form, and any waiver of the requirements is void. Go through the form with an agent or attorney before you list.",
+          "claim_ids": ["clm:5", "clm:6", "clm:7"]
+        },
+        {
+          "q": "Do I have to clean out a house before selling it?",
+          "a": "Not always. It depends on your time, your money, who has authority to sell and which route you pick. Clearing it out shows the real condition before you list. A direct sale is the other route, and a direct buyer prices in the condition.",
+          "claim_ids": []
+        },
+        {
+          "q": "Can the city or county act on a packed or hoarded house?",
+          "a": "Possibly. State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards. Whether a home meets them is for the local authority. Ask the city or county whether any notice is open.",
+          "claim_ids": ["clm:1", "clm:2", "clm:3", "clm:4"]
+        },
+        {
+          "q": "Who can sell the house if the owner cannot or will not?",
+          "a": "Whoever has legal authority to sign. An attorney or title company can confirm who that is.",
+          "claim_ids": []
+        },
+        {
+          "q": "Can I agree with the buyer to skip disclosure?",
+          "a": "No, not for a sale the disclosure article covers. Under the California statute, any waiver of the disclosure requirements is void as against public policy. Work through the form with an agent or attorney instead.",
+          "claim_ids": ["clm:7"]
+        }
+      ]
+    }
+  }
+}

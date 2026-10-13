@@ -1,0 +1,82 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "Section Writer",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["ea44cab5d3bbdade6b52f787b32b19c487f7ff5d41c76d69a28a260a3ae6d406"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "s6-v2-human-directive-20261013",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s6",
+    "addresses": ["human:directive"],
+    "change_note": "Applied Leo's edit only: the two sentences about the real question were replaced with the single sentence The real question is which route fits your situation. Every other sentence, the claim_ids and the figures are unchanged.",
+    "declines": [
+      {
+        "key": "soften:hedge:a1a2dca21c13",
+        "reason": "Moot: Leo's directive removes the sentence containing the word usually, and the replacement sentence has no hedge word."
+      }
+    ],
+    "unit": {
+      "kind": "section",
+      "key": "s6",
+      "h2": "Should you clear it out, list it, keep it or sell directly?",
+      "blocks": [
+        {
+          "t": "p",
+          "text": "The answer depends on your time, your money, who gets to decide and what you can live with. The real question is which route fits your situation. Each one below costs you something different in time, money, certainty or control. None of them is wrong for everyone, and most of them have nothing to do with Twin Home Buyer."
+        },
+        {
+          "t": "h3",
+          "text": "Keep it for now"
+        },
+        {
+          "t": "p",
+          "text": "This fits when you are not under time pressure, the person living there is not ready to move, or the family still has to sort out who decides. Keeping the home while care, cleanup and decisions get worked out can be better than a rushed sale. The cost is that the house keeps needing attention."
+        },
+        {
+          "t": "h3",
+          "text": "Fix it, then test the open market"
+        },
+        {
+          "t": "p",
+          "text": "This fits when you have the time and the money to clear the house and handle repairs, and you want to see what the open market offers afterward. A professional cleanout crew, followed by an inspection, can show you the real condition of the house before you list. The cost is time and cash up front, before you know what the house will bring. If you are handling a parent's home, [this post on selling a house full of belongings](https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/) covers the family side of clearing out."
+        },
+        {
+          "t": "h3",
+          "text": "List it with an agent"
+        },
+        {
+          "t": "p",
+          "text": "This fits when the home can be cleared and shown, you can complete the disclosure paperwork with an agent, and you want to market the home broadly. Listing with an agent who knows difficult-condition homes is a legitimate route. Plan for the paperwork. The California disclosure article applies, except as provided in Civil Code 1102.2, to a transfer by sale of single-family residential property. The required disclosures are made on a copy of the Real Estate Transfer Disclosure Statement form. And any waiver of those requirements is void as against public policy, so there is no agreeing your way around it. Go through the form with your agent or an attorney."
+        },
+        {
+          "t": "h3",
+          "text": "Get professional help first"
+        },
+        {
+          "t": "p",
+          "text": "This is less a route than a step before any route. An attorney can speak to authority, probate and disclosure questions. A title company can speak to liens and title. A CPA can speak to taxes. The city or county can tell you whether any enforcement action exists on the property. Ask these before you choose, because the answers can change which routes are open to you."
+        },
+        {
+          "t": "h3",
+          "text": "Sell directly to a buyer"
+        },
+        {
+          "t": "p",
+          "text": "This fits when you want to avoid cleanout, repairs and showings, or you need privacy, and you accept that a direct buyer prices the condition of the house into the offer. That is the tradeoff. You give up some of what a broad open-market sale might bring, and in return you take on less work. Before you pick any buyer, ask what exactly they will and will not handle, and get it in writing. If you want to talk through a direct sale of a packed or hoarded home, the next step is [our page for hoarder houses](https://www.twinhomebuyer.com/hoarder-houses/). For a plain explanation of the term, see [what selling a house as-is means](https://www.twinhomebuyer.com/what-does-selling-your-house-as-is-mean/)."
+        },
+        {
+          "t": "note",
+          "text": "Confirm with the right professional before you commit to a route: a real estate attorney for authority and disclosure, a title company for liens and title, and a CPA for tax."
+        }
+      ],
+      "claim_ids": ["clm:5", "clm:6", "clm:7"],
+      "roles": ["options"]
+    }
+  }
+}

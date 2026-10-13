@@ -1,0 +1,28 @@
+{
+  "article_id": "54070caa-bd79-4184-a82a-9235b1c33b64",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "Editorial Critic",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["9e2884cd22714e9384d9c8170345dbe757459f9fb1c2ef8b444a1f62ff155db2"],
+  "decision": "PASS",
+  "findings": [
+    {
+      "issue_key": "ed:statute-first-opening",
+      "severity": "optional",
+      "note": "The section opens on 'In California, the disclosure rules in Civil Code 1102 apply...' and only reaches the seller's feeling in paragraph 2 ('this can be the question that makes you freeze'). If the writer revises anyway, consider swapping the order so the seller's worry comes first and the statute sentence follows. Wording-only; no facts change."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "ed-s4-9e2884cd-v1",
+  "timestamp": "2026-10-13T00:00:00Z",
+  "result": {
+    "unit_key": "s4",
+    "version_hash": "9e2884cd22714e9384d9c8170345dbe757459f9fb1c2ef8b444a1f62ff155db2",
+    "voice_reference_used": true,
+    "copy_paste_test": { "passed": true, "flagged": [] },
+    "authenticity": { "q1": true, "q2": true, "q3": true, "q4": true, "q5": true, "q6": true, "q7": true, "q8": true, "q9": true, "q10": true },
+    "score": { "voice": 16, "education": 16, "deal_logic": 14, "local": 8, "structure": 12, "trust": 9, "total": 75 }
+  }
+}

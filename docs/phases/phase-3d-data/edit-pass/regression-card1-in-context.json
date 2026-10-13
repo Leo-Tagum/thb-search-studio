@@ -1,0 +1,83 @@
+[
+  {
+    "run": 1,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:authority-roles:unsupported",
+        "note": "FAQ item 4 (Who can sell the house) lists legal roles and a case-specific conclusion with no cited claim and no ledger support: 'That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house alone does not give you that authority.' The ledger has no claim on who holds authority to sell. Remove the role list and the 'living in the house alone' conclusion, or keep only the plain point that authority depends on how title is held and must be confirmed with an attorney or title company."
+      }
+    ],
+    "otherFindings": [
+      {
+        "severity": "optional",
+        "key": "fact:faq:statute-no-hoarding:unsupported",
+        "note": "FAQ item 3 says 'The statute does not mention hoarding.' No ledger claim (clm:1-4) states this; it comes only from the brief notes. Either add a ledger claim for it or soften to 'Whether a particular home meets them is for the local authority.'"
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "soften",
+        "note": "'Not always.' is a frequency word, not a statistic, and states no statute or figure. The next sentences say it depends on time, money, authority and route; plainer wording such as 'It depends.' would do."
+      }
+    ]
+  },
+  {
+    "run": 2,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:authority-roles:unsupported",
+        "note": "FAQ item 4 (\"Who can sell the house if the owner cannot or will not?\") lists who may sign: \"That might be the owner, a trustee, an executor or administrator, or several heirs who agree.\" It also states \"Living in the house alone does not give you that authority.\" The item cites no claim, and no ledger claim supports a list of legal roles or this case-specific legal conclusion. The brief's authority row carries claim_ids [] and says the guide states no specific probate or trust rules."
+      }
+    ],
+    "otherFindings": [
+      {
+        "severity": "optional",
+        "key": "fact:faq:not-always:soften",
+        "note": "FAQ item 2 opens \"Not always.\" This is a frequency word on a question that touches a legal duty. No ledger claim says whether cleanout is required. Plainer wording would avoid implying a legal rule."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "soften",
+        "note": "\"Not always.\" is a conditional answer that states no figure, statute or legal rule. Plainer wording such as \"It depends\" would avoid sounding like a frequency claim."
+      }
+    ]
+  },
+  {
+    "run": 3,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:authority-roles:unsupported",
+        "note": "Item 4 (Who can sell the house...) states a list of legal roles as fact with no cited claim: 'Only someone with legal authority to sign. That might be the owner, a trustee, an executor or administrator, or several heirs who agree. Living in the house alone does not give you that authority.' No ledger claim supports who holds authority to sign, and 'Living in the house alone does not give you that authority' is a case-specific legal conclusion. Remove the list of roles and the 'Living in the house alone' sentence, or reword to say authority depends on how title is held and who is legally allowed to sign, and keep the confirm-with-an-attorney-or-title-company sentence."
+      }
+    ],
+    "otherFindings": [
+      {
+        "severity": "optional",
+        "key": "fact:faq:hoarding-not-in-statute:uncited",
+        "note": "Item 3 says 'The statute does not mention hoarding.' This is a statement about statute text. It comes from the brief's open items, but no ledger claim supports it and I cannot verify it. Not required because the brief directs it; it would be better backed by a ledger claim, or reworded to 'The statute lists these conditions; whether a hoarded home meets them is for the local authority'."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "soften",
+        "note": "'Not always.' is a frequency phrase that states no statute, figure or list of roles. The answer that follows ties it to time, money, authority and route. Plainer wording would be 'It depends on your time, your money, who has authority to sell and which route you pick.' with no 'Not always.' lead-in, so it does not imply a cleanout duty in some cases."
+      }
+    ]
+  }
+]
