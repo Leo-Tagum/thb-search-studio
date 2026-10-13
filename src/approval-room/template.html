@@ -187,7 +187,7 @@ details.notes .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:
   cl.appendChild(el('div',{class:'scroll'},[ct]));
   nb.appendChild(cl);
 
-  if (P.open_items && P.open_items.length) { var oi = el('div',{class:'notes-sec'}); oi.appendChild(el('h2',{text:'Open items from the brief'})); var ul=el('ul'); P.open_items.forEach(function(t){ul.appendChild(el('li',{text:t}));}); oi.appendChild(ul); nb.appendChild(oi); }
+  if (P.open_items && P.open_items.length) { var oi = el('div',{class:'notes-sec'}); oi.appendChild(el('h2',{text:'Open items from the brief'})); var ul=el('ul'); P.open_items.forEach(function(t){ul.appendChild(el('li',{text:t}));}); oi.appendChild(ul); if (P.open_items_note) oi.appendChild(el('p',{class:'fine',text:P.open_items_note})); nb.appendChild(oi); }
 
   var ids = el('div',{class:'notes-sec'});
   ids.appendChild(el('h2',{text:'Version ids'}));
