@@ -75,3 +75,11 @@ export function verificationFromRow(row: Record<string, any>): ClaimVerification
 
 /** True when the row carries the full record the rule asks for: a quote, a section, what it was read from, a label and a reader impact. */
 export const isVerificationComplete = (v: ClaimVerification): boolean => !!(v.quote?.trim() && v.section && v.against && v.label && v.readerImpact);
+
+/** What the reviewers see of a claim's verification record in the packet's claim ledger (null fields for a claim written before the rule). */
+export function ledgerRecord(v: ClaimVerification | undefined) {
+  return {
+    quote: v?.quote ?? null, section: v?.section ?? null, verification_label: v?.label ?? null, verification_reason: v?.reason ?? null,
+    reader_impact: v?.readerImpact ?? null, gates: v?.gates ?? [], verified_against: v?.against ?? null,
+  };
+}

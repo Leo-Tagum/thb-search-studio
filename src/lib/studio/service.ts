@@ -15,7 +15,7 @@ import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
 import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../team/mode";
 import { agentLikeActor, resolveActorError } from "./actors";
-import { verificationColumns, verificationFromRow } from "./legal-claims";
+import { ledgerRecord, verificationColumns, verificationFromRow } from "./legal-claims";
 import { envelopeOf, saveEnvelope } from "./team-envelope";
 import { reopen as teamReopen, resolveByHuman as teamResolveByHuman } from "../team/loop";
 import { CLASSIC_V1_KEY, STUDIO_AGENT_META, V1_PROMPT_VERSION, isStudioAgent, studioOutputSchemas, studioSemanticChecks, type StudioAgentKey, type StudioValidationCtx } from "./agents";
@@ -108,6 +108,7 @@ export async function load(db: SupabaseClient, articleId: string): Promise<Loade
     today: today(), claims, approvedFactTexts, allowedLinks: [...links, MONEY_URL, AUTHOR_URL], sourceUrls: [...sources.values()].map((s: any) => s.source_url).filter(Boolean),
     internalPassages: (internal ?? []).map((p: any) => ({ text: p.text, reasons: p.internal_reasons ?? [] })), allowedJurisdictions: ["California"], blockedPhrases: ARTICLE_BLOCKED,
     briefH2: Object.fromEntries((sections ?? []).filter((s: any) => s.section_key !== "faq").map((s: any) => [s.section_key, s.brief_h2])), keyword: article.primary_keyword ?? "",
+    legalRecord: true,      // Phase 3e: a cited high-risk legal claim needs its exact quote, section and label; deciders are not shown as a closed list
   };
   return { article, brief, sections: sections ?? [], claims, sources, facts: facts ?? [], versions: new Map((vers ?? []).map((v: any) => [v.id, v])), check };
 }
@@ -151,7 +152,7 @@ export async function queueStudioRun(db: SupabaseClient, agent: ClassicAgent, ar
   const cur = row.current_version_id ? (await db.from("section_versions").select("*").eq("id", row.current_version_id).single()).data : null;
   const outlineIdx = L.sections.indexOf(row);
   const brief = L.brief.outline;
-  const ledger = [...L.claims.values()].map((c) => ({ id: c.id, text: c.text, risk: c.risk, support: c.support, source: c.sourceId ? { title: L.sources.get(c.sourceId)?.title, url: L.sources.get(c.sourceId)?.source_url } : null, jurisdiction: c.jurisdiction }));
+  const ledger = [...L.claims.values()].map((c) => ({ id: c.id, text: c.text, risk: c.risk, support: c.support, source: c.sourceId ? { title: L.sources.get(c.sourceId)?.title, url: L.sources.get(c.sourceId)?.source_url } : null, jurisdiction: c.jurisdiction, ...ledgerRecord(c.verification) }));
   const { data: vr } = await db.from("brand_facts").select("fact_value,status,provisional_by,provisional_at").eq("fact_key", "voice_reference").single();
   const approvedFacts = L.facts.filter((f: any) => f.status === "approved");
   const data: Record<string, unknown> = {
@@ -362,6 +363,8 @@ async function applyAccepted(db: SupabaseClient, run: any, out: any, L: Loaded, 
       const { data: ver } = await db.from("section_versions").select("content").eq("id", versionId).single();
       for (const id of unitClaimIds(ver!.content as Unit)) { const c = L.claims.get(id); if (c) await db.from("claims").update({ locked_text: c.text, text_hash: sha256(c.text) }).eq("article_id", articleId).eq("claim_key", id); }
     }
+    // Phase 3e: V1 could not verify a legal point from the official text: an escalation to Leo that names the reference needed (shown in the Studio and the CLI).
+    if (isV1 && next.status === "BLOCKED_CLAIM") for (const ref of (r.leo_reference_needed ?? []) as { claim: string | null; section: string | null; why: string }[]) await db.from("escalations").insert({ article_id: articleId, section_id: row.id, issue_key: `legal:reference-needed:${run.task_packet.unit_key}`, reason: `Leo, a reference is needed: ${ref.why}`, attempts: 0, reference_needed: ref });
     if (next.status === "BLOCKED_CLAIM" || next.status === "BLOCKED_PRIVACY") await blockArticle(db, articleId, next.status, { unit: run.task_packet.unit_key, blockedBy: next.blockedBy });
     if (next.status === "ESCALATED") await db.from("escalations").insert({ article_id: articleId, section_id: row.id, issue_key: next.escalation!.issueKey, reason: next.escalation!.reason, attempts: 2 });
   }

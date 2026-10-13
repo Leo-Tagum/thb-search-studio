@@ -9,6 +9,9 @@ import { MAX_ATTEMPTS, ratingRuleHits, semanticChecks, wrapUntrusted, norm, type
 import { officialUrl } from "../agents/official-sources";
 import { studioOutputSchemas, studioSemanticChecks, V1_PROMPT_VERSION, type StudioValidationCtx } from "../studio/agents";
 import { HEDGE_RULINGS, rulingGuard, rulingNoteError } from "../studio/hedge-rulings";
+import { READER_IMPACTS, VERIFICATION_LABELS } from "../studio/legal-claims";
+import { legalKindsOf } from "../studio/legal-flags";
+import { unitClaimIds } from "../studio/schema";
 import { r1SubmitErrors } from "./research";
 import { r1FetchRequest, verifyR1Web, type SnapshotStore } from "./snapshots";
 import { resolveRootCause, rootCauseResult, type ApprovedIdentity } from "./strategy";
@@ -39,6 +42,9 @@ const s5 = studioOutputSchemas["thb-05-fact-privacy-auditor"];
 const s6 = studioOutputSchemas["thb-06-seo-aeo-geo-auditor"];
 const s7 = studioOutputSchemas["thb-07-editorial-critic"];
 const cards = z.array(feedbackCard).max(20);
+// Phase 3e: V1 compares each cited high-risk legal claim with its stored official quote, and may ask Leo for a reference instead of guessing.
+const v1ClaimCheck = z.strictObject({ claim_id: z.string(), verdict: z.enum(["supported_as_written", "unsupported", "altered", "stale", "wrong_jurisdiction", "overstated"]), note: z.string(), quote_comparison: z.enum(VERIFICATION_LABELS).optional(), reader_impact: z.enum(READER_IMPACTS).optional() });
+const leoReferenceNeeded = z.strictObject({ claim: z.string().nullable(), section: z.string().nullable(), why: z.string().trim().min(10).max(600) });
 const tickets = z.array(feedbackCard).max(5);
 
 export const hedgeRuling = z.strictObject({ key: z.string().regex(/^hedge:[0-9a-f]{12}$/), ruling: z.enum(HEDGE_RULINGS), note: z.string().optional() });
@@ -66,7 +72,7 @@ const SCHEMAS = {
   S2_ROOT: a3.extend({ result: rootCauseResult }),
   W1: w1Output,
   W2: w2Output,
-  V1: s5.extend({ result: s5.shape.result.extend({ cards, hedge_rulings: z.array(hedgeRuling).max(30) }) }),
+  V1: s5.extend({ result: s5.shape.result.extend({ claim_checks: z.array(v1ClaimCheck), cards, hedge_rulings: z.array(hedgeRuling).max(30), leo_reference_needed: z.array(leoReferenceNeeded).max(5).default([]) }) }),
   V2: s6.extend({ result: s6.shape.result.extend({ cards }) }),
   V3: s7.extend({ result: s7.shape.result.extend({ cards }) }),
 } as const;
@@ -234,9 +240,46 @@ export async function teamSemanticChecks(role: TeamRole, out: any, ctx: TeamCtx)
         }
         if (out.decision !== "BLOCKED") for (const k of pending) if (!rulings.some((r) => r.key === k)) errs.push(`V1 must rule (proven / soften / not_a_claim / reword / drop) on flagged sentence ${k}`);
         if (out.decision === "PASS" && rulings.some((r) => r.ruling === "reword" || r.ruling === "drop")) errs.push("a PASS cannot carry a reword or drop ruling; use REVISION (soften and not_a_claim may ride on a PASS)");
+        errs.push(...v1LegalErrors(out, ctx.studio, rulings, sentenceOf));
       }
       break;
     }
+  }
+  return errs;
+}
+
+
+/** Phase 3e: what V1 owes on legal claims ("Legal claims: no guessing"). Applies when the unit is checked with the legal record on (the service sets it). */
+export function v1LegalErrors(out: any, studio: StudioValidationCtx, rulings: { key: string; ruling: string; note?: string }[], sentenceOf: Map<string, string>): string[] {
+  const errs: string[] = [];
+  const r = out.result;
+  // 1. An escalation to Leo is a BLOCKED_CLAIM that names the reference; it is never a PASS, and a PASS never carries one.
+  const refs = (r.leo_reference_needed ?? []) as unknown[];
+  if (refs.length && (out.decision !== "BLOCKED" || r.block_kind !== "BLOCKED_CLAIM")) errs.push("leo_reference_needed needs decision BLOCKED with block_kind BLOCKED_CLAIM (a missing or unclear official text is never a PASS)");
+  // 2. A ruling of "proven" on a flagged legal sentence must name its evidence: an absence claim needs a statute_absence claim; a layer sentence needs both layers' claims.
+  for (const x of rulings) {
+    if (x.ruling !== "proven") continue;
+    const sentence = sentenceOf.get(x.key);
+    if (!sentence) continue;
+    const kinds = legalKindsOf(sentence);
+    const ids = [...new Set((x.note ?? "").match(/clm:\d+|new:[\w:.-]+/g) ?? [])];
+    if (kinds.includes("LEGAL_ABSENCE") && !ids.some((id) => studio.check.claims.get(id)?.claimType === "statute_absence")) errs.push(`hedge ruling ${x.key}: "proven" on an absence-of-law sentence needs a ledger claim of type statute_absence (official text read, term absent) named in note; otherwise reword or drop it`);
+    if ((kinds.includes("LAYER_LOCAL_AS_STATE") || kinds.includes("LAYER_CROSS_LOCAL")) && ids.length < 2) errs.push(`hedge ruling ${x.key}: "proven" on a sentence that names two layers of law (or two cities) needs both claim ids in note, one per layer; otherwise reword so the layers are separate`);
+  }
+  // 3. The verification record of every cited high-risk claim.
+  if (!studio.check.legalRecord || !studio.currentUnit) return errs;
+  const cited = unitClaimIds(studio.currentUnit).map((id) => studio.check.claims.get(id)).filter((c): c is NonNullable<typeof c> => !!c && (c.risk === "high" || c.risk === "critical"));
+  const checks = new Map((r.claim_checks as { claim_id: string; quote_comparison?: string; reader_impact?: string; note: string }[]).map((c) => [c.claim_id, c]));
+  for (const c of cited) {
+    const ck = checks.get(c.id);
+    if (!ck?.quote_comparison || !ck.reader_impact) errs.push(`claim_checks for the high-risk legal claim ${c.id} needs quote_comparison (MATCH, NARROWER, BROADER or WRONG, compared with the stored official quote) and reader_impact (none or changes)`);
+    if (out.decision !== "PASS") continue;
+    const v = c.verification;
+    if (!v || !v.quote?.trim() || !v.label) errs.push(`PASS is not allowed: ${c.id} has no exact official quote or label in the ledger; raise leo_reference_needed (BLOCKED_CLAIM) and ask Leo for the official print`);
+    else if (v.label === "BROADER" || v.label === "WRONG") errs.push(`PASS is not allowed: ${c.id} is labelled ${v.label} against the official text`);
+    if (ck?.quote_comparison === "BROADER" || ck?.quote_comparison === "WRONG") errs.push(`PASS is not allowed: you compared ${c.id} with its quote and found it ${ck.quote_comparison}`);
+    if (ck?.quote_comparison === "NARROWER" && (ck.reader_impact !== "none" || ck.note.trim().length < 10)) errs.push(`PASS is not allowed: ${c.id} is NARROWER; that is acceptable only with reader_impact "none" and a note saying why the omission changes nothing for a reader`);
+    if (ck?.reader_impact === "changes") errs.push(`PASS is not allowed: for ${c.id} what the claim omits changes what a reader would believe or do`);
   }
   return errs;
 }

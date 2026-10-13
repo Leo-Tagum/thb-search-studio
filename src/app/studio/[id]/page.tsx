@@ -64,6 +64,12 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
         {hybrid ? null : change.ok ? <button className="border px-2">Switch to {otherMode} mode</button> : <span className="text-neutral-600 dark:text-neutral-400">Mode locked: {change.reason}</span>}
       </form>
       <p>State <b>{L.article.state}</b> · slug {L.article.slug} · keyword &quot;{L.article.primary_keyword}&quot; · version {L.article.version_hash ? L.article.version_hash.slice(0, 12) : "not assembled"} · approved {L.article.approved_hash ? "yes (hash matches)" : "no"}</p>
+      {(esc ?? []).filter((e) => e.reference_needed).length > 0 && (
+        <div className="border border-red-600 p-2">
+          <b>Leo: a reference is needed</b>
+          <ul className="list-disc pl-5">{(esc ?? []).filter((e) => e.reference_needed).map((e) => <li key={e.id}>{e.reference_needed.why}{e.reference_needed.claim ? ` (claim ${e.reference_needed.claim})` : ""}{e.reference_needed.section ? ` (${e.reference_needed.section})` : ""}. Upload the official print to the Evidence Library, then send the section back from here.</li>)}</ul>
+        </div>
+      )}
       {blockers.length > 0 && (
         <div className="border border-red-600 p-2">
           <b>Blockers</b>

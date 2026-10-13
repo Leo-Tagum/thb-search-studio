@@ -6,6 +6,7 @@ import { parseInline, wordCount } from "./inline";
 import { riskyKeys, uncoveredKeys } from "./tokens";
 import { sha256 } from "./hash";
 import type { ClaimVerification } from "./legal-claims";
+import { deciderFindings, legalFlagReason, legalKindsOf, legalRecordFindings, LEGAL_FLAG_TERMS, type LegalFlagKind } from "./legal-flags";
 import { unitClaimIds, unitStrings, unitText, type Unit } from "./schema";
 
 export type LedgerClaim = {
@@ -28,6 +29,7 @@ export type CheckCtx = {
   blockedPhrases: [string, RegExp][];             // article-specific PENDING JUAN items
   briefH2: Record<string, string>;                // unit key -> approved H2 from the brief
   keyword: string;
+  legalRecord?: boolean;                          // Phase 3e: enforce the legal-claim verification record (quote, label, gates) and the decider check; set by the service, off in fixtures that predate it
 };
 
 const slash = (u: string) => u.replace(/\/+$/, "");
@@ -81,6 +83,7 @@ export function checkUnit(u: Unit, ctx: CheckCtx): Finding[] {
     if (c.sourceRecheckBy && c.sourceRecheckBy < ctx.today) f.push({ code: "STALE_RULE", severity: "BLOCKED_CLAIM", detail: `claim ${c.id}: its source was due for re-verification by ${c.sourceRecheckBy}` });
     if (!ctx.allowedJurisdictions.some((j) => c.jurisdiction.toLowerCase().includes(j.toLowerCase()))) f.push({ code: "WRONG_JURISDICTION", severity: "BLOCKED_CLAIM", detail: `claim ${c.id} is for "${c.jurisdiction}", not this article's jurisdiction` });
   }
+  if (ctx.legalRecord) f.push(...legalRecordFindings(cited), ...deciderFindings(strings.map((s) => parseInline(s).plain), cited));
   const unc = uncoveredKeys(text, [...cited.map((c) => c.text), ...ctx.approvedFactTexts]);
   for (const k of unc) f.push({ code: "UNCOVERED_FIGURE", severity: "BLOCKED_CLAIM", detail: `the text states ${k}, which no cited ledger claim or approved brand fact contains (unsupported or altered detail)` });
   if (HISTORY.test(text) && !cited.some((c) => c.claimType === "thb_history")) f.push({ code: "UNDECLARED_HISTORY_CLAIM", severity: "BLOCKED_CLAIM", detail: "states what THB or Juan has done or seen without a declared, evidenced thb_history claim" });
@@ -149,7 +152,7 @@ export function checkArticle(units: Unit[], ctx: ArticleCtx): Finding[] {
 // explicitly as proven (with its evidence), reword, or drop (see team/loop.ts).
 export const HEDGE_TERMS = ["most owners", "most people", "usually", "always", "never", "nobody", "everyone"] as const;
 const HEDGE_RE = new RegExp("\\b(" + HEDGE_TERMS.join("|") + ")\\b", "i");
-export type HedgeFlag = { key: string; term: string; sentence: string };
+export type HedgeFlag = { key: string; term: string; sentence: string; legal?: LegalFlagKind[]; why?: string };
 const normSentence = (x: string) => x.replace(/\s+/g, " ").trim();
 
 export function hedgeFlagsInText(text: string): HedgeFlag[] {
@@ -157,11 +160,12 @@ export function hedgeFlagsInText(text: string): HedgeFlag[] {
   const seen = new Set<string>();
   for (const sentence of text.split(/\n+/).flatMap((line) => normSentence(line).split(/(?<=[.!?])\s+/)).map(normSentence).filter(Boolean)) {
     const m = HEDGE_RE.exec(sentence);
-    if (!m) continue;
+    const legal = legalKindsOf(sentence);                     // Phase 3e: absence-of-law claims and layer blending are flagged the same way and need V1's explicit ruling
+    if (!m && !legal.length) continue;
     const key = `hedge:${sha256(sentence.toLowerCase()).slice(0, 12)}`;
     if (seen.has(key)) continue;
     seen.add(key);
-    out.push({ key, term: m[1].toLowerCase(), sentence });
+    out.push(legal.length ? { key, term: m ? m[1].toLowerCase() : LEGAL_FLAG_TERMS[legal[0]], sentence, legal, why: legal.map(legalFlagReason).join("; ") } : { key, term: m![1].toLowerCase(), sentence });
   }
   return out;
 }

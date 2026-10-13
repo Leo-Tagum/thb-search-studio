@@ -51,6 +51,15 @@ import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 import { fingerprintV2 } from "../src/lib/studio/fingerprint-v2";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
+
+/** Phase 3e: every open escalation where V1 or Agent 2 could not verify a legal point from the official text and needs Leo's reference. */
+async function printReferencesNeeded(articleId: string) {
+  const { data } = await db.from("escalations").select("issue_key,reason,reference_needed,created_at").eq("article_id", articleId).eq("status", "OPEN").not("reference_needed", "is", null);
+  for (const e of data ?? []) {
+    const r = e.reference_needed as { claim: string | null; section: string | null; why: string };
+    console.log(`  >> LEO: A REFERENCE IS NEEDED (${e.issue_key}): ${r.why}${r.claim ? ` [claim ${r.claim}]` : ""}${r.section ? ` [${r.section}]` : ""} — upload the official print to the Evidence Library, then: resolve <article> <unit> request_revision "<what changed>"`);
+  }
+}
 const [cmd, a, b, c] = process.argv.slice(2);
 const ALL = [...AGENT_KEYS, ...STUDIO_AGENT_KEYS, CLASSIC_V1_KEY] as string[];
 const agentKeyOf = (x: string) => (/^[1-7]$/.test(x) ? ALL[Number(x) - 1] : /^v1$/i.test(x) ? CLASSIC_V1_KEY : x);
@@ -79,6 +88,7 @@ if (cmd === "queue") {
 } else if (cmd === "plan" || cmd === "queue-next") {
   const L = await load(db, a);
   console.log(`article ${L.article.title} — state ${L.article.state}`);
+  await printReferencesNeeded(a);
   for (const s of L.sections) {
     const st = stateOf(s);
     const nextAgent = runnerFor(st);
@@ -242,7 +252,8 @@ if (cmd === "queue") {
   const L = await load(db, a);
   console.log(`${L.article.title}\n  slug ${L.article.slug} · state ${L.article.state} · version ${L.article.version_hash?.slice(0, 12) || "none"} · approved ${L.article.approved_hash?.slice(0, 12) || "no"}`);
   for (const s of L.sections) console.log(`  ${s.section_key}: ${s.status}`);
-  for (const [id, cl] of L.claims) console.log(`  claim ${id}: ${cl.support} ${cl.risk}${cl.lockedText ? " (locked)" : ""}`);
+  for (const [id, cl] of L.claims) console.log(`  claim ${id}: ${cl.support} ${cl.risk}${cl.lockedText ? " (locked)" : ""}${cl.verification?.label ? ` ${cl.verification.label} (reader impact ${cl.verification.readerImpact ?? "?"})` : cl.risk === "high" ? " NO LEGAL VERIFICATION RECORD" : ""}`);
+  await printReferencesNeeded(a);
 } else if (cmd === "resolve") {
   const kind = c as "request_revision" | "reopen" | "hold" | "v1_gate"; // argv: resolve <article> <unit> <kind> [text]
   const text = process.argv.slice(6).join(" ").trim();

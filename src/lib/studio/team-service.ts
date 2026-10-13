@@ -3,6 +3,7 @@
 // section loop (team/loop.ts), the ticket router (team/router.ts via team/store.ts) and the claim ledger consistent. Only code moves state:
 // no role output sets a lock, an approval or a state, and nothing here can resolve a section: that stays Leo's action.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { ledgerRecord } from "./legal-claims";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { auditArticle, advanceArticle, blockArticleFor, load, MONEY_URL, orchestratorFor, safeJson, todayISO, voiceUsable, type Loaded } from "./service";
 import { checkUnit } from "./checks";
@@ -96,7 +97,7 @@ async function opportunityOf(db: SupabaseClient, L: Loaded) { return (await db.f
 async function packetData(t: T, role: TeamRole, unit: string | null, ticket: TicketRec | null, router: RouterState, cur: any, extra: Record<string, unknown>): Promise<Record<string, unknown>> {
   const { db, L } = t;
   const brief = L.brief.outline;
-  const ledger = [...L.claims.values()].map((c) => ({ id: c.id, text: c.text, risk: c.risk, support: c.support, source: c.sourceId ? { title: L.sources.get(c.sourceId)?.title, url: L.sources.get(c.sourceId)?.source_url } : null, jurisdiction: c.jurisdiction }));
+  const ledger = [...L.claims.values()].map((c) => ({ id: c.id, text: c.text, risk: c.risk, support: c.support, source: c.sourceId ? { title: L.sources.get(c.sourceId)?.title, url: L.sources.get(c.sourceId)?.source_url } : null, jurisdiction: c.jurisdiction, ...ledgerRecord(c.verification) }));
   const approvedFacts = L.facts.filter((f: any) => f.status === "approved");
   const base: Record<string, unknown> = {
     article: { id: t.articleId, title: L.article.title, slug: L.article.slug, primary_keyword: L.article.primary_keyword },

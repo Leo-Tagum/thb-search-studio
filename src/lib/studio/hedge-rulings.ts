@@ -1,3 +1,4 @@
+import { legalKindsOf } from "./legal-flags";
 // V1 severity calibration (prompt version 1.2.0, after Leo's blind judgment of ten V1 must-fix cards: A 2, B 3, C 5).
 // V1 still rules on every flagged generalization, with one of five rulings:
 //   proven        a ledger claim or stored passage supports it (evidence in note)             -> settled, no item
@@ -27,6 +28,8 @@ const GENERAL_LEGAL = /\b(law|laws|legal|legally|requires?|required|requirements
 /** Why this ruling is not allowed on this sentence, or null. Applies to `soften` and `not_a_claim` only. */
 export function rulingGuard(sentence: string, ruling: string): string | null {
   if (ruling !== "soften" && ruling !== "not_a_claim") return null;
+  // Phase 3e: an absence-of-law claim or a sentence that blends the layers of law is never softened or waved through as "not a claim"
+  if (legalKindsOf(sentence).length) return `ruling "${ruling}" is not allowed on a sentence about what a law does not say, or one that blends California law with a local rule or one city's rule with another's ("${sentence.slice(0, 80)}"); rule it proven (with the claim ids), reword or drop`;
   if (SPECIFIC_LEGAL.test(sentence)) return `ruling "${ruling}" is not allowed on a sentence with a statute, code section, statutory condition, figure, amount of money or list of legal roles ("${sentence.slice(0, 80)}"); rule it proven, reword or drop`;
   if (ruling === "not_a_claim" && GENERAL_LEGAL.test(sentence)) return `ruling "not_a_claim" is not allowed on a sentence that states a legal rule ("${sentence.slice(0, 80)}"); rule it soften (a general principle), proven, reword or drop`;
   return null;
