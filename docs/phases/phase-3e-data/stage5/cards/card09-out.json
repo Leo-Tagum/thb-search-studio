@@ -1,0 +1,83 @@
+{
+  "article_id": "ef02cdd5-f6fb-4f01-b42b-ab7ee9a14709",
+  "opportunity_id": "bcb801a3-724c-41e0-b473-4ac96accd55c",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["c7cb73a629991e449d1c65fcd462ee238b322cfd148c27ea90cc712f70c95926"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:faq:item1:authority_list_unsupported",
+      "severity": "required",
+      "note": "Item 1 answer states 'Whoever has legal authority to sign, such as an owner, trustee, executor, administrator, surviving spouse or several heirs acting together.' This is a list of legal roles with authority to sell, and no ledger claim supports it (the item cites no claim ids, and clm:1 to clm:7 cover only H&S 17920.3 and Civil Code 1102/1102.6). 'Surviving spouse' and 'several heirs acting together' are case-specific probate and title conclusions. The brief itself says the guide states no specific probate or trust rules. Remove the role list, or rewrite it without naming who holds authority.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:faq:item1:no_professional_confirmation",
+      "severity": "required",
+      "note": "Item 1 is an authority and probate answer with no confirm-with-a-professional language. Add that authority depends on who holds title and the situation, and that the seller should confirm with a real estate or probate attorney or a title company before acting.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:faq:coverage:optional",
+      "severity": "optional",
+      "note": "The unit has 3 items; the unit note asks for 5-7. Items 2 and 3 (title company and what is recorded; CPA and tax) state no law, figure or promise and are acceptable, but are not drawn from the brief's fan-out questions. Editorial point only; if the writer adds items on disclosure, cleanout or code enforcement, cite the ledger claims and keep each threshold and decider (clm:2, clm:3 and clm:4 name a health officer or fire chief).",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [
+    "Item 1: remove the list 'owner, trustee, executor, administrator, surviving spouse or several heirs acting together' or restate it without naming legal roles.",
+    "Item 1: add a confirm-with-a-professional sentence (real estate or probate attorney, or title company)."
+  ],
+  "output_version_id": "v1-faq-c7cb73a6-review1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "c7cb73a629991e449d1c65fcd462ee238b322cfd148c27ea90cc712f70c95926",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "leo_reference_needed": [],
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:item1:authority_list_unsupported",
+        "section": "faq",
+        "issue": "Item 1 lists legal roles with authority to sell (owner, trustee, executor, administrator, surviving spouse, several heirs) with no ledger claim behind it.",
+        "severity": "must fix",
+        "evidence": "No cited claim_ids; ledger clm:1-clm:7 do not cover authority or probate; standing rules SR-4, SR-5",
+        "fix": "Drop the role list. For example: 'It depends on who holds title and on the situation; confirm with a real estate or probate attorney or a title company.'",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:item1:no_professional_confirmation",
+        "section": "faq",
+        "issue": "Item 1 gives an authority and probate answer with no confirm-with-a-professional language.",
+        "severity": "must fix",
+        "evidence": "editorial-standards section 5; V1 rule 3",
+        "fix": "Tell the reader to confirm authority with an attorney or title company.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:coverage:optional",
+        "section": "faq",
+        "issue": "Only 3 items against the 5-7 asked; none draw on the brief's fan-out questions.",
+        "severity": "suggestion",
+        "evidence": "brief_for_this_unit note",
+        "fix": "If adding disclosure, cleanout or code items, cite ledger claims and keep thresholds and deciders.",
+        "blocking": false
+      }
+    ]
+  }
+}

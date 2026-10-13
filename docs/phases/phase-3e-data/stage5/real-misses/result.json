@@ -1,0 +1,183 @@
+[
+  {
+    "label": "rm1-bad",
+    "miss": 1,
+    "kind": "bad",
+    "unit": "s3",
+    "ok": true,
+    "how": "V1 REVISION; cites the sentence: yes; non-MATCH quote comparisons: clm:1 NARROWER/none",
+    "status": "NEEDS_REVISION",
+    "v1Decision": "REVISION",
+    "requiredFindings": [
+      {
+        "key": "legal:s3:absence:hoarding",
+        "note": "The sentence 'The statute does not mention hoarding.' is an absence-of-law claim. The ledger has no claim of type statute_absence for H&S 17920.3 (clm:1 to clm:8 are all affirmative statutes), so it is unproven (SR-6). Delete the sentence. The article can still avoid calling hoarded houses substandard by simply not saying it."
+      },
+      {
+        "key": "fact:s3:decider_unsupported",
+        "note": "Who decides is stated as 'The local enforcement authority' (table row 1, last column) and 'The local enforcement authority makes that call' (paragraph after the table), plus 'not for you, me or a buyer to say'. No cited claim says that. The stored quote for clm:1 (17920.3(j)) names no decider at all, and the opening paragraph (clm:8) names none either. The statute's named deciders are in clm:2, clm:3 (health officer, or code enforcement officer if no agreement exists) and clm:4 (fire chief or deputy). Per SR-5, name those or say 'a local official, such as a health officer, a code enforcement officer or a fire chief'. For row 1, remove the claim that a specific authority decides, or reword to 'a local official, such as ...; confirm with your city or county'."
+      }
+    ],
+    "rulings": [
+      {
+        "ruling": "drop",
+        "sentence": "The statute does not mention hoarding.",
+        "note": "Absence-of-law sentence; no ledger claim of type statute_absence supports it (SR-6). Remove it."
+      }
+    ],
+    "nonMatch": [
+      {
+        "claim_id": "clm:1",
+        "verdict": "supported_as_written",
+        "note": "Table row 1 wording tracks the claim; the quote also lists weeds, vegetation and other items (NARROWER), and the threshold is carried by clm:8, which the unit cites and states in the opening paragraph. The 'who decides' cell for this row is not supported (see fact:s3:decider_unsupported).",
+        "quote_comparison": "NARROWER",
+        "reader_impact": "none"
+      }
+    ]
+  },
+  {
+    "label": "rm3-bad",
+    "miss": 3,
+    "kind": "bad",
+    "unit": "s7",
+    "ok": true,
+    "how": "V1 REVISION; cites the sentence: yes; non-MATCH quote comparisons: clm:1 NARROWER/none, clm:5 BROADER/changes",
+    "status": "NEEDS_REVISION",
+    "v1Decision": "REVISION",
+    "requiredFindings": [
+      {
+        "key": "fact:s7:decider_closed_list",
+        "note": "The sentence 'Notice who decides. It is the county health department or the fire marshal, not you and not me.' presents a closed list of deciders that the law does not make. clm:1 to clm:4 and the stored quotes name a health officer, a code enforcement officer (Penal Code 829.5) where no agreement exists with an agency that has a health officer, and the fire chief or the chief's deputy. 'County health department' and 'fire marshal' are not in the stored quotes, and the unit's own earlier sentences already name the code enforcement officer alternative, so this sentence also contradicts them. 'County' is also an unsupported scope: the quotes say the determination is made by the local jurisdiction's officials, not specifically the county. This breaks SR-5."
+      },
+      {
+        "key": "fact:s7:clm:5:scope_dropped",
+        "note": "'The disclosures are made on the Real Estate Transfer Disclosure Statement form. And any waiver of the requirements is void as against public policy.' States both rules flat, for any sale. The stored quotes limit them to the disclosures 'required by this article' (clm:5) and 'the requirements of this article' (clm:7). The article applies only to a transfer by sale of single-family residential property, except as provided in Section 1102.2 (clm:6), and the unit does not cite clm:6. A reader with a condo, multi-unit or other property type would believe the form and the waiver rule apply to them. quote_comparison BROADER, reader impact changes. Waiver sentence 'the requirements' has no antecedent."
+      }
+    ],
+    "rulings": [],
+    "nonMatch": [
+      {
+        "claim_id": "clm:1",
+        "verdict": "supported_as_written",
+        "note": "Junk, debris, garbage and similar materials adding up to a fire, health or safety hazard is a fair narrower rendering of 17920.3(j); the omitted weeds, vegetation and other items do not change what a seller reader would do. Threshold carried by clm:8, which the unit cites and states.",
+        "quote_comparison": "NARROWER",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:5",
+        "verdict": "overstated",
+        "note": "States the form requirement for any sale without the article's scope (single-family residential property, clm:6, not cited).",
+        "quote_comparison": "BROADER",
+        "reader_impact": "changes"
+      }
+    ]
+  },
+  {
+    "label": "rm2-bad",
+    "miss": 2,
+    "kind": "bad",
+    "unit": "s3",
+    "ok": true,
+    "how": "V1 REVISION; cites the sentence: yes; non-MATCH quote comparisons: clm:1 BROADER/changes, clm:2 NARROWER/none, clm:8 BROADER/changes",
+    "status": "NEEDS_REVISION",
+    "v1Decision": "REVISION",
+    "requiredFindings": [
+      {
+        "key": "fact:clm:8:overstated",
+        "note": "Paragraph 2 says 'California law says junk, debris, garbage and pests make a building substandard.' This turns 'listed conditions that can make a building substandard' into a flat rule. The statute (clm:8 quote) makes a building substandard only when a listed condition exists 'to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public'. Pests are also listed only as infestation as determined by a health officer or code enforcement officer, and 'pests' and 'garbage' are not the statute's wording."
+      },
+      {
+        "key": "fact:clm:8:threshold_missing",
+        "note": "The unit cites clm:8, and clm:1, 2, 3 and 4 all carry their threshold in clm:8, but the unit never states the threshold anywhere (not in the paragraphs, the table or the note). The table rows read as if the condition alone is enough. The reader would believe a listed condition by itself makes a home substandard. State once, near the table, that a listed condition counts only 'to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public' (SR-5)."
+      },
+      {
+        "key": "fact:clm:1:decider_unsupported",
+        "note": "Table row 1 gives 'The local enforcement authority' as who decides, and the paragraph after the table says 'The local enforcement authority makes that call'. The stored quote for 17920.3(j) (clm:1) names no decider, and no ledger claim supports who decides for (j). Who decides is a legal claim and needs a claim or must go. The paragraph also presents one decider for all four rows, while rows 2 to 4 name a health officer, code enforcement officer or fire chief or deputy."
+      }
+    ],
+    "rulings": [],
+    "nonMatch": [
+      {
+        "claim_id": "clm:1",
+        "verdict": "overstated",
+        "note": "Table row 1 matches the stored (j) quote in substance (stated as 'among the listed conditions that can make a building substandard'), but paragraph 2 makes it a flat rule and the threshold carried by clm:8 is never stated. The decider 'local enforcement authority' is not supported by the (j) quote.",
+        "quote_comparison": "BROADER",
+        "reader_impact": "changes"
+      },
+      {
+        "claim_id": "clm:2",
+        "verdict": "supported_as_written",
+        "note": "Row 2 states the health officer and the code enforcement officer alternative and 'condition of inadequate sanitation'. It omits the Penal Code 829.5 reference and the course-of-study condition, which does not change what a seller would believe or do. The missing threshold is raised once under clm:8.",
+        "quote_comparison": "NARROWER",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:8",
+        "verdict": "overstated",
+        "note": "The unit cites clm:8 but never states its threshold, and paragraph 2 says 'make a building substandard' with no condition. The threshold is the point of this claim.",
+        "quote_comparison": "BROADER",
+        "reader_impact": "changes"
+      }
+    ]
+  },
+  {
+    "label": "control-s7",
+    "miss": 0,
+    "kind": "control",
+    "unit": "s7",
+    "ok": true,
+    "how": "V1 PASS",
+    "status": "NEEDS_SEO",
+    "v1Decision": "PASS",
+    "requiredFindings": [],
+    "rulings": [],
+    "nonMatch": [
+      {
+        "claim_id": "clm:1",
+        "verdict": "supported_as_written",
+        "note": "Unit says junk, debris, garbage and similar materials that add up to a fire, health or safety hazard are on the list. Stored quote (j) also names weeds, vegetation, dead organic matter, offal, rodent harborages, stagnant water, combustible materials; omission does not change what this reader believes. Threshold (endangers life, limb, health, property, safety or welfare of occupants, nearby residents or the public) is stated in the unit and carried by clm:8, which the unit cites.",
+        "quote_comparison": "NARROWER",
+        "reader_impact": "none"
+      }
+    ]
+  },
+  {
+    "label": "control-s3",
+    "miss": 0,
+    "kind": "control",
+    "unit": "s3",
+    "ok": false,
+    "how": "V1 REVISION with 1 required finding(s)",
+    "status": "NEEDS_REVISION",
+    "v1Decision": "REVISION",
+    "requiredFindings": [
+      {
+        "key": "fact:s3:who-decides-local-authority:unsupported",
+        "note": "The unit names 'The local enforcement authority' as the decider in the first table row (junk, debris and garbage) and says in the paragraph after the table 'The local enforcement authority makes that call'. No cited claim or stored quote supports this. The stored quote for clm:1 (H&S 17920.3(j)) names no decider, and clm:8 names none either. Who decides is a specific legal claim, so it needs a ledger claim from the official print. The words are in the brief but not in the ledger. The rest of the paragraph (health officer, code enforcement officer, fire official in several conditions) is supported by clm:2, clm:3 and clm:4."
+      }
+    ],
+    "rulings": [],
+    "nonMatch": [
+      {
+        "claim_id": "clm:1",
+        "verdict": "supported_as_written",
+        "note": "Table row 1 says junk, debris, garbage and similar materials that constitute fire, health or safety hazards are among the listed conditions. This is narrower than the (j) quote (it omits weeds, vegetation, dead organic matter and the like). The threshold is stated in the opening paragraph and carried by clm:8, which the unit cites. The omission does not change what the reader would believe or do. The 'who decides' cell for this row is a separate issue (see finding).",
+        "quote_comparison": "NARROWER",
+        "reader_impact": "none"
+      }
+    ]
+  },
+  {
+    "label": "rm3-code",
+    "miss": 3,
+    "kind": "code",
+    "unit": "s7",
+    "ok": true,
+    "how": "unit NEEDS_REVISION by code, V1 not needed; issues: det:LEGAL_DECIDER_CLOSED",
+    "status": "NEEDS_REVISION",
+    "v1Decision": null,
+    "requiredFindings": [],
+    "rulings": [],
+    "nonMatch": []
+  }
+]

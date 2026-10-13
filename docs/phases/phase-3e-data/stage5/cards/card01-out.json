@@ -1,0 +1,62 @@
+{
+  "article_id": "581b5ad8-3ef6-4a79-a85b-a11970a4dc3d",
+  "opportunity_id": "52d196a0-9abf-4fb5-aec2-4e0c60245f3e",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["698e5854ea57cf2403d60caa831c386efeaba5fa4c845af3fa19de778e58b0d2"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:faq:authority:no_confirm",
+      "severity": "required",
+      "note": "Item 1 answer 'Living in the house alone does not give you that authority.' states a legal conclusion about authority to sell as certain, with no confirm-with-a-professional language and no ledger claim. 'that authority' also has no antecedent in the answer, so it does not stand alone. Reword to name who to confirm with (a real estate attorney or title company) and say who may sign depends on how title is held, without a closed list of roles."
+    },
+    {
+      "issue_key": "fact:faq:authority:unsupported_principle",
+      "severity": "optional",
+      "note": "The statement that living in a house does not give authority to sell is a general legal principle that no cited ledger claim supports (the brief cites no claim for authority). Either soften to a conditional such as 'Living in the house does not by itself show who can sign; an attorney or title company can confirm who holds authority', or leave it as a pointer to the professional."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [
+    "Rewrite the answer to the question 'Who can sell the house if the owner cannot or will not?' so it is self-contained and tells the reader to confirm authority with a real estate attorney or title company."
+  ],
+  "output_version_id": "v1-faq-698e5854-r1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "698e5854ea57cf2403d60caa831c386efeaba5fa4c845af3fa19de778e58b0d2",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "leo_reference_needed": [],
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:authority:no_confirm",
+        "section": "faq",
+        "issue": "Item 1 states an authority-to-sell conclusion as certain with no confirm-with-a-professional language, and 'that authority' has no antecedent.",
+        "severity": "must fix",
+        "evidence": "editorial-standards section 5; brief professional_confirmation (attorney, title company); no ledger claim cited",
+        "fix": "Make the answer self-contained and add that a real estate attorney or title company can confirm who has authority to sign for this property.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:faq:authority:unsupported_principle",
+        "section": "faq",
+        "issue": "General legal principle about living in the house and authority has no supporting ledger claim.",
+        "severity": "should fix",
+        "evidence": "Severity calibration rule 2; brief authority row cites no claim_ids",
+        "fix": "Phrase as a conditional or as a pointer to the professional rather than a flat rule.",
+        "blocking": false
+      }
+    ]
+  }
+}

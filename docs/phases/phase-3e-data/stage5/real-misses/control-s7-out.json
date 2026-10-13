@@ -1,0 +1,32 @@
+{
+  "article_id": "f54b3ec2-1d5f-41fd-8fce-212d537762a7",
+  "opportunity_id": "1e4c2b93-797e-4bf2-8219-753641c6a92c",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["327862d0a3f2f3eedfef7ffb719ec0499ce8892dda6be8d9a0f683f2e576b16d"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:7", "clm:8"],
+  "required_actions": [],
+  "output_version_id": "v1-s7-327862d0-pass-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s7",
+    "version_hash": "327862d0a3f2f3eedfef7ffb719ec0499ce8892dda6be8d9a0f683f2e576b16d",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Unit says junk, debris, garbage and similar materials that add up to a fire, health or safety hazard are on the list. Stored quote (j) also names weeds, vegetation, dead organic matter, offal, rodent harborages, stagnant water, combustible materials; omission does not change what this reader believes. Threshold (endangers life, limb, health, property, safety or welfare of occupants, nearby residents or the public) is stated in the unit and carried by clm:8, which the unit cites.", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Names health officer and the code enforcement officer alternative when no agreement exists with an agency that has a health officer. Matches quote (a)(12). Threshold carried by clm:8 and stated.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Same two deciders as quote (a)(16); threshold stated via clm:8.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Fire chief or chief's deputy opinion, cause fire or explosion or ready fuel to spread fire; matches (h) for combustible waste or vegetation.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "Says disclosures are made on the Real Estate Transfer Disclosure Statement form; matches 1102.6(a). No form contents described.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "Any waiver of the requirements is void as against public policy; word for word. The sentence about a buyer agreeing to skip disclosures is an application of the waiver rule, not a new claim.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:8", "verdict": "supported_as_written", "note": "Unit states the threshold in the same terms as the opening paragraph: only when the condition endangers the life, limb, health, property, safety or welfare of occupants, nearby residents or the public.", "quote_comparison": "MATCH", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [],
+    "cards": [],
+    "leo_reference_needed": []
+  }
+}

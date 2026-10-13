@@ -1,0 +1,100 @@
+{
+  "article_id": "c33c510f-a11e-4264-972c-19fce49fd1e1",
+  "opportunity_id": "a6adfd4a-10ae-4e9d-b56b-3efb5d50ead2",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["0ae5928241ebe80bd4af92ebb0e0d620b0bf0785ea2f8f30956de41ed6eafffb"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:s3:who-decides-local-authority:unsupported",
+      "severity": "required",
+      "note": "The unit names 'The local enforcement authority' as the decider in the first table row (junk, debris and garbage) and says in the paragraph after the table 'The local enforcement authority makes that call'. No cited claim or stored quote supports this. The stored quote for clm:1 (H&S 17920.3(j)) names no decider, and clm:8 names none either. Who decides is a specific legal claim, so it needs a ledger claim from the official print. The words are in the brief but not in the ledger. The rest of the paragraph (health officer, code enforcement officer, fire official in several conditions) is supported by clm:2, clm:3 and clm:4.",
+      "claim_id": "clm:1"
+    },
+    {
+      "issue_key": "fact:s3:local-rules-wording",
+      "severity": "optional",
+      "note": "Standing rule SR-2 gives the exact fallback wording 'local rules vary; check with your city or county'. The unit says 'Local rules differ by city and county, so treat it as background and not as the rule for your address.' Use the standard wording. The closing note already tells the reader to confirm with the city or county."
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:8"],
+  "required_actions": [
+    "In the table row 'Junk, debris and garbage', replace the 'Who decides' cell 'The local enforcement authority' with wording the quote supports, for example 'The statute names no decider for this item; ask your city or county'. Or get a ledger claim from Leo's official print that supports the enforcing authority and cite it.",
+    "In the paragraph after the table, change 'The local enforcement authority makes that call' to wording that does not state an unsupported decider, for example 'Your city or county decides how it applies to your house, so confirm with them'. Keep the supported part about the health officer, code enforcement officer or fire official."
+  ],
+  "output_version_id": "v1-s3-0ae59282-review1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s3",
+    "version_hash": "0ae5928241ebe80bd4af92ebb0e0d620b0bf0785ea2f8f30956de41ed6eafffb",
+    "claim_checks": [
+      {
+        "claim_id": "clm:1",
+        "verdict": "supported_as_written",
+        "note": "Table row 1 says junk, debris, garbage and similar materials that constitute fire, health or safety hazards are among the listed conditions. This is narrower than the (j) quote (it omits weeds, vegetation, dead organic matter and the like). The threshold is stated in the opening paragraph and carried by clm:8, which the unit cites. The omission does not change what the reader would believe or do. The 'who decides' cell for this row is a separate issue (see finding).",
+        "quote_comparison": "NARROWER",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:2",
+        "verdict": "supported_as_written",
+        "note": "Health officer or, if no agreement exists with an agency that has a health officer, a code enforcement officer: both alternatives are stated. The threshold is carried by clm:8.",
+        "quote_comparison": "MATCH",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:3",
+        "verdict": "supported_as_written",
+        "note": "Both deciders are stated, with the 'no agreement' condition. The threshold is carried by clm:8.",
+        "quote_comparison": "MATCH",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:4",
+        "verdict": "supported_as_written",
+        "note": "Combustible waste or vegetation, in the opinion of the fire chief or the chief's deputy: it matches subdivision (h). The threshold is carried by clm:8.",
+        "quote_comparison": "MATCH",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:8",
+        "verdict": "supported_as_written",
+        "note": "The opening paragraph states the threshold (endanger the life, limb, health, property, safety or welfare of occupants, nearby residents or the public), and 'people living there' is a fair plain reading of occupants.",
+        "quote_comparison": "MATCH",
+        "reader_impact": "none"
+      }
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "leo_reference_needed": [],
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s3:who-decides-local-authority:unsupported",
+        "section": "s3",
+        "issue": "'The local enforcement authority' is stated as the decider (table row 1 and the paragraph after the table) but no cited claim or stored quote supports it.",
+        "severity": "must fix",
+        "evidence": "clm:1 quote (H&S 17920.3(j)) names no decider; clm:8 names none; SR-4 and SR-5",
+        "fix": "Row 1 'Who decides': 'The statute names no decider for this item; ask your city or county'. Paragraph: 'Your city or county decides how it applies to your house, so confirm with them', keeping the supported health officer, code enforcement officer and fire official part.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s3:local-rules-wording",
+        "section": "s3",
+        "issue": "Local-rules caveat does not use the standing-rule wording.",
+        "severity": "should fix",
+        "evidence": "SR-2",
+        "fix": "Use 'local rules vary; check with your city or county'.",
+        "blocking": false
+      }
+    ]
+  }
+}

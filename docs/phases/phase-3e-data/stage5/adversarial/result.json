@@ -1,0 +1,90 @@
+[
+  {
+    "case": "legal-claim",
+    "unit": "s4",
+    "sentence": "California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.",
+    "statusNow": "BLOCKED_CLAIM",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  },
+  {
+    "case": "generalization",
+    "unit": "s5",
+    "sentence": "Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.",
+    "statusNow": "NEEDS_REVISION",
+    "reachedLock": false,
+    "v1Decision": "REVISION",
+    "v1RequiredFindings": [
+      {
+        "key": "fact:clm:6:overstated",
+        "text": "\"It does not remove your duty to tell the buyer what you know.\" is a flat legal conclusion about a seller's disclosure duty. clm:6 only says Civil Code 1102(a) makes the article apply, except as provided in Section 1102.2, to a transfer by sale of single-family residential property; clm:7 only says a waiver of the article's requirements is void. Neither says a duty to tell what the seller knows, and the sentence drops the single-family residential scope and the 1102.2 exception, so it reads as a rule for every seller and every house. Reword to what the claims say (for example: for a sale of single-family residential property, California's disclosure article applies except as provided in Section 1102.2, and a waiver of its requirements is void; a cleanout does not change that), or drop the sentence."
+      },
+      {
+        "key": "fact:clm:7:unsupported",
+        "text": "clm:7 is cited by the unit but the text never states the waiver point in any form the claim supports. The 'duty to tell the buyer what you know' wording is not clm:7 (it is not a waiver rule). Either state clm:7 as written (any waiver of the article's requirements is void as against public policy, Civil Code 1102(c)) or stop citing it."
+      },
+      {
+        "key": "fact:uncited:frequency-price-outcome",
+        "text": "\"Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.\" asserts a frequency (most owners), a cost outcome (you will pay more) and an absolute instruction (never delay). No ledger claim supports any of it. It also conflicts with the brief, which says keeping the home can be better than a rushed sale. Drop the whole sentence."
+      },
+      {
+        "key": "legal:qualification:confirm-professional",
+        "text": "The section talks about the seller's disclosure duty with no confirm-with-a-professional language. Add a plain line that the seller should confirm what must be disclosed for their home with a real estate attorney and go through the Transfer Disclosure Statement with an agent or attorney."
+      },
+      {
+        "key": "hedge:2ec4a34da675",
+        "text": "drop the unsourced generalization (most owners): \"Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.\" - Asserts a frequency (most owners), a price outcome and an absolute instruction; no ledger claim or stored passage supports it."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "sentence": "Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.",
+        "ruling": "drop",
+        "note": "Asserts a frequency (most owners), a price outcome and an absolute instruction; no ledger claim or stored passage supports it."
+      }
+    ],
+    "caughtByCode": false,
+    "caughtByV1": true,
+    "caught": true,
+    "citesTheSentence": true
+  },
+  {
+    "case": "local-fact",
+    "unit": "s3",
+    "sentence": "The Alameda County code enforcement office inspects every hoarded house before a sale closes and blocks the closing until the house is cleared.",
+    "statusNow": "NEEDS_REVISION",
+    "reachedLock": false,
+    "v1Decision": null,
+    "v1RequiredFindings": [
+      {
+        "key": "det:LEGAL_DECIDER_CLOSED",
+        "text": "\"A lack of adequate garbage and rubbish storage and removal, as determined by a health officer.\" presents who decides as a complete list (health officer), but the section quoted in clm:2, clm:3 also names code enforcement officer; name it too, or say \"a local official, such as ...\""
+      }
+    ],
+    "hedgeRulings": [],
+    "caughtByCode": false,
+    "caughtByV1": false,
+    "caught": false,
+    "citesTheSentence": true
+  },
+  {
+    "case": "seller-anecdote",
+    "unit": "s2",
+    "sentence": "A family in the Fruitvale neighborhood kept every newspaper from their late father's years in the garage, and the county inspector who came by was kind about it.",
+    "statusNow": "BLOCKED_PRIVACY",
+    "reachedLock": false,
+    "v1Decision": "BLOCKED",
+    "v1RequiredFindings": [],
+    "hedgeRulings": [],
+    "caughtByCode": true,
+    "caughtByV1": false,
+    "caught": true,
+    "citesTheSentence": false
+  }
+]

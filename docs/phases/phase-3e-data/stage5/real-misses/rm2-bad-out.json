@@ -1,0 +1,139 @@
+{
+  "article_id": "f54b3ec2-1d5f-41fd-8fce-212d537762a7",
+  "opportunity_id": "1e4c2b93-797e-4bf2-8219-753641c6a92c",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["c8df4c45116ab81cf6672df2d55f3702bbda66aaeda45d2ff1e41c750ced9cb8"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:clm:8:overstated",
+      "severity": "required",
+      "note": "Paragraph 2 says 'California law says junk, debris, garbage and pests make a building substandard.' This turns 'listed conditions that can make a building substandard' into a flat rule. The statute (clm:8 quote) makes a building substandard only when a listed condition exists 'to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public'. Pests are also listed only as infestation as determined by a health officer or code enforcement officer, and 'pests' and 'garbage' are not the statute's wording.",
+      "claim_id": "clm:8"
+    },
+    {
+      "issue_key": "fact:clm:8:threshold_missing",
+      "severity": "required",
+      "note": "The unit cites clm:8, and clm:1, 2, 3 and 4 all carry their threshold in clm:8, but the unit never states the threshold anywhere (not in the paragraphs, the table or the note). The table rows read as if the condition alone is enough. The reader would believe a listed condition by itself makes a home substandard. State once, near the table, that a listed condition counts only 'to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public' (SR-5).",
+      "claim_id": "clm:8"
+    },
+    {
+      "issue_key": "fact:clm:1:decider_unsupported",
+      "severity": "required",
+      "note": "Table row 1 gives 'The local enforcement authority' as who decides, and the paragraph after the table says 'The local enforcement authority makes that call'. The stored quote for 17920.3(j) (clm:1) names no decider, and no ledger claim supports who decides for (j). Who decides is a legal claim and needs a claim or must go. The paragraph also presents one decider for all four rows, while rows 2 to 4 name a health officer, code enforcement officer or fire chief or deputy.",
+      "claim_id": "clm:1"
+    },
+    {
+      "issue_key": "fact:local_rules_wording",
+      "severity": "optional",
+      "note": "'Local rules differ by city and county' is close to, but not, the standing wording. SR-2 says to use 'local rules vary; check with your city or county' for an unverified local rule. The Oakland link is a real THB page and is kept as background, so only the wording changes.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:8"],
+  "required_actions": [
+    "Rewrite paragraph 2 so it says the statute lists conditions that can make a building substandard when they exist to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants, nearby residents or the public. Remove the flat 'California law says junk, debris, garbage and pests make a building substandard'.",
+    "State the clm:8 threshold once, in words close to the statute's, before or right after the table.",
+    "Table row 1, 'Who decides': remove 'The local enforcement authority' or replace it with a neutral entry such as 'Check with your city or county'. In the paragraph after the table, replace 'The local enforcement authority makes that call' with wording that names only what the ledger names (a health officer or, where no agreement exists, a code enforcement officer; the fire chief or deputy) and says 'a local official, such as...' for the rest.",
+    "Optional: use 'local rules vary; check with your city or county' in the Oakland link paragraph."
+  ],
+  "output_version_id": "v1-s3-c8df4c45-review1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s3",
+    "version_hash": "c8df4c45116ab81cf6672df2d55f3702bbda66aaeda45d2ff1e41c750ced9cb8",
+    "claim_checks": [
+      {
+        "claim_id": "clm:1",
+        "verdict": "overstated",
+        "note": "Table row 1 matches the stored (j) quote in substance (stated as 'among the listed conditions that can make a building substandard'), but paragraph 2 makes it a flat rule and the threshold carried by clm:8 is never stated. The decider 'local enforcement authority' is not supported by the (j) quote.",
+        "quote_comparison": "BROADER",
+        "reader_impact": "changes"
+      },
+      {
+        "claim_id": "clm:2",
+        "verdict": "supported_as_written",
+        "note": "Row 2 states the health officer and the code enforcement officer alternative and 'condition of inadequate sanitation'. It omits the Penal Code 829.5 reference and the course-of-study condition, which does not change what a seller would believe or do. The missing threshold is raised once under clm:8.",
+        "quote_comparison": "NARROWER",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:3",
+        "verdict": "supported_as_written",
+        "note": "Row 3 matches the stored (a)(16) quote and the claim, with both deciders named. The missing threshold is raised once under clm:8.",
+        "quote_comparison": "MATCH",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:4",
+        "verdict": "supported_as_written",
+        "note": "Row 4 matches the stored (h) quote (fire chief or deputy's opinion, fire or explosion, ready fuel). The missing threshold is raised once under clm:8.",
+        "quote_comparison": "MATCH",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:8",
+        "verdict": "overstated",
+        "note": "The unit cites clm:8 but never states its threshold, and paragraph 2 says 'make a building substandard' with no condition. The threshold is the point of this claim.",
+        "quote_comparison": "BROADER",
+        "reader_impact": "changes"
+      }
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "leo_reference_needed": [],
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:clm:8:overstated",
+        "section": "s3",
+        "issue": "Paragraph 2 states as a flat rule that junk, debris, garbage and pests make a building substandard.",
+        "severity": "must fix",
+        "evidence": "clm:8 quote (H&S 17920.3 opening paragraph): condition exists 'to an extent that endangers...'; clm:1 text 'among the listed conditions that can make'",
+        "fix": "Say the statute lists conditions that can make a building substandard when they endanger the life, limb, health, property, safety or welfare of occupants, nearby residents or the public.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:clm:8:threshold_missing",
+        "section": "s3",
+        "issue": "The clm:8 threshold is cited but never stated, so the table reads as if the condition alone is enough.",
+        "severity": "must fix",
+        "evidence": "clm:8 gates (threshold); clm:1 to clm:4 gates carried_by clm:8; SR-5",
+        "fix": "State the threshold once near the table, in the statute's words.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:clm:1:decider_unsupported",
+        "section": "s3",
+        "issue": "Row 1 and the paragraph after the table name 'the local enforcement authority' as the decider, which no ledger claim supports for (j).",
+        "severity": "must fix",
+        "evidence": "clm:1 quote (no decider named); SR-5",
+        "fix": "Drop the decider for row 1 or use 'Check with your city or county'. Name only the officers rows 2 to 4 name, and use 'a local official, such as...' elsewhere.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:local_rules_wording",
+        "section": "s3",
+        "issue": "Use the standing wording for an unverified local rule.",
+        "severity": "should fix",
+        "evidence": "SR-2",
+        "fix": "'Local rules vary; check with your city or county.'",
+        "blocking": false
+      }
+    ]
+  }
+}

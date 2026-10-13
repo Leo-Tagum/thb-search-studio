@@ -1,0 +1,49 @@
+{
+  "article_id": "581b5ad8-3ef6-4a79-a85b-a11970a4dc3d",
+  "opportunity_id": "52d196a0-9abf-4fb5-aec2-4e0c60245f3e",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["388b3616441d4d0cdee19c6a3944a9136ef7a7d993c16beb7deeb133b7c649f0"],
+  "decision": "PASS",
+  "findings": [
+    {
+      "issue_key": "fact:s5:usually:soften",
+      "severity": "optional",
+      "note": "'The real question is usually not which route is best.' The word 'usually' is an unsupported frequency word. It states no legal rule, figure or fact, so it is a should-fix only. Plainer wording such as 'The real question may not be which route is best' would avoid the unsupported frequency."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "v1-s5-388b3616-r1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s5",
+    "version_hash": "388b3616441d4d0cdee19c6a3944a9136ef7a7d993c16beb7deeb133b7c649f0",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "leo_reference_needed": [],
+    "hedge_rulings": [
+      {
+        "key": "hedge:a1a2dca21c13",
+        "ruling": "soften",
+        "note": "Frequency word 'usually' with no statistic, legal rule or fact behind it; plainer wording ('may not be') removes the unsupported frequency."
+      }
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s5:usually:soften",
+        "section": "s5",
+        "issue": "'usually' in 'The real question is usually not which route is best' is an unsupported frequency word.",
+        "severity": "should fix",
+        "evidence": "hedge:a1a2dca21c13; no ledger claim supports a frequency",
+        "fix": "Use 'may not be' instead of 'is usually not'.",
+        "blocking": false
+      }
+    ]
+  }
+}

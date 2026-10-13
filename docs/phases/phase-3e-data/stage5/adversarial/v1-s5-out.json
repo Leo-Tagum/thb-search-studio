@@ -1,0 +1,121 @@
+{
+  "article_id": "1d742ee9-2242-4381-8c86-678879103667",
+  "opportunity_id": "8b8fa482-cfac-4440-b2bd-946f5e5825fa",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["f0b11fe1177b730377bf532d7ba31a2cb810aeeca708a5ea9f4d09cb4403a9bb"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:clm:6:overstated",
+      "severity": "required",
+      "note": "\"It does not remove your duty to tell the buyer what you know.\" is a flat legal conclusion about a seller's disclosure duty. clm:6 only says Civil Code 1102(a) makes the article apply, except as provided in Section 1102.2, to a transfer by sale of single-family residential property; clm:7 only says a waiver of the article's requirements is void. Neither says a duty to tell what the seller knows, and the sentence drops the single-family residential scope and the 1102.2 exception, so it reads as a rule for every seller and every house. Reword to what the claims say (for example: for a sale of single-family residential property, California's disclosure article applies except as provided in Section 1102.2, and a waiver of its requirements is void; a cleanout does not change that), or drop the sentence.",
+      "claim_id": "clm:6"
+    },
+    {
+      "issue_key": "fact:clm:7:unsupported",
+      "severity": "required",
+      "note": "clm:7 is cited by the unit but the text never states the waiver point in any form the claim supports. The 'duty to tell the buyer what you know' wording is not clm:7 (it is not a waiver rule). Either state clm:7 as written (any waiver of the article's requirements is void as against public policy, Civil Code 1102(c)) or stop citing it.",
+      "claim_id": "clm:7"
+    },
+    {
+      "issue_key": "fact:uncited:frequency-price-outcome",
+      "severity": "required",
+      "note": "\"Most owners in this spot wait too long, and you will usually pay more the longer you wait, so you should never delay.\" asserts a frequency (most owners), a cost outcome (you will pay more) and an absolute instruction (never delay). No ledger claim supports any of it. It also conflicts with the brief, which says keeping the home can be better than a rushed sale. Drop the whole sentence."
+    },
+    {
+      "issue_key": "legal:qualification:confirm-professional",
+      "severity": "required",
+      "note": "The section talks about the seller's disclosure duty with no confirm-with-a-professional language. Add a plain line that the seller should confirm what must be disclosed for their home with a real estate attorney and go through the Transfer Disclosure Statement with an agent or attorney."
+    }
+  ],
+  "evidence_ids": ["clm:6", "clm:7"],
+  "required_actions": [
+    "Reword or drop 'It does not remove your duty to tell the buyer what you know.' so it says only what clm:6 and clm:7 say, including single-family residential property, the Section 1102.2 exception, and that a waiver is void.",
+    "Drop the sentence 'Most owners in this spot wait too long ... you should never delay.'",
+    "Add confirm-with-an-attorney (and agent for the form) language where the disclosure point is made."
+  ],
+  "output_version_id": "v1-s5-f0b11fe1-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s5",
+    "version_hash": "f0b11fe1177b730377bf532d7ba31a2cb810aeeca708a5ea9f4d09cb4403a9bb",
+    "claim_checks": [
+      {
+        "claim_id": "clm:6",
+        "verdict": "overstated",
+        "note": "The duty sentence is broader than 1102(a): no single-family residential scope, no Section 1102.2 exception, and it states a duty to tell what the seller knows that the stored quote does not contain.",
+        "quote_comparison": "BROADER",
+        "reader_impact": "changes"
+      },
+      {
+        "claim_id": "clm:7",
+        "verdict": "unsupported",
+        "note": "The text does not state the waiver-is-void rule; the nearest sentence (duty to tell the buyer what you know) is a different legal statement that 1102(c) does not make.",
+        "quote_comparison": "WRONG",
+        "reader_impact": "changes"
+      }
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "leo_reference_needed": [],
+    "hedge_rulings": [
+      {
+        "key": "hedge:2ec4a34da675",
+        "ruling": "drop",
+        "note": "Asserts a frequency (most owners), a price outcome and an absolute instruction; no ledger claim or stored passage supports it."
+      }
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:clm:6:overstated",
+        "section": "s5",
+        "issue": "'It does not remove your duty to tell the buyer what you know' is a flat legal conclusion broader than clm:6 (no single-family scope, no 1102.2 exception).",
+        "severity": "must fix",
+        "evidence": "clm:6 stored quote, Civil Code 1102(a); quote_comparison BROADER, reader_impact changes",
+        "fix": "State what clm:6 and clm:7 say: for a sale of single-family residential property the disclosure article applies except as provided in Section 1102.2, and a waiver is void; a cleanout does not change that. Or drop the sentence.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:clm:7:unsupported",
+        "section": "s5",
+        "issue": "clm:7 is cited but the waiver-is-void rule is not stated; the duty wording is not what 1102(c) says.",
+        "severity": "must fix",
+        "evidence": "clm:7 stored quote, Civil Code 1102(c)",
+        "fix": "State that any waiver of the article's requirements is void as against public policy (Civil Code 1102(c)), or remove the citation.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:uncited:frequency-price-outcome",
+        "section": "s5",
+        "issue": "'Most owners ... wait too long, you will usually pay more ... never delay' is an unsupported frequency, cost outcome and absolute instruction.",
+        "severity": "must fix",
+        "evidence": "hedge:2ec4a34da675; no ledger claim supports it",
+        "fix": "Drop the sentence.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "legal:qualification:confirm-professional",
+        "section": "s5",
+        "issue": "Disclosure duty is discussed with no confirm-with-a-professional language.",
+        "severity": "must fix",
+        "evidence": "editorial-standards section 5; brief professional_confirmation (real estate attorney, listing agent)",
+        "fix": "Add a line telling the seller to confirm what must be disclosed for their home with a real estate attorney and to complete the Transfer Disclosure Statement with an agent or attorney.",
+        "blocking": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "article_id": "04b2db7e-edf3-408f-81cd-35a6fcf99fe3",
+  "opportunity_id": "f50ac397-0f20-4892-93cc-be5174d6c15d",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["c8a09ba7c1d2f63cc9bdef7ce073869493ad9fc558ec4fa65ab64b6a5f045b95"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "legal:s3:absence:hoarding",
+      "severity": "required",
+      "note": "The sentence 'The statute does not mention hoarding.' is an absence-of-law claim. The ledger has no claim of type statute_absence for H&S 17920.3 (clm:1 to clm:8 are all affirmative statutes), so it is unproven (SR-6). Delete the sentence. The article can still avoid calling hoarded houses substandard by simply not saying it."
+    },
+    {
+      "issue_key": "fact:s3:decider_unsupported",
+      "severity": "required",
+      "note": "Who decides is stated as 'The local enforcement authority' (table row 1, last column) and 'The local enforcement authority makes that call' (paragraph after the table), plus 'not for you, me or a buyer to say'. No cited claim says that. The stored quote for clm:1 (17920.3(j)) names no decider at all, and the opening paragraph (clm:8) names none either. The statute's named deciders are in clm:2, clm:3 (health officer, or code enforcement officer if no agreement exists) and clm:4 (fire chief or deputy). Per SR-5, name those or say 'a local official, such as a health officer, a code enforcement officer or a fire chief'. For row 1, remove the claim that a specific authority decides, or reword to 'a local official, such as ...; confirm with your city or county'.",
+      "claim_id": "clm:1"
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:8"],
+  "required_actions": [
+    "Delete the sentence 'The statute does not mention hoarding.' (no statute_absence claim exists).",
+    "Replace 'The local enforcement authority' in table row 1 and in the paragraph after the table with wording supported by clm:2, clm:3, clm:4 (named deciders) or 'a local official, such as ...'; do not present it as a closed list or as a statutory decider for subdivision (j)."
+  ],
+  "output_version_id": "v1-s3-c8a09ba7-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s3",
+    "version_hash": "c8a09ba7c1d2f63cc9bdef7ce073869493ad9fc558ec4fa65ab64b6a5f045b95",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Table row 1 wording tracks the claim; the quote also lists weeds, vegetation and other items (NARROWER), and the threshold is carried by clm:8, which the unit cites and states in the opening paragraph. The 'who decides' cell for this row is not supported (see fact:s3:decider_unsupported).", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Names both the health officer and the code enforcement officer alternative and 'inadequate sanitation', matching the quote.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Both deciders and the condition are stated; matches the quote.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Fire chief or deputy opinion, fire or explosion or ready fuel; matches the quote. The row's threshold is given in the opening paragraph via clm:8.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:8", "verdict": "supported_as_written", "note": "Opening paragraph states the full 'to an extent that endangers ...' threshold and the substandard consequence.", "quote_comparison": "MATCH", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "leo_reference_needed": [],
+    "hedge_rulings": [
+      {"key": "hedge:a0354a5b18af", "ruling": "drop", "note": "Absence-of-law sentence; no ledger claim of type statute_absence supports it (SR-6). Remove it."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "legal:s3:absence:hoarding", "section": "s3", "issue": "'The statute does not mention hoarding.' is an absence-of-law claim with no statute_absence claim in the ledger.", "severity": "must fix", "evidence": "SR-6; hedge:a0354a5b18af; ledger has no statute_absence claim", "fix": "Delete the sentence.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s3:decider_unsupported", "section": "s3", "issue": "'The local enforcement authority' is stated as the decider (table row 1 and the paragraph after the table); no cited claim says so and the clm:1 quote names no decider.", "severity": "must fix", "evidence": "SR-5; clm:1 quote (17920.3(j)); clm:2, clm:3, clm:4 name the actual deciders", "fix": "Use the deciders named in clm:2, clm:3, clm:4, or 'a local official, such as a health officer, a code enforcement officer or a fire chief'; for row 1 drop the specific decider or say to confirm with your city or county.", "blocking": false}
+    ]
+  }
+}

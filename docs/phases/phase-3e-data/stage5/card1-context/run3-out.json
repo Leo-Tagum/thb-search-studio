@@ -1,0 +1,66 @@
+{
+  "article_id": "7d1f8f57-d894-43e5-b7a1-87c62587f3ec",
+  "opportunity_id": "f68535de-72cf-4552-b0b9-2a521f8cb690",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:clm:1:threshold_omitted",
+      "severity": "required",
+      "note": "FAQ item 3 ('Possibly. State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards...') states the listed conditions without the threshold 'to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public' (clm:8, H&S 17920.3 opening paragraph). clm:1 is labelled NARROWER only because every citing unit cites clm:8; this item does not. A reader would believe junk and debris alone can make a building substandard. Reader impact: changes. Also the item cites clm:2, clm:3, clm:4 but its text uses none of them.",
+      "claim_id": "clm:1"
+    },
+    {
+      "issue_key": "legal:absence:faq:hoarding",
+      "severity": "required",
+      "note": "FAQ item 3: 'The statute does not mention hoarding.' is an absence-of-law claim. The ledger has no statute_absence claim for it (SR-6). Remove the sentence, or have Research record a statute_absence claim with the full official text read and the section and date, then cite it."
+    },
+    {
+      "issue_key": "fact:faq:item4:authority_roles_unsupported",
+      "severity": "required",
+      "note": "FAQ item 4 ('Who can sell the house if the owner cannot or will not?') cites no claim yet states a list of legal roles ('the owner, a trustee, an executor or administrator, or several heirs who agree'), a rule ('Only someone with legal authority to sign') and a case-specific legal conclusion ('Living in the house alone does not give you that authority'). None is supported by the ledger. Rewrite without the role list and without the conclusion, for example: who can sign depends on how title is held and on the family's situation; confirm with an attorney or title company. Or have Research add a sourced claim for it."
+    },
+    {
+      "issue_key": "fact:faq:item2:not_always",
+      "severity": "optional",
+      "note": "FAQ item 2 opens 'Not always.' to 'Do I have to clean out a house before selling it?' This implies that cleanout is sometimes required, and no claim supports that. 'a direct buyer prices in the condition' is also uncited, though it matches the brief's sell_directly option and states no legal rule. Plainer wording would help, for example 'No law in this guide requires it; it depends on your time, money and route.' Only use that if the wording is checked against a source. Otherwise say 'It depends on...'."
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:6", "clm:7", "clm:8"],
+  "required_actions": [
+    "Item 3: cite clm:8 and state the threshold in the answer ('to an extent that endangers the life, limb, health, property, safety, or welfare of occupants, nearby residents or the public'). Say a local official decides, or name the deciders, without a closed list.",
+    "Item 3: delete 'The statute does not mention hoarding.' unless a statute_absence claim is added to the ledger.",
+    "Item 4: remove the unsupported role list and 'Living in the house alone does not give you that authority', or support them with a ledger claim. Keep the confirm-with-attorney-or-title-company line."
+  ],
+  "output_version_id": "v1-faq-b30a408c-run3-review1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "overstated", "note": "Item 3 gives the junk and debris hazard condition without the endangerment threshold in clm:8, which the item does not cite. The stored label NARROWER depends on clm:8 being cited. The omission changes what a reader would believe.", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Cited in item 3 but the text says nothing beyond clm:1's content, so it claims no more than the ledger. Fixing the clm:8 threshold covers the whole sentence. Either use the infestation condition (with the health officer or code enforcement officer alternatives) or drop the cite.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Cited in item 3, but its content is not used in the text. It says no more than the ledger. Use it or drop the cite.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Cited in item 3, but its content is not used in the text. It says no more than the ledger. Use it or drop the cite.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "Item 1 says disclosures are made on the Real Estate Transfer Disclosure Statement form. This matches the quote and does not describe the form's contents.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "Item 1 says 'for a sale of single-family residential property ... with an exception'. This is NARROWER (sale only), accepted by Leo's ruling of 2026-10-13: the omitted transfer types do not change what a seller reader would believe or do.", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "Items 1 and 5 say any waiver of the requirements is void as against public policy. This matches the quote. Item 5 limits it to 'a sale the disclosure article covers', which is accurate.", "quote_comparison": "MATCH", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "hedge_rulings": [
+      {"key": "hedge:4a926ce9f475", "ruling": "soften", "note": "'Not always.' is not a statistic, but it hints at a legal duty to clean out that no ledger claim supports. Plainer wording ('It depends on...') would remove the hint."},
+      {"key": "hedge:a0354a5b18af", "ruling": "drop", "note": "Absence-of-law sentence with no statute_absence claim in the ledger (SR-6). Remove it."}
+    ],
+    "leo_reference_needed": [],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:1:threshold_omitted", "section": "faq", "issue": "Item 3 states the substandard conditions without the endangerment threshold and does not cite clm:8.", "severity": "must fix", "evidence": "clm:8, SR-5, clm:1 label NARROWER (threshold carried by clm:8)", "fix": "Cite clm:8. Say the conditions matter only where they exist 'to an extent that endangers the life, limb, health, property, safety, or welfare of occupants, nearby residents or the public', and that a local official decides.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "legal:absence:faq:hoarding", "section": "faq", "issue": "'The statute does not mention hoarding.' is an unproven absence-of-law claim.", "severity": "must fix", "evidence": "SR-6; hedge:a0354a5b18af; no statute_absence claim in the ledger", "fix": "Delete the sentence.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:item4:authority_roles_unsupported", "section": "faq", "issue": "Item 4 gives an unsupported list of legal roles and a case-specific legal conclusion with no cited claim.", "severity": "must fix", "evidence": "No ledger claim on authority to sell; the brief gives no claim_ids for the authority row", "fix": "Say who can sign depends on how title is held and the family's situation. Remove the role list and 'Living in the house alone does not give you that authority'. Keep the confirm-with-attorney-or-title-company line.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:item2:not_always", "section": "faq", "issue": "'Not always.' hints at a legal duty to clean out that no claim supports.", "severity": "should fix", "evidence": "hedge:4a926ce9f475; no ledger claim on cleanout duty", "fix": "Open with 'It depends on...' instead.", "blocking": false}
+    ]
+  }
+}

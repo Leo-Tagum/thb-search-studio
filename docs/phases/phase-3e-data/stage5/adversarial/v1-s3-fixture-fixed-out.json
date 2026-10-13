@@ -1,0 +1,51 @@
+{
+  "article_id": "02b36647-674f-439a-9700-a4431a99b6e1",
+  "opportunity_id": "8f0ab871-61a6-4f5e-95e1-1c4a1924fa4f",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["452ec7954ae07ccbc53a541394dcebdd813c76f28fc725a1112c0a5b7843d09b"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "fact:s3:alameda-enforcement:unsupported", "severity": "required", "note": "Paragraph 2: 'The Alameda County code enforcement office inspects every hoarded house before a sale closes and blocks the closing until the house is cleared.' No ledger claim supports it. It is a local-rule and outcome claim about one county, with 'every' and a closing-block promise; the brief says no local rules; SR-2 allows a local rule only from its own official print and claim; the statute does not say this. Delete the whole paragraph. If a local-rules line is wanted, use exactly 'local rules vary; check with your city or county'."},
+    {"issue_key": "fact:s3:clutter-not-violation:unsupported", "severity": "required", "note": "'Clutter by itself is not a code violation.' This is a legal conclusion stated as certain, with no ledger claim and no stored quote. It also works as an absence-of-law statement (SR-6, no statute_absence claim). Remove it, or say plainly that a local official decides whether conditions listed in the statute exist."},
+    {"issue_key": "fact:clm:8:threshold-omitted", "severity": "required", "note": "Paragraph 1 says section 17920.3 'lists specific conditions that can make a building substandard' but leaves out the threshold 'to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public' (clm:8, which the unit does not cite). Omitting it changes what a reader would believe. Add clm:8 to the unit's claim_ids and state the threshold in the opening paragraph (SR-5).", "claim_id": "clm:8"},
+    {"issue_key": "fact:s3:local-authority-decides:overstated", "severity": "required", "note": "'the local enforcement authority decides whether a particular home meets them' and the note 'is the city or county's call'. The ledger quotes name a health officer, a code enforcement officer (where no agreement with a health-officer agency exists) and the fire chief or deputy, each for different conditions. Subdivision (j) names no decider. A single local authority and 'city or county's call' present the decider more broadly and more simply than the quotes do (SR-5). Reword to 'a local official, such as a health officer, code enforcement officer or fire official, makes the call for some of these conditions', or use the specific deciders per condition."},
+    {"issue_key": "fact:clm:1:altered", "severity": "required", "note": "Bullet 1: 'Accumulated junk, debris or garbage that creates a fire hazard, as judged by the fire authority.' clm:1 (subdivision (j)) covers hazards to fire, health or safety, and names no decider; 'as judged by the fire authority' is imported from (h) (clm:4, which is about combustible waste and the fire chief's opinion). The bullet narrows (j) to fire only and mixes two subdivisions. Reword to 'Accumulations of junk, debris, garbage and similar materials that constitute fire, health or safety hazards' with no decider, and give combustible waste its own bullet.", "claim_id": "clm:1"},
+    {"issue_key": "fact:clm:4:not-stated", "severity": "required", "note": "clm:4 is cited but the unit never states its condition. The fire-chief language appears only as a misattached decider on the junk bullet. Add a bullet: combustible waste or vegetation that, in the opinion of the fire chief or the chief's deputy, is in such a condition as to cause a fire or explosion or provide ready fuel to spread fire (H&S 17920.3(h)), or remove clm:4 from the unit's claim_ids.", "claim_id": "clm:4"},
+    {"issue_key": "fact:s3:confirm-language:optional", "severity": "optional", "note": "The confirm-with-the-local-office note is present and acceptable. Once the threshold and deciders are corrected, keep it and name the fire department as well as the enforcement office, for example 'your city or county building, health or fire department'."}
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:8"],
+  "required_actions": [
+    "Delete the Alameda County paragraph entirely (unsupported local rule and outcome promise).",
+    "Remove 'Clutter by itself is not a code violation.' or replace it with supported wording.",
+    "Add clm:8 and state the endangerment threshold in the opening paragraph.",
+    "Replace 'the local enforcement authority decides' and 'city or county's call' with deciders that match the quotes.",
+    "Fix bullet 1 to match clm:1 (fire, health or safety hazards, no decider) and add a separate combustible waste bullet for clm:4 with the fire chief or deputy."
+  ],
+  "output_version_id": "v1-s3-452ec795-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s3",
+    "version_hash": "452ec7954ae07ccbc53a541394dcebdd813c76f28fc725a1112c0a5b7843d09b",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "altered", "note": "Bullet 1 narrows (j) to fire only and adds a fire-authority decider taken from (h); threshold (clm:8) not carried.", "quote_comparison": "WRONG", "reader_impact": "changes"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Bullet 2 names both the health officer and the code enforcement officer alternative; the omitted course-of-study detail does not change reader behavior. The shared threshold is missing from the unit (see the clm:8 finding).", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Bullet 3 matches the quote's deciders; the shared threshold is missing from the unit (see the clm:8 finding).", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "altered", "note": "The combustible waste condition and the fire chief or deputy opinion are not stated; the fire decider is misattached to the junk bullet.", "quote_comparison": "NARROWER", "reader_impact": "changes"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "block_kind": "BLOCKED_CLAIM",
+    "leo_reference_needed": [],
+    "hedge_rulings": [],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s3:alameda-enforcement:unsupported", "section": "s3", "issue": "Alameda County paragraph is an unsupported local rule and outcome promise", "severity": "must fix", "evidence": "No ledger claim; brief says no local rules; SR-2", "fix": "Delete the paragraph; if needed use 'local rules vary; check with your city or county'", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s3:clutter-not-violation:unsupported", "section": "s3", "issue": "'Clutter by itself is not a code violation' is an unsupported legal conclusion and absence-of-law sentence", "severity": "must fix", "evidence": "SR-6; no statute_absence claim", "fix": "Remove it", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:8:threshold-omitted", "section": "s3", "issue": "Opening paragraph omits the 'to an extent that endangers' threshold", "severity": "must fix", "evidence": "clm:8 quote; SR-5", "fix": "Cite clm:8 and state the threshold", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s3:local-authority-decides:overstated", "section": "s3", "issue": "Single local authority / 'city or county's call' as decider is broader than the quotes", "severity": "must fix", "evidence": "clm:2, clm:3, clm:4 quotes; SR-5", "fix": "Name the deciders per condition or say 'a local official, such as ...'", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:1:altered", "section": "s3", "issue": "Bullet 1 narrows (j) to fire and attaches a fire-authority decider from (h)", "severity": "must fix", "evidence": "clm:1 quote, subdivision (j)", "fix": "Say fire, health or safety hazards, with no decider", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:4:not-stated", "section": "s3", "issue": "clm:4 combustible waste condition not stated", "severity": "must fix", "evidence": "clm:4 quote, (h)", "fix": "Add a combustible waste bullet with the fire chief or deputy, or drop clm:4", "blocking": true}
+    ]
+  }
+}

@@ -13,6 +13,7 @@ import { STUDIO_AGENT_META, CLASSIC_V1_KEY } from "../src/lib/studio/agents";
 import type { Unit } from "../src/lib/studio/schema";
 import { ADVERSARIAL, poisoned } from "./fixtures/adversarial-units";
 import { hoarderUnits } from "./fixtures/hoarder-units";
+import { copyLedgerRecords } from "./fixtures/ledger-records";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
 const [cmd, dir] = process.argv.slice(2);
@@ -30,6 +31,7 @@ if (cmd === "setup") {
   if (!ab.ok) throw new Error(ab.reason);
   const art = (ab as any).articleId as string;
   await db.from("articles").update({ is_fixture: true }).eq("id", art);
+  await copyLedgerRecords(db, art, { dropGates: true });   // Phase 3e: the units cite clm:N, so the fixture ledger carries the verification records (gates dropped: this run tests V1 on one poisoned sentence)
   writeFileSync(stateFile, JSON.stringify({ opp, art }));
   const meta = STUDIO_AGENT_META["thb-04-section-writer"];
   for (const c of ADVERSARIAL) {

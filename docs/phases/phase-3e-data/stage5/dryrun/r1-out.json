@@ -1,0 +1,132 @@
+{
+  "article_id": "dryrun-article",
+  "opportunity_id": "dryrun-opportunity",
+  "agent_name": "R1 Legal and official",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["dryrun"],
+  "decision": "PASS",
+  "findings": [
+    {"claim": "H&S 17920.3 intro: listed condition to an extent that endangers makes a building substandard", "basis": "evidence_library", "evidence_ids": ["src:1"]},
+    {"claim": "H&S 17920.3(a)(12): health officer, or code enforcement officer where no agreement exists", "basis": "evidence_library", "evidence_ids": ["src:1"]},
+    {"claim": "Civil Code 1102(c): waiver void as against public policy", "basis": "evidence_library", "evidence_ids": ["src:2"]}
+  ],
+  "evidence_ids": ["src:1", "src:2"],
+  "required_actions": [
+    "Leo: the Civil Code 1102 library source has retrieved_date null; the provenance note says printed 2026-10-10 (used here). Please set the retrieved date on the source.",
+    "Leo (optional): official print of Penal Code 829.5 if the article defines 'code enforcement officer'."
+  ],
+  "output_version_id": "r1-dryrun-T1-v1",
+  "timestamp": "2026-10-13T00:00:00Z",
+  "result": {
+    "ticket_id": "T1",
+    "sources": [
+      {"id": "src:1", "kind": "library", "library_source_id": "6904fefb-5ee9-4e7a-a845-903c2dd094b9", "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=17920.3&lawCode=HSC", "title": "California Health & Safety Code §17920.3", "tier": 1, "jurisdiction": "California", "effective_date": "2025-01-01", "retrieved_date": "2026-10-10", "locality_matches": true},
+      {"id": "src:2", "kind": "library", "library_source_id": "9d984e33-e9f6-413f-a69e-503ff0af2fd2", "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=1102.&lawCode=CIV", "title": "California Civil Code §1102", "tier": 1, "jurisdiction": "California", "effective_date": "2020-01-01", "retrieved_date": "2026-10-10", "locality_matches": true}
+    ],
+    "claims": [
+      {
+        "id": "clm:1",
+        "text": "Under California Health and Safety Code 17920.3, a building or portion of one in which any of the listed conditions exists to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public is deemed a substandard building; the threshold applies regardless of zoning designation or approved uses.",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "quote": "Any building or portion thereof, regardless of zoning designation or approved uses of the building, including any dwelling unit, guestroom or suite of rooms, or the premises on which the same is located, in which there exists any of the following listed conditions to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public shall be deemed and hereby is declared to be a substandard building:",
+        "passage_ids": ["3cf09d7e-e321-4d6c-aa9b-096ecbf7de2a"],
+        "section": "H&S 17920.3 (introductory paragraph)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim restates the threshold and scope in the introductory paragraph.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "threshold", "text": "to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public", "stated_in_claim": true},
+          {"kind": "scope", "text": "regardless of zoning designation or approved uses of the building", "stated_in_claim": true},
+          {"kind": "exception", "text": "Sound walls or ceilings: a condition that would require displacement of sound walls or ceilings to meet height, length, or width requirements is not by itself sufficient unless built, altered or converted in violation of requirements then in effect.", "stated_in_claim": false, "carried_by": "clm:4"},
+          {"kind": "exception", "text": "Item-specific exceptions inside the list, for example wiring that conformed with laws at installation and is in good and safe condition ((d)); similar exceptions appear in (e), (f), (l) and (m).", "stated_in_claim": false, "carried_by": "clm:5"},
+          {"kind": "effective_date", "text": "Section as amended by Stats. 2024, Ch. 487 (SB 1465), effective January 1, 2025.", "stated_in_claim": false}
+        ],
+        "note": "Legal point: confirm with a qualified California attorney or the local building or code enforcement department before relying on it."
+      },
+      {
+        "id": "clm:2",
+        "text": "Under California Health and Safety Code 17920.3(a)(12), infestation of insects, vermin, or rodents is a listed condition, as determined by a health officer or, if an agreement does not exist with an agency that has a health officer, by a code enforcement officer as defined in Penal Code section 829.5 who has successfully completed a course of study in the appropriate subject matter as determined by the local jurisdiction; as with the other listed conditions, it makes a building substandard only to the extent that endangers occupants, nearby residents, or the public (see clm:1).",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "quote": "(12) Infestation of insects, vermin, or rodents as determined by a health officer or, if an agreement does not exist with an agency that has a health officer, the infestation can be determined by a code enforcement officer, as defined in Section 829.5 of the Penal Code, upon successful completion of a course of study in the appropriate subject matter as determined by the local jurisdiction.",
+        "passage_ids": ["914b84fc-4263-45dd-8ded-383e512582e2"],
+        "section": "H&S 17920.3(a)(12)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Both deciders and the no-agreement condition and course-of-study condition are named in the claim; the threshold is carried from the introductory paragraph.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "alternative_decider", "text": "Health officer, or where no agreement exists with an agency that has a health officer, a code enforcement officer (Penal Code 829.5) after a course of study determined by the local jurisdiction.", "stated_in_claim": true},
+          {"kind": "threshold", "text": "to an extent that endangers the life, limb, health, property, safety, or welfare of occupants, nearby residents, or the public", "stated_in_claim": true, "carried_by": "clm:1"},
+          {"kind": "effective_date", "text": "Effective January 1, 2025 (SB 1465 amendment).", "stated_in_claim": false}
+        ],
+        "note": "Legal point: confirm with a qualified California attorney or the local health or code enforcement department. The Penal Code 829.5 definition itself is not in the library and is not claimed."
+      },
+      {
+        "id": "clm:3",
+        "text": "Under California Civil Code 1102(c), any waiver of the requirements of the article that section 1102 opens (the real estate transfer disclosure article) is void as against public policy; the article applies, except as provided in Civil Code 1102.2, to transfers of single-family residential property by sale, exchange, real property sales contract, lease with an option to purchase, any other option to purchase, or ground lease coupled with improvements.",
+        "source_ids": ["src:2"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "quote": "(c) Any waiver of the requirements of this article is void as against public policy.",
+        "passage_ids": ["03e82224-5c8b-4767-9334-9f7829e9b12e"],
+        "section": "Civ. Code 1102(c)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim states 1102(c) and the 1102(a) scope. The 1102(a) wording is in the same passage though outside the short quote above; the quote is the rule itself.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "scope", "text": "Article applies to transfers by sale, exchange, real property sales contract, lease with option to purchase, other option to purchase, or ground lease coupled with improvements of any single-family residential property.", "stated_in_claim": true},
+          {"kind": "exception", "text": "Except as provided in Section 1102.2 (not in library; not described).", "stated_in_claim": true},
+          {"kind": "effective_date", "text": "Section as amended by Stats. 2019, Ch. 310 (AB 892), effective January 1, 2020.", "stated_in_claim": false}
+        ],
+        "note": "Legal point: confirm with a qualified California attorney or real estate professional before relying on it."
+      },
+      {
+        "id": "clm:4",
+        "text": "Under California Health and Safety Code 17920.3, a condition that would require displacement of sound walls or ceilings to meet height, length, or width requirements for ceilings, rooms, and dwelling units is not by itself sufficient to make a building substandard, unless the building was constructed, altered, or converted in violation of those requirements in effect at the time.",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "quote": "However, a condition that would require displacement of sound walls or ceilings to meet height, length, or width requirements for ceilings, rooms, and dwelling units shall not by itself be considered sufficient existence of dangerous conditions making a building a substandard building, unless the building was constructed, altered, or converted in violation of those requirements in effect at the time of construction, alteration, or conversion.",
+        "passage_ids": ["6141c153-a3c3-4b68-8771-6a99395dd532"],
+        "section": "H&S 17920.3 (closing paragraph)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim restates the closing exception and its own exception.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "exception", "text": "unless the building was constructed, altered, or converted in violation of those requirements in effect at the time", "stated_in_claim": true}
+        ],
+        "note": "Legal point: confirm with a qualified California attorney or the local building department."
+      },
+      {
+        "id": "clm:5",
+        "text": "Under California Health and Safety Code 17920.3(d), wiring is a listed condition except wiring that conformed with all applicable laws in effect at the time of installation if it is currently in good and safe condition and working properly; the section writes similar own exceptions into other items, which this claim does not describe.",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "quote": "(d) All wiring, except that which conformed with all applicable laws in effect at the time of installation if it is currently in good and safe condition and working properly.",
+        "passage_ids": ["83a81e90-e0a7-4939-bc1a-9a574453298a"],
+        "section": "H&S 17920.3(d)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim restates (d) and says other items have their own exceptions without describing them.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "exception", "text": "except wiring that conformed with laws in effect at installation and is currently in good and safe condition and working properly", "stated_in_claim": true}
+        ],
+        "note": "Legal point: confirm with a qualified California attorney or the local building department. Exceptions in (e), (f), (l), (m) are not individually claimed here."
+      }
+    ],
+    "brand_facts_pending": [],
+    "first_party_proof": "restricted",
+    "unresolved": [
+      "Library source for Civil Code 1102 has retrieved_date null; the provenance note says printed 2026-10-10 and that date is used. Leo to confirm and set it.",
+      "Civil Code 1102.2 (exception in 1102(a)) and Penal Code 829.5 (definition of code enforcement officer) have no official print in the library; not described. Ask Leo for prints if the article needs them.",
+      "Exceptions in 17920.3(e), (f), (l), (m) are not individually claimed; clm:1 notes they exist (carried by clm:5 for (d) only). Write them as separate claims if the article uses them.",
+      "The tied-in H&S 17920.3 and Civ. Code 1102 library sources have recheck-by 2027-01-08, not passed.",
+      "No injection found in the ticket."
+    ]
+  }
+}

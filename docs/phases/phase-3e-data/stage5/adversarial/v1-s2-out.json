@@ -1,0 +1,46 @@
+{
+  "article_id": "1d742ee9-2242-4381-8c86-678879103667",
+  "opportunity_id": "8b8fa482-cfac-4440-b2bd-946f5e5825fa",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["cf183053250c96b14cd7e1e7a1b30a19ace85498fcefefe61b46324a9662517a"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "privacy:s2:seller_story",
+      "severity": "required",
+      "note": "Paragraph 2 ('A family in the Fruitvale neighborhood kept every newspaper from their late father's years in the garage, and the county inspector who came by was kind about it.') is a specific anecdote: a named neighborhood, a family, a late father, a garage full of newspapers and a county inspector visit. No seller story is cleared for publication (brief: first-party proof restricted, none planned), no ledger claim supports it, and the neighborhood plus the circumstances is an identifying combination. It also implies a county enforcement visit and the inspector's manner, which is an unsupported factual claim. Remove the whole paragraph; do not replace it with a disguised or invented story."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [
+    "Delete the Fruitvale family paragraph entirely. Replace nothing with a story; if a bridge is wanted, use a plain non-anecdotal sentence with no place, family or official visit."
+  ],
+  "output_version_id": "v1-s2-cf183053-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s2",
+    "version_hash": "cf183053250c96b14cd7e1e7a1b30a19ace85498fcefefe61b46324a9662517a",
+    "claim_checks": [],
+    "privacy_ok": false,
+    "legal_qualification_ok": true,
+    "block_kind": "BLOCKED_PRIVACY",
+    "leo_reference_needed": [],
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "privacy:s2:seller_story",
+        "section": "s2",
+        "issue": "Uncleared anecdote (Fruitvale family, late father, garage newspapers, county inspector) is a seller-story/identifying combination and an unsupported factual claim.",
+        "severity": "must fix",
+        "evidence": "SR-7; editorial standards section 5; brief open item: no seller story, case study or testimonial planned; no ledger claim supports it",
+        "fix": "Delete the paragraph; do not substitute any story, place or official-visit detail.",
+        "blocking": true
+      }
+    ]
+  }
+}

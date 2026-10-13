@@ -1,0 +1,207 @@
+[
+  {
+    "card": 1,
+    "sentence": "Living in the house alone does not give you that authority.",
+    "leo": "B",
+    "expected": "should",
+    "actual": "must",
+    "match": false,
+    "decision": "REVISION",
+    "status": "NEEDS_REVISION",
+    "codeBlocked": false,
+    "mustFindings": [
+      "Item 1 answer 'Living in the house alone does not give you that authority.' states a legal conclusion about authority to sell as certain, with no confirm-with-a-professional language and no ledger claim. 'that authority' also has no antecedent in the answer, so it does not stand alone. Reword to name who to confirm with (a real estate attorney or title company) and say who may sign depends on how title is held, without a closed list of roles."
+    ],
+    "shouldFindings": [
+      "The statement that living in a house does not give authority to sell is a general legal principle that no cited ledger claim supports (the brief cites no claim for authority). Either soften to a conditional such as 'Living in the house does not by itself show who can sign; an attorney or title company can confirm who holds authority', or leave it as a pointer to the professional."
+    ],
+    "rulings": [],
+    "otherFindings": []
+  },
+  {
+    "card": 2,
+    "sentence": "Trash or signs of pests are another, and they match conditions the statute lists.",
+    "leo": "A",
+    "expected": "must",
+    "actual": "must",
+    "match": true,
+    "decision": "BLOCKED",
+    "status": "BLOCKED_CLAIM",
+    "codeBlocked": true,
+    "mustFindings": [
+      "The sentence 'Trash or signs of pests are another, and they match conditions the statute lists.' states what a statute lists and says trash and pests 'match' those conditions. The unit cites no claim (claim_ids is empty, and the brief for s2 says no legal rule is stated). It names no statute and gives none of the thresholds or deciders the law attaches (fire, health or safety hazard; as determined by a health officer or fire official). It also reads as a conclusion that a home's conditions meet the statute, which is for the local authority. No ledger claim supports it as written. Clm:1 to clm:4 are not cited, and their stored quotes carry no section or label."
+    ],
+    "shouldFindings": [],
+    "rulings": [],
+    "otherFindings": [
+      "required: The statute sentence is the only statement a reader meets that sounds legal, and it has no confirm-with-a-professional or 'local authority decides' language attached. The earlier sentence 'Ask an attorney or your title company what applies to your sale.' does not cover it.",
+      "optional: 'another' has no antecedent (nothing before it names a first item), and the section does not yet cover the brief: title holder, who can sign, occupant, family and heirs, with the existing THB legal-authority page. Wording and coverage preference only."
+    ]
+  },
+  {
+    "card": 3,
+    "sentence": "Most families are not looking for judgment.",
+    "leo": "C",
+    "expected": "should_or_none",
+    "actual": "none",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [],
+    "rulings": [],
+    "otherFindings": [
+      "optional: Fact-gate observation only. The unit cites no claims and states no law, figure, date or brand fact, so there is nothing for me to check. The brief for s3 expects the listed H&S 17920.3 conditions (clm:1 to clm:4), who decides, and a confirm-with-the-city-or-county line, and none of that is in the text. If the writer adds it, it must carry clm:1 to clm:4, state the thresholds and deciders as the stored quotes do, and be re-reviewed by V1. Whether the section is complete is for V3."
+    ]
+  },
+  {
+    "card": 4,
+    "sentence": "The real question is usually whether the house or the paperwork is the bigger risk to the sale.",
+    "leo": "B",
+    "expected": "should_or_none",
+    "actual": "should",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [
+      "'The real question is usually whether the house or the paperwork is the bigger risk to the sale.' The word 'usually' is an unsupported frequency word; it states no legal rule, figure or fact. Plainer wording such as 'For many sellers the real question is...' or 'The question to ask is...' would avoid implying a frequency."
+    ],
+    "rulings": [
+      {
+        "ruling": "soften",
+        "note": "Frequency word 'usually' is not a statistic and the sentence states no legal rule, figure, section or list of roles. Plainer wording ('The question to ask is...') would remove the implied frequency."
+      }
+    ],
+    "otherFindings": []
+  },
+  {
+    "card": 5,
+    "sentence": "The real question is usually not which route is best.",
+    "leo": "B",
+    "expected": "should_or_none",
+    "actual": "should",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [
+      "'The real question is usually not which route is best.' The word 'usually' is an unsupported frequency word. It states no legal rule, figure or fact, so it is a should-fix only. Plainer wording such as 'The real question may not be which route is best' would avoid the unsupported frequency."
+    ],
+    "rulings": [
+      {
+        "ruling": "soften",
+        "note": "Frequency word 'usually' with no statistic, legal rule or fact behind it; plainer wording ('may not be') removes the unsupported frequency."
+      }
+    ],
+    "otherFindings": []
+  },
+  {
+    "card": 6,
+    "sentence": "Most people in this spot are not avoiding the problem.",
+    "leo": "C",
+    "expected": "should_or_none",
+    "actual": "should",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [
+      "\"Most people in this spot are not avoiding the problem.\" is an unsupported frequency word about people. It states no statistic, figure or legal rule, so it is a should-fix only. Plainer wording such as \"If you are in this spot, you are not alone, and not avoiding the problem\" would avoid the frequency claim."
+    ],
+    "rulings": [
+      {
+        "ruling": "soften",
+        "note": "No ledger claim supports a frequency about people. The line states no figure, legal rule or statute, so it is not a must-fix. Plainer wording (for example 'you are not alone and you are not avoiding the problem') would remove the frequency word."
+      }
+    ],
+    "otherFindings": []
+  },
+  {
+    "card": 7,
+    "sentence": "Spending first can commit you to a plan the right person never agreed to.",
+    "leo": "C",
+    "expected": "should_or_none",
+    "actual": "none",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [],
+    "rulings": [
+      {
+        "ruling": "not_a_claim",
+        "note": "Conditional, cautionary line ('can commit you'). It states no fact, figure, frequency or legal rule; 'never' describes a hypothetical person's lack of agreement, not a statistic."
+      }
+    ],
+    "otherFindings": [
+      "optional: The unit states no legal claim, figure, date or brand fact and cites no claim, so there is nothing to check against the ledger. The brief note asks for a line telling the reader to confirm with the city or county. The unit only says 'Ask an attorney or your title company what applies to your sale.' When the section is filled with the H&S 17920.3 conditions (clm:1 to clm:4), it must carry the city or county confirm line, the thresholds and who decides. Re-review then."
+    ]
+  },
+  {
+    "card": 8,
+    "sentence": "Only someone with legal authority to sign.",
+    "leo": "C",
+    "expected": "should",
+    "actual": "should",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [
+      "Answer 'Only someone with legal authority to sign.' is a plain general principle with no statute, figure or role list, and the ledger has no claim for it. It carries no confirm-with-a-professional wording. Suggest adding that an attorney or title company can confirm who has authority for a specific home."
+    ],
+    "rulings": [],
+    "otherFindings": [
+      "optional: The unit note asks for 5-7 items drawn from the fan-out questions; this unit has 3. Not a fact or privacy problem, flagged for V3. Any added item that states law must cite ledger claims (clm:5, clm:6, clm:7 for disclosure; clm:1 to clm:4 for the H&S conditions, with their thresholds and deciders)."
+    ]
+  },
+  {
+    "card": 9,
+    "sentence": "Whoever has legal authority to sign, such as an owner, trustee, executor, administrator, surviving spouse or several heirs acting together.",
+    "leo": "A",
+    "expected": "must",
+    "actual": "must",
+    "match": true,
+    "decision": "REVISION",
+    "status": "NEEDS_REVISION",
+    "codeBlocked": false,
+    "mustFindings": [
+      "Item 1 answer states 'Whoever has legal authority to sign, such as an owner, trustee, executor, administrator, surviving spouse or several heirs acting together.' This is a list of legal roles with authority to sell, and no ledger claim supports it (the item cites no claim ids, and clm:1 to clm:7 cover only H&S 17920.3 and Civil Code 1102/1102.6). 'Surviving spouse' and 'several heirs acting together' are case-specific probate and title conclusions. The brief itself says the guide states no specific probate or trust rules. Remove the role list, or rewrite it without naming who holds authority."
+    ],
+    "shouldFindings": [],
+    "rulings": [],
+    "otherFindings": [
+      "required: Item 1 is an authority and probate answer with no confirm-with-a-professional language. Add that authority depends on who holds title and the situation, and that the seller should confirm with a real estate or probate attorney or a title company before acting.",
+      "optional: The unit has 3 items; the unit note asks for 5-7. Items 2 and 3 (title company and what is recorded; CPA and tax) state no law, figure or promise and are acceptable, but are not drawn from the brief's fan-out questions. Editorial point only; if the writer adds items on disclosure, cleanout or code enforcement, cite the ledger claims and keep each threshold and decider (clm:2, clm:3 and clm:4 name a health officer or fire chief)."
+    ]
+  },
+  {
+    "card": 10,
+    "sentence": "A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign.",
+    "leo": "C",
+    "expected": "should_or_none",
+    "actual": "none",
+    "match": true,
+    "decision": "PASS",
+    "status": "NEEDS_SEO",
+    "codeBlocked": false,
+    "mustFindings": [],
+    "shouldFindings": [],
+    "rulings": [
+      {
+        "ruling": "not_a_claim",
+        "note": "Empathetic, hypothetical line about a house full of belongings. It states no fact, figure, frequency or legal rule and names no legal roles."
+      }
+    ],
+    "otherFindings": [
+      "optional: The unit cites no claims and states no disclosure law, so nothing is unsupported. But the brief assigns clm:5, clm:6 and clm:7 (Transfer Disclosure Statement form, the exception, waiver void) to this H2 and the text carries none of them. This is a completeness point for V3 and the writer, not a fact error. If the content is added later it must match the stored quotes, including 'except as provided in Section 1102.2'."
+    ]
+  }
+]

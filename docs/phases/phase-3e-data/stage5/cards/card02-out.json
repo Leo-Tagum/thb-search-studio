@@ -1,0 +1,84 @@
+{
+  "article_id": "581b5ad8-3ef6-4a79-a85b-a11970a4dc3d",
+  "opportunity_id": "52d196a0-9abf-4fb5-aec2-4e0c60245f3e",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["a75e220b9aa5dcef73e29cb34ce038106027f14e9a466d6192965706278c250d"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "fact:s2:uncited_statute_claim",
+      "severity": "required",
+      "note": "The sentence 'Trash or signs of pests are another, and they match conditions the statute lists.' states what a statute lists and says trash and pests 'match' those conditions. The unit cites no claim (claim_ids is empty, and the brief for s2 says no legal rule is stated). It names no statute and gives none of the thresholds or deciders the law attaches (fire, health or safety hazard; as determined by a health officer or fire official). It also reads as a conclusion that a home's conditions meet the statute, which is for the local authority. No ledger claim supports it as written. Clm:1 to clm:4 are not cited, and their stored quotes carry no section or label.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:s2:legal_confirm_missing",
+      "severity": "required",
+      "note": "The statute sentence is the only statement a reader meets that sounds legal, and it has no confirm-with-a-professional or 'local authority decides' language attached. The earlier sentence 'Ask an attorney or your title company what applies to your sale.' does not cover it.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "edit:s2:thin_and_dangling",
+      "severity": "optional",
+      "note": "'another' has no antecedent (nothing before it names a first item), and the section does not yet cover the brief: title holder, who can sign, occupant, family and heirs, with the existing THB legal-authority page. Wording and coverage preference only.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [
+    "Remove the sentence 'Trash or signs of pests are another, and they match conditions the statute lists.' from s2. Condition and statute content belongs in s3 with cited claims.",
+    "Rewrite s2 as seller-problem logic only (who holds title, who can sign, the occupant, co-owners and heirs), with no legal rule, and keep the attorney or title company confirmation."
+  ],
+  "output_version_id": "v1-s2-a75e220b-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s2",
+    "version_hash": "a75e220b9aa5dcef73e29cb34ce038106027f14e9a466d6192965706278c250d",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "block_kind": "BLOCKED_CLAIM",
+    "leo_reference_needed": [],
+    "hedge_rulings": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s2:uncited_statute_claim",
+        "section": "s2",
+        "issue": "Uncited statement of what 'the statute lists' and that trash and pests 'match' it, with no claim, threshold or decider.",
+        "severity": "must fix",
+        "evidence": "Brief for s2 (no legal rule stated); unit claim_ids empty; SR-4, SR-5",
+        "fix": "Delete the sentence. Put statute content in s3 with cited claims, thresholds and 'a local official decides'.",
+        "blocking": true
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s2:legal_confirm_missing",
+        "section": "s2",
+        "issue": "Legal-sounding statement has no confirm-with-a-professional or local-authority language where the reader meets it.",
+        "severity": "must fix",
+        "evidence": "Editorial standards section 5",
+        "fix": "Removing the sentence clears this. Keep the attorney or title company confirmation.",
+        "blocking": false
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "edit:s2:thin_and_dangling",
+        "section": "s2",
+        "issue": "'another' has no antecedent and the section omits the brief's title, signer, occupant and heirs content.",
+        "severity": "suggestion",
+        "evidence": "brief_for_this_unit purpose and seller_situation_map rows ownership, authority, people",
+        "fix": "Cover title holder, who can sign, occupant, co-owners and heirs in seller-problem terms, and link the legal-authority page.",
+        "blocking": false
+      }
+    ]
+  }
+}

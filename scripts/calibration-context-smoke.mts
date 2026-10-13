@@ -11,6 +11,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { approveBrief, load, queueStudioRun, stateOf, submitStudio } from "../src/lib/studio/service";
 import { CLASSIC_V1_KEY, STUDIO_AGENT_META } from "../src/lib/studio/agents";
 import { LEO_CARDS } from "./fixtures/leo-v1-cards";
+import { copyLedgerRecords } from "./fixtures/ledger-records";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
 const [cmd, dir] = process.argv.slice(2);
@@ -45,6 +46,7 @@ if (cmd === "setup") {
     const art = (ab as any).articleId as string;
     await db.from("articles").update({ is_fixture: true }).eq("id", art);
     arts.push({ opp, art });
+    await copyLedgerRecords(db, art, { dropGates: true });   // Phase 3e: the unit cites clm:1-7, so the fixture ledger carries their verification records (gates dropped: this run tests V1's judgment of card 1, not the carried-gate check)
     writeFileSync(stateFile, JSON.stringify(state));
     const { runId } = await queueStudioRun(db, "thb-04-section-writer", art, "faq");
     const body = { article_id: art, opportunity_id: opp, agent_name: "Section Writer", agent_prompt_version: meta.promptVersion, model_version: "claude-code/calibration-fixture", input_version_ids: ["fixture"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: `ctx-${n}`, timestamp: new Date().toISOString(), result: { unit_key: "faq", unit, addresses: [], change_note: "fixture: the FAQ exactly as V1 reviewed it", declines: [] } };

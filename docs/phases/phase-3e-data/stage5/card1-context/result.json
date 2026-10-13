@@ -1,0 +1,143 @@
+[
+  {
+    "run": 1,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:authority-roles",
+        "note": "FAQ item 4 has no ledger claim behind it. It names \"the owner, a trustee, an executor or administrator, or several heirs who agree\", which is a list of legal roles. It also states \"Living in the house alone does not give you that authority\", which is a legal conclusion. Neither is supported. Remove the list and that sentence. Keep \"Only someone with legal authority to sign\". Add that who that is depends on how title is held, and that the seller should confirm with an attorney or title company."
+      }
+    ],
+    "otherFindings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:absence:hoarding",
+        "note": "FAQ item 3 says \"The statute does not mention hoarding.\" This is an absence-of-law claim. The ledger has no statute_absence claim, so it is unproven (SR-6). Remove the sentence."
+      },
+      {
+        "severity": "required",
+        "key": "fact:faq:clm:1:threshold",
+        "note": "FAQ item 3 cites clm:1 to clm:4 but not clm:8. It says state law lists conditions that can make a building substandard, such as \"junk and debris that are fire, health or safety hazards\", with no threshold. H&S 17920.3 applies only where a listed condition exists \"to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public\". The ledger notes on clm:1 to clm:4 say the threshold is carried by clm:8 and that every citing unit must cite it. Cite clm:8 and add the threshold in plain words. Omitting it changes what a reader would believe, so reader_impact is changes."
+      },
+      {
+        "severity": "optional",
+        "key": "fact:faq:local-layer",
+        "note": "FAQ item 3 moves from state law to \"the city or county\" with no local claim. Add the exact phrase \"local rules vary; check with your city or county\" (SR-2) so a reader does not take the state list as the local rule."
+      },
+      {
+        "severity": "optional",
+        "key": "fact:faq:not-always",
+        "note": "FAQ item 2 opens with \"Not always.\" This implies no legal duty to clean out, and no ledger claim supports that. Soften it to something like \"There is no single answer; it depends on...\" so it does not read as a legal conclusion."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "soften",
+        "note": "'Not always.' is conditional and states no figure, frequency or statute. A plainer 'it depends on...' would avoid implying there is no legal duty to clean out."
+      },
+      {
+        "key": "hedge:a0354a5b18af",
+        "ruling": "drop",
+        "note": "'The statute does not mention hoarding.' is an absence-of-law sentence. No statute_absence claim is in the ledger, so it is unproven (SR-6). Remove it."
+      }
+    ]
+  },
+  {
+    "run": 2,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:item4:authority_roles_unsupported",
+        "note": "Item 4 lists who may sign ('the owner, a trustee, an executor or administrator, or several heirs who agree') and concludes 'Living in the house alone does not give you that authority'. It cites no claim (claim_ids is empty). The list of legal roles and the legal conclusion have no ledger support."
+      }
+    ],
+    "otherFindings": [
+      {
+        "severity": "required",
+        "key": "fact:clm:1:overstated",
+        "note": "Item 3 says 'State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards' and cites clm:1 to clm:4 but not clm:8. It leaves out the statutory threshold ('to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public'). The omission changes what a reader would believe: that any such condition makes a house substandard. The clm:1 ledger label NARROWER depends on every citing unit also citing clm:8."
+      },
+      {
+        "severity": "required",
+        "key": "legal:absence:faq:hoarding",
+        "note": "'The statute does not mention hoarding.' is an absence-of-law claim. The ledger has no statute_absence claim for it (SR-6). Remove the sentence."
+      },
+      {
+        "severity": "required",
+        "key": "fact:faq:item3:enforcement_unsupported",
+        "note": "The question 'Can the city or county act on a packed or hoarded house?' is answered 'Possibly'. No ledger claim says what a city or county may do (enforcement power, notices). The cited claims only list conditions that can make a building substandard and who determines some of them. 'Whether a home meets them is for the local authority' also names a general decider where the quote names a health officer, a code enforcement officer (clm:2, clm:3) and the fire chief or deputy (clm:4)."
+      },
+      {
+        "severity": "optional",
+        "key": "fact:faq:item2:not_always",
+        "note": "'Not always.' in item 2 answers a 'do I have to' question and can read as a legal conclusion that there is no duty to clean out. Plainer wording would say that no ledger claim covers a cleanout duty and that the choice depends on route and on checking with an agent, attorney or the city or county."
+      },
+      {
+        "severity": "optional",
+        "key": "fact:clm:6:item5_uncited",
+        "note": "Item 5 relies on the scope limit 'for a sale the disclosure article covers' (clm:6) but cites only clm:7. Add clm:6 to its claim_ids."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "soften",
+        "note": "'Not always.' is an unsupported frequency phrase, not a statistic. No ledger claim covers a cleanout duty, so plainer wording should avoid implying a legal answer."
+      },
+      {
+        "key": "hedge:a0354a5b18af",
+        "ruling": "drop",
+        "note": "Absence-of-law sentence. No statute_absence claim is in the ledger, so it cannot be proven (SR-6)."
+      }
+    ]
+  },
+  {
+    "run": 3,
+    "decision": "REVISION",
+    "unitStatus": "NEEDS_REVISION",
+    "card1": "must",
+    "card1Findings": [
+      {
+        "severity": "required",
+        "key": "fact:faq:item4:authority_roles_unsupported",
+        "note": "FAQ item 4 ('Who can sell the house if the owner cannot or will not?') cites no claim yet states a list of legal roles ('the owner, a trustee, an executor or administrator, or several heirs who agree'), a rule ('Only someone with legal authority to sign') and a case-specific legal conclusion ('Living in the house alone does not give you that authority'). None is supported by the ledger. Rewrite without the role list and without the conclusion, for example: who can sign depends on how title is held and on the family's situation; confirm with an attorney or title company. Or have Research add a sourced claim for it."
+      }
+    ],
+    "otherFindings": [
+      {
+        "severity": "required",
+        "key": "fact:clm:1:threshold_omitted",
+        "note": "FAQ item 3 ('Possibly. State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards...') states the listed conditions without the threshold 'to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public' (clm:8, H&S 17920.3 opening paragraph). clm:1 is labelled NARROWER only because every citing unit cites clm:8; this item does not. A reader would believe junk and debris alone can make a building substandard. Reader impact: changes. Also the item cites clm:2, clm:3, clm:4 but its text uses none of them."
+      },
+      {
+        "severity": "required",
+        "key": "legal:absence:faq:hoarding",
+        "note": "FAQ item 3: 'The statute does not mention hoarding.' is an absence-of-law claim. The ledger has no statute_absence claim for it (SR-6). Remove the sentence, or have Research record a statute_absence claim with the full official text read and the section and date, then cite it."
+      },
+      {
+        "severity": "optional",
+        "key": "fact:faq:item2:not_always",
+        "note": "FAQ item 2 opens 'Not always.' to 'Do I have to clean out a house before selling it?' This implies that cleanout is sometimes required, and no claim supports that. 'a direct buyer prices in the condition' is also uncited, though it matches the brief's sell_directly option and states no legal rule. Plainer wording would help, for example 'No law in this guide requires it; it depends on your time, money and route.' Only use that if the wording is checked against a source. Otherwise say 'It depends on...'."
+      }
+    ],
+    "hedgeRulings": [
+      {
+        "key": "hedge:4a926ce9f475",
+        "ruling": "soften",
+        "note": "'Not always.' is not a statistic, but it hints at a legal duty to clean out that no ledger claim supports. Plainer wording ('It depends on...') would remove the hint."
+      },
+      {
+        "key": "hedge:a0354a5b18af",
+        "ruling": "drop",
+        "note": "Absence-of-law sentence with no statute_absence claim in the ledger (SR-6). Remove it."
+      }
+    ]
+  }
+]

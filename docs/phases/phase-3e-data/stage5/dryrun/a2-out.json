@@ -1,0 +1,203 @@
+{
+  "article_id": "",
+  "opportunity_id": "dryrun-opportunity",
+  "agent_name": "Research & Evidence",
+  "agent_prompt_version": "1.1.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["dryrun"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"claim": "H&S 17920.3 defines a substandard building by listed conditions that exist to an extent that endangers life, limb, health, property, safety or welfare; library print supports the wording.", "basis": "evidence_library", "evidence_ids": ["src:1"]},
+    {"claim": "H&S 17920.3(a)(12), (a)(16), (h) and (j) name who decides or what condition counts, each with its alternative deciders and thresholds carried in the claim.", "basis": "evidence_library", "evidence_ids": ["src:1"]},
+    {"claim": "Civ. Code 1102(a) and (c) and 1102.6(a) are supported only as quoted; 1102.2 exceptions, the form's content and any statement about what a hoarder-house seller must disclose are NOT in the library.", "basis": "evidence_library", "evidence_ids": ["src:2", "src:3"]},
+    {"claim": "Whether California law mentions hoarding, and any city or county rule, could not be verified from the stored prints.", "basis": "assumption", "evidence_ids": []}
+  ],
+  "evidence_ids": ["src:1", "src:2", "src:3"],
+  "required_actions": [
+    "Ask Leo for an official leginfo print of Civil Code 1102.2 (exceptions to the disclosure requirement) before any article says who is exempt from the Transfer Disclosure Statement.",
+    "Ask Leo for an official print of Civil Code 1102.3 and the published text of Stats. 2020 Ch. 370 Sec. 25 (the Real Estate Transfer Disclosure Statement form, pp. 34-38) before any article says what the form asks the seller to disclose; the 1102.6 print is marked incomplete text.",
+    "Ask Leo for an official print of the local (city or county) housing, nuisance or code enforcement ordinance for any place the article names; until then the article says exactly: local rules vary; check with your city or county.",
+    "Do not write that California law mentions or does not mention hoarding without a statute_absence claim; the 17920.3 print is stored but no absence proof was prepared (it would need a full read, term search, section and date). Ask Leo whether to prepare it.",
+    "Professional-confirmation note required in the article for every legal claim here: a real estate attorney or the local enforcing agency should confirm how these rules apply to a specific property.",
+    "Library effective_date is empty for H&S 17920.3 and Civ. Code 1102 and retrieved_date is empty for Civ. Code 1102; dates in this packet are taken from the print text and provenance note (2026-10-10). Ask Leo to fill them in. Recheck-by for all three is 2027-01-08 and has not passed."
+  ],
+  "output_version_id": "a2-dryrun-v1",
+  "timestamp": "2026-10-13T00:00:00Z",
+  "result": {
+    "sources": [
+      {"id": "src:1", "kind": "library", "library_source_id": "6904fefb-5ee9-4e7a-a845-903c2dd094b9", "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=17920.3&lawCode=HSC", "title": "California Health & Safety Code §17920.3", "tier": 1, "jurisdiction": "California", "effective_date": "2025-01-01", "retrieved_date": "2026-10-10", "locality_matches": true},
+      {"id": "src:2", "kind": "library", "library_source_id": "9d984e33-e9f6-413f-a69e-503ff0af2fd2", "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=1102.&lawCode=CIV", "title": "California Civil Code §1102", "tier": 1, "jurisdiction": "California", "effective_date": "2020-01-01", "retrieved_date": "2026-10-10", "locality_matches": true},
+      {"id": "src:3", "kind": "library", "library_source_id": "6d3b1902-a118-4b3d-9095-1e8560662046", "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=1102.6.&lawCode=CIV", "title": "California Civil Code §1102.6", "tier": 1, "jurisdiction": "California", "effective_date": "2021-01-01", "retrieved_date": "2026-10-10", "locality_matches": true}
+    ],
+    "claims": [
+      {
+        "id": "clm:1",
+        "text": "Under California Health & Safety Code 17920.3, a building or part of one (including a dwelling unit or the premises it is on), regardless of zoning or approved uses, is declared a substandard building when any of the listed conditions exists to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants, nearby residents, or the public.",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "passage_ids": ["3cf09d7e-e321-4d6c-aa9b-096ecbf7de2a"],
+        "quote": "Any building or portion thereof, regardless of zoning designation or approved uses of the building, including any dwelling unit, guestroom or suite of rooms, or the premises on which the same is located, in which there exists any of the following listed conditions to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public shall be deemed and hereby is declared to be a substandard building:",
+        "section": "H&S 17920.3 (introductory paragraph)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim restates the threshold, scope and consequence in the quoted text.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "threshold", "text": "to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public", "stated_in_claim": true},
+          {"kind": "scope", "text": "regardless of zoning designation or approved uses; includes dwelling units and the premises", "stated_in_claim": true}
+        ]
+      },
+      {
+        "id": "clm:2",
+        "text": "Under H&S 17920.3(a)(12), infestation of insects, vermin, or rodents counts as inadequate sanitation when determined by a health officer or, if no agreement exists with an agency that has a health officer, by a code enforcement officer (as defined in Penal Code 829.5) who has completed a course of study in the subject as determined by the local jurisdiction; as with every listed condition, it makes a building substandard only to an extent that endangers life, limb, health, property, safety, or welfare (see clm:1).",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "passage_ids": ["914b84fc-4263-45dd-8ded-383e512582e2"],
+        "quote": "(12) Infestation of insects, vermin, or rodents as determined by a health officer or, if an agreement does not exist with an agency that has a health officer, the infestation can be determined by a code enforcement officer, as defined in Section 829.5 of the Penal Code, upon successful completion of a course of study in the appropriate subject matter as determined by the local jurisdiction.",
+        "section": "H&S 17920.3(a)(12)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim carries both deciders and the training condition; the endangerment threshold is stated in the claim and in clm:1.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "alternative_decider", "text": "health officer, or a code enforcement officer where no agreement exists with an agency that has a health officer", "stated_in_claim": true},
+          {"kind": "threshold", "text": "to an extent that endangers life, limb, health, property, safety, or welfare", "stated_in_claim": true, "carried_by": "clm:1"}
+        ]
+      },
+      {
+        "id": "clm:3",
+        "text": "Under H&S 17920.3(a)(16), lack of adequate garbage and rubbish storage and removal facilities counts as inadequate sanitation when determined by a health officer or, if no agreement exists with an agency that has a health officer, by a code enforcement officer as defined in Penal Code 829.5; it makes a building substandard only to the endangerment extent in clm:1.",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "passage_ids": ["914b84fc-4263-45dd-8ded-383e512582e2", "ed361731-5987-4ddc-b347-126d26acd3c2"],
+        "quote": "(16) Lack of adequate garbage and rubbish storage and removal facilities, as determined by a health officer or, if an agreement does not exist with an agency that has a health officer, the lack of adequate garbage and rubbish removal facilities can be determined by a code enforcement officer as defined in Section 829.5 of the Penal Code.",
+        "section": "H&S 17920.3(a)(16)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim names both deciders and the condition as worded; quote runs across two consecutive passages.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "alternative_decider", "text": "health officer, or a code enforcement officer where no agreement exists with an agency that has a health officer", "stated_in_claim": true},
+          {"kind": "threshold", "text": "to an extent that endangers life, limb, health, property, safety, or welfare", "stated_in_claim": true, "carried_by": "clm:1"}
+        ]
+      },
+      {
+        "id": "clm:4",
+        "text": "Under H&S 17920.3(j), premises on which an accumulation of weeds, vegetation, junk, dead organic matter, debris, garbage, offal, rodent harborages, stagnant water, combustible materials, and similar materials or conditions constitute fire, health, or safety hazards are a listed condition; the building is a substandard building only to the endangerment extent in clm:1.",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "passage_ids": ["ac5e1d13-3239-4425-b792-a12a41c3fb26"],
+        "quote": "(j) Those premises on which an accumulation of weeds, vegetation, junk, dead organic matter, debris, garbage, offal, rodent harborages, stagnant water, combustible materials, and similar materials or conditions constitute fire, health, or safety hazards.",
+        "section": "H&S 17920.3(j)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim lists the same materials and hazard test; the section does not use the word hoarding and the claim does not say it does.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "threshold", "text": "conditions must constitute fire, health, or safety hazards, and exist to an extent that endangers life, limb, health, property, safety, or welfare", "stated_in_claim": true, "carried_by": "clm:1"}
+        ]
+      },
+      {
+        "id": "clm:5",
+        "text": "Under H&S 17920.3(h), any building or part of one, device, apparatus, equipment, combustible waste, or vegetation that, in the opinion of the fire chief or the chief's deputy, is in such a condition as to cause a fire or explosion or provide a ready fuel to augment the spread and intensity of fire or explosion from any cause is a listed condition; the building is substandard only to the endangerment extent in clm:1.",
+        "source_ids": ["src:1"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "passage_ids": ["83a81e90-e0a7-4939-bc1a-9a574453298a", "ac5e1d13-3239-4425-b792-a12a41c3fb26"],
+        "quote": "(h) Any building or portion thereof, device, apparatus, equipment, combustible waste, or vegetation that, in the opinion of the chief of the fire department or the chief's deputy, is in such a condition as to cause a fire or explosion or provide a ready fuel to augment the spread and intensity of fire or explosion arising from any cause.",
+        "section": "H&S 17920.3(h)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim names the decider (fire chief or deputy) and the test.", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "alternative_decider", "text": "the chief of the fire department or the chief's deputy decides, in their opinion", "stated_in_claim": true},
+          {"kind": "threshold", "text": "to an extent that endangers life, limb, health, property, safety, or welfare", "stated_in_claim": true, "carried_by": "clm:1"}
+        ]
+      },
+      {
+        "id": "clm:6",
+        "text": "Under California Civil Code 1102(a), except as provided in Section 1102.2, the Article's disclosure requirements apply to any transfer by sale, exchange, real property sales contract, lease with an option to purchase, any other option to purchase, or ground lease coupled with improvements, of any single-family residential property. The 1102.2 exceptions are not in the library, so this claim says nothing about who is exempt.",
+        "source_ids": ["src:2"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "passage_ids": ["03e82224-5c8b-4767-9334-9f7829e9b12e"],
+        "quote": "(a) Except as provided in Section 1102.2, this article applies to any transfer by sale, exchange, real property sales contract as defined in Section 2985, lease with an option to purchase, any other option to purchase, or ground lease coupled with improvements of any single-family residential property.",
+        "section": "Civ. Code 1102(a)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim carries the exception pointer and the single-family scope.", "against": "authenticated leginfo print stored 2026-10-10 (retrieved date missing in the library record)", "reader_impact": "none"},
+        "gates": [
+          {"kind": "exception", "text": "except as provided in Section 1102.2 (text not in library)", "stated_in_claim": true},
+          {"kind": "scope", "text": "single-family residential property; listed kinds of transfer", "stated_in_claim": true}
+        ]
+      },
+      {
+        "id": "clm:7",
+        "text": "Under Civil Code 1102(c), any waiver of the requirements of that article is void as against public policy.",
+        "source_ids": ["src:2"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "passage_ids": ["03e82224-5c8b-4767-9334-9f7829e9b12e"],
+        "quote": "(c) Any waiver of the requirements of this article is void as against public policy.",
+        "section": "Civ. Code 1102(c)",
+        "claim_type": "statute",
+        "verification": {"label": "MATCH", "reason": "Claim repeats the quoted subdivision; the requirements it refers to are those the article applies to per 1102(a) (see clm:6).", "against": "authenticated leginfo print stored 2026-10-10", "reader_impact": "none"},
+        "gates": [
+          {"kind": "scope", "text": "applies to the requirements of this article (Civ. Code 1102 et seq.), whose reach is set in 1102(a)", "stated_in_claim": true, "carried_by": "clm:6"}
+        ]
+      },
+      {
+        "id": "clm:8",
+        "text": "Under Civil Code 1102.6(a), the disclosures the article requires about the property being transferred are set forth in, and must be made on a copy of, the disclosure form that section refers to. The stored print does not contain the form's text, so this claim says nothing about what the form asks.",
+        "source_ids": ["src:3"],
+        "support": "supported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "passage_ids": ["35fab702-bc30-430a-9f06-c058f9db386c"],
+        "quote": "(a) The disclosures required by this article pertaining to the property proposed to be transferred are set forth in, and shall be made on a copy of, the following disclosure form:",
+        "section": "Civ. Code 1102.6(a)",
+        "claim_type": "statute",
+        "verification": {"label": "NARROWER", "reason": "Claim leaves out the form's contents, which the print marks as incomplete text (see published Stats. 2020 Ch. 370); the claim says so explicitly and asserts nothing about content, so a reader is not misled.", "against": "authenticated leginfo print stored 2026-10-10; section marked NOTICE OF INCOMPLETE TEXT", "reader_impact": "none"},
+        "gates": [
+          {"kind": "effective_date", "text": "Amended by Stats. 2020, Ch. 370, Sec. 25 (SB 1371), effective January 1, 2021", "stated_in_claim": false},
+          {"kind": "scope", "text": "applies to disclosures required by this article, whose reach is set in 1102(a)", "stated_in_claim": false, "carried_by": "clm:6"}
+        ]
+      },
+      {
+        "id": "clm:9",
+        "text": "A seller of a hoarder house in California must disclose its hoarding condition on the Real Estate Transfer Disclosure Statement.",
+        "source_ids": ["src:3"],
+        "support": "unsupported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "note": "The form text and Civ. Code 1102.2 and 1102.3 are not in the library; ask Leo for official prints.",
+        "passage_ids": [],
+        "section": "Civ. Code 1102 et seq."
+      },
+      {
+        "id": "clm:10",
+        "text": "California statute 17920.3 does not mention hoarding.",
+        "source_ids": ["src:1"],
+        "support": "unsupported",
+        "jurisdiction": "California",
+        "risk": "high",
+        "claim_type": "statute_absence",
+        "note": "Absence claim without proof prepared; not to be used. Needs a full read, term search, section and date recorded.",
+        "passage_ids": [],
+        "section": "H&S 17920.3"
+      }
+    ],
+    "brand_facts_pending": [
+      "Any statement that Twin Home Buyer buys hoarder houses in particular places (service area / cities) is pending Juan; none used."
+    ],
+    "first_party_proof": "restricted",
+    "unresolved": [
+      "Ask Leo for an official print of Civil Code 1102.2 (exceptions) before stating who is exempt from the disclosure requirement.",
+      "Ask Leo for an official print of Civil Code 1102.3 and of the Real Estate Transfer Disclosure Statement (Stats. 2020 Ch. 370, Sec. 25, pp. 34-38); the 1102.6 print is incomplete text, so what the form asks (including anything about hoarding or property condition) is unverified (clm:9 unsupported).",
+      "Absence claim (clm:10, California law not mentioning hoarding) unsupported: no proof prepared; do not write it.",
+      "Local (city or county) rules on hoarding, nuisance or code enforcement: no print; the article says exactly 'local rules vary; check with your city or county'.",
+      "Library records have empty effective_date (17920.3, 1102) and empty retrieved_date (1102); filled from the print text and provenance note. Recheck-by 2027-01-08 has not passed for all three."
+    ]
+  }
+}

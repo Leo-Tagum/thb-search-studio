@@ -1,0 +1,49 @@
+{
+  "article_id": "581b5ad8-3ef6-4a79-a85b-a11970a4dc3d",
+  "opportunity_id": "52d196a0-9abf-4fb5-aec2-4e0c60245f3e",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["ba737b5f8848d7835eb7cad8478fe8c71e67d36066770bee53956d2829bf2475"],
+  "decision": "PASS",
+  "findings": [
+    {
+      "issue_key": "fact:s4:usually:soften",
+      "severity": "optional",
+      "note": "'The real question is usually whether the house or the paperwork is the bigger risk to the sale.' The word 'usually' is an unsupported frequency word; it states no legal rule, figure or fact. Plainer wording such as 'For many sellers the real question is...' or 'The question to ask is...' would avoid implying a frequency."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "v1-s4-ba737b5f-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s4",
+    "version_hash": "ba737b5f8848d7835eb7cad8478fe8c71e67d36066770bee53956d2829bf2475",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "leo_reference_needed": [],
+    "hedge_rulings": [
+      {
+        "key": "hedge:4c9bb9176582",
+        "ruling": "soften",
+        "note": "Frequency word 'usually' is not a statistic and the sentence states no legal rule, figure, section or list of roles. Plainer wording ('The question to ask is...') would remove the implied frequency."
+      }
+    ],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s4:usually:soften",
+        "section": "s4",
+        "issue": "'usually' in 'The real question is usually whether the house or the paperwork is the bigger risk' is an unsupported frequency word.",
+        "severity": "should fix",
+        "evidence": "hedge:4c9bb9176582; no ledger claim supports a frequency",
+        "fix": "Use 'The question to ask is whether...' or similar, without a frequency word.",
+        "blocking": false
+      }
+    ]
+  }
+}

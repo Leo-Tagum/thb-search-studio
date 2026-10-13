@@ -1,0 +1,49 @@
+{
+  "article_id": "d58e469c-5f2e-4fbb-bb46-2cfda838b0c3",
+  "opportunity_id": "614643fc-4b7e-4b2a-8cd9-092166bdb981",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["37b5deb362bd18021f433604a4653451861a1e0f55e1a313586f1711f7ac466e"],
+  "decision": "PASS",
+  "findings": [
+    {
+      "issue_key": "fact:s3:city_county_confirm_missing",
+      "severity": "optional",
+      "note": "The unit states no legal claim, figure, date or brand fact and cites no claim, so there is nothing to check against the ledger. The brief note asks for a line telling the reader to confirm with the city or county. The unit only says 'Ask an attorney or your title company what applies to your sale.' When the section is filled with the H&S 17920.3 conditions (clm:1 to clm:4), it must carry the city or county confirm line, the thresholds and who decides. Re-review then."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "v1-s3-37b5deb362bd-r1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s3",
+    "version_hash": "37b5deb362bd18021f433604a4653451861a1e0f55e1a313586f1711f7ac466e",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {
+        "key": "hedge:a7df148da563",
+        "ruling": "not_a_claim",
+        "note": "Conditional, cautionary line ('can commit you'). It states no fact, figure, frequency or legal rule; 'never' describes a hypothetical person's lack of agreement, not a statistic."
+      }
+    ],
+    "leo_reference_needed": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s3:city_county_confirm_missing",
+        "section": "s3",
+        "issue": "Brief asks for a confirm-with-city-or-county line; the unit names only an attorney or title company.",
+        "severity": "should fix",
+        "evidence": "brief_for_this_unit.notes; professional_confirmation (city or county building, health or fire department); SR-2",
+        "fix": "When the section is written, add a line that whether a home meets any condition is for the local enforcement authority, and tell the reader to confirm with their city or county. Where no local rule is verified, use 'local rules vary; check with your city or county'.",
+        "blocking": false
+      }
+    ]
+  }
+}

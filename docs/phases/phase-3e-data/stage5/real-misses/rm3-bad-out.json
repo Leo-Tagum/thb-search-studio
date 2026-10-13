@@ -1,0 +1,58 @@
+{
+  "article_id": "04b2db7e-edf3-408f-81cd-35a6fcf99fe3",
+  "opportunity_id": "f50ac397-0f20-4892-93cc-be5174d6c15d",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["0debccf75b84eee21d91970c6eed810792c320a018132682ac0d7cced5159650"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:s7:decider_closed_list",
+      "severity": "required",
+      "note": "The sentence 'Notice who decides. It is the county health department or the fire marshal, not you and not me.' presents a closed list of deciders that the law does not make. clm:1 to clm:4 and the stored quotes name a health officer, a code enforcement officer (Penal Code 829.5) where no agreement exists with an agency that has a health officer, and the fire chief or the chief's deputy. 'County health department' and 'fire marshal' are not in the stored quotes, and the unit's own earlier sentences already name the code enforcement officer alternative, so this sentence also contradicts them. 'County' is also an unsupported scope: the quotes say the determination is made by the local jurisdiction's officials, not specifically the county. This breaks SR-5.",
+      "claim_id": "clm:2"
+    },
+    {
+      "issue_key": "fact:s7:clm:5:scope_dropped",
+      "severity": "required",
+      "note": "'The disclosures are made on the Real Estate Transfer Disclosure Statement form. And any waiver of the requirements is void as against public policy.' States both rules flat, for any sale. The stored quotes limit them to the disclosures 'required by this article' (clm:5) and 'the requirements of this article' (clm:7). The article applies only to a transfer by sale of single-family residential property, except as provided in Section 1102.2 (clm:6), and the unit does not cite clm:6. A reader with a condo, multi-unit or other property type would believe the form and the waiver rule apply to them. quote_comparison BROADER, reader impact changes. Waiver sentence 'the requirements' has no antecedent.",
+      "claim_id": "clm:5"
+    },
+    {
+      "issue_key": "fact:s7:vague_frequency",
+      "severity": "optional",
+      "note": "'A lot of it comes from the paperwork and the people.' and 'None of that is a cleanout problem.' are unsupported frequency and absolute wording, but they state no legal rule or figure. Plainer wording, such as 'Some of it comes from the paperwork and the people', would do. Should-fix only.",
+      "claim_id": null
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:6", "clm:7", "clm:8"],
+  "required_actions": [
+    "Replace 'It is the county health department or the fire marshal' with wording that names every alternative in the stored quotes: a health officer or, where no agreement exists with an agency that has a health officer, a code enforcement officer, and for combustible waste the fire chief or the chief's deputy. Or write 'a local official, such as a health officer or the fire chief'. Do not say 'county' unless a ledger claim supports it.",
+    "Scope the disclosure sentences: say the Real Estate Transfer Disclosure Statement requirement applies to a sale of single-family residential property, with an exception, and that any waiver of the requirements of that disclosure law is void as against public policy. Add clm:6 to the unit's cited claims (Leo's NARROWER ruling on clm:6 covers 'sale' only). Do not describe form contents."
+  ],
+  "output_version_id": "v1-s7-0debccf7-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s7",
+    "version_hash": "0debccf75b84eee21d91970c6eed810792c320a018132682ac0d7cced5159650",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Junk, debris, garbage and similar materials adding up to a fire, health or safety hazard is a fair narrower rendering of 17920.3(j); the omitted weeds, vegetation and other items do not change what a seller reader would do. Threshold carried by clm:8, which the unit cites and states.", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Health officer and code enforcement officer alternative both named in the infestation sentence. (The later 'who decides' sentence is raised separately.)", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Health officer and code enforcement officer alternative both named.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "Fire chief or the chief's deputy, in their opinion; matches the stored quote.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:5", "verdict": "overstated", "note": "States the form requirement for any sale without the article's scope (single-family residential property, clm:6, not cited).", "quote_comparison": "BROADER", "reader_impact": "changes"},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "Wording matches the quote; the missing scope (what 'the requirements' refers to) is fixed together with the clm:5 finding.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:8", "verdict": "supported_as_written", "note": "Threshold stated accurately: 'bad enough to endanger the life, limb, health, property, safety or welfare of the people living there, nearby residents or the public'.", "quote_comparison": "MATCH", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "leo_reference_needed": [],
+    "hedge_rulings": [],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s7:decider_closed_list", "section": "s7", "issue": "'It is the county health department or the fire marshal' is a closed, wrong list of deciders; the law names a health officer, a code enforcement officer where no health-officer agreement exists, and the fire chief or the chief's deputy.", "severity": "must fix", "evidence": "clm:2, clm:3, clm:4 stored quotes; SR-5", "fix": "Write 'a local official, such as a health officer or the fire chief, decides, not you and not me', or name every alternative as in the earlier sentences. Drop 'county'.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s7:clm:5:scope_dropped", "section": "s7", "issue": "Form and waiver rules are stated for any sale; the law applies them to a transfer by sale of single-family residential property, with an exception.", "severity": "must fix", "evidence": "clm:5, clm:6, clm:7 stored quotes", "fix": "Add the single-family residential scope (and the exception) and cite clm:6; say 'any waiver of the requirements of the disclosure law is void as against public policy'.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s7:vague_frequency", "section": "s7", "issue": "'A lot of it comes from the paperwork and the people' and 'None of that is a cleanout problem' are unsupported absolutes (no legal rule or figure).", "severity": "should fix", "evidence": "editorial standards; no ledger claim", "fix": "Use 'Some of it comes from the paperwork and the people'.", "blocking": false}
+    ]
+  }
+}

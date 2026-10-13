@@ -1,0 +1,52 @@
+{
+  "article_id": "eb9e4d6a-dda9-4f12-b739-d2a16d7a2e79",
+  "opportunity_id": "9d6e9a39-130f-412c-a988-035896ea6e4c",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1"],
+  "decision": "REVISION",
+  "findings": [
+    {"issue_key": "fact:faq:absence:hoarding", "severity": "required", "note": "FAQ item 3 says \"The statute does not mention hoarding.\" This is an absence-of-law claim. The ledger has no statute_absence claim, so it is unproven (SR-6). Remove the sentence.", "claim_id": "clm:1"},
+    {"issue_key": "fact:faq:clm:1:threshold", "severity": "required", "note": "FAQ item 3 cites clm:1 to clm:4 but not clm:8. It says state law lists conditions that can make a building substandard, such as \"junk and debris that are fire, health or safety hazards\", with no threshold. H&S 17920.3 applies only where a listed condition exists \"to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public\". The ledger notes on clm:1 to clm:4 say the threshold is carried by clm:8 and that every citing unit must cite it. Cite clm:8 and add the threshold in plain words. Omitting it changes what a reader would believe, so reader_impact is changes.", "claim_id": "clm:1"},
+    {"issue_key": "fact:faq:authority-roles", "severity": "required", "note": "FAQ item 4 has no ledger claim behind it. It names \"the owner, a trustee, an executor or administrator, or several heirs who agree\", which is a list of legal roles. It also states \"Living in the house alone does not give you that authority\", which is a legal conclusion. Neither is supported. Remove the list and that sentence. Keep \"Only someone with legal authority to sign\". Add that who that is depends on how title is held, and that the seller should confirm with an attorney or title company."},
+    {"issue_key": "fact:faq:local-layer", "severity": "optional", "note": "FAQ item 3 moves from state law to \"the city or county\" with no local claim. Add the exact phrase \"local rules vary; check with your city or county\" (SR-2) so a reader does not take the state list as the local rule."},
+    {"issue_key": "fact:faq:not-always", "severity": "optional", "note": "FAQ item 2 opens with \"Not always.\" This implies no legal duty to clean out, and no ledger claim supports that. Soften it to something like \"There is no single answer; it depends on...\" so it does not read as a legal conclusion."}
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:6", "clm:7", "clm:8"],
+  "required_actions": [
+    "Item 3: delete \"The statute does not mention hoarding.\"",
+    "Item 3: cite clm:8 and state the threshold: conditions count only to an extent that endangers the life, limb, health, property, safety or welfare of occupants, nearby residents or the public.",
+    "Item 3: add \"local rules vary; check with your city or county\".",
+    "Item 4: remove the list of roles and \"Living in the house alone does not give you that authority\"; say who can sign depends on how title is held and to confirm with an attorney or title company."
+  ],
+  "output_version_id": "v1-faq-b30a408c-r1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "overstated", "note": "The unit states the listed condition as something that can make a building substandard but leaves out the 'to an extent that endangers ...' threshold, which sits in clm:8, and clm:8 is not cited.", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:2", "verdict": "overstated", "note": "The unit gives no threshold and says the local authority decides. The health officer or code enforcement officer alternative is not wrongly closed. clm:8 is not cited, so the threshold is missing.", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:3", "verdict": "overstated", "note": "The threshold from clm:8 is missing from the unit and clm:8 is not cited.", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:4", "verdict": "overstated", "note": "The threshold from clm:8 is missing from the unit and clm:8 is not cited.", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "The unit says the disclosures are made on the Real Estate Transfer Disclosure Statement form. This matches the quote.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "The unit says 'sale of single-family residential property, with an exception'. It is narrower than the quote (sale only), but Leo ruled on 2026-10-13 that this is accepted for a seller guide, so the reader would not believe or do anything different.", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "The unit says any waiver of the requirements is void as against public policy. This matches the quote word for word.", "quote_comparison": "MATCH", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "leo_reference_needed": [],
+    "hedge_rulings": [
+      {"key": "hedge:4a926ce9f475", "ruling": "soften", "note": "'Not always.' is conditional and states no figure, frequency or statute. A plainer 'it depends on...' would avoid implying there is no legal duty to clean out."},
+      {"key": "hedge:a0354a5b18af", "ruling": "drop", "note": "'The statute does not mention hoarding.' is an absence-of-law sentence. No statute_absence claim is in the ledger, so it is unproven (SR-6). Remove it."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:absence:hoarding", "section": "faq", "issue": "Item 3 says 'The statute does not mention hoarding.' with no statute_absence claim.", "severity": "must fix", "evidence": "SR-6; hedge:a0354a5b18af; no statute_absence claim in ledger", "fix": "Delete the sentence.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:clm:1:threshold", "section": "faq", "issue": "Item 3 lists conditions that can make a building substandard without the 'to an extent that endangers' threshold, and does not cite clm:8.", "severity": "must fix", "evidence": "clm:8 (H&S 17920.3 opening paragraph); clm:1 verification_reason; SR-5", "fix": "Cite clm:8. Say conditions count only to an extent that endangers the life, limb, health, property, safety or welfare of occupants, nearby residents or the public.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:authority-roles", "section": "faq", "issue": "Item 4 gives a list of legal roles and a legal conclusion ('Living in the house alone does not give you that authority') with no ledger claim.", "severity": "must fix", "evidence": "No ledger claim; editorial standards section 5; SR-4", "fix": "Say only someone with legal authority to sign can sell, that who that is depends on how title is held, and to confirm with an attorney or title company. Remove the role list and the 'living in the house' sentence.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:local-layer", "section": "faq", "issue": "Item 3 moves from the state list to the city or county without saying local rules vary.", "severity": "should fix", "evidence": "SR-2", "fix": "Add 'local rules vary; check with your city or county'.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:not-always", "section": "faq", "issue": "Item 2 opens with 'Not always.', which implies no legal duty to clean out and has no ledger support.", "severity": "should fix", "evidence": "hedge:4a926ce9f475; no ledger claim", "fix": "Use 'It depends on...' wording.", "blocking": false}
+    ]
+  }
+}

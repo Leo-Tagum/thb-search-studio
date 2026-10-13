@@ -1,0 +1,88 @@
+{
+  "article_id": "1d742ee9-2242-4381-8c86-678879103667",
+  "opportunity_id": "8b8fa482-cfac-4440-b2bd-946f5e5825fa",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["b92838990dc2e562266de06d9d4a6678d79ac8fc5dedc7680c8d600856a4e12a"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "fact:uncited:neighbor-hoarding-notice:unsupported",
+      "severity": "required",
+      "note": "The sentence 'California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.' states a specific legal requirement (who must be told, in what form, and when). No cited claim and no ledger claim supports it. Clm:5, clm:6 and clm:7 cover only the Transfer Disclosure Statement form, the article's scope and the void waiver. Nothing in the ledger mentions neighbor notice or hoarding. It also contradicts the brief, which says the guide does not describe what the disclosure covers. Remove the sentence.",
+      "claim_id": null
+    },
+    {
+      "issue_key": "fact:clm:6:most-sales",
+      "severity": "optional",
+      "note": "'For most sales of single-family homes' adds a frequency ('most') that no ledger claim supports. Clm:6 says the article applies to a transfer by sale of single-family residential property, except as provided in Section 1102.2. Suggest the statute's own framing: 'When you sell single-family residential property in California, the disclosure article generally applies, except as Civil Code section 1102.2 provides'. Say 'residential property' as the statute does.",
+      "claim_id": "clm:6"
+    }
+  ],
+  "evidence_ids": ["clm:5", "clm:6", "clm:7"],
+  "required_actions": [
+    "Delete the sentence 'California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.' The ledger has no claim for it.",
+    "Optional: replace 'For most sales' with wording that matches clm:6 (applies to a sale of single-family residential property, except as Civil Code 1102.2 provides)."
+  ],
+  "output_version_id": "v1-s4-b9283899-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s4",
+    "version_hash": "b92838990dc2e562266de06d9d4a6678d79ac8fc5dedc7680c8d600856a4e12a",
+    "claim_checks": [
+      {
+        "claim_id": "clm:5",
+        "verdict": "supported_as_written",
+        "note": "'The disclosures are made on that form (Civil Code section 1102.6)' matches the stored quote that the disclosures shall be made on a copy of the form.",
+        "quote_comparison": "MATCH",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:6",
+        "verdict": "supported_as_written",
+        "note": "Sale only, with the exception acknowledged ('The law has exceptions'). Leo's ruling of 2026-10-13 accepts the narrower 'sale' for a seller guide, so the omitted transfer types do not change what this reader would do. 'Most sales' is raised separately as optional.",
+        "quote_comparison": "NARROWER",
+        "reader_impact": "none"
+      },
+      {
+        "claim_id": "clm:7",
+        "verdict": "supported_as_written",
+        "note": "'a waiver of those requirements is void' matches the stored quote that any waiver of the requirements of the article is void as against public policy.",
+        "quote_comparison": "MATCH",
+        "reader_impact": "none"
+      }
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "block_kind": "BLOCKED_CLAIM",
+    "hedge_rulings": [],
+    "leo_reference_needed": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:uncited:neighbor-hoarding-notice:unsupported",
+        "section": "s4",
+        "issue": "Uncited legal requirement: 'California law requires you to tell your neighbors about a hoarding condition in writing before you list the house.'",
+        "severity": "must fix",
+        "evidence": "No ledger claim supports it. Clm:5, clm:6 and clm:7 cover only the TDS form, scope and void waiver. Standards section 5 and SR-4.",
+        "fix": "Delete the sentence. Do not add a replacement legal rule unless a ledger claim with an official quote supports it.",
+        "blocking": true
+      },
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:clm:6:most-sales",
+        "section": "s4",
+        "issue": "'For most sales' is an unsupported frequency. Clm:6 says the article applies except as Section 1102.2 provides.",
+        "severity": "should fix",
+        "evidence": "clm:6, Civil Code 1102(a)",
+        "fix": "Say the disclosure article applies to a sale of single-family residential property, with exceptions (Civil Code 1102.2).",
+        "blocking": false
+      }
+    ]
+  }
+}

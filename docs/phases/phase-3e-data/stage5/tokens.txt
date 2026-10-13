@@ -1,0 +1,7 @@
+cards (10 V1)                runs 10  input      60 cache-create    252784 cache-read    332136 output   2033  ALL    587013  excl cache reads    254877
+card 1 in context (3 V1)     runs  3  input      18 cache-create     75033 cache-read    133113 output    611  ALL    208775  excl cache reads     75662
+adversarial (4 V1)           runs  4  input      24 cache-create     84585 cache-read    172882 output    819  ALL    258310  excl cache reads     85428
+real misses (5 V1)           runs  5  input      30 cache-create    136482 cache-read    240242 output   1229  ALL    377983  excl cache reads    137741
+Agent 2 dry run              runs  1  input       6 cache-create     31756 cache-read     30611 output    199  ALL     62572  excl cache reads     31961
+R1 dry run                   runs  1  input       6 cache-create     26486 cache-read     27909 output    203  ALL     54604  excl cache reads     26695
+TOTAL                        runs 24  input     144 cache-create    607126 cache-read    936893 output   5094  ALL   1549257  excl cache reads    612364

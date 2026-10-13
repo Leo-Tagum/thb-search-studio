@@ -1,0 +1,54 @@
+{
+  "article_id": "f9b92b88-096f-4021-8fd8-c5e625d72656",
+  "opportunity_id": "a75a52a7-3eab-43c1-ae41-050ed31aa4c3",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1"],
+  "decision": "REVISION",
+  "findings": [
+    {"issue_key": "fact:clm:1:overstated", "severity": "required", "note": "Item 3 says 'State law lists conditions that can make a building substandard, such as junk and debris that are fire, health or safety hazards' and cites clm:1 to clm:4 but not clm:8. It leaves out the statutory threshold ('to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants of the building, nearby residents, or the public'). The omission changes what a reader would believe: that any such condition makes a house substandard. The clm:1 ledger label NARROWER depends on every citing unit also citing clm:8.", "claim_id": "clm:1"},
+    {"issue_key": "legal:absence:faq:hoarding", "severity": "required", "note": "'The statute does not mention hoarding.' is an absence-of-law claim. The ledger has no statute_absence claim for it (SR-6). Remove the sentence.", "claim_id": "clm:1"},
+    {"issue_key": "fact:faq:item3:enforcement_unsupported", "severity": "required", "note": "The question 'Can the city or county act on a packed or hoarded house?' is answered 'Possibly'. No ledger claim says what a city or county may do (enforcement power, notices). The cited claims only list conditions that can make a building substandard and who determines some of them. 'Whether a home meets them is for the local authority' also names a general decider where the quote names a health officer, a code enforcement officer (clm:2, clm:3) and the fire chief or deputy (clm:4)."},
+    {"issue_key": "fact:faq:item4:authority_roles_unsupported", "severity": "required", "note": "Item 4 lists who may sign ('the owner, a trustee, an executor or administrator, or several heirs who agree') and concludes 'Living in the house alone does not give you that authority'. It cites no claim (claim_ids is empty). The list of legal roles and the legal conclusion have no ledger support."},
+    {"issue_key": "fact:faq:item2:not_always", "severity": "optional", "note": "'Not always.' in item 2 answers a 'do I have to' question and can read as a legal conclusion that there is no duty to clean out. Plainer wording would say that no ledger claim covers a cleanout duty and that the choice depends on route and on checking with an agent, attorney or the city or county."},
+    {"issue_key": "fact:clm:6:item5_uncited", "severity": "optional", "note": "Item 5 relies on the scope limit 'for a sale the disclosure article covers' (clm:6) but cites only clm:7. Add clm:6 to its claim_ids."}
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4", "clm:5", "clm:6", "clm:7", "clm:8"],
+  "required_actions": [
+    "Item 3: cite clm:8 and state the threshold in the answer ('to an extent that endangers the life, limb, health, property, safety, or welfare of the occupants, nearby residents, or the public'), attributed to California law.",
+    "Item 3: delete 'The statute does not mention hoarding.'",
+    "Item 3: reframe the question and answer to what clm:1 to clm:4 and clm:8 support, which is conditions that can make a building substandard under California law. Name the deciders (a health officer or, where no agreement exists, a code enforcement officer; the fire chief or deputy for combustible waste) or say 'a local official, such as ...'. Drop 'Possibly'. Say 'local rules vary; check with your city or county'.",
+    "Item 4: remove the role list and the 'living in the house alone' conclusion, or support them with a ledger claim. Keep the plain advice to confirm who can sign with an attorney or title company."
+  ],
+  "output_version_id": "v1-faq-b30a408c-review1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "faq",
+    "version_hash": "b30a408c09e1ab5358710ac2afb4c7d864bdb46c8f5b9c5260bd4ab5677bc0d1",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "overstated", "note": "Item 3 states the listed-condition rule without the 'to an extent that endangers' threshold held by clm:8, which the unit does not cite.", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:2", "verdict": "overstated", "note": "Cited in the same answer. The text states the conditions and the decider generically ('local authority'), and the threshold is missing (clm:8 not cited).", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:3", "verdict": "overstated", "note": "Cited in the same answer. The threshold is missing (clm:8 not cited) and the decider is stated as 'local authority'.", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:4", "verdict": "overstated", "note": "Cited in the same answer. The threshold is missing (clm:8 not cited) and the decider is stated as 'local authority' rather than the fire chief or deputy.", "quote_comparison": "NARROWER", "reader_impact": "changes"},
+      {"claim_id": "clm:5", "verdict": "supported_as_written", "note": "Item 1 says the disclosures are made on the Real Estate Transfer Disclosure Statement form, which matches the quote.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:6", "verdict": "supported_as_written", "note": "'for a sale of single-family residential property ... with an exception' uses the statute's own words and refers to the 1102.2 exception. Sale-only is accepted under Leo's ruling of 2026-10-13, so the omitted transfer types do not change what this reader would do.", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:7", "verdict": "supported_as_written", "note": "'any waiver of the requirements is void as against public policy' matches the quote word for word.", "quote_comparison": "MATCH", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "leo_reference_needed": [],
+    "hedge_rulings": [
+      {"key": "hedge:4a926ce9f475", "ruling": "soften", "note": "'Not always.' is an unsupported frequency phrase, not a statistic. No ledger claim covers a cleanout duty, so plainer wording should avoid implying a legal answer."},
+      {"key": "hedge:a0354a5b18af", "ruling": "drop", "note": "Absence-of-law sentence. No statute_absence claim is in the ledger, so it cannot be proven (SR-6)."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:1:overstated", "section": "faq", "issue": "Item 3 states the substandard-condition list without the 'to an extent that endangers' threshold and does not cite clm:8.", "severity": "must fix", "evidence": "clm:8 quote; SR-5; ledger label for clm:1 requires all citing units to cite clm:8", "fix": "Cite clm:8 and add the threshold in the answer, attributed to California law.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "legal:absence:faq:hoarding", "section": "faq", "issue": "'The statute does not mention hoarding.' has no statute_absence claim.", "severity": "must fix", "evidence": "SR-6; hedge:a0354a5b18af; no statute_absence claim in ledger", "fix": "Delete the sentence.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:item3:enforcement_unsupported", "section": "faq", "issue": "Item 3 answers 'Possibly' to whether the city or county can act. No ledger claim supports enforcement power, and 'local authority' replaces the named deciders.", "severity": "must fix", "evidence": "clm:1 to clm:4 quotes list conditions and deciders only; SR-5; SR-2", "fix": "Reframe to what California law lists as substandard conditions, name the deciders or say 'a local official, such as ...', and say 'local rules vary; check with your city or county'.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:item4:authority_roles_unsupported", "section": "faq", "issue": "Item 4 lists who may sign and states that living in the house gives no authority, with no ledger claim.", "severity": "must fix", "evidence": "item 4 claim_ids is empty; no authority claim in the ledger; severity calibration rule 1 (list of legal roles)", "fix": "Remove the role list and the conclusion. Keep: only someone with legal authority can sign, and confirm who with an attorney or title company.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:faq:item2:not_always", "section": "faq", "issue": "'Not always.' answering a 'do I have to' question can read as a legal conclusion.", "severity": "should fix", "evidence": "hedge:4a926ce9f475", "fix": "Say the choice depends on route, and point to an agent, attorney or the city or county for any duty.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:clm:6:item5_uncited", "section": "faq", "issue": "Item 5 relies on the article's scope (clm:6) but cites only clm:7.", "severity": "should fix", "evidence": "clm:6", "fix": "Add clm:6 to the item's claim_ids.", "blocking": false}
+    ]
+  }
+}

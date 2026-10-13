@@ -1,0 +1,43 @@
+{
+  "article_id": "581b5ad8-3ef6-4a79-a85b-a11970a4dc3d",
+  "opportunity_id": "52d196a0-9abf-4fb5-aec2-4e0c60245f3e",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.3.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["49797767d32c22100feb3ef50815899d21a87878b683844def42517acf39bc78"],
+  "decision": "PASS",
+  "findings": [
+    {
+      "issue_key": "fact:s3:brief-content-missing",
+      "severity": "optional",
+      "note": "Fact-gate observation only. The unit cites no claims and states no law, figure, date or brand fact, so there is nothing for me to check. The brief for s3 expects the listed H&S 17920.3 conditions (clm:1 to clm:4), who decides, and a confirm-with-the-city-or-county line, and none of that is in the text. If the writer adds it, it must carry clm:1 to clm:4, state the thresholds and deciders as the stored quotes do, and be re-reviewed by V1. Whether the section is complete is for V3."
+    }
+  ],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "v1-s3-49797767-pass-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s3",
+    "version_hash": "49797767d32c22100feb3ef50815899d21a87878b683844def42517acf39bc78",
+    "claim_checks": [],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [],
+    "leo_reference_needed": [],
+    "cards": [
+      {
+        "ticket": "QUALITY_CORRECTION",
+        "from": ["V1"],
+        "to": "W1",
+        "key": "fact:s3:brief-content-missing",
+        "section": "s3",
+        "issue": "Unit states none of the brief's H&S 17920.3 conditions and cites no claims; any legal content added later must carry clm:1 to clm:4 with their thresholds and deciders.",
+        "severity": "suggestion",
+        "evidence": "brief_for_this_unit.claim_ids clm:1-clm:4; SR-5",
+        "fix": "If the conditions are added, cite clm:1 to clm:4, keep the 'as determined by a health officer' and 'in the opinion of the fire chief' wording, and say local rules vary; check with your city or county.",
+        "blocking": false
+      }
+    ]
+  }
+}
