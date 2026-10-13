@@ -333,9 +333,11 @@ The only **required** finding in the s7 pass was Agent 6's `seo:direct-answer-no
 - **Unattended:** not shown. Two owner-approved exceptions, a Leo-directed editor replacement, and Leo's decisions were needed.
 
 ## Open for Leo
-Phase 3d is closed. Juan reviews proposal `d5d477d7…` (article version `0db68f782324`) in the Approval Room; the polish items above are for his review. Leo prints the three statute sections again for a fresh date before publishing.
+Phase 3d is closed. **Update (Leo, 2026-10-13): the hoarder guide is a TEST article, not a post. Proposal `d5d477d7…` (article version `0db68f782324`) is test-only: the Approval Room is on hold ("On hold. Test article, not for review."), nobody reviews or approves it, and `sync-approvals` is never run on it.** The earlier plan (Juan reviews it, Leo reprints the three statutes and publishes) is withdrawn.
 
 ## 3e backlog: UI/UX audit (2026-10-13)
+
+**Standing note (Leo, 2026-10-13): proposal `d5d477d7-bfb5-4458-b716-31d6b4954161` is test-only. Never run `sync-approvals` on it; never republish the Approval Room for it without Leo's explicit go.**
 
 Batch 1 (UI and config only) is done: dev server bound to 127.0.0.1, Preview iframe white background, markdown rendered in Draft and Diff, Approvals message, hybrid article labelled "classic + V1", dark-mode contrast, Blog audit table padding, banner wording. Planned, not started:
 
