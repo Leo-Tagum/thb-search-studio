@@ -1,0 +1,267 @@
+<title>Image Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout concept: one article, a short list of image jobs. Each card reads top to bottom as the job does: where it goes, the prompt to copy, the exact words to add, the file to hand in.
+   Palette: THB navy and orange on a light background. Type: Bricolage Grotesque for titles, Instrument Sans for everything else. */
+:root {
+  --bg: #f3f5f9; --surface: #ffffff; --ink: #14213d; --ink-2: #4a5873; --line: #dbe1ec; --soft: #eaeef6;
+  --navy: #14213d; --orange: #e8590c; --orange-ink: #b8430a; --orange-soft: #fff0e6;
+  --todo: #5b6784; --todo-bg: #e8ebf2; --prog: #9a5b00; --prog-bg: #fff1d6; --done: #17623a; --done-bg: #dcf3e4; --stale: #9b2c2c; --stale-bg: #fde8e8;
+  --lock-bg: #f0f2f7; --focus: #1f5fd1; --shadow: 0 1px 2px rgba(20,33,61,.06), 0 4px 14px rgba(20,33,61,.06);
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif; --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1626; --surface: #172039; --ink: #eef1f8; --ink-2: #aab4cc; --line: #2a3556; --soft: #1e2946;
+  --navy: #eef1f8; --orange: #ff8a3d; --orange-ink: #ffa566; --orange-soft: #3a2415;
+  --todo: #b3bcd3; --todo-bg: #25304f; --prog: #ffcb70; --prog-bg: #3d2f12; --done: #7fdca3; --done-bg: #17382a; --stale: #ff9a9a; --stale-bg: #3f1c1c;
+  --lock-bg: #1c2642; --focus: #7aa8ff; --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f1626; --surface: #172039; --ink: #eef1f8; --ink-2: #aab4cc; --line: #2a3556; --soft: #1e2946;
+  --navy: #eef1f8; --orange: #ff8a3d; --orange-ink: #ffa566; --orange-soft: #3a2415;
+  --todo: #b3bcd3; --todo-bg: #25304f; --prog: #ffcb70; --prog-bg: #3d2f12; --done: #7fdca3; --done-bg: #17382a; --stale: #ff9a9a; --stale-bg: #3f1c1c;
+  --lock-bg: #1c2642; --focus: #7aa8ff; --shadow: 0 1px 2px rgba(0,0,0,.3); color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--body); }
+.wrap { max-width: 1020px; margin: 0 auto; padding-inline: 16px; padding-block: 22px 56px; }
+h1, h2, h3 { font-family: var(--display); color: var(--navy); margin: 0; text-wrap: balance; }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.fixture { background: var(--orange-soft); border: 1px dashed var(--orange); color: var(--orange-ink); border-radius: 10px; padding: 8px 14px; font-weight: 600; font-size: 13px; margin-bottom: 18px; }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; gap: 6px 24px; align-items: end; justify-content: space-between; margin-bottom: 16px; }
+.top h1 { font-size: 30px; line-height: 1.15; }
+.eyebrow { font: 600 12px/1.2 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 6px; }
+.count { display: flex; gap: 8px; flex-wrap: wrap; }
+.count span { font-weight: 600; font-size: 13px; padding: 4px 11px; border-radius: 999px; }
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0 0 22px; padding: 0; list-style: none; counter-reset: s; }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px 12px 46px; position: relative; font-size: 14px; counter-increment: s; min-width: 0; }
+.steps li::before { content: counter(s); position: absolute; left: 12px; top: 11px; width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: var(--bg); font: 700 13px/24px var(--display); text-align: center; }
+.steps b { display: block; font-family: var(--display); font-size: 15px; color: var(--navy); }
+
+/* cards */
+.cards { display: flex; flex-direction: column; gap: 20px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+.card-head { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-start; justify-content: space-between; padding: 16px 20px 14px; border-bottom: 1px solid var(--line); }
+.card-head .t { min-width: 0; flex: 1 1 320px; }
+.card-head h2 { font-size: 21px; line-height: 1.2; }
+.meta { color: var(--ink-2); font-size: 13px; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 2px 14px; }
+.pill { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 13px; padding: 5px 13px 5px 10px; border-radius: 999px; white-space: nowrap; }
+.pill::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+.s-todo { color: var(--todo); background: var(--todo-bg); } .s-prog { color: var(--prog); background: var(--prog-bg); } .s-done { color: var(--done); background: var(--done-bg); }
+.tag { font-weight: 600; font-size: 12px; padding: 3px 9px; border-radius: 6px; background: var(--soft); color: var(--ink-2); }
+.tag.must { background: var(--orange-soft); color: var(--orange-ink); }
+.stale { background: var(--stale-bg); color: var(--stale); }
+.body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+.col { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.col + .col { border-left: 1px solid var(--line); }
+.sec h3 { font: 700 12px/1.2 var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 7px; display: flex; align-items: center; gap: 8px; }
+.sec h3 .n { background: var(--navy); color: var(--bg); width: 20px; height: 20px; border-radius: 50%; font: 700 11px/20px var(--display); text-align: center; letter-spacing: 0; }
+.sec p { margin: 0; }
+.where { display: flex; gap: 14px; align-items: center; }
+.slot { flex: none; width: 74px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); padding: 7px; display: flex; flex-direction: column; gap: 4px; }
+.slot i { display: block; height: 4px; border-radius: 2px; background: var(--line); }
+.slot i.me { height: 14px; background: var(--orange); border-radius: 3px; }
+.box { position: relative; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.box.prompt { padding-right: 14px; font-size: 14.5px; }
+.btn { cursor: pointer; border: 1.5px solid var(--navy); background: var(--surface); color: var(--navy); font-weight: 600; border-radius: 9px; padding: 7px 14px; font-size: 14px; }
+.btn:hover { background: var(--navy); color: var(--bg); }
+.btn.primary { background: var(--orange); border-color: var(--orange); color: #fff; }
+.btn.primary:hover { background: var(--orange-ink); border-color: var(--orange-ink); color: #fff; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 9px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: var(--stale-bg); color: var(--stale); border-radius: 6px; padding: 3px 9px; font-size: 13px; font-weight: 500; }
+.hint { color: var(--ink-2); font-size: 13px; }
+.copied { color: var(--done); font-weight: 600; font-size: 13px; }
+
+/* locked overlay text */
+.lock { background: var(--lock-bg); border: 1px solid var(--line); border-radius: 10px; padding: 4px 14px 12px; }
+.lock .lines { margin: 0; padding: 0; list-style: none; }
+.lock li { padding: 9px 0; border-bottom: 1px dashed var(--line); user-select: all; font-weight: 500; }
+.lock li:last-child { border-bottom: 0; }
+.lock li small { display: block; color: var(--ink-2); font-weight: 400; font-size: 12px; user-select: none; }
+.lock .note { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; color: var(--ink-2); padding-top: 10px; border-top: 1px solid var(--line); }
+.lock .note svg { flex: none; margin-top: 2px; }
+.spec { display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; font-size: 14px; }
+.spec dt { color: var(--ink-2); } .spec dd { margin: 0; font-weight: 500; }
+
+/* upload + history */
+.drop { border: 2px dashed var(--line); border-radius: 12px; padding: 14px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; background: var(--bg); }
+.thumb { width: 112px; height: 63px; border-radius: 8px; border: 1px solid var(--line); background: var(--soft); object-fit: cover; display: block; flex: none; }
+.drop .t { min-width: 0; flex: 1 1 180px; }
+.hist { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.hist th { text-align: left; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); padding: 0 8px 6px 0; font-weight: 600; }
+.hist td { padding: 7px 8px 7px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.hist tr.cur td:first-child { font-weight: 700; color: var(--navy); }
+.vwrap { overflow-x: auto; }
+
+/* status */
+.seg { display: inline-flex; border: 1.5px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg); }
+.seg button { border: 0; background: transparent; padding: 8px 14px; font-weight: 600; font-size: 14px; cursor: pointer; color: var(--ink-2); }
+.seg button + button { border-left: 1.5px solid var(--line); }
+.seg button[aria-pressed="true"].s-todo { background: var(--todo-bg); color: var(--todo); }
+.seg button[aria-pressed="true"].s-prog { background: var(--prog-bg); color: var(--prog); }
+.seg button[aria-pressed="true"].s-done { background: var(--done-bg); color: var(--done); }
+.seg button[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* notes */
+.thread { display: flex; flex-direction: column; gap: 8px; margin: 0 0 9px; padding: 0; list-style: none; }
+.msg { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+.msg b { font-weight: 700; color: var(--navy); } .msg time { color: var(--ink-2); font-size: 12px; margin-left: 6px; }
+.msg.studio { border-left: 3px solid var(--orange); }
+.add { display: flex; gap: 8px; }
+.add input { flex: 1; min-width: 0; border: 1.5px solid var(--line); border-radius: 9px; padding: 8px 12px; background: var(--surface); }
+.foot { margin-top: 24px; color: var(--ink-2); font-size: 13px; }
+@media (max-width: 820px) {
+  .steps { grid-template-columns: 1fr 1fr; } .body { grid-template-columns: 1fr; } .col + .col { border-left: 0; border-top: 1px solid var(--line); }
+  .top h1 { font-size: 25px; }
+}
+@media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+<div class="wrap" id="app"><noscript>This page needs JavaScript.</noscript></div>
+<script id="payload" type="application/json">__PAYLOAD__</script>
+<script>
+(function () {
+  var P = JSON.parse(document.getElementById('payload').textContent);
+  var app = document.getElementById('app');
+  var LABEL = { todo: 'To do', prog: 'In progress', done: 'Done' };
+  var TYPE = { infographic: 'Infographic', diagram_flowchart: 'Flow diagram', checklist_graphic: 'Checklist graphic', comparison_graphic: 'Comparison graphic', illustration: 'Illustration', stock_photo: 'Generic stock photo', icon_set: 'Icon set' };
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      var v = attrs[k];
+      if (k === 'class') n.className = v; else if (k === 'text') n.textContent = v; else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), v); else if (v !== false && v != null) n.setAttribute(k, v === true ? '' : v);
+    });
+    (kids || []).forEach(function (c) { if (c != null) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+  var lockSvg = function () { var s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('width', '15'); s.setAttribute('height', '15'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '2'); s.setAttribute('aria-hidden', 'true'); var r = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); r.setAttribute('x', '5'); r.setAttribute('y', '11'); r.setAttribute('width', '14'); r.setAttribute('height', '9'); r.setAttribute('rx', '2'); var p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('d', 'M8 11V8a4 4 0 0 1 8 0v3'); s.appendChild(r); s.appendChild(p); return s; };
+
+  // ---- state: the Studio plan comes from the payload; Lawrence's work (status, uploads, notes) is kept in the db capability when this page has it, in memory otherwise ----
+  var S = {}; P.cards.forEach(function (c) { S[c.card_id] = { state: c.state, uploads: (c.uploads || []).slice(), notes: (c.notes || []).slice() }; });
+  var DB = null, ME = 'Lawrence';
+  function docFor(id) { return DB && DB.doc('board/' + P.board.article_id + '/work/' + id.replace(':', '-')); }
+  function save(id) { try { var d = docFor(id); if (d) d.set({ state: S[id].state, uploads: S[id].uploads.map(function (u) { return { v: u.v, for_card_version: u.for_card_version, file_name: u.file_name, date: u.date, asset_id: u.asset_id || null }; }), notes: S[id].notes }); } catch (e) { /* the page keeps working in memory */ } }
+  function load() {
+    return Promise.resolve(window.claude && window.claude.use ? window.claude.use('db') : null).then(function (db) {
+      DB = db; if (!db) return;
+      return Promise.all(P.cards.map(function (c) { return docFor(c.card_id).get().then(function (d) { var v = d && (d.data ? d.data() : d); if (v && v.state) { S[c.card_id].state = v.state; S[c.card_id].uploads = v.uploads || []; S[c.card_id].notes = v.notes || []; } }).catch(function () {}); }));
+    }).catch(function () {});
+  }
+  function today() { return new Date().toISOString().slice(0, 10); }
+
+  function copy(text, done) {
+    var fin = function (ok) { done(ok); };
+    try { navigator.clipboard.writeText(text).then(function () { fin(true); }, function () { fin(fallback()); }); } catch (e) { fin(fallback()); }
+    function fallback() { var t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} document.body.removeChild(t); return ok; }
+  }
+  function copyBtn(label, text) {
+    var note = el('span', { class: 'copied', 'aria-live': 'polite' });
+    var b = el('button', { class: 'btn primary', type: 'button', onclick: function () { copy(text, function (ok) { note.textContent = ok ? 'Copied' : 'Select the text and copy it'; setTimeout(function () { note.textContent = ''; }, 2200); }); } }, [label]);
+    return [b, note];
+  }
+  function currentImage(c) { var u = S[c.card_id].uploads.filter(function (x) { return x.for_card_version === c.card_version; }); return u.length ? u[u.length - 1] : null; }
+
+  function render() {
+    app.textContent = '';
+    if (P.board.fixture) app.appendChild(el('div', { class: 'fixture', text: 'Fixture data. This is a test board with made-up cards, not a real article.' }));
+    var counts = { todo: 0, prog: 0, done: 0 }; P.cards.forEach(function (c) { counts[S[c.card_id].state]++; });
+    app.appendChild(el('div', { class: 'top' }, [
+      el('div', {}, [el('div', { class: 'eyebrow', text: 'Image board' }), el('h1', { text: P.board.article_title })]),
+      el('div', { class: 'count', 'aria-label': 'Progress' }, ['todo', 'prog', 'done'].map(function (k) { return el('span', { class: 's-' + k, text: counts[k] + ' ' + LABEL[k].toLowerCase() }); })),
+    ]));
+    app.appendChild(el('ol', { class: 'steps' }, [
+      el('li', {}, [el('b', { text: 'Copy the prompt' }), 'Paste it into your AI image tool. Add the avoid list as the negative prompt.']),
+      el('li', {}, [el('b', { text: 'Add the words yourself' }), 'The AI never draws text. Type the exact text shown below in your design tool.']),
+      el('li', {}, [el('b', { text: 'Upload the image' }), 'One file per card. A new upload becomes the next version.']),
+      el('li', {}, [el('b', { text: 'Set the status' }), 'In progress while you work, Done when the image is uploaded.']),
+    ]));
+    var list = el('div', { class: 'cards' });
+    P.cards.forEach(function (c, i) { list.appendChild(card(c, i + 1)); });
+    app.appendChild(list);
+    app.appendChild(el('p', { class: 'foot', text: 'Text on an image cannot be edited here. If a word needs to change, the Studio makes a new version of the card and the earlier image is marked outdated. Article text: ' + P.board.text_hash + '.' }));
+  }
+
+  function card(c, n) {
+    var st = S[c.card_id]; var img = currentImage(c);
+    var outdated = st.uploads.length && !img;
+    var head = el('div', { class: 'card-head' }, [
+      el('div', { class: 't' }, [
+        el('div', { class: 'eyebrow', text: 'Card ' + n + ' of ' + P.cards.length }),
+        el('h2', { text: c.title }),
+        el('div', { class: 'meta' }, [el('span', { text: TYPE[c.type] || c.type }), el('span', { text: c.unit_title }), el('span', { text: 'Card version ' + c.card_version }), el('span', { class: 'tag ' + (c.priority === 'must_have' ? 'must' : ''), text: c.priority === 'must_have' ? 'Must have' : 'Nice to have' })]),
+      ]),
+      el('span', { class: 'pill s-' + st.state, text: LABEL[st.state] }),
+    ]);
+
+    var slot = el('div', { class: 'slot', 'aria-hidden': 'true' }, [el('i'), el('i'), el('i', { class: 'me' }), el('i'), el('i')]);
+    var left = el('div', { class: 'col' }, [
+      sec(null, 'What it is for and where it goes', [el('div', { class: 'where' }, [slot, el('div', {}, [el('p', { text: c.purpose }), el('p', { class: 'hint', style: 'margin-top:6px', text: c.placement })])])]),
+      sec(1, 'Prompt for your AI image tool', [el('div', { class: 'box prompt', text: c.generation_prompt }), el('div', { class: 'row' }, copyBtn('Copy prompt', c.generation_prompt)), el('p', { class: 'hint', style: 'margin-top:6px', text: 'Works in any image tool. Ratio ' + c.aspect_ratio.ratio + ', about ' + c.aspect_ratio.width_px + ' by ' + c.aspect_ratio.height_px + ' px.' })]),
+      sec(null, 'Avoid (negative prompt)', [el('div', { class: 'chips' }, c.avoid.map(function (a) { return el('span', { class: 'chip', text: a }); })), el('div', { class: 'row' }, copyBtn('Copy avoid list', c.avoid.join(', ')))]),
+    ]);
+
+    var lines = el('ul', { class: 'lines' }, c.text_overlay.map(function (l) { return el('li', {}, [l.text, el('small', { text: 'From ' + l.source })]); }));
+    var lockBox = el('div', { class: 'lock' }, [lines, el('div', { class: 'note' }, [lockSvg(), el('span', { text: 'Locked. Add these words yourself, exactly as written. To change a word, ask for a new card version.' })])]);
+    var spec = el('dl', { class: 'spec' }, [el('dt', { text: 'Size' }), el('dd', { text: c.aspect_ratio.ratio + ', ' + c.aspect_ratio.width_px + ' x ' + c.aspect_ratio.height_px + ' px' }), el('dt', { text: 'File name' }), el('dd', { text: c.suggested_file_name }), el('dt', { text: 'Alt text' }), el('dd', { text: c.alt_text })]);
+
+    var fileInput = el('input', { type: 'file', id: 'f-' + c.card_id.replace(':', '-'), accept: 'image/png,image/jpeg,image/webp,image/svg+xml', hidden: true, onchange: function (e) { upload(c, e.target.files && e.target.files[0]); } });
+    var thumb = img && img.thumb ? el('img', { class: 'thumb', src: img.thumb, alt: 'Latest upload for card ' + n }) : el('div', { class: 'thumb', 'aria-hidden': 'true' });
+    var dropText = img ? [el('b', { text: img.file_name }), el('div', { class: 'hint', text: 'Image v' + img.v + ' for card version ' + c.card_version + ', uploaded ' + img.date })] : [el('b', { text: outdated ? 'The earlier image is outdated' : 'No image yet' }), el('div', { class: 'hint', text: outdated ? 'The card changed after your last upload. Make a new image for card version ' + c.card_version + '.' : 'PNG, JPEG, WebP or SVG, up to 10 MB.' })];
+    var drop = el('div', { class: 'drop' }, [thumb, el('div', { class: 't' }, dropText), el('label', { class: 'btn primary', for: fileInput.id, style: 'cursor:pointer', text: img ? 'Upload a new version' : 'Upload image' })]);
+
+    var rows = c.versions.slice().sort(function (a, b) { return b.v - a.v; }).map(function (v) {
+      var up = st.uploads.filter(function (u) { return u.for_card_version === v.v; }); var last = up.length ? up[up.length - 1] : null;
+      var cur = v.v === c.card_version;
+      return el('tr', { class: cur ? 'cur' : '' }, [el('td', { text: 'v' + v.v + (cur ? ' (current)' : '') }), el('td', { text: v.date + ': ' + v.change }), el('td', {}, [last ? last.file_name + ' (image v' + last.v + ')' : (cur ? 'none yet' : 'none'), (!cur && last) ? el('div', { class: 'tag stale', style: 'display:inline-block;margin-left:6px', text: 'outdated' }) : null])]);
+    });
+    var hist = el('div', { class: 'vwrap' }, [el('table', { class: 'hist' }, [el('thead', {}, [el('tr', {}, [el('th', { text: 'Card' }), el('th', { text: 'What changed' }), el('th', { text: 'Your image' })])]), el('tbody', {}, rows)])]);
+
+    var seg = el('div', { class: 'seg', role: 'group', 'aria-label': 'Status' }, ['todo', 'prog', 'done'].map(function (k) {
+      var disabled = k === 'done' && !img;
+      return el('button', { type: 'button', class: 's-' + k, 'aria-pressed': st.state === k ? 'true' : 'false', disabled: disabled, title: disabled ? 'Upload the image for this card version first' : false, onclick: function () { st.state = k; save(c.card_id); render(); } }, [LABEL[k]]);
+    }));
+
+    var thread = el('ul', { class: 'thread' }, st.notes.map(function (m) { return el('li', { class: 'msg' + (m.who === 'Studio' || m.who === 'Leo' ? ' studio' : '') }, [el('b', { text: m.who }), el('time', { text: m.at }), el('div', { text: m.text })]); }));
+    var noteIn = el('input', { type: 'text', id: 'n-' + c.card_id.replace(':', '-'), placeholder: 'Ask a question or leave a note', 'aria-label': 'Note for card ' + n });
+    var send = function () { var t = noteIn.value.trim(); if (!t) return; st.notes.push({ who: ME, at: today(), text: t }); save(c.card_id); render(); };
+    noteIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') send(); });
+
+    var right = el('div', { class: 'col' }, [
+      sec(2, 'Text to add yourself (read-only)', [lockBox]),
+      sec(null, 'Size and file', [spec]),
+      sec(3, 'Hand in', [drop, fileInput]),
+      sec(4, 'Status', [seg, !img ? el('p', { class: 'hint', style: 'margin-top:6px', text: 'Done unlocks once an image for the current card version is uploaded.' }) : null]),
+    ]);
+    var bottom = el('div', { class: 'body', style: 'border-top:1px solid var(--line)' }, [
+      el('div', { class: 'col' }, [sec(null, 'Version history', [hist])]),
+      el('div', { class: 'col' }, [sec(null, 'Notes on this card', [thread, el('div', { class: 'add' }, [noteIn, el('button', { class: 'btn', type: 'button', onclick: send, text: 'Send' })])])]),
+    ]);
+    return el('article', { class: 'card', 'aria-label': c.title }, [head, el('div', { class: 'body' }, [left, right]), bottom]);
+  }
+  function sec(n, title, kids) { return el('div', { class: 'sec' }, [el('h3', {}, [n ? el('span', { class: 'n', text: String(n) }) : null, title])].concat(kids)); }
+
+  function upload(c, file) {
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) { alert10(); return; }
+    var st = S[c.card_id]; var v = st.uploads.length + 1;
+    var finish = function (assetId, thumb) {
+      st.uploads.push({ v: v, for_card_version: c.card_version, file_name: file.name, date: today(), asset_id: assetId || null, thumb: thumb || null });
+      if (st.state === 'todo') st.state = 'prog'; save(c.card_id); render();
+    };
+    var thumb = URL.createObjectURL(file);
+    Promise.resolve(window.claude && window.claude.use ? window.claude.use('assets') : null).then(function (assets) {
+      if (!assets) return finish(null, thumb);
+      return assets.upload(file).then(function (r) { finish(r.id, r.url); }, function () { finish(null, thumb); });
+    }).catch(function () { finish(null, thumb); });
+  }
+  function alert10() { var m = document.createElement('div'); m.className = 'fixture'; m.textContent = 'That file is over 10 MB. Export a smaller one and try again.'; app.insertBefore(m, app.firstChild); setTimeout(function () { m.remove(); }, 4000); }
+
+  render();
+  load().then(render);
+})();
+</script>
