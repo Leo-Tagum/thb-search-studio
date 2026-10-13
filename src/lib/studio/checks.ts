@@ -5,6 +5,7 @@ import { checkOutputPrivacy, type InternalPassage } from "../seller/privacy-gate
 import { parseInline, wordCount } from "./inline";
 import { riskyKeys, uncoveredKeys } from "./tokens";
 import { sha256 } from "./hash";
+import type { ClaimVerification } from "./legal-claims";
 import { unitClaimIds, unitStrings, unitText, type Unit } from "./schema";
 
 export type LedgerClaim = {
@@ -12,6 +13,7 @@ export type LedgerClaim = {
   support: "supported" | "unsupported" | "conflicting";
   sourceId: string | null; sourceRecheckBy: string | null; jurisdiction: string;
   claimType?: string; lockedText?: string | null;
+  verification?: ClaimVerification;                // Phase 3e: the legal-claim verification record (absent on claims written before the rule)
 };
 export type Finding = { code: string; severity: "BLOCKED_CLAIM" | "BLOCKED_PRIVACY" | "REVISION"; detail: string };
 

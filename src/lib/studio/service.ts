@@ -15,6 +15,7 @@ import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
 import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../team/mode";
 import { agentLikeActor, resolveActorError } from "./actors";
+import { verificationColumns, verificationFromRow } from "./legal-claims";
 import { envelopeOf, saveEnvelope } from "./team-envelope";
 import { reopen as teamReopen, resolveByHuman as teamResolveByHuman } from "../team/loop";
 import { CLASSIC_V1_KEY, STUDIO_AGENT_META, V1_PROMPT_VERSION, isStudioAgent, studioOutputSchemas, studioSemanticChecks, type StudioAgentKey, type StudioValidationCtx } from "./agents";
@@ -68,7 +69,7 @@ export async function approveBrief(db: SupabaseClient, oppId: string, actorId: s
       article_id: art.id, claim_key: c.id, claim_text: c.text, claim_type: "statute", risk_level: c.risk, source_id: src?.library_source_id ?? null,
       supporting_passage: c.quote ?? null, jurisdiction: c.jurisdiction, applicability: "California residential sale", effective_or_verified_date: src?.effective_date ?? null,
       checked_date: today(), confidence_status: c.support, publication_permission: "public_law", requires_human_review: false, support: c.support, declared_by: "thb-02-research-evidence",
-      text_hash: sha256(c.text),
+      text_hash: sha256(c.text), ...verificationColumns(c),
     };
   });
   await db.from("claims").insert(claims);
@@ -96,7 +97,7 @@ export async function load(db: SupabaseClient, articleId: string): Promise<Loade
   const sources = new Map((srcs ?? []).map((s: any) => [s.id, s]));
   const claims = new Map<string, LedgerClaim>((cl ?? []).map((c: any) => [c.claim_key, {
     id: c.claim_key, text: c.locked_text ?? c.claim_text, risk: c.risk_level, support: c.support, sourceId: c.source_id,
-    sourceRecheckBy: c.source_id ? (sources.get(c.source_id)?.recheck_by ?? null) : null, jurisdiction: c.jurisdiction ?? "", claimType: c.claim_type, lockedText: c.locked_text,
+    sourceRecheckBy: c.source_id ? (sources.get(c.source_id)?.recheck_by ?? null) : null, jurisdiction: c.jurisdiction ?? "", claimType: c.claim_type, lockedText: c.locked_text, verification: verificationFromRow(c),
   }]));
   const approved = (facts ?? []).filter((f: any) => f.status === "approved");
   const name = approved.find((f: any) => f.fact_key === "company_name")?.fact_value ?? "Twin Home Buyer";

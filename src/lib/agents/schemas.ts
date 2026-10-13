@@ -1,6 +1,7 @@
 // Blueprint §5 common response schema + per-agent result schemas. Strict: unknown keys (for example
 // "approved" or "next_state") are rejected, so no agent output can set an approval or a state.
 import { z } from "zod";
+import { QUOTE_MAX, verificationFields } from "../studio/legal-claims";
 
 export const AGENT_KEYS = ["thb-01-seo-strategist", "thb-02-research-evidence", "thb-03-content-architect"] as const;
 export type AgentKey = (typeof AGENT_KEYS)[number];
@@ -54,7 +55,8 @@ const claim = z.strictObject({
   risk: z.enum(["low", "medium", "high"]),
   // For claims supported by an Evidence Library source: the passage ids and a short verbatim quote (checked against the stored text).
   passage_ids: z.array(z.string()).optional(),
-  quote: z.string().max(400).optional(),
+  quote: z.string().max(QUOTE_MAX).optional(),
+  ...verificationFields,   // Phase 3e: section, verification {label, reason, against, reader_impact}, gates (required for high-risk legal claims by the stage 2 submit check)
   note: z.string().optional(),
 });
 export const agent2Result = z.strictObject({
