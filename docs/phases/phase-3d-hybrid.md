@@ -224,5 +224,32 @@ Unchanged: checked before the pass, after every reopen, after every round and af
 
 Data: `phase-3d-data/edit-pass/` (every agent output, the intended edits, the before/after comparison, usage, regression results).
 
+## Evidence for 3e: reviewer variance on unchanged text (2026-10-13)
+
+Agent 6 failed an unchanged s7 opening paragraph (`seo:direct-answer-not-first`) that it had passed before: in Phase 3c, and carried through Task 10. The only change to that paragraph in the edit pass was dropping the word "usually". The same reviewer, on the same structure, gave two different verdicts. This is evidence for the 3e rule "review only changed sentences": a reviewer that re-judges unchanged text can block locked work for reasons that did not change, and the loop cannot decline a required finding. It cost one extra writer run, then V1, Agent 6 and Agent 7 on s7.
+
+There is no direct Leo-edit path for a section in NEEDS_EDITORIAL. A small owner-directed edit had to go through Agent 7's replacement path.
+
+## Editorial polish items for Juan's review: NOT applied (s7, 2026-10-13)
+
+These are optional reviewer findings, not release fixes. Leo rejected the first s7 rewrite and authorized one surgical correction only (the opening's first sentence); none of the items below was applied. They are listed for Juan.
+
+| Reviewer | Item | Type |
+|---|---|---|
+| Agent 6 | Optional single-family scope clarification: add the clm:6 scope to the sentence about the disclosure form (`seo:disclosure-scope-qualifier`). | optional |
+| Agent 7 | Unsupported proportional wording in "A lot of it comes from the paperwork and the people." (suggested "Much of it"). | optional |
+| Agent 7 | Optional warmth sentence acknowledging the family's situation, before the closing note. | optional |
+| Agent 7 | Advisory score 76, below its 85-point reference line, despite PASS. Advisory only; it blocks nothing. | advisory |
+
+**How the s7 opening was corrected (Leo-directed).** Leo rejected the first rewrite (it ended "…problems that surface late.") and directed one sentence: "Three things can stall the sale of a packed house: a local health or fire official's attention, a disclosure misstep, and authority, heir or lien problems." Because s7 was in NEEDS_EDITORIAL, that change was made through Agent 7's replacement path (run `b582325d…`). **That Agent 7 output was a Leo-directed editorial change, not an independent Agent 7 review.** It was compared with version `bfe53dfbb733…` before submission: only that sentence differed. The new version `713d65b59dfc…` then went through V1, Agent 6 and Agent 7 again (independent reviews, all PASS).
+
+Final-version optional items (also not applied): Agent 6 `seo:a-lot-unsupported` (same "A lot of it" sentence) and `seo:answer-first-wording` (the "real question" line could be cut); Agent 7 `ed:local-thin` (only the Oakland link is local) and `ed:stall-repetition` ("stall" repeated). Agent 7's advisory score on the final version is 76 (below 85), PASS, no required findings.
+
+The only **required** finding in the s7 pass was Agent 6's `seo:direct-answer-not-first` (the opening must answer first). It is the one release fix, and Leo's exact sentence addresses it.
+
+## Final state: article assembled, HUMAN_REVIEW (2026-10-13)
+
+s7 locked as `713d65b59dfc…` after Leo's explicit approval. All nine units are LOCKED and the article assembled as version **`204aa5725284`** on branch `54070caa…`, state HUMAN_REVIEW, revision count 2 (the limit was not changed or overridden), not approved. V1 PASS is recorded on the exact locked version of all six changed units: s1 `42a6cc0df835`, s2 `0157370ba4ea`, s4 `9e2884cd2271`, s6 `aa9761273e58`, faq `625b8fe417d9`, s7 `713d65b59dfc`. s3, s5 and s8 are untouched and their V1 PASS is on their locked versions. The original article's fingerprint `23f8dd72…4611` is unchanged. No proposal, approval, publication or WordPress write. The article has not gone to Juan yet.
+
 ## Open for Leo
-One decision blocks closing 3d: s7 (Agent 6 requires restructuring the opening; see the edit-pass section, options a, b and c). After that the assembled article version can go to Juan. The should-fix items Leo left alone (items 13 and 14, the first-person opening and the FAQ's light local wording, plus the items under KEEP) stay listed for Juan's review.
+s7 is closed (see Final state above). The assembled article version `204aa5725284` can go to Juan for review; the polish items above are for his review.
