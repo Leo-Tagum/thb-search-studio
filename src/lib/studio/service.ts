@@ -12,6 +12,7 @@ import { fixChurn, splitSentences } from "./v1-gate";
 import { needsRuling } from "./hedge-rulings";
 import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
+import { brandRuleFindings } from "./brand-check";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
 import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../team/mode";
 import { agentLikeActor, resolveActorError } from "./actors";
@@ -461,6 +462,13 @@ export async function advanceArticle(db: SupabaseClient, articleId: string): Pro
   const html = renderBody(draft, composed);
   const bad = auditHtml(html);
   if (bad.length) throw new Error(`rendered body failed the HTML allowlist: ${bad.join("; ")}`);
+  // Phase 3e: the brand-rule check on the WHOLE rendered article, template parts included (editorial standards section 7, SR-3). A hit stops the assembly.
+  const brand = brandRuleFindings(html);
+  if (brand.length) {
+    await audit(db, articleId, "article_check_failed", { findings: brand, stage: "assembly_brand_rules" });
+    for (const f of brand) await db.from("escalations").insert({ article_id: articleId, issue_key: `article:${f.code}`, reason: f.detail, attempts: 0 });
+    return `assembly stopped by the brand-rule check (${[...new Set(brand.map((f) => f.code))].join(", ")}); Leo must look at the template text or the wording`;
+  }
   const hash = sha256(html);
   const { data: ver, error } = await db.from("article_versions").insert({ article_id: articleId, version_hash: hash, body: { draft, composed, html }, reason: "assembled from locked sections", created_by: "studio" }).select("id").single();
   if (error) throw error;

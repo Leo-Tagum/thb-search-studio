@@ -8,7 +8,7 @@
 // Text is extracted with pdftotext; only whitespace, the page furniture of a print (title page banner, "Page n of m", print dates) and case are ignored. A single changed
 // word, number or subsection letter is reported.
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";

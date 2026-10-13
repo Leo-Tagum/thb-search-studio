@@ -1,0 +1,114 @@
+# Phase 3e, Stage 6 plan: Bay Area / local law, case studies and seller stories, Bay Area framing (PLAN ONLY, nothing here is run)
+
+Status: saved 2026-10-13 on Leo's instruction. **Not started.** It starts only after Agent 8 / D1 is built and has been dry-run on a fixture (see [phase-3e-image-planner-plan.md](phase-3e-image-planner-plan.md), build steps 1 to 10). The hoarder guide is a **pilot / configuration test, never published** (Leo, 2026-10-13), so everything in part A runs on it as a test.
+
+Rules for every part, as always: fingerprint v2 of the original article (`23f8dd72…4611`) before and after each step; no force-push; no proposal, approval, publish or WordPress write by me; I do not contact Juan; migrations only with Leo's approval; only act as leo on real articles; no seller-identifying data (SR-7); legal claims: no guessing (SR-4 to SR-6). A step that needs an official print I do not have stops and asks Leo.
+
+Token figures below are estimates from the measured per-run costs in the 3d and Stage 5 reports (about 54k tokens per agent run counting every category, about 25k without cache reads; the hybrid hoarder run was about 912k). They are not promises.
+
+---
+
+## A. San Francisco / San Mateo law, end to end, on the hoarder guide (test, never published)
+
+**Goal:** show that the pipeline can add a short local-law section without guessing and without blending layers.
+
+**Steps**
+1. **Allowed-jurisdiction list per article.** The article gets an explicit list (for the test: California, City and County of San Francisco, and the San Mateo jurisdiction Juan names). A claim whose jurisdiction is not on the list is refused at submit. (Today `allowedJurisdictions` is a fixed `["California"]` in `service.ts`; this makes it per article, in the brief.)
+2. **Agent 2** builds local claims from the Evidence Library only, each with the full record (exact quote, section, source URL, date checked, label, gates, reader impact). Where the Library has no print for a local point it does **not** guess: it returns a **print request** (jurisdiction, code, section number, title, URL) for Leo. Uses the navigation index once it exists (migration 0022, after Juan's storage decision); until then the request names the section and where to find it.
+3. **Writer** adds one short San Francisco section from those claims only (and a San Mateo line only if its own claim exists).
+4. **V1** checks the layers: a local rule is never presented as California law; San Francisco is never presented as San Mateo; each local sentence has its own claim and attribution; unverified points are the exact sentence "local rules vary; check with your city or county".
+5. **Brand-rule check** and image-plan checks run unchanged.
+
+**Inputs needed from Leo:** (a) which San Mateo jurisdiction applies (pending Juan: County Ordinance Code for unincorporated areas, or City of San Mateo); (b) the complete SF Housing Code table-of-contents reprint, and prints of the SF sections the section will cite (Housing Code 351 and the sections Agent 2 asks for); (c) the San Mateo prints; (d) prints of Civil Code 1102.2 and 1102.3, the disclosure form text, Penal Code 829.5 and Gov Code 10248.5 if the section touches them (the pending-prints list in [phase-3e-evidence-access-research.md](phase-3e-evidence-access-research.md)).
+
+**Pass / fail (measured):**
+- Every local sentence in the section has a claim with a complete verification record and a MATCH (or NARROWER with no reader impact) label. **Fail** if any local sentence has none.
+- Print requests: for each local point whose print is missing, the output holds a correct request (right code, right section, right URL) and **no claim** is made. **Fail** if a claim appears without a print, or a request names the wrong section.
+- No layer blending: zero `LAYER_LOCAL_AS_STATE` or `LAYER_CROSS_LOCAL` flags left unproven in the locked text; V1 catches a planted blend in a fixture run.
+- No service-area claim anywhere (brand-rule check clean).
+- The original article's fingerprint v2 is unchanged.
+
+**Token estimate:** about 450k to 700k (Agent 2 local claims about 80k with a print request round; writer about 55k; V1 on three touched units about 165k; Agents 5/6/7 on the touched units about 150k to 300k; one revision cycle adds about a third).
+
+**Risks:** official sites block automated access, so everything rests on Leo's prints; the first SF table-of-contents print looked partial; the revision limit (the section is reopened by a logged exception, the 4th, which Leo approves first; the guide's old s3 wording "the local enforcement authority" becomes "a local official" in the same pass); a San Mateo jurisdiction not yet chosen blocks that half; hosts' storage terms are unverified (the 3e research).
+
+---
+
+## B. Case studies and seller stories: two different content types
+
+**Rules first, then tests with FAKE examples only. Real seller or deal data never enters the Studio for testing.** Every example in a test is labelled FAKE and is made-up text with no resemblance to a real deal.
+
+### B1. Case study = the transaction
+What happened to the property: condition, what was done, outcome.
+- No address; no exact purchase or sale prices; no exact dates (public records could identify the property). Ranges or general terms only (for example "a purchase price in the mid-six figures", "several months").
+- Neighborhood-level detail only if Juan approves it.
+- **Every number is verified against our transaction records** (purchase, rehab spend, resale). An unverified number is dropped. **Verified total rehab spend currently exists for 0 of 47 deals**, so today no rehab figure can be used at all.
+- Photos only if the property cannot be identified from them, and with Juan's OK.
+
+### B2. Seller story = the scenario
+"We have handled this type of situation; maybe we can help you too."
+- It describes the **situation type**, not a specific person. Anonymous unless there is **written** seller permission (currently 0 on file; a verbal OK does not count).
+- No promise of price, speed or outcome; no testimonial framing.
+- No service-area claims until Juan confirms the cities (SR-3).
+
+### Both types
+- **No composite or invented sellers or properties, and no details added "for color".** If a detail is not in the record, it is not in the text.
+- **Green / Yellow / Red / Research-only gate:** only **Green** is usable; **Yellow** is held for Juan; **Red** and **Research-only** are never used.
+- Content comes **from Leo (Content HQ)**, not from agents researching sellers. Juan approves each one.
+
+### Proposed standing rules (I propose; Leo approves before any version bump to 1.2.0)
+- **SR-18. Case study (the transaction).** Facts only from our transaction records, every number verified, ranges instead of exact prices and dates, no address or neighborhood without Juan, no photo that could identify the property, no rehab figure unless verified.
+- **SR-19. Seller story (the scenario).** Describes a situation type, never a person; anonymous unless written seller permission is on file; no promise of price, speed or outcome; no testimonial framing; no service-area claim.
+- **SR-20. Seller-derived content gate.** No composite or invented sellers or properties, no embellishment; only Green content is used, Yellow waits for Juan, Red and Research-only are never used; content comes from Leo, Juan approves each piece; agents never research individual sellers.
+(SR-7, SR-3 and SR-9 already apply and are not repeated.)
+
+### Tests (all labelled FAKE; written as unit tests of the checks first, then through the real V1)
+| Case (FAKE) | Expected |
+|---|---|
+| a case study containing a street address or an exact price ("$612,500") | blocked |
+| a case study with a number that has no verification record | blocked or escalated to Leo |
+| an exact date ("closed on March 4, 2025") | blocked |
+| a seller story with a promise ("we'll close in 7 days", "we will pay cash") | blocked |
+| a seller story with an identifying detail (a name, a street, a job, a family detail that points to a person) | blocked |
+| an invented detail not in the record ("a sunny kitchen") | blocked |
+| a clean, anonymized **Green** case study | passes |
+| a clean, anonymized **Green** seller story | passes |
+| a **Yellow** example of each type | held for Juan, not usable |
+| a **Red** or **Research-only** example | refused |
+
+**Inputs needed from Leo (the input format and the verification record I will need):**
+- **B1, one record per case study:** record id (internal, never printed), property type, condition in plain words, what was done, outcome in general terms, purchase price **range** and its transaction-record reference, rehab spend (verified amount or "not verified") and its reference, resale **range** and reference, timeframe in general terms, neighborhood (only with Juan's approval, with the date), photo status (none / identifiable / not identifiable plus Juan's OK), gate color, Juan's approval date.
+- **B2, one record per story:** situation type in plain words, what THB generally does in that kind of situation (process only), who supplied it (Content HQ reference), permission status (none / written, with the date), gate color, Juan's approval date.
+- Plus, once: the list of fields in the transaction records that can be verified (today 0 of 47 deals have a verified rehab total, so I need to know which fields are trustworthy).
+
+**Pass / fail:** every row of the table behaves as expected; **fail** on any false pass of a blocked row, or any false block of a clean Green row; the checks never write to or read from real seller data (a test asserts the check functions take only their input text and the record's fields).
+
+**Token estimate:** the code checks and unit tests cost about 0 tokens to run; writing them is operator time. A model pass through the real V1 on the ten fixtures is about 10 × 40k to 55k, so about 400k to 550k.
+
+**Risks:** regexes cannot recognize every identifying detail (a model check plus Leo's look stay in the loop; the checks are a floor, not proof); "range" and "general terms" are judgment calls, so the check refuses exact figures and leaves ranges to the reviewer; no verified rehab data exists, so case studies stay number-free until Leo supplies verified records; consent records for seller stories do not exist yet.
+
+---
+
+## C. Bay Area framing and the cannibalization check
+
+**Goal:** show that Agent 1 and Agent 3 can give the test article a Bay Area angle without making a service-area claim, and that the check against the existing page "sell Bay Area house full of belongings" (`/sell-bay-area-house-full-of-belongings/`) runs and reports overlap.
+
+**Steps**
+1. **Agent 1** (hybrid) or S1 (team) triages the Bay Area angle for the hoarder guide (default geography per SR-1) and records the cannibalization risk against the existing page.
+2. **Agent 3** (or S2) builds a Bay Area brief: the angle, an H1 and sections that address Bay Area readers without saying where THB buys (SR-3), with local-law sections tied to part A.
+3. The **cannibalization check** (existing code in the opportunity and audit pipeline) runs against the existing page and reports overlap, intent difference, and whether to differentiate, merge or hold.
+
+**Inputs needed from Leo:** whether the working title option 1 stays ("Selling a Packed or Hoarded House in the SF Bay Area: What to Disclose and Whether to Clean Out First", slug `packed-or-hoarded-house-bay-area-what-to-disclose-clean-out-first`); the current Search Console window for both pages (stored data, no new fetch); Juan's decision on whether the two pages are meant to coexist or one should absorb the other.
+
+**Pass / fail:** the brief names its Bay Area angle and the difference in intent from the existing page; the overlap report runs and names the shared queries; **no** service-area claim, no city list, no "we buy in" wording (the brand-rule check is clean on the brief's sample text); open items list what Juan still has to confirm. **Fail** if the cannibalization check does not run, or the brief states or implies coverage.
+
+**Token estimate:** about 120k to 180k (Agent 1 about 55k, Agent 3 about 60k to 90k, the overlap check is code).
+
+**Risks:** two pages competing for the same query is a real ranking risk and the check is advisory; the Bay Area angle can drift into coverage language; the brief for the existing page was written before the Bay Area direction (its geography line and its experience wording were outdated; the brief must quote editorial standards section 7, see the 3e backlog).
+
+---
+
+## Order and gates
+1. After Agent 8 is built and dry-run on a fixture: **C** first (cheapest, no new prints), then **A** (needs Leo's prints and the San Mateo choice), then **B** (rules and fake-example tests need Leo's approval of SR-18 to SR-20 first, which bumps the standing rules to 1.2.0 and re-versions the prompts).
+2. Each part ends with a short report (results against its pass / fail criteria, tokens used, fingerprint v2 before and after) and stops for Leo.
+3. Nothing in Stage 6 publishes anything or contacts Juan.

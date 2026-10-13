@@ -113,3 +113,11 @@ Agent 8 / D1 once: about 60k (28k without cache reads). V1 image-text check: abo
 - Leo uploads the complete SF Housing Code table-of-contents reprint, and tells me when it is in.
 - Leo invites Lawrence as Editor when the board exists.
 - Which San Mateo jurisdiction applies (pending Juan).
+
+## 8. Decisions and build progress (Leo, 2026-10-13)
+- **Decision (Leo, 2026-10-13): Agent 8's image-storage workflow is independent of legal-source storage. Migration 0021 requires separate approval.** Resolved: the open question of whether image storage waits for Juan's legal-source storage decision is closed; it does not.
+- **Migration 0021:** approved in principle with two changes, both made in the preview ([migration-0021-PREVIEW.sql](phase-3e-data/migration-0021-PREVIEW.sql), [rollback](phase-3e-data/migration-0021-PREVIEW-rollback.sql)): plan statuses PLANNED, V1_CHECKED, ON_BOARD, IN_PROGRESS, ALL_DONE, LEO_CHECKED, STALE, SUPERSEDED (card states to match); bucket `article-images` limited to 10 MB per file and PNG, JPEG, WebP and SVG. **Not applied.** Applies only after build steps 1 and 2 are reported and Leo gives the final go.
+- **Navigation index:** a separate migration (0022), later, after Juan's storage decision.
+- **Build step 1 done:** standing rules 1.1.0, image rules SR-11 to SR-17, all 17 prompts re-referenced and re-versioned (each minor +1; V1 1.4.0), R1, Agent 2 and R3 quote-length text corrected from 400 to the code's 1200 characters, version test passing.
+- **Build step 2 done:** `src/lib/studio/image-cards.ts` (strict card schema and the checks) with tests; `src/lib/studio/brand-check.ts` (brand-rule check on every assembly, wired into `advanceArticle`) with tests. No migration, no prompt files for Agent 8 or D1 yet (step 3).
+

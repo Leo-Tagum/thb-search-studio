@@ -335,6 +335,13 @@ The only **required** finding in the s7 pass was Agent 6's `seo:direct-answer-no
 ## Open for Leo
 Phase 3d is closed. **Update (Leo, 2026-10-13): the hoarder guide is a TEST article, not a post. Proposal `d5d477d7…` (article version `0db68f782324`) is test-only: the Approval Room is on hold ("On hold. Test article, not for review."), nobody reviews or approves it, and `sync-approvals` is never run on it.** The earlier plan (Juan reviews it, Leo reprints the three statutes and publishes) is withdrawn.
 
+### Pilot / configuration test (Leo, 2026-10-13)
+The hoarder guide (branch `54070caa…`, version `0db68f782324`) is a **pilot / configuration test for calibration, not a post**. It is never published, and the approval flow is not run on it. What it found, now carried into 3e:
+- **Legal gaps:** an absence-of-law sentence with no proof ("the statute does not mention hoarding"); thresholds dropped from rules (clm:8); a decider presented as a closed list (clm:2/clm:3). Fixed by three one-time exceptions, and now caught in code: legal-claim verification record (migration 0020), submit and gate checks, V1 legal checks, standing rules SR-4 to SR-6.
+- **Decider wording:** "the local enforcement authority" (s3) stays as is for the test; the planned wording for a Bay Area revision is "a local official".
+- **Template author-box scope:** the author sentence ("25+ years ... since 2002") was approved by Juan in writing on 2026-10-10 (editorial standards section 7) and is correct; an outdated line in the brief's open items said otherwise. The sentence is a literal string in the shared template (`composeAuthor`) and in five other places, and no check read template text.
+- **Brand-check gap:** the experience, rating, pending-Juan and sourced-fact checks scanned agent output only. **Closed in build step 2 (2026-10-13): `brandRuleFindings` scans the whole rendered article on every assembly, template parts included; a hit stops the assembly and records an escalation.** Still open: one source of truth for the approved wordings, and the brief quoting section 7 (see the backlog items below).
+
 ## 3e backlog: UI/UX audit (2026-10-13)
 
 **Standing note (Leo, 2026-10-13): proposal `d5d477d7-bfb5-4458-b716-31d6b4954161` is test-only. Never run `sync-approvals` on it; never republish the Approval Room for it without Leo's explicit go.**
