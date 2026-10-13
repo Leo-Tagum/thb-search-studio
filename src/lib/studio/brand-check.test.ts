@@ -56,10 +56,10 @@ describe("the brand-rule check scans the whole rendered article", () => {
     for (const t of ["We buy houses in Oakland.", "We serve San Mateo County.", "Serving San Francisco homeowners.", "See the cities we serve."]) expect(codes(renderBody(draft(t), composed())), t).toContain("BRAND_SERVICE_AREA");
   });
   it("catches an as-is or no-cleanout promise and a guaranteed price", () => {
-    for (const t of ["We buy as-is, no cleanout needed.", "We guarantee a fair cash offer."]) expect(codes(renderBody(draft(t), composed())), t).toContain("BRAND_PROMISE");
+    for (const t of ["We'll get you the highest price.", "You'll get the highest price with us.", "We guarantee the highest price for your home.", "A best-price guarantee on every sale.", "We buy as-is, no cleanout needed.","We guarantee a fair cash offer."]) expect(codes(renderBody(draft(t), composed())), t).toContain("BRAND_PROMISE");
   });
   it("plain talk that only mentions the words passes: an as-is guide title, a seller choosing the highest price, a city named as a topic", () => {
-    expect(brandRuleFindings(renderBody(draft("Some sellers want the highest price. A house can sell as-is, but that is the seller's choice. Oakland has its own code."), composed()))).toEqual([]);
+    expect(brandRuleFindings(renderBody(draft("Some sellers want the highest price. Whether speed, certainty or the highest price matters most is up to you. A house can sell as-is, but that is the seller's choice. Oakland has its own code."), composed()))).toEqual([]);
   });
   it("htmlPlainText drops the style block and tags and decodes entities", () => {
     const t = htmlPlainText(renderBody(draft("Tom & Jerry"), composed()));

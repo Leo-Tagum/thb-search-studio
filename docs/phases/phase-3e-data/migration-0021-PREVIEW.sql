@@ -36,9 +36,9 @@ create table image_cards (
 create table image_uploads (
   id uuid primary key default gen_random_uuid(),
   card_id uuid not null references image_cards(id),
-  version_no integer not null,
+  version_no integer not null check (version_no >= 1),
   file_name text not null,
-  storage_path text not null,                 -- article-images/articles/<article>/<card>/v<n>_<sha>.<ext>, never overwritten
+  storage_path text not null unique,                 -- article-images/articles/<article>/<card>/v<n>_<sha>.<ext>, never overwritten
   asset_id text,                              -- the board's asset id, kept for traceability
   sha256 text not null,
   bytes integer not null,

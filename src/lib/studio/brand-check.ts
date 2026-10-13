@@ -25,6 +25,8 @@ const SERVICE_AREA: [string, RegExp][] = [
 const PROMISES: [string, RegExp][] = [
   ['an "we buy as-is" or no-cleanout promise', /\b(?:we|twin home buyer)\s+(?:buy|buys|purchase|purchases)\b[^.]{0,40}\bas[- ]is\b|\bno\s+(?:clean[- ]?out|repairs?|cleaning)\s+(?:needed|required)\b|\bwithout\s+(?:any\s+)?clean(?:ing|[- ]?out)\b[^.]{0,30}\bwe\b/i],
   ["a guaranteed price or offer", /\b(?:guarantee[sd]?|guaranteed)\s+(?:cash\s+)?(?:offer|price)\b|\bfair\s+cash\s+offer\b/i],
+  // A reader's own phrase ("whether the highest price matters most to you") passes; a promise of it does not.
+  ['a promise of the highest price', /\b(?:we(?:['’]ll|\s+will|\s+can)|you(?:['’]ll|\s+will))\s+(?:get|give|pay|fetch)\s+(?:you\s+)?(?:the\s+|a\s+)?(?:highest|top|best)\s+(?:price|dollar)\b|\bguarantee[sd]?\b[^.]{0,40}\b(?:highest|top|best)\s+(?:price|dollar)\b|\b(?:highest|top|best)[- ](?:price|dollar)\s+guarantee/i],
 ];
 
 /** Findings (BLOCKED_CLAIM) for everything in the assembled HTML that editorial standards section 7 or SR-3 do not allow. Empty means the assembly may continue. */
