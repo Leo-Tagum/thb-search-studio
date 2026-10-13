@@ -50,7 +50,7 @@ if (cmd === "prepare") {
     limits: { max_cards: MAX_CARDS, max_must_have: MAX_MUST_HAVE, faq_gets_no_card: true, max_words_per_overlay_line: 12 },
     note: "FIXTURE: made-up article text for a dry run. Not a real article.",
   };
-  const packet = { run_id: "dryrun-a8", attempts_used: 0, last_error: null, agent_key: "thb-08-image-planner", prompt_version: "1.2.0", article_id: ART, opportunity_id: OPP, text_version_hash: textHash, input_version_ids: [textHash], instructions: "Plan the images for this fixture article as thb-08-image-planner. Write ONE JSON output (the Output shape in your prompt). Use article_id, opportunity_id and the text_version_hash from this packet; input_version_ids must contain the text_version_hash.", untrusted_data_block: wrapUntrusted(data) };
+  const packet = { run_id: "dryrun-a8", attempts_used: 0, last_error: null, agent_key: "thb-08-image-planner", prompt_version: "1.4.0", article_id: ART, opportunity_id: OPP, text_version_hash: textHash, input_version_ids: [textHash], instructions: "Plan the images for this fixture article as thb-08-image-planner. Write ONE JSON output (the Output shape in your prompt). Use article_id, opportunity_id and the text_version_hash from this packet; input_version_ids must contain the text_version_hash.", untrusted_data_block: wrapUntrusted(data) };
   writeFileSync(join(dir, "a8-packet.json"), JSON.stringify(packet, null, 2));
   writeFileSync(join(dir, "units.json"), JSON.stringify({ textHash, unitHashes }, null, 2));
   console.log(`prepared: ${units.length} fixture units, text hash ${textHash.slice(0, 12)}; wrote a8-packet.json (nothing saved anywhere else)`);

@@ -150,9 +150,9 @@ async function Detail({ params, searchParams }: { params: Promise<{ id: string }
 
       {tab === "approvals" && (
         <div className="space-y-2">
-          <p>Final sign-off comes from Juan through the THB Approval Room. Create the proposal with <code>npm run studio -- proposal {id} &lt;file&gt;</code> (Claude Code republishes the Approval Room), then read the decisions back with <code>sync-approvals</code>. A decision counts only for a confirmed approver, on the exact stored version.</p>
+          <p>Final sign-off comes from the approver (Cherry; Juan may also approve) through the THB Approval Room. Create the proposal with <code>npm run studio -- proposal {id} &lt;file&gt;</code> (Claude Code republishes the Approval Room), then read the decisions back with <code>sync-approvals</code>. A decision counts only for a confirmed approver, on the exact stored version.</p>
           <ul className="list-disc pl-5">{(props ?? []).map((p) => <li key={p.id}>proposal {p.id} · {p.status} · created {p.created_at}{p.voice_snapshot ? " · includes the voice reference" : ""}</li>)}</ul>
-          {!(props ?? []).length && <p>{L.article.state !== "HUMAN_REVIEW" ? `Not ready to hand to Juan: the article is in ${L.article.state}; it must reach HUMAN_REVIEW first.` : !L.article.version_hash ? "Not ready to hand to Juan: the article is not assembled yet." : "Not handed to Juan yet: no proposal has been created. The article is ready; run the proposal command above."}</p>}
+          {!(props ?? []).length && <p>{L.article.state !== "HUMAN_REVIEW" ? `Not ready to hand to the approver: the article is in ${L.article.state}; it must reach HUMAN_REVIEW first.` : !L.article.version_hash ? "Not ready to hand to the approver: the article is not assembled yet." : "Not handed to the approver yet: no proposal has been created. The article is ready; run the proposal command above."}</p>}
         </div>
       )}
 

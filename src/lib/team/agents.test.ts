@@ -17,9 +17,9 @@ const RESEARCH: Record<string, { tools: string; prohibited: string; own: string 
 describe("Research team files (R1, R2, R3)", () => {
   for (const [k, spec] of Object.entries(RESEARCH)) {
     const text = readFileSync(join(dir, `${k}.md`), "utf8");
-    it(`${k}: exists, versioned 1.3.0, quotes its Prohibited action, has the specified tools`, () => {
+    it(`${k}: exists, versioned 1.4.0, quotes its Prohibited action, has the specified tools`, () => {
       expect(text).toMatch(/^name: /m);
-      expect(text).toMatch(/prompt_version: 1\.3\.0/);
+      expect(text).toMatch(/prompt_version: 1\.4\.0/);
       expect(text).toContain(`**Prohibited action: ${spec.prohibited}.**`);
       expect(text).toContain(spec.own);
       expect(toolsOf(text)).toBe(spec.tools);

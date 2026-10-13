@@ -8,9 +8,11 @@ import { localNamesIn } from "./legal-flags";
 
 export const STORY_GATES = ["green", "yellow", "red", "research_only"] as const;
 export type StoryGate = (typeof STORY_GATES)[number];
-/** Juan-approved process wording ("what we generally do"). NONE EXISTS YET (Leo, 2026-10-14): until Juan approves one, a seller story describes the situation only. */
+/** Juan-approved process wording ("what we generally do"). NONE EXISTS YET (Leo, 2026-10-14): until Juan approves one, a seller story describes the situation only (process wording stays Juan's decision). */
 export type ApprovedProcess = { id: string; text: string };
 export const APPROVED_PROCESS_WORDING: ApprovedProcess[] = [];
+/** Who approves articles, case studies and seller stories (SR-8, 2026-10-14): Cherry (COO); Juan may also approve. Juan alone decides brand facts, service area (so a city), as-is wording and process wording. */
+export const APPROVERS = ["Cherry", "Juan"] as const;
 export const REGION_NAMES = ["the Bay Area", "the Peninsula", "the East Bay", "the North Bay", "the South Bay"] as const;
 
 const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
@@ -24,15 +26,15 @@ export const storyFact = z.strictObject({
 export const storyCard = z.strictObject({
   story_id: z.string().trim().min(3),                  // internal id, never printed
   type: z.enum(["case_study", "seller_story"]),
-  gate: z.strictObject({ color: z.enum(STORY_GATES), set_by: z.string().trim().min(2), set_on: date, from: z.enum(STORY_GATES).nullable().default(null), juan_approval_on: date.nullable().default(null) }),
+  gate: z.strictObject({ color: z.enum(STORY_GATES), set_by: z.string().trim().min(2), set_on: date, from: z.enum(STORY_GATES).nullable().default(null), approval_on: date.nullable().default(null), approved_by: z.enum(APPROVERS).nullable().default(null) }),
   source: z.string().trim().min(3),                    // the Content HQ reference
-  juan_approval: z.strictObject({ status: z.enum(["none", "pending", "approved"]), on: date.nullable() }).default({ status: "none", on: null }),
+  approval: z.strictObject({ status: z.enum(["none", "pending", "approved"]), on: date.nullable(), by: z.enum(APPROVERS).nullable().default(null) }).default({ status: "none", on: null, by: null }),   // the approver's approval of this story (Cherry; Juan may also approve)
   permission: z.strictObject({ status: z.enum(["none", "written"]), doc_ref: z.string().nullable(), on: date.nullable() }).default({ status: "none", doc_ref: null, on: null }),
   quotes: z.array(z.strictObject({ text: z.string().trim().min(3), permission_ref: z.string().trim().min(3) })).default([]),
   location: z.strictObject({ level: z.enum(["none", "region", "city", "neighborhood"]), text: z.string().nullable(), juan_approved_on: date.nullable() }).default({ level: "none", text: null, juan_approved_on: null }),
   facts: z.array(storyFact).min(1).max(30),
   property_type: z.string().optional(),
-  photos: z.array(z.strictObject({ status: z.enum(["none", "identifiable", "not_identifiable"]), juan_ok_on: date.nullable() })).default([]),
+  photos: z.array(z.strictObject({ status: z.enum(["none", "identifiable", "not_identifiable"]), approver_ok_on: date.nullable() })).default([]),
   situation_type: z.string().optional(),
   reader_takeaway: z.string().nullable().default(null),   // one sentence with no promise
   process_wording_ids: z.array(z.string()).default([]),   // ids of Juan-approved process wording the story may use (none exist yet)
@@ -49,7 +51,7 @@ const F = (code: string, rule: StoryFinding["rule"], level: StoryLevel, detail: 
 export function storyCardErrors(card: StoryCard, approved: ApprovedProcess[] = APPROVED_PROCESS_WORDING): string[] {
   const e: string[] = [];
   if (card.gate.set_by !== "Leo") e.push(`the gate was set by "${card.gate.set_by}"; only Leo changes a gate (SR-20)`);
-  if (card.gate.color === "green" && card.gate.from === "yellow" && !card.gate.juan_approval_on) e.push("a Yellow story becomes Green only after Juan's approval is recorded (SR-20)");
+  if (card.gate.color === "green" && card.gate.from === "yellow" && (!card.gate.approval_on || !card.gate.approved_by)) e.push("a Yellow story becomes Green only after the approver's approval is recorded, with who approved and when (Cherry; Juan may also approve) (SR-20)");
   if (card.permission.status === "written" && (!card.permission.doc_ref || !card.permission.on)) e.push("written permission needs its document reference and date (SR-19)");
   if (card.quotes.length && card.permission.status !== "written") e.push("a quotation needs written seller permission on file; there is none (SR-19)");
   if ((card.location.level === "city" || card.location.level === "neighborhood") && (!card.location.text || !card.location.juan_approved_on)) e.push("a city or neighborhood needs Juan's recorded approval (SR-18, SR-19)");
@@ -58,7 +60,7 @@ export function storyCardErrors(card: StoryCard, approved: ApprovedProcess[] = A
   if (card.type === "seller_story") for (const f of card.facts) if (!["situation", "condition"].includes(f.kind)) e.push(`seller story fact ${f.id} is a ${f.kind}; until Juan approves process wording a seller story describes the situation only (SR-19)`);
   for (const p of card.photos) {
     if (p.status === "identifiable") e.push("a photo that could identify the property is not allowed (SR-18)");
-    if (p.status === "not_identifiable" && !p.juan_ok_on) e.push("a photo needs Juan's OK even when the property cannot be identified (SR-18)");
+    if (p.status === "not_identifiable" && !p.approver_ok_on) e.push("a photo needs the approver's OK even when the property cannot be identified (SR-18)");
   }
   return e;
 }
@@ -78,10 +80,13 @@ const NEIGHBORHOOD_RE = /\b[A-Z][a-z]+\s+(?:Hills?|Heights|District|Valley|Flats
 const IDENTIFYING = [
   /\b(?:retired|widow(?:ed|er)?|veteran|elderly|single (?:mother|father|mom|dad))\b/i,
   /\b(?:school ?teacher|teacher|nurse|doctor|lawyer|attorney|firefighter|police officer|engineer|professor|pastor|farmer|chef|carpenter|plumber)\b/i,
-  /\b\d{2}[- ]year[- ]old\b|\bin (?:his|her|their) (?:\d0s|(?:twenties|thirties|forties|fifties|sixties|seventies|eighties|nineties))\b|\bage[sd]? \d{2}\b/i,
+  /\b\d{1,3}[- ]years?[- ]old\b|\bin (?:his|her|their) (?:\d0s|(?:twenties|thirties|forties|fifties|sixties|seventies|eighties|nineties))\b|\bage[sd]? \d{2}\b/i,
+  /\b(?:owners?|sellers?)['’]s?\s+(?:husband|wife|spouse|son|daughter|mother|father|brother|sister|grandson|granddaughter|nephew|niece|partner)\b/i,
   /\bwhose\s+(?:husband|wife|son|daughter|mother|father|brother|sister|spouse)\b|\b(?:her|his|their)\s+(?:late\s+)?(?:husband|wife|spouse|son|daughter|mother|father|brother|sister)\b/i,
   /\b(?:Mr|Mrs|Ms|Miss|Dr)\.?\s+[A-Z][a-z]+|\b(?:named|called)\s+[A-Z][a-z]+|\b(?:the|a)\s+[A-Z][a-z]+\s+family\b/,
 ];
+// Specifics about a person (SR-18, 2026-10-14): age, health, deaths, family members, jobs, relationships, finances. A brief, general reason for the sale ("could no longer keep up with the home") is allowed.
+const PERSON_SPECIFICS = /\b(?:died|passed away|passed on|death of|deceased|bereave\w*|diagnos\w+|illness|ill health|cancer|dementia|alzheimer\w*|stroke|disabled|disability|hospitali[sz]\w*|surgery|divorc\w+|separat(?:ed|ion)|bankrupt\w*|foreclos\w+|behind on (?:the )?(?:payments?|mortgage|taxes)|laid off|lost (?:his|her|their) job|unemployed|medical bills|financial (?:trouble|hardship|difficult\w*)|debt)\b/i;
 const KNOWN_PROPER = new Set(["twin home", "home buyer", "bay area", "east bay", "north bay", "south bay", "san francisco", "san mateo", "san carlos", "daly city", "redwood city", "palo alto", "south san", "san jose"]);
 const SPECIFIC_PERSON = /\b(?:one|a|another|the|this)\s+(?:woman|man|seller|owner|homeowner|widow|couple|family|client|heir|daughter|son|lady|gentleman)\s+(?:we|who|that we|named|from|whose|came|called|reached|contacted)\b|\bone of our (?:sellers|clients|homeowners|families)\b/i;
 const PROMISE_RES = [
@@ -123,7 +128,7 @@ export function storyFindings(card: StoryCard, text: string, opts: { approvedPro
   const okPlace = card.location.juan_approved_on && card.location.text && (card.location.level === "city" || card.location.level === "neighborhood") ? card.location.text.toLowerCase() : "";
   for (const p of places) if (!okPlace || !okPlace.includes(p)) out.push(F("STORY_LOCATION", sr, "BLOCK", `"${p}" is a city or neighborhood; only a region ("the Bay Area", "the Peninsula", "the East Bay") is allowed without Juan's recorded approval`));
   // identifying detail, personal names, a specific person
-  for (const re of IDENTIFYING) { const m = re.exec(plain); if (m) { out.push(F("STORY_IDENTIFYING", "SR-7", "BLOCK", `"${m[0]}" is a detail that could point to a person (SR-7, ${sr})`)); break; } }
+  for (const re of [...IDENTIFYING, PERSON_SPECIFICS]) { const m = re.exec(plain); if (m) { out.push(F("STORY_IDENTIFYING", "SR-7", "BLOCK", `"${m[0]}" is a specific about a person (age, health, death, family member, job, relationship or finances); a case study may give only a brief, general reason for the sale (SR-18, SR-19, SR-7)`)); break; } }
   for (const s of sentencesOf(plain)) {
     const toks = s.split(/\s+/);
     for (let i = 0; i < toks.length - 1; i++) {
@@ -131,6 +136,7 @@ export function storyFindings(card: StoryCard, text: string, opts: { approvedPro
       if (/^[A-Z][a-z]+$/.test(a) && /^[A-Z][a-z]+$/.test(b) && !KNOWN_PROPER.has(`${a} ${b}`.toLowerCase()) && !places.has(`${a} ${b}`.toLowerCase()) && !/^(?:Health|Civil|Penal|Bay|East|North|South|Twin|Home)$/.test(a)) { out.push(F("STORY_NAME", "SR-7", "BLOCK", `"${a} ${b}" looks like a person's name`)); break; }
     }
   }
+  if (card.type === "case_study") { const m = /\b(?:the|this|their|his|her)\s+(?:owners?['’]s?\s+)?family\b|\bthe owners?['’]s?\s+family\b|\bfamily of the owners?\b/i.exec(plain); if (m) out.push(F("STORY_IDENTIFYING", "SR-18", "BLOCK", `"${m[0]}" refers to the owner's family: family members are a specific about a person; give only a brief, general reason for the sale (for example "the owners could no longer keep up with the home")`)); }
   if (card.type === "seller_story" && SPECIFIC_PERSON.test(plain)) out.push(F("STORY_SPECIFIC_PERSON", "SR-19", "BLOCK", "the story points to one specific person or family; describe the situation type, not a person"));
   // promises, testimonial framing, composites
   for (const re of PROMISE_RES) { const m = re.exec(plain); if (m) { out.push(F("STORY_PROMISE", sr, "BLOCK", `"${m[0]}" is a promise or an implied result for the reader`)); break; } }

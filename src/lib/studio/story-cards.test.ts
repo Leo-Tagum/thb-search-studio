@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { storyCard, storyCardErrors, storyFindings, storyVerdict, APPROVED_PROCESS_WORDING, REGION_NAMES } from "./story-cards";
+import { storyCard, storyCardErrors, storyFindings, storyVerdict, APPROVED_PROCESS_WORDING, APPROVERS, REGION_NAMES } from "./story-cards";
 import { STORY_FIXTURES } from "./story-fixtures";
 
 // Stage 6 part B. Every story below is FAKE (see story-fixtures.ts): invented people, places and numbers; no real seller or deal data.
@@ -38,10 +38,10 @@ describe("the four rules Leo added on 2026-10-14", () => {
     expect(storyCardErrors(storyCard.parse({ ...by("FAKE-22").card, location: { level: "city", text: "Oakland", juan_approved_on: null } })).join()).toContain("Juan's recorded approval");
     expect(storyCardErrors(storyCard.parse({ ...by("FAKE-22").card, location: { level: "region", text: "Oakland", juan_approved_on: null } })).join()).toContain("a region must be");
   });
-  it("only Leo changes a gate; Yellow becomes Green only after Juan's approval is recorded", () => {
+  it("only Leo changes a gate; Yellow becomes Green only after the approver's approval (Cherry; Juan may also approve) is recorded", () => {
     expect(storyCardErrors(by("FAKE-27").card).join()).toContain("only Leo changes a gate");
-    expect(storyCardErrors(by("FAKE-28").card).join()).toContain("only after Juan's approval");
-    const ok = storyCard.parse({ ...by("FAKE-28").card, gate: { ...by("FAKE-28").card.gate, juan_approval_on: "2026-10-14" } });
+    expect(storyCardErrors(by("FAKE-28").card).join()).toContain("only after the approver's approval");
+    const ok = storyCard.parse({ ...by("FAKE-28").card, gate: { ...by("FAKE-28").card.gate, approval_on: "2026-10-14", approved_by: "Cherry" } });
     expect(storyCardErrors(ok)).toEqual([]);
   });
   it("a process description uses Juan-approved wording only, and none exists yet", () => {
@@ -63,9 +63,9 @@ describe("the card schema is strict", () => {
   });
   it("written permission needs its document and date; a photo that could identify the property is refused", () => {
     expect(storyCardErrors(storyCard.parse({ ...card, permission: { status: "written", doc_ref: null, on: null } })).join()).toContain("document reference");
-    expect(storyCardErrors(storyCard.parse({ ...card, photos: [{ status: "identifiable", juan_ok_on: null }] })).join()).toContain("identify the property");
-    expect(storyCardErrors(storyCard.parse({ ...card, photos: [{ status: "not_identifiable", juan_ok_on: null }] })).join()).toContain("Juan's OK");
-    expect(storyCardErrors(storyCard.parse({ ...card, photos: [{ status: "not_identifiable", juan_ok_on: "2026-10-14" }] }))).toEqual([]);
+    expect(storyCardErrors(storyCard.parse({ ...card, photos: [{ status: "identifiable", approver_ok_on: null }] })).join()).toContain("identify the property");
+    expect(storyCardErrors(storyCard.parse({ ...card, photos: [{ status: "not_identifiable", approver_ok_on: null }] })).join()).toContain("the approver's OK");
+    expect(storyCardErrors(storyCard.parse({ ...card, photos: [{ status: "not_identifiable", approver_ok_on: "2026-10-14" }] }))).toEqual([]);
   });
 });
 
@@ -77,5 +77,36 @@ describe("the checks never write anything and never publish", () => {
     expect(f).toEqual([]);
     expect(JSON.stringify(fx.card)).toBe(before);
     expect(storyVerdict(f)).toBe("PASS");
+  });
+});
+
+describe("SR-18 (2026-10-14): a brief, general, verified reason for the sale is allowed; specifics about a person are not", () => {
+  const by = (id: string) => STORY_FIXTURES.find((f) => f.id === id)!;
+  it("'the owners could no longer keep up with the home' passes (FAKE-01 and FAKE-30)", () => {
+    for (const id of ["FAKE-01", "FAKE-30"]) expect(storyFindings(by(id).card, by(id).text), id).toEqual([]);
+  });
+  it("a death, a job, an illness or money trouble is blocked even when it is a verified fact in the record", () => {
+    for (const id of ["FAKE-31", "FAKE-32", "FAKE-33"]) {
+      const fx = by(id);
+      expect(fx.card.facts.every((f) => f.verified), `${id} facts are verified`).toBe(true);
+      const f = storyFindings(fx.card, fx.text);
+      expect(storyVerdict(f), id).toBe("BLOCKED");
+      expect(f.map((x) => x.code), id).toContain("STORY_IDENTIFYING");
+    }
+  });
+  it("the specifics SR-18 lists are all caught: age, health, deaths, family members, jobs, relationships, finances", () => {
+    const card = by("FAKE-01").card;
+    for (const t of ["The owner was 82 years old.", "The owner was in her eighties.", "The owner had dementia.", "The owner passed away.", "The owner's son wanted to sell.", "She was a schoolteacher.", "They were going through a divorce.", "The owners were laid off.", "They had a lot of debt."]) expect(storyFindings(card, t).map((x) => x.code), t).toContain("STORY_IDENTIFYING");
+  });
+  it("the approver is Cherry (Juan may also approve); a Yellow-to-Green record names who approved and when", () => {
+    expect([...APPROVERS]).toEqual(["Cherry", "Juan"]);
+    const g = by("FAKE-28").card.gate;
+    expect(storyCardErrors(storyCard.parse({ ...by("FAKE-28").card, gate: { ...g, approval_on: "2026-10-14", approved_by: "Cherry" } }))).toEqual([]);
+    expect(storyCardErrors(storyCard.parse({ ...by("FAKE-28").card, gate: { ...g, approval_on: "2026-10-14", approved_by: "Juan" } }))).toEqual([]);
+    expect(storyCardErrors(storyCard.parse({ ...by("FAKE-28").card, gate: { ...g, approval_on: "2026-10-14" } })).join()).toContain("who approved and when");
+    expect(storyCard.safeParse({ ...by("FAKE-28").card, gate: { ...g, approved_by: "Leo" } }).success).toBe(false);          // Leo is the operator, never an approver
+  });
+  it("a city still needs JUAN's recorded approval (a service-area decision), not the approver's", () => {
+    expect(storyCardErrors(storyCard.parse({ ...by("FAKE-25").card, location: { level: "city", text: "Oakland", juan_approved_on: null } })).join()).toContain("Juan's recorded approval");
   });
 });

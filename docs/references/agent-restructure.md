@@ -66,7 +66,7 @@ BLOCKING: yes/no   (only V1 can block)
 - V1 (Fact & Privacy) **must pass** every section. Its veto can't be argued away; only proof clears it.
 - Every **must-fix** from V2/V3 is done.
 - **Should-fixes and suggestions** are listed for Leo. Unanimity isn't required, so one reviewer can't deadlock an article.
-- Leo reviews, then Juan approves the exact version. Any later edit cancels the approval (server-side hash check).
+- Leo reviews, then the approver approves the exact version (since 2026-10-14: Cherry; Juan may also approve). Any later edit cancels the approval (server-side hash check).
 
 ## 5. Escalation to Leo
 1. Conflicting evidence on a major claim
@@ -86,7 +86,7 @@ BLOCKING: yes/no   (only V1 can block)
   - no competitor sources;
   - money pages protected;
   - no WordPress writes;
-  - Juan's approval required.
+  - The approver's approval required (Cherry; Juan may also approve; Juan alone for brand facts, service area, as-is wording and process wording).
 - Every ticket and reply is logged (who, what, when, version).
 
 ## 7. Reused vs new

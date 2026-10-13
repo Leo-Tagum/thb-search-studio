@@ -7,11 +7,11 @@ import { w1Output, w1SemanticChecks, w2Output, w2SemanticChecks } from "./writin
 const claims = new Map<string, LedgerClaim>([["clm:1", { id: "clm:1", text: "Civil Code section 1102 applies to a transfer by sale.", risk: "high", support: "supported", sourceId: "src", sourceRecheckBy: null, jurisdiction: "California" }]]);
 const check: CheckCtx = { today: "2026-10-12", claims, approvedFactTexts: [], allowedLinks: [], sourceUrls: [], internalPassages: [], allowedJurisdictions: ["California"], blockedPhrases: [], briefH2: { s2: "What do you have to disclose?" }, keyword: "x" };
 const ctx: StudioValidationCtx = {
-  packet: { agent_key: "thb-04-section-writer", prompt_version: "1.4.0", unit_key: "s2", unit_hash: null, allowed_claim_ids: ["clm:1"], opportunity_id: "o1", article_id: "a1" },
+  packet: { agent_key: "thb-04-section-writer", prompt_version: "1.5.0", unit_key: "s2", unit_hash: null, allowed_claim_ids: ["clm:1"], opportunity_id: "o1", article_id: "a1" },
   currentUnit: null, currentHash: null, check, voiceUsable: true, requiredIssuesOpen: [],
 };
 const envelope = (decision: string, result: object, extra: object = {}) => ({
-  article_id: "a1", opportunity_id: "o1", agent_name: "x", agent_prompt_version: "1.4.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings: [],
+  article_id: "a1", opportunity_id: "o1", agent_name: "x", agent_prompt_version: "1.5.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings: [],
   evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-12T12:00:00Z", result, ...extra,
 });
 
@@ -108,9 +108,9 @@ describe("W2: suggestions only, never draft text, claims, locks or state", () =>
 describe("writing files", () => {
   const read = (f: string) => readFileSync(`.claude/agents/${f}.md`, "utf8");
   const toolsOf = (t: string) => t.split(/\r?\n/).find((l) => l.startsWith("tools:"));
-  it("W1 carries Agent 4's Prohibited action, 1.4.0, Read/Write only, and the ticket and hedge rules", () => {
+  it("W1 carries Agent 4's Prohibited action, 1.5.0, Read/Write only, and the ticket and hedge rules", () => {
     const t = read("thb-w1-writer");
-    expect(t).toMatch(/prompt_version: 1\.4\.0/);
+    expect(t).toMatch(/prompt_version: 1\.5\.0/);
     expect(t).toContain("**Prohibited action: Making unapproved new factual claims.**");
     expect(toolsOf(t)).toBe("tools: Read, Write");
     expect(t).toMatch(/You never add a claim/);
@@ -122,9 +122,9 @@ describe("writing files", () => {
   it("W1's own examples do not contain a hedge phrase presented as good writing", () => {
     expect(read("thb-w1-writer")).not.toMatch(/write "Most owners/);
   });
-  it("W2 has its own Prohibited action, 1.3.0, Read/Write only, and says it never writes into the draft", () => {
+  it("W2 has its own Prohibited action, 1.4.0, Read/Write only, and says it never writes into the draft", () => {
     const t = read("thb-w2-cowriter");
-    expect(t).toMatch(/prompt_version: 1\.3\.0/);
+    expect(t).toMatch(/prompt_version: 1\.4\.0/);
     expect(t).toContain("**Prohibited action: Writing draft text; adding claims; setting a lock or a state.**");
     expect(toolsOf(t)).toBe("tools: Read, Write");
     expect(t).toMatch(/never write into the draft: only W1 does/);

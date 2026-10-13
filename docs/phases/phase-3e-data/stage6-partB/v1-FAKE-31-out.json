@@ -1,0 +1,41 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.8.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-CS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "story:FAKE-CS-001:SR-18:death-family",
+      "severity": "required",
+      "note": "\"The owners sold the home after her husband died.\" gives a death and a family member as the reason for the sale. SR-18 allows only a brief, general, verified reason with no specifics about any person (no deaths, family members, relationships). The record fact f1 is itself over the line, so the text cannot be repaired by rewording this sentence alone; Leo must supply a general reason."
+    }
+  ],
+  "evidence_ids": ["FAKE-CS-001"],
+  "required_actions": [
+    "Remove the death and the family member (\"her husband died\"). Use only a general verified reason for the sale, or none."
+  ],
+  "output_version_id": "v1-story-FAKE-31-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-CS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {
+            "rule": "SR-18",
+            "what": "\"after her husband died\" states a death and a family member; a reason for the sale must be general with no specifics about any person"
+          },
+          {
+            "rule": "SR-20",
+            "what": "\"The owners sold ... her husband\" mixes plural owners with a single woman and a husband; the sentence says more about a person than a record-safe general reason and the plural/singular mismatch suggests detail beyond the record"
+          }
+        ],
+        "note": "Blocked: the situation sentence discloses a death and a family member, which SR-18 forbids; the second sentence (\"We purchased the home.\") rests on verified fact f2 and is fine."
+      }
+    ]
+  }
+}

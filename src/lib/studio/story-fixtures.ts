@@ -3,12 +3,12 @@
 import { storyCard, type ApprovedProcess, type StoryCard, type StoryVerdict } from "./story-cards";
 
 const V = (n: number) => ({ record_ref: `FAKE-REC-${n}`, checked_by: "Leo", checked_on: "2026-10-14" });
-const GATE = { color: "green" as const, set_by: "Leo", set_on: "2026-10-14", from: null, juan_approval_on: null };
+const GATE = { color: "green" as const, set_by: "Leo", set_on: "2026-10-14", from: null, approval_on: null, approved_by: null };
 type Over = Record<string, unknown>;
 const caseCard = (over: Over = {}): StoryCard => storyCard.parse({
   story_id: "FAKE-CS-001", type: "case_study", gate: GATE, source: "FAKE Content HQ ref", property_type: "single-family home",
   facts: [
-    { id: "f1", kind: "situation", text: "The owner's family could no longer keep up with the home.", verified: V(1) },
+    { id: "f1", kind: "situation", text: "The owners could no longer keep up with the home.", verified: V(1) },
     { id: "f2", kind: "action", text: "We purchased the home.", verified: V(2) },
     { id: "f3", kind: "action", text: "We cleared the belongings and made repairs.", verified: V(3) },
     { id: "f4", kind: "outcome", text: "The home was later resold.", verified: V(4) },
@@ -22,7 +22,7 @@ const sellerCard = (over: Over = {}): StoryCard => storyCard.parse({
     { id: "f2", kind: "situation", text: "Many of them did not know where to start.", verified: V(12) },
   ], reader_takeaway: "If this sounds familiar, you are not alone.", ...over,
 });
-const CASE = "The owner's family could no longer keep up with the home. We purchased the home. We cleared the belongings and made repairs. The home was later resold.";
+const CASE = "The owners could no longer keep up with the home. We purchased the home. We cleared the belongings and made repairs. The home was later resold.";
 const SELLER = "We have worked with families who inherited a house full of a parent's belongings. Many of them did not know where to start. If this sounds familiar, you are not alone.";
 const sellerFacts = (extra: object[] = []) => [{ id: "f1", kind: "situation", text: "We have worked with families who inherited a house full of a parent's belongings.", verified: V(11) }, { id: "f2", kind: "situation", text: "Many of them did not know where to start.", verified: V(12) }, ...extra];
 
@@ -57,4 +57,9 @@ export const STORY_FIXTURES: StoryFixture[] = [
   { id: "FAKE-27", label: "gate changed by an agent, not Leo", card: caseCard({ gate: { ...GATE, set_by: "Agent 7" } }), text: CASE, expect: "BLOCKED", codes: ["STORY_CARD_RECORD"] },
   { id: "FAKE-28", label: "Yellow turned Green without Juan's recorded approval", card: caseCard({ gate: { ...GATE, from: "yellow" } }), text: CASE, expect: "BLOCKED", codes: ["STORY_CARD_RECORD"] },
   { id: "FAKE-29", label: "seller story whose record contains an action (process), not only the situation", card: sellerCard({ facts: sellerFacts([{ id: "f3", kind: "action", text: "We cleared everything out.", verified: V(13) }]) }), text: SELLER, expect: "BLOCKED", codes: ["STORY_CARD_RECORD"] },
+  { id: "FAKE-30", label: "case study: a brief, general, verified reason for the sale (allowed)", card: caseCard({ facts: [{ id: "f1", kind: "situation", text: "The owners could no longer keep up with the home.", verified: V(31) }, { id: "f2", kind: "action", text: "We purchased the home.", verified: V(2) }] }), text: "The owners could no longer keep up with the home. We purchased the home.", expect: "PASS", codes: [] },
+  { id: "FAKE-31", label: "case study giving a death as the reason for the sale (a specific about a person)", card: caseCard({ facts: [{ id: "f1", kind: "situation", text: "The owners sold the home after her husband died.", verified: V(32) }, { id: "f2", kind: "action", text: "We purchased the home.", verified: V(2) }] }), text: "The owners sold the home after her husband died. We purchased the home.", expect: "BLOCKED", codes: ["STORY_IDENTIFYING"], inV1Calibration: true },
+  { id: "FAKE-32", label: "case study giving the owner's job and age (a specific about a person)", card: caseCard({ facts: [{ id: "f1", kind: "situation", text: "A retired nurse owned the home.", verified: V(33) }, { id: "f2", kind: "action", text: "We purchased the home.", verified: V(2) }] }), text: "A retired nurse owned the home. We purchased the home.", expect: "BLOCKED", codes: ["STORY_IDENTIFYING"] },
+  { id: "FAKE-33", label: "case study giving health or finances as the reason (a specific about a person)", card: caseCard({ facts: [{ id: "f1", kind: "situation", text: "The owners were behind on the mortgage after a long illness.", verified: V(34) }, { id: "f2", kind: "action", text: "We purchased the home.", verified: V(2) }] }), text: "The owners were behind on the mortgage after a long illness. We purchased the home.", expect: "BLOCKED", codes: ["STORY_IDENTIFYING"] },
+  { id: "FAKE-34", label: "case study mentioning the owner's family (family members are a specific about a person)", card: caseCard({ facts: [{ id: "f1", kind: "situation", text: "The owner's family could no longer keep up with the home.", verified: V(35) }, { id: "f2", kind: "action", text: "We purchased the home.", verified: V(2) }] }), text: "The owner's family could no longer keep up with the home. We purchased the home.", expect: "BLOCKED", codes: ["STORY_IDENTIFYING"] },
 ];

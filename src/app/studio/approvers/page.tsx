@@ -24,8 +24,8 @@ async function Approvers({ searchParams }: { searchParams: Promise<Record<string
                 {r.status === "PENDING" ? (
                   <form action={confirmApproverAction} className="flex gap-2">
                     <input type="hidden" name="viewer" value={r.viewer_id} />
-                    <select name="role"><option value="approver">approver (e.g. Juan)</option><option value="secondary">secondary (e.g. Cherry)</option><option value="operator">operator (this is Leo)</option></select>
-                    <input name="label" required placeholder="who is this? e.g. Juan" className="border px-1" />
+                    <select name="role"><option value="approver">approver (e.g. Cherry; Juan may also approve)</option><option value="secondary">secondary (a second approver, if a proposal asks for one)</option><option value="operator">operator (this is Leo)</option></select>
+                    <input name="label" required placeholder="who is this? e.g. Cherry" className="border px-1" />
                     <button className="border px-2">Confirm: this is…</button>
                   </form>
                 ) : "—"}

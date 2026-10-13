@@ -1,36 +1,38 @@
-FAKE-01  expected PASS          code PASS          V1 BLOCKED       DIFFER
+FAKE-01  expected PASS          code PASS          V1 PASS          AGREE 
       clean case study (Green, all facts verified)
-      V1 rules: SR-18 "The owner's family could no longer keep up with t
-FAKE-02  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+FAKE-02  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       case study with a street address
       V1 rules: SR-18 "1428 Elm Street" is an address; a case study neve | SR-20 "The house was on 1428 Elm Street." is not in any 
-FAKE-05  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+FAKE-05  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       case study with an unverified number (fact f5 has no record)
       V1 rules: SR-20 "We spent about $85,000 on repairs." comes from fa | SR-18 "about $85,000" is a rehab amount with no verified
-FAKE-06  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+FAKE-06  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       case study with an invented detail (not in the record)
       V1 rules: SR-20 "The kitchen was sunny, with original oak cabinets
-FAKE-08  expected HELD_FOR_JUAN code HELD_FOR_JUAN V1 HELD_FOR_JUAN AGREE 
+FAKE-08  expected HELD_FOR_JUAN code HELD_FOR_JUAN V1 HELD_FOR_JUAN AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       clean case study, Yellow gate
       V1 rules: SR-20 Gate is Yellow (set by Leo, no Juan approval recor
-FAKE-09  expected PASS          code PASS          V1 PASS          AGREE 
+FAKE-09  expected PASS          code PASS          V1 PASS          AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       clean seller story (Green, situation only)
-FAKE-10  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+FAKE-10  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       seller story with a promise ("we'll close in 7 days and pay cash")
       V1 rules: SR-20 "We'll close in 7 days and pay cash." rests on no  | SR-19 "We'll close in 7 days and pay cash." promises spe | SR-3 "close in 7 days" is a closing-time promise, a PEN
-FAKE-11  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+FAKE-11  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       seller story with identifying detail (occupation, family detail, city)
       V1 rules: SR-19 "A retired schoolteacher" is a job and age-type de | SR-19 "whose husband had passed" is a family detail poin | SR-19 "from San Mateo" is a city; the card records locat | SR-20 The whole sentence rests on no verified fact (f1 a | SR-3 "from San Mateo ... came to us" can read as a serv
-FAKE-18  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+FAKE-18  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       a quotation with no written permission on file
       V1 rules: SR-19 “It was a relief to have help.” is a quotation, bu | SR-20 “It was a relief to have help.” is not in the reco
-FAKE-21  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+FAKE-21  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       city-level location without Juan's approval
       V1 rules: SR-19 "in San Mateo" is a city; location level is none a | SR-20 "San Mateo" is not in any verified fact of the rec | SR-3 "worked with families in San Mateo" reads as a ser
-FAKE-22  expected PASS          code PASS          V1 PASS          AGREE 
+FAKE-22  expected PASS          code PASS          V1 PASS          AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       region-level location (the Bay Area)
-FAKE-23  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+FAKE-23  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE   PRODUCTION CHECK REFUSED: agent_prompt_version must be 1.8.0
       a process description that is not Juan-approved wording
       V1 rules: SR-19 "We clear out the house, handle the repairs and bu | SR-20 The same sentence is not in the record (no verifie | SR-3 "buy it directly" with clearing out and repairs re
+FAKE-31  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      case study giving a death as the reason for the sale (a specific about a person)
+      V1 rules: SR-18 "after her husband died" states a death and a fami | SR-20 "The owners sold ... her husband" mixes plural own
 
-V1 agrees with the expected verdict on 11 of 12; the code checks agree on 12 of 12; outputs refused by the production checks: 0; missing: 0
+V1 agrees with the expected verdict on 13 of 13; the code checks agree on 13 of 13; outputs refused by the production checks: 11; missing: 0

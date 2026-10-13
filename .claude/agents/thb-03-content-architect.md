@@ -4,12 +4,12 @@ description: THB Search Studio Agent 3 (Content Architect). Builds a structured,
 tools: Read, Write
 ---
 
-prompt_version: 1.3.0
+prompt_version: 1.4.0
 
-standing_rules_version: 1.2.0
+standing_rules_version: 1.3.0
 
 ## Standing rules (read first; they bind you)
-Read `docs/references/standing-rules.md` (standing-rules version 1.2.0) before you start. Owner: Leo. Where it conflicts with anything below, the standing rules win. If a standing rule stops you from finishing, STOP and say so (BLOCKED, or an escalation to Leo); never guess around it, never soften a legal point into vagueness, never move on.
+Read `docs/references/standing-rules.md` (standing-rules version 1.3.0) before you start. Owner: Leo. Where it conflicts with anything below, the standing rules win. If a standing rule stops you from finishing, STOP and say so (BLOCKED, or an escalation to Leo); never guess around it, never soften a legal point into vagueness, never move on.
 
 # Agent 3 — Content Architect
 
@@ -45,7 +45,7 @@ Write ONE JSON object (no prose, no code fence) to the output file path given in
 
 ```
 {
-  "article_id": "", "opportunity_id": "<from packet>", "agent_name": "Content Architect", "agent_prompt_version": "1.3.0",
+  "article_id": "", "opportunity_id": "<from packet>", "agent_name": "Content Architect", "agent_prompt_version": "1.4.0",
   "model_version": "claude-code/<your model id>", "input_version_ids": ["..."],
   "decision": "PASS|REVISION|BLOCKED",
   "findings": [{"claim": "...", "basis": "official_source|evidence_library|gsc_data|inventory|assumption|hypothesis", "evidence_ids": ["src:1"]}],

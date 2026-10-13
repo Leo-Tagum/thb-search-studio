@@ -10,8 +10,8 @@ export const IMAGE_AGENT_KEYS = ["thb-08-image-planner", "thb-d1-image-planner"]
 export type ImageAgentKey = (typeof IMAGE_AGENT_KEYS)[number];
 export const isImageAgent = (k: string): k is ImageAgentKey => (IMAGE_AGENT_KEYS as readonly string[]).includes(k);
 export const IMAGE_AGENT_META: Record<ImageAgentKey, { n: 8 | null; name: string; promptVersion: string; decisions: readonly string[] }> = {
-  "thb-08-image-planner": { n: 8, name: "Image Planner", promptVersion: "1.3.0", decisions: ["PASS", "BLOCKED"] },
-  "thb-d1-image-planner": { n: null, name: "Design, Image Planner", promptVersion: "1.3.0", decisions: ["PASS", "BLOCKED"] },
+  "thb-08-image-planner": { n: 8, name: "Image Planner", promptVersion: "1.4.0", decisions: ["PASS", "BLOCKED"] },
+  "thb-d1-image-planner": { n: null, name: "Design, Image Planner", promptVersion: "1.4.0", decisions: ["PASS", "BLOCKED"] },
 };
 
 const finding = z.strictObject({ issue_key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i), severity: z.enum(["required", "optional"]), note: z.string().min(5) });

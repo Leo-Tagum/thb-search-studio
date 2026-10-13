@@ -7,9 +7,9 @@ export const AGENT_KEYS = ["thb-01-seo-strategist", "thb-02-research-evidence", 
 export type AgentKey = (typeof AGENT_KEYS)[number];
 
 export const AGENT_META: Record<AgentKey, { n: 1 | 2 | 3; name: string; promptVersion: string; decisions: readonly string[] }> = {
-  "thb-01-seo-strategist": { n: 1, name: "SEO Strategist", promptVersion: "1.3.0", decisions: ["CREATE", "UPDATE", "MERGE", "HOLD", "REJECT"] },
-  "thb-02-research-evidence": { n: 2, name: "Research & Evidence", promptVersion: "1.3.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
-  "thb-03-content-architect": { n: 3, name: "Content Architect", promptVersion: "1.3.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
+  "thb-01-seo-strategist": { n: 1, name: "SEO Strategist", promptVersion: "1.4.0", decisions: ["CREATE", "UPDATE", "MERGE", "HOLD", "REJECT"] },
+  "thb-02-research-evidence": { n: 2, name: "Research & Evidence", promptVersion: "1.4.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
+  "thb-03-content-architect": { n: 3, name: "Content Architect", promptVersion: "1.4.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
 };
 
 const finding = z.strictObject({
