@@ -280,13 +280,13 @@ describe("Agent 5 audit: every check it performed is covered by V1 (rules and co
   for (const c of CASES) {
     it(`${c.name} (${c.covers})`, async () => {
       const sc = studio(c.unit ?? good, c.ctx);
-      const a5out = envelope(c.decision, result(c.res), "1.1.0", c.findings);
+      const a5out = envelope(c.decision, result(c.res), "1.2.0", c.findings);
       const p5 = studioOutputSchemas["thb-05-fact-privacy-auditor"].safeParse(a5out);
       expect(p5.success).toBe(true);
       const e5 = studioSemanticChecks("thb-05-fact-privacy-auditor", (p5 as unknown as { data: never }).data, sc).filter((e) => !/^agent_prompt_version/.test(e));
       expect(e5.length, "the check must bite on Agent 5").toBeGreaterThan(0);
       // the same output, as V1 submits it (cards and hedge_rulings added), through the classic V1 path (teamSemanticChecks)
-      const v1out = envelope(c.decision, { ...result(c.res), cards: [], hedge_rulings: [] }, "1.3.0", c.findings);
+      const v1out = envelope(c.decision, { ...result(c.res), cards: [], hedge_rulings: [] }, "1.4.0", c.findings);
       const pv = teamSchema("V1").safeParse(v1out);
       expect(pv.success, JSON.stringify(pv.success ? "" : pv.error.issues)).toBe(true);
       const packet = buildTeamPacket("V1", { articleId: "a1", opportunityId: "o1", unitKey: "s2", versionHash: "h1" }, {});
@@ -303,7 +303,7 @@ describe("Agent 5 audit: every check it performed is covered by V1 (rules and co
     expect(codes([{ t: "p", text: "Civil Code section 1102 applies to a transfer by sale. Our founder runs the company." }])).toContain("PENDING_JUAN");
   });
   it("V1's schema is strict and carries Agent 5's required fields: no output can set an approval, a lock or a state", () => {
-    const base = envelope("PASS", { ...result(), cards: [], hedge_rulings: [] }, "1.3.0");
+    const base = envelope("PASS", { ...result(), cards: [], hedge_rulings: [] }, "1.4.0");
     expect(teamSchema("V1").safeParse(base).success).toBe(true);
     for (const k of ["approved", "locked", "state", "next_state"]) expect(teamSchema("V1").safeParse({ ...base, [k]: true }).success, k).toBe(false);
     expect(teamSchema("V1").safeParse({ ...base, result: { ...base.result, approved: true } }).success).toBe(false);

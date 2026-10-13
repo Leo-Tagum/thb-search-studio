@@ -32,7 +32,7 @@ describe("the standing rules file", () => {
     }
   });
   it("covers the rules Leo listed", () => {
-    for (const re of [/Bay Area/, /separate layers/i, /no guessing/i, /Thresholds, conditions and deciders/, /absence-of-law/i, /service-area claims/i, /Privacy/, /Juan approves/, /published automatically/]) expect(rules).toMatch(re);
+    for (const re of [/Bay Area/, /separate layers/i, /no guessing/i, /Thresholds, conditions and deciders/, /absence-of-law/i, /service-area claims/i, /Privacy/, /Juan approves/, /published automatically/, /Image text is the locked text, word for word/, /A legal line in an image is a whole sentence/, /Images make no brand or service-area claim/, /Images never change the text, and Leo checks every image/]) expect(rules).toMatch(re);
   });
 });
 

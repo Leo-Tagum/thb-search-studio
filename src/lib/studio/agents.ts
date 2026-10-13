@@ -9,14 +9,14 @@ export const STUDIO_AGENT_KEYS = ["thb-04-section-writer", "thb-05-fact-privacy-
 export type StudioAgentKey = (typeof STUDIO_AGENT_KEYS)[number];
 /** Phase 3d: V1 (the team's fact and privacy reviewer) is the fact gate of the classic loop. It is not a classic Agent 1-7 and keeps its own file and prompt version. */
 export const CLASSIC_V1_KEY = "thb-v1-fact-privacy";
-export const V1_PROMPT_VERSION = "1.3.0";   // 1.1.0 declines wording; 1.2.0 severity calibration (soften, not_a_claim); 1.2.1 release label of the validated 1.2.0 text (no wording change); 1.3.0 Phase 3e: legal claims, no guessing (quote comparison, reader impact, legal flags, leo_reference_needed) and the standing rules
+export const V1_PROMPT_VERSION = "1.4.0";   // 1.1.0 declines wording; 1.2.0 severity calibration (soften, not_a_claim); 1.2.1 release label of the validated 1.2.0 text (no wording change); 1.3.0 Phase 3e: legal claims, no guessing (quote comparison, reader impact, legal flags, leo_reference_needed) and the standing rules
 export const isStudioAgent = (k: string): k is StudioAgentKey => (STUDIO_AGENT_KEYS as readonly string[]).includes(k);
 
 export const STUDIO_AGENT_META: Record<StudioAgentKey, { n: 4 | 5 | 6 | 7; name: string; promptVersion: string; decisions: readonly string[] }> = {
-  "thb-04-section-writer": { n: 4, name: "Section Writer", promptVersion: "1.2.0", decisions: ["PASS", "BLOCKED"] },
-  "thb-05-fact-privacy-auditor": { n: 5, name: "Fact & Privacy Auditor", promptVersion: "1.1.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
-  "thb-06-seo-aeo-geo-auditor": { n: 6, name: "SEO/AEO/GEO Auditor", promptVersion: "1.2.0", decisions: ["PASS", "REVISION"] },
-  "thb-07-editorial-critic": { n: 7, name: "Editorial Critic", promptVersion: "1.2.0", decisions: ["PASS", "REVISION"] },
+  "thb-04-section-writer": { n: 4, name: "Section Writer", promptVersion: "1.3.0", decisions: ["PASS", "BLOCKED"] },
+  "thb-05-fact-privacy-auditor": { n: 5, name: "Fact & Privacy Auditor", promptVersion: "1.2.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
+  "thb-06-seo-aeo-geo-auditor": { n: 6, name: "SEO/AEO/GEO Auditor", promptVersion: "1.3.0", decisions: ["PASS", "REVISION"] },
+  "thb-07-editorial-critic": { n: 7, name: "Editorial Critic", promptVersion: "1.3.0", decisions: ["PASS", "REVISION"] },
 };
 
 const issue = z.strictObject({ issue_key: z.string().regex(/^[a-z0-9_:.-]{3,80}$/i), severity: z.enum(["required", "optional"]), note: z.string().min(5), claim_id: z.string().nullish(), new_evidence: z.string().trim().min(5).max(1000).optional() });  // new_evidence: only to raise again an item the writer already declined  // a null claim_id means "no claim"

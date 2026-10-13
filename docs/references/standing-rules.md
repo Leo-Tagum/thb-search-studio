@@ -1,8 +1,8 @@
 # THB Search Studio: standing rules
 
-standing-rules-version: 1.0.0
+standing-rules-version: 1.1.0
 owner: Leo
-last-updated: 2026-10-13
+last-updated: 2026-10-13 (1.1.0: image rules SR-11 to SR-17)
 
 Every agent prompt and the operator (Claude Code) load this file first. Where it conflicts with anything else, these rules win. Only Leo changes it. A change bumps the version above, the constant `STANDING_RULES_VERSION` in `src/lib/agents/standing-rules.ts`, and the `standing_rules_version:` line in every agent prompt in `.claude/agents/` (a test fails until they all agree).
 
@@ -45,3 +45,26 @@ Source: Leo. Date: 2026-10-10.
 
 **SR-10.** Only act as leo on real articles. No proposal, approval, publish or WordPress action unless Leo says so in that step. No force-push. Migrations only with Leo's approval. Never change the original article (check its fingerprint, v1 and v2, before and after anything that touches an article's data). Do not contact Juan or Cherry; Leo does. Report outcomes faithfully, and stop and ask when a legal point cannot be verified.
 Source: Leo, restated at each step. Date: 2026-10-13.
+
+## Images (Phase 3e image planner, Agent 8 / D1)
+
+**SR-11. Image text is the locked text, word for word.** Every line of text inside an image is copied exactly from a named locked block of the article (whitespace aside): no paraphrase, no new words, no new numbers, no figure, chart value or statistic that the article does not state. Alt text and captions state no fact the article does not state.
+Source: Leo (image planner plan, section 2.3). Date: 2026-10-13.
+
+**SR-12. A legal line in an image is a whole sentence with its claim.** A legal point shown in an image is a whole sentence, table cell or list item from the locked text, never a fragment, so a threshold, condition or decider cannot be dropped (SR-5). The card cites the claim ids that verify it, and V1 checks it as it checks article text (label MATCH).
+Source: Leo (image planner plan, section 2.3). Date: 2026-10-13.
+
+**SR-13. Images make no brand or service-area claim.** No map, no city names presented as where we buy, no skyline or landmark imagery implying coverage, no "serving X" badge, no rating, review count, BBB badge, hours, closing-time promise or "as-is" promise (SR-3 and editorial standards section 7). Brand text appears only if it is verbatim locked text.
+Source: Leo (image planner plan, section 2.3). Date: 2026-10-13.
+
+**SR-14. Images keep the layers of law apart.** A graphic comparing state and local rules keeps each layer separate with its own claim. A local rule never appears under a "California law" label, and no image implies one city's or county's rule equals another's (SR-2).
+Source: Leo (image planner plan, section 2.3). Date: 2026-10-13.
+
+**SR-15. Images carry no private or identifying detail.** No seller photos, faces, house numbers, addresses, documents or license plates; stock photos are generic with no identifiable people; nothing demeaning about a person or a home. Uploaded photos have their metadata (EXIF, GPS) removed before they are stored (SR-7).
+Source: Leo (image planner plan, section 2.3). Date: 2026-10-13.
+
+**SR-16. Banned imagery.** No quotation-mark speech bubbles, no before-and-after of a real home, no invented charts or data, no testimonial framing.
+Source: Leo (image planner plan, section 2.3). Date: 2026-10-13.
+
+**SR-17. Images never change the text, and Leo checks every image.** The image planner never edits, unlocks or reopens article text. The image check by the model (reading the picture) is a flagging aid only; Leo looks at every image himself before any proposal. An image added or replaced after a proposal exists changes the approval hash and supersedes the proposal, like a text edit.
+Source: Leo (image planner plan, sections 2.1 and 2.5). Date: 2026-10-13.
