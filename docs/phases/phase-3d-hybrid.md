@@ -244,6 +244,21 @@ V1 had ruled the same type of unsupported assertion must-fix elsewhere, indicati
 
 **Current disposition:** Proposed removal from s3. No revision authorized yet. Awaiting owner approval of the complete removal list and a documented one-time third-revision exception.
 
+### Evidence for 3e — Standing rule: legal claims, no guessing (Leo, 2026-10-13)
+
+**Rule, for every article from now on:**
+1. Every legal claim must be checked against the OFFICIAL text (leginfo.legislature.ca.gov, or the official city or county code), quoted exactly with its section and subsection.
+2. Summaries, blogs, law-firm pages or memory do not count as verification.
+3. If the official text cannot be reached, or the wording is unclear, or it is not certain that it applies: STOP and ask Leo for a reference or help. Do not guess, do not soften it into vagueness, do not move on.
+4. Each claim records: the exact quote, the URL, the date checked, and MATCH / NARROWER / BROADER / WRONG.
+5. Anything not MATCH is fixed or removed before the article goes to Juan.
+
+**Required change to the research step (Agent 2 / R1):** fetch the official text; store the full exact quote with section and subsection (today only a short line-wrapped fragment is stored as `supporting_passage`), the URL and the date checked; assign MATCH / NARROWER / BROADER / WRONG, including whether the claim drops a threshold, a condition, an exception or an alternative decider that the section states; escalate to Leo when the official text cannot be reached or the wording is unclear.
+
+**Required change to V1:** for every legal claim, compare the draft sentence with the stored exact quote, not with the claim wording; rule NARROWER / BROADER / WRONG on a missing threshold, exception or alternative; refuse a legal claim whose verification record is missing, not MATCH, or not from the official text; escalate to Leo instead of passing when unsure.
+
+**Disposition:** rule recorded only. No agent prompt and no code changed. First application: the hoarder guide check of clm:1-7 (reported to Leo 2026-10-13; the official live pages returned HTTP 403 to automated fetches, so the check used the authenticated leginfo prints Leo stored on 2026-10-10).
+
 ## Editorial polish items for Juan's review: NOT applied (s7, 2026-10-13)
 
 These are optional reviewer findings, not release fixes. Leo rejected the first s7 rewrite and authorized one surgical correction only (the opening's first sentence); none of the items below was applied. They are listed for Juan.
