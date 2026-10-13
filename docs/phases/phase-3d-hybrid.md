@@ -7,7 +7,7 @@ Classic stays the default pipeline. V1 (fact and privacy, with the hedge flag an
 Plan approved with conditions: list Agent 5's checks and where each is covered; the churn check applies only to the writer's V1-fix pass; every changed agent file gets a prompt version bump with the exact change (declines wording only); commit order declines module, classic declines, V1 gate, escalation, adversarial fixtures, smokes and verify script. Defaults accepted: 2 attempts then escalation; not retroactive; no migration; no new code flags unless the live test shows a V1 miss. The real run (task 10) may run units in parallel; the report says so and keeps counters and escalations per unit.
 
 ## Status
-Tasks 1-9 built and committed; V1 severity calibration (1.2.1) approved with documented exception (below). **Task 10 (real run on `54070caa…`) not started: waiting for Leo's go-ahead.**
+Tasks 1-9 built and committed; V1 severity calibration (1.2.1) approved with documented exception (below). **Task 10 (the hybrid on `54070caa…`) done 2026-10-13: reached HUMAN_REVIEW, see below.**
 
 ## What was built
 | Task | Commit subject | What |
@@ -106,5 +106,67 @@ Prompt version: the validated text is the 1.2.0 text; 1.2.1 is the release label
 
 Limits: one model's rulings, one run per card in the isolated test; the guard is keyword-based (a legal rule worded without the listed words can still be ruled `not_a_claim`, so the protection rests on V1's judgment plus the specific-claim guard); the classification script maps findings to a card by wording overlap.
 
+## Task 10: the hybrid on the classic-revision branch `54070caa…` (2026-10-13)
+
+**Result: reached HUMAN_REVIEW. 9 units locked, article assembled (`81de13358a74`), 0 escalations, 0 retries, no proposal, no approval, no WordPress write.** The original article's fingerprint `23f8dd72…4611` was compared before every step and after every step (16 checks) and never changed. Stopped at HUMAN_REVIEW as instructed.
+
+### The reopen-all-units step, and why
+Before any V1 run, all nine units were sent through the V1 gate **as `leo`** with `studio resolve <branch> <unit> v1_gate` (the Leo-only gate-only action): the unit goes to `NEEDS_FACT` with the text unchanged, and V1 passing identical text keeps the Agent 6 and 7 passes, so no unchanged unit repeats them. Why all nine first, not one at a time:
+- The article was in HUMAN_REVIEW. The first gate returns it to DRAFTING (REVISION_REQUIRED then DRAFTING); the orchestrator allows two such article-level revisions in total. If a unit relocked while others were still waiting, the article would reassemble to HUMAN_REVIEW and the next gate would use up another revision. (The `smoke:studio` run first hit exactly this limit.) With all nine units gated first, the article stayed in DRAFTING until the last unit locked and assembled once.
+- Gate-only (not a reopen with a directive) was used because V1 had to look at every unit anyway and the text had not changed: seven units needed a single V1 run.
+
+### Conditions
+Parallel: the nine units ran in parallel within each round (all nine V1 reviews together; then the two units that needed a fix, together at each later step). Counters and escalations are kept per unit by the state machine. V1 prompt 1.2.1 and the guard as committed in `4aca4dc`, one identical dispatch prompt for every V1 run (no extra instructions). Rounds: 5 (V1 on 9 units; writer on 2; V1 re-check on 2; Agent 6 on 2; Agent 7 on 2).
+
+### 1. V1 result per unit
+
+| Unit | V1 round 1 | must-fix | should-fix | `not_a_claim` | What was fixed |
+|---|---|---|---|---|---|
+| s1 | PASS, locked again | 0 | 2 (one `soften`, one optional finding on the same sentence) | 1 | nothing |
+| s2 | REVISION | 1 | 2 | 0 | the cited sentence only (the list of roles: owner, trustee, executor, administrator, spouse, heirs) was replaced by "Who that is depends on the documents and the facts, and an attorney or title company can confirm it." Round 2: V1 PASS; Agents 6 and 7 PASS; locked |
+| s3 | PASS, locked again | 0 | 0 | 0 | nothing |
+| s4 | PASS, locked again | 0 | 1 | 0 | nothing |
+| s5 | PASS, locked again | 0 | 0 | 0 | nothing |
+| s6 | PASS, locked again | 0 | 1 (`soften`) | 1 | nothing |
+| s7 | PASS, locked again | 0 | 2 (one `soften`) | 0 | nothing |
+| s8 | PASS, locked again | 0 | 0 | 1 | nothing |
+| faq | REVISION | 2 | 2 | 0 | the three cited sentences were removed ("The statute does not mention hoarding."; the list of roles; "Living in the house alone does not give you that authority."), nothing else changed. Round 2: V1 PASS; Agents 6 and 7 PASS; locked |
+
+Totals: 3 must-fix findings on 2 units, 8 should-fix items in V1's round-1 reviews, 3 `not_a_claim` rulings, 4 `soften` rulings, 0 `proven`. The fix-only rule held: only the cited sentences changed, and the churn check did not fire. For comparison only (not like for like, because V1 was calibrated in between): the Phase 3c follow-up V1 (prompt 1.0.0) returned REVISION on 6 of 9 units of this text with 7 must-fix.
+
+### 2. Measured tokens (from the session transcripts)
+17 subagents. Input 96; cache creation 416,737; cache read 491,628; output 4,226 (a lower bound, see the evidence audit). **All categories: 912,687. Without cache reads: 421,059.** Cache reads are 54% of the total. The old estimate (characters of the stored packets and outputs divided by 4) gives **141,258**, so the old method was low by about 6.5x again. By role: V1 11 agents 650,464; writer 2 agents 120,562; Agent 6 2 agents 84,722; Agent 7 2 agents 56,939. Per agent 53.7k. Against the earlier measured figures for the same text: classic revision 37 runs, 1.69M; team revision 110 runs, 5.58M. The pre-run hybrid projection (58 runs, re-expressed about 2.6M, estimated) was too high because gate-only skipped Agents 6 and 7 on seven units and V1's calibrated rulings left only two units to fix.
+
+### 3. Runs and elapsed time
+17 runs: V1 11 (9 + 2), writer 2, Agent 6 2, Agent 7 2. 0 retries, 0 rejected outputs. Wall clock: 00:01:17Z (start of gating) to 00:10:05Z (HUMAN_REVIEW) **= 8 min 48 s**; first to last agent 5.8 min. Units ran in parallel, so this is not comparable with the team run's 87 min sequential.
+
+### 4. Automation counters
+- **Leo's actions:** the go-ahead for Task 10, and the nine Leo-only `v1_gate` actions (executed through the operator CLI as `leo`, under that authorization). No resolve, no escalation answer, no approval.
+- **Operator actions:** 5 rounds of queue, dump, dispatch, submit (20 command steps), 17 agent dispatches, 16 fingerprint checks, 7 plan reads, and the end-of-run data collection. All mechanical; none needed a judgment.
+- **Escalations: 0.** No unit reached the round limit; no churn finding; no rejected output.
+- **Could it have finished unattended?** After the gate action, yes: no decision was needed in any round. What an unattended run still needs: (a) a runner that dispatches the agents (today the operator does that by hand), (b) the gate action, which is Leo-only by design (a single "gate all units" command would do), (c) the standing stop for an escalation, which did not occur here. This run is one data point with no failures.
+
+### 5. Hedge spot-check list (5 of V1's 7 hedge rulings)
+Selection rule, fixed before reading them: all three `not_a_claim` rulings (the ones that remove a finding) plus the first two `soften` rulings in unit order. There were no `proven` rulings. All 7 are in `phase-3d-data/task10/t10-rulings.json`.
+
+| Unit | Original sentence | V1 ruling | V1's reason |
+|---|---|---|---|
+| s1 | A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it. | `not_a_claim` | Empathetic, non-judgmental line about the occupant; states no fact, figure, frequency or legal rule. |
+| s6 | None of them is wrong for everyone, and most of them have nothing to do with Twin Home Buyer. | `not_a_claim` | Describes the section's own list of options and says no route fits everyone; states no fact, figure or legal rule and makes no THB claim beyond the brief's honest-options structure. |
+| s8 | A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign. | `not_a_claim` | Empathetic, hypothetical line about a stalled sale; states no fact, figure, frequency or legal rule; "nobody" is rhetorical. |
+| faq | Not always. | `soften` | An unsupported frequency phrase, not a statistic; "It depends on..." says the same without implying a rule. |
+| s1 | Getting clear early usually creates more options, not fewer. | `soften` | Unsupported frequency word, not a statistic and not a legal rule; "can keep more options open" would do. |
+
+Notes for the judge: the s6 sentence contains "most of them have nothing to do with Twin Home Buyer", a quantifier about the section's own options rather than the market, which is why V1 ruled it `not_a_claim`; whether it is a claim about THB is Leo's call. The FAQ's "Not always." was `soften` here but `not_a_claim` in two of the three card-1 context runs, so V1 is not stable on that sentence.
+
+### 6. Should-fix items listed for Leo (non-blocking; 9 open on the final text, 4 declined by the writer)
+Open: **s1**: "Getting clear early usually creates more options, not fewer." (V1, twice: an optional finding and a `soften` ruling on the same sentence). **s2**: first-person voice in the opening (Agent 6); the "attorney or title company can confirm" pointer repeated three times (Agent 7); open with the seller's situation rather than a definition (Agent 7). **s4**: "this is often the question that makes people freeze. Many owners think the clutter has to be explained away..." an unsupported frequency and belief claim about owners (V1). **s6**: "The real question is usually not which route is best." (V1 `soften`). **s7**: "The statute doesn't mention hoarding" has no ledger claim (V1, not blocking); "The real question is usually whether the house or the paperwork is the bigger risk to the sale." (V1 `soften`). **faq**: item 4 "Only someone with legal authority to sign." has no ledger claim (Agent 6); light local flavor (Agent 7); item 6 repeats items 2 and 4 (Agent 7).
+
+Declined by the writer, with reasons stored and counted (`studio declines <branch>`): s2 "Title can sit with an individual, a trust, an estate or an LLC. Each one changes who has to agree." and s2 "Most families are not looking for judgment." (both: outside the cited sentences of a V1 fix pass, so changing them would be rejected by code); faq "Not always." (twice, same reason). These are exactly the items a fix-only pass leaves for Leo.
+
+Observations: (1) s1's single sentence appears as two should-fix items (an optional finding and a `soften` item with different keys); (2) should-fix items are never applied automatically: the fix pass changes only cited sentences, so Leo decides on the rest; (3) the "usually" in s6 and s7 is a should-fix, not a block.
+
+Data: `phase-3d-data/task10/` (every agent output by round, V1 rows, rulings, usage, final state). Report script: `scripts/phase3d-task10-report.mts`.
+
 ## Open for Leo
-Task 10: the hybrid on `54070caa…` (7 remaining V1 must-fix items), then V1's result per unit and the 5-item hedge spot-check list. Needs Leo's go-ahead before any change to that article.
+Review the 9 open should-fix items and the 5-item hedge spot-check list in the Task 10 section. The branch `54070caa…` is at HUMAN_REVIEW with no proposal, approval or publication.

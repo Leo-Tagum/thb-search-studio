@@ -1,0 +1,150 @@
+[
+ {
+  "round": "r1",
+  "unit": "faq",
+  "decision": "REVISION",
+  "must": 2,
+  "should": 2,
+  "not_a_claim": 0,
+  "proven": 0,
+  "flagged": 1,
+  "must_notes": [
+   "Item 4 answer lists legal roles (\"the owner, a trustee, an executor or administrator, or several heirs who agree\") and concludes \"Living in the house alone does not give you that authority.\" No cited claim or ledger claim supports",
+   "Item 3 states \"The statute does not mention hoarding\" and answers \"Possibly\" to whether the city or county can act. No ledger claim (clm:1-4) says what the statute omits or that a city or county may enforce it; clm:2-4 speak only "
+  ],
+  "should_notes": [
+   "Item 2 opens \"Not always.\" (flagged). It is an unsupported frequency word that implies cleanout is not required; plainer wording such as 'It depends on...' would remove the implied rule."
+  ]
+ },
+ {
+  "round": "r1",
+  "unit": "s1",
+  "decision": "PASS",
+  "must": 0,
+  "should": 2,
+  "not_a_claim": 1,
+  "proven": 0,
+  "flagged": 2,
+  "must_notes": [],
+  "should_notes": [
+   "'Getting clear early usually creates more options, not fewer.' is an unsupported frequency/outcome word, not a statistic and not a legal rule. Plainer wording such as 'Getting clear early can keep mor"
+  ]
+ },
+ {
+  "round": "r1",
+  "unit": "s2",
+  "decision": "REVISION",
+  "must": 1,
+  "should": 2,
+  "not_a_claim": 0,
+  "proven": 0,
+  "flagged": 0,
+  "must_notes": [
+   "Paragraph 1 says: 'Depending on the situation, that might be an owner, a trustee, an executor, an administrator, a surviving spouse, or several heirs agreeing together.' This is a list of legal roles who hold authority to sign. Th"
+  ],
+  "should_notes": [
+   "'Title can sit with an individual, a trust, an estate or an LLC. Each one changes who has to agree.' No ledger claim supports it. It is a general principle with a short list of ownership forms. Consid",
+   "'Most families are not looking for judgment.' It is empathetic, not a statistic, and it was not flagged. Plainer wording such as 'Many families are looking for time and a clear next step' would avoid "
+  ]
+ },
+ {
+  "round": "r1",
+  "unit": "s3",
+  "decision": "PASS",
+  "must": 0,
+  "should": 0,
+  "not_a_claim": 0,
+  "proven": 0,
+  "flagged": 0,
+  "must_notes": [],
+  "should_notes": []
+ },
+ {
+  "round": "r1",
+  "unit": "s4",
+  "decision": "PASS",
+  "must": 0,
+  "should": 1,
+  "not_a_claim": 0,
+  "proven": 0,
+  "flagged": 0,
+  "must_notes": [],
+  "should_notes": [
+   "\"this is often the question that makes people freeze. Many owners think the clutter has to be explained away...\" is an unsupported frequency and belief claim about owners. It states no law, figure or "
+  ]
+ },
+ {
+  "round": "r1",
+  "unit": "s5",
+  "decision": "PASS",
+  "must": 0,
+  "should": 0,
+  "not_a_claim": 0,
+  "proven": 0,
+  "flagged": 0,
+  "must_notes": [],
+  "should_notes": []
+ },
+ {
+  "round": "r1",
+  "unit": "s6",
+  "decision": "PASS",
+  "must": 0,
+  "should": 1,
+  "not_a_claim": 1,
+  "proven": 0,
+  "flagged": 2,
+  "must_notes": [],
+  "should_notes": []
+ },
+ {
+  "round": "r1",
+  "unit": "s7",
+  "decision": "PASS",
+  "must": 0,
+  "should": 2,
+  "not_a_claim": 0,
+  "proven": 0,
+  "flagged": 1,
+  "must_notes": [],
+  "should_notes": [
+   "\"The statute doesn't mention hoarding\" is a statement about the statute with no ledger claim behind it. It comes from the brief's open items and is consistent with the cited text, but a ledger claim w"
+  ]
+ },
+ {
+  "round": "r1",
+  "unit": "s8",
+  "decision": "PASS",
+  "must": 0,
+  "should": 0,
+  "not_a_claim": 1,
+  "proven": 0,
+  "flagged": 1,
+  "must_notes": [],
+  "should_notes": []
+ },
+ {
+  "round": "r3",
+  "unit": "faq",
+  "decision": "PASS",
+  "must": 0,
+  "should": 0,
+  "not_a_claim": 0,
+  "proven": 0,
+  "flagged": 0,
+  "must_notes": [],
+  "should_notes": []
+ },
+ {
+  "round": "r3",
+  "unit": "s2",
+  "decision": "PASS",
+  "must": 0,
+  "should": 0,
+  "not_a_claim": 0,
+  "proven": 0,
+  "flagged": 0,
+  "must_notes": [],
+  "should_notes": []
+ }
+]

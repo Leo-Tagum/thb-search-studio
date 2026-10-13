@@ -1,0 +1,58 @@
+[
+ {
+  "round": "r1",
+  "unit": "faq",
+  "ruling": "soften",
+  "note": "'Not always.' is an unsupported frequency phrase, not a statistic; 'It depends on...' states the same without implying a rule.",
+  "sentence": "Not always.",
+  "term": "always"
+ },
+ {
+  "round": "r1",
+  "unit": "s1",
+  "ruling": "not_a_claim",
+  "note": "Empathetic, non-judgmental line about the occupant; states no fact, figure, frequency or legal rule.",
+  "sentence": "A packed house is often a family matter before it is a real estate matter, and nobody should be judged for it.",
+  "term": "nobody"
+ },
+ {
+  "round": "r1",
+  "unit": "s1",
+  "ruling": "soften",
+  "note": "Unsupported frequency word, not a statistic and not a legal rule; 'can keep more options open' would do.",
+  "sentence": "Getting clear early usually creates more options, not fewer.",
+  "term": "usually"
+ },
+ {
+  "round": "r1",
+  "unit": "s6",
+  "ruling": "soften",
+  "note": "'usually' is a frequency word with no statistic and states no legal rule or fact. Plainer wording such as 'The real question is not which route is best. It is which route fits your situation.' would do.",
+  "sentence": "The real question is usually not which route is best.",
+  "term": "usually"
+ },
+ {
+  "round": "r1",
+  "unit": "s6",
+  "ruling": "not_a_claim",
+  "note": "Describes the section's own list of options and says no route fits everyone. It states no fact, figure or legal rule, and makes no THB claim beyond the brief's honest-options structure.",
+  "sentence": "None of them is wrong for everyone, and most of them have nothing to do with Twin Home Buyer.",
+  "term": "everyone"
+ },
+ {
+  "round": "r1",
+  "unit": "s7",
+  "ruling": "soften",
+  "note": "'usually' is a frequency word, not a statistic, and states no legal rule or fact. Plainer wording such as 'The real question is whether...' or 'is often' would do.",
+  "sentence": "The real question is usually whether the house or the paperwork is the bigger risk to the sale.",
+  "term": "usually"
+ },
+ {
+  "round": "r1",
+  "unit": "s8",
+  "ruling": "not_a_claim",
+  "note": "Empathetic, hypothetical line about a stalled sale; states no fact, figure, frequency or legal rule. 'nobody' is rhetorical.",
+  "sentence": "A house full of belongings is hard enough without finding out halfway through that nobody checked who could sign.",
+  "term": "nobody"
+ }
+]
