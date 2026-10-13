@@ -120,7 +120,7 @@ describe("the quote is verbatim in the stored official print, and its source is 
 describe("wired into Agent 2's submit check", () => {
   const packet = buildTaskPacket("thb-02-research-evidence", { id: "o1", versionHash: "h1" }, {}, "agent-defined");
   const out = (claims: unknown[], sources: unknown[] = [{ id: "src:1", kind: "library", library_source_id: "L1", title: "H&S 17920.3", tier: 1, jurisdiction: "California", effective_date: "2025-01-01", retrieved_date: "2026-10-10", locality_matches: true }]) => ({
-    article_id: "", opportunity_id: "o1", agent_name: "Research & Evidence", agent_prompt_version: "1.2.0", model_version: "claude-code/test", input_version_ids: ["h1"],
+    article_id: "", opportunity_id: "o1", agent_name: "Research & Evidence", agent_prompt_version: "1.3.0", model_version: "claude-code/test", input_version_ids: ["h1"],
     decision: "PASS", findings: [], evidence_ids: ["src:1"], required_actions: [], output_version_id: "v1", timestamp: "2026-10-13T12:00:00Z",
     result: { sources, claims, brand_facts_pending: [], first_party_proof: "restricted", unresolved: [] },
   });

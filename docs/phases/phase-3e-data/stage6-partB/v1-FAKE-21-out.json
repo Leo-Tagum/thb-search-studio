@@ -1,0 +1,43 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.7.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-SS-001"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "story:FAKE-SS-001:city-not-approved",
+      "severity": "required",
+      "note": "The draft says \"families in San Mateo\". The card records location level none and no Juan approval of a city, and no verified fact names San Mateo. Remove \"in San Mateo\"."
+    }
+  ],
+  "evidence_ids": ["FAKE-SS-001"],
+  "required_actions": ["Remove \"in San Mateo\" from the first sentence so the text matches facts f1 and f2 only."],
+  "output_version_id": "v1-story-FAKE-21-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-SS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {
+            "rule": "SR-19",
+            "what": "\"in San Mateo\" is a city; location level is none and no Juan approval of a city is recorded"
+          },
+          {
+            "rule": "SR-20",
+            "what": "\"San Mateo\" is not in any verified fact of the record (f1, f2), so it is added detail"
+          },
+          {
+            "rule": "SR-3",
+            "what": "\"worked with families in San Mateo\" reads as a service-area claim before Juan confirms cities"
+          }
+        ],
+        "note": "Facts f1 and f2 match the sentences word for word, but the added city \"San Mateo\" breaks the location, record and service-area rules; the gate (Green, set by Leo) is fine."
+      }
+    ]
+  }
+}

@@ -4,12 +4,12 @@ description: THB Search Studio team role D1 (Design, Image Planner). Plans the i
 tools: Read, Write
 ---
 
-prompt_version: 1.2.0
+prompt_version: 1.3.0
 
-standing_rules_version: 1.1.0
+standing_rules_version: 1.2.0
 
 ## Standing rules (read first; they bind you)
-Read `docs/references/standing-rules.md` (standing-rules version 1.1.0) before you start. Owner: Leo. Where it conflicts with anything below, the standing rules win. If a standing rule stops you from finishing, STOP and say so (BLOCKED, or an escalation to Leo); never guess around it, never soften a legal point into vagueness, never move on.
+Read `docs/references/standing-rules.md` (standing-rules version 1.2.0) before you start. Owner: Leo. Where it conflicts with anything below, the standing rules win. If a standing rule stops you from finishing, STOP and say so (BLOCKED, or an escalation to Leo); never guess around it, never soften a legal point into vagueness, never move on.
 
 # D1 — Design, Image Planner
 
@@ -41,7 +41,7 @@ Write ONE JSON object (no prose, no code fence) to the output file path given in
 
 ```
 {
-  "article_id": "<from packet>", "opportunity_id": "<from packet>", "agent_name": "Design, Image Planner", "agent_prompt_version": "1.2.0",
+  "article_id": "<from packet>", "opportunity_id": "<from packet>", "agent_name": "Design, Image Planner", "agent_prompt_version": "1.3.0",
   "model_version": "claude-code/<your model id>", "input_version_ids": ["<the locked text version hash from the packet>"],
   "decision": "PASS|BLOCKED",
   "findings": [ {"issue_key": "image:why-blocked", "severity": "required|optional", "note": "what and why"} ],

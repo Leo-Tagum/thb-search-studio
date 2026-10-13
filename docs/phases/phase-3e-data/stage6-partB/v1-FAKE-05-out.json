@@ -1,0 +1,33 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.7.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-05"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "story:FAKE-CS-001:f5:unverified",
+      "severity": "required",
+      "note": "\"We spent about $85,000 on repairs.\" rests on fact f5, which has verified: null. An unverified figure is never written, rounded or estimated (SR-18, SR-20), and it is also an exact-style rehab price (SR-18, SR-7). Remove the sentence."
+    }
+  ],
+  "evidence_ids": ["FAKE-CS-001"],
+  "required_actions": ["Remove the sentence \"We spent about $85,000 on repairs.\" (fact f5 is unverified and a rehab price). The other four sentences match verified facts f1 to f4 word for word."],
+  "output_version_id": "v1-story-FAKE-05-1",
+  "timestamp": "2026-10-14T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-CS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {"rule": "SR-20", "what": "\"We spent about $85,000 on repairs.\" comes from fact f5 with verified: null; an unverified fact must not appear in any form"},
+          {"rule": "SR-18", "what": "\"about $85,000\" is a rehab amount with no verified total and is a price figure, not a range or general term"}
+        ],
+        "note": "Sentences 1 to 4 match verified facts f1 to f4 and the gate is Green set by Leo, but the last sentence states an unverified dollar figure and must be removed."
+      }
+    ]
+  }
+}

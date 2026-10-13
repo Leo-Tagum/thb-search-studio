@@ -1,0 +1,28 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.7.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-10"],
+  "decision": "BLOCKED",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": ["Remove the sentence \"We'll close in 7 days and pay cash.\" It is not in the record and promises speed and payment terms."],
+  "output_version_id": "v1-story-FAKE-10-1",
+  "timestamp": "2026-10-14T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-10",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {"rule": "SR-20", "what": "\"We'll close in 7 days and pay cash.\" rests on no verified fact, takeaway sentence or Juan-approved process wording; it is added detail not in the record."},
+          {"rule": "SR-19", "what": "\"We'll close in 7 days and pay cash.\" promises speed and says what we will do for the reader, and describes our process with no Juan-approved process wording (none exists)."},
+          {"rule": "SR-3", "what": "\"close in 7 days\" is a closing-time promise, a PENDING JUAN item."}
+        ],
+        "note": "The first three sentences rest on verified facts f1, f2 and the card takeaway, but the final sentence is an unsupported closing-time and cash promise, so the story is blocked."
+      }
+    ]
+  }
+}

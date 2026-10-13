@@ -1,8 +1,8 @@
 # THB Search Studio: standing rules
 
-standing-rules-version: 1.1.0
+standing-rules-version: 1.2.0
 owner: Leo
-last-updated: 2026-10-13 (1.1.0: image rules SR-11 to SR-17)
+last-updated: 2026-10-14 (1.2.0: seller-derived content, SR-18 to SR-20)
 
 Every agent prompt and the operator (Claude Code) load this file first. Where it conflicts with anything else, these rules win. Only Leo changes it. A change bumps the version above, the constant `STANDING_RULES_VERSION` in `src/lib/agents/standing-rules.ts`, and the `standing_rules_version:` line in every agent prompt in `.claude/agents/` (a test fails until they all agree).
 
@@ -68,3 +68,14 @@ Source: Leo (image planner plan, section 2.3). Date: 2026-10-13.
 
 **SR-17. Images never change the text, and Leo checks every image.** The image planner never edits, unlocks or reopens article text. The image check by the model (reading the picture) is a flagging aid only; Leo looks at every image himself before any proposal. An image added or replaced after a proposal exists changes the approval hash and supersedes the proposal, like a text edit.
 Source: Leo (image planner plan, sections 2.1 and 2.5). Date: 2026-10-13.
+
+## Seller-derived content (case studies and seller stories; Stage 6, part B)
+
+**SR-18. Case study (the transaction).** A case study tells what happened to one property: its condition, what was done, the outcome. It is written only from a record Leo supplies and only from facts in our transaction records. Every number or fact is marked verified against a named record, or it is dropped. An unverified figure is never written, rounded or estimated. A rehab amount appears only if a verified total exists for that deal. Never include: an address; a city or neighborhood unless Juan approved it for that case (recorded; a region such as "the Bay Area", "the Peninsula" or "the East Bay" is allowed); exact purchase, rehab or resale prices (use ranges or general terms such as "a mid-six-figure purchase"); exact dates (use "several months"); any detail about a person; or anything that could identify the property from public records. Photos only if the property cannot be identified from them and Juan approved them. No promise or implied result for the reader.
+Source: Leo (Stage 6 plan, part B; edits 2026-10-14). Date: 2026-10-14.
+
+**SR-19. Seller story (the scenario).** A seller story shows that Twin Home Buyer has handled a type of situation: "we've handled situations like this; maybe we can help you too." It describes the situation type, never a person: no name, family detail, job, age, timeline or other detail that could point to someone. Location is region-level only ("the Bay Area", "the Peninsula", "the East Bay"); a city or neighborhood only with Juan's recorded approval, as in SR-18. It is anonymous unless written seller permission is on file (a verbal OK does not count; none is on file today). A quotation is allowed only with written seller permission on file, quoted word for word and never edited; today there is none, so no quotes. There is no promise or implication about price, speed, outcome or what we will do for the reader, no testimonial framing, and no service-area claim or "we buy in ..." (SR-3). "What we generally do" uses Juan-approved process wording only; none exists yet, so until Juan approves one a seller story describes the situation only, not our process.
+Source: Leo (Stage 6 plan, part B; edits 2026-10-14). Date: 2026-10-14.
+
+**SR-20. Seller-derived content gate (both types).** No composite or invented sellers, properties, deals or quotes, and nothing added "for color": if a detail is not in the record, it is not in the text. Content comes only from Leo (Content HQ); agents never research, search for or contact sellers and never look for deal data themselves. Each piece carries a gate color: Green (verified and cleared; the only color that is used), Yellow (held for Juan), Red (never used), Research-only (background for understanding, never published or paraphrased). Only Leo changes a gate; Yellow becomes Green only after Juan's approval is recorded; no agent sets or changes a gate. Juan approves each case study and seller story, as part of approving the article that contains it. Internal access is not consent (SR-7).
+Source: Leo (Stage 6 plan, part B; edits 2026-10-14). Date: 2026-10-14.

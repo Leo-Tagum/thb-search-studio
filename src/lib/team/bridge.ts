@@ -9,6 +9,7 @@ import { MAX_ATTEMPTS, ratingRuleHits, semanticChecks, wrapUntrusted, norm, type
 import { officialUrl } from "../agents/official-sources";
 import { studioOutputSchemas, studioSemanticChecks, V1_PROMPT_VERSION, type StudioValidationCtx } from "../studio/agents";
 import { v1ImageCheckErrors, v1ImageCheckOutput } from "../studio/image-agents";
+import { v1StoryCheckOutput } from "../studio/story-agents";
 import type { ImagePlanResult } from "../studio/image-cards";
 import { HEDGE_RULINGS, rulingGuard, rulingNoteError } from "../studio/hedge-rulings";
 import { READER_IMPACTS, VERIFICATION_LABELS } from "../studio/legal-claims";
@@ -31,7 +32,7 @@ export const TEAM_DECISIONS: Record<TeamRole, readonly string[]> = {
   W1: ["PASS", "BLOCKED"], W2: ["PASS"], V1: ["PASS", "REVISION", "BLOCKED"], V2: ["PASS", "REVISION"], V3: ["PASS", "REVISION"],
 };
 /** Prompt versions per role. 1.1.0 (Phase 3d): declines wording in W1, V1, V2 and V3. Phase 3e: every prompt loads the standing rules; R1, V1, W1 (and the architect and strategist roles) carry the legal-claims and geography rules. */
-export const TEAM_PROMPT_VERSIONS: Record<TeamRole, string> = { R1: "1.2.0", R2: "1.2.0", R3: "1.2.0", S1: "1.2.0", S2: "1.2.0", W1: "1.3.0", W2: "1.2.0", V1: V1_PROMPT_VERSION, V2: "1.3.0", V3: "1.3.0" };
+export const TEAM_PROMPT_VERSIONS: Record<TeamRole, string> = { R1: "1.3.0", R2: "1.3.0", R3: "1.3.0", S1: "1.3.0", S2: "1.3.0", W1: "1.4.0", W2: "1.3.0", V1: V1_PROMPT_VERSION, V2: "1.4.0", V3: "1.4.0" };
 export const teamPromptVersion = (role: TeamRole): string => TEAM_PROMPT_VERSIONS[role];
 export const isTeamRole = (k: string): k is TeamRole => k in TEAM_AGENT_FILE;
 export const teamRoleOfAgentKey = (k: string): TeamRole | null => (Object.entries(TEAM_AGENT_FILE).find(([, f]) => f === k)?.[0] as TeamRole | undefined) ?? null;
@@ -75,6 +76,7 @@ const SCHEMAS = {
   W1: w1Output,
   W2: w2Output,
   V1: s5.extend({ result: s5.shape.result.extend({ claim_checks: z.array(v1ClaimCheck), cards, hedge_rulings: z.array(hedgeRuling).max(30), leo_reference_needed: z.array(leoReferenceNeeded).max(5).default([]) }) }),
+  V1_STORY: v1StoryCheckOutput,                         // Stage 6 part B: V1's story check (prompt 1.7.0)
   V1_IMAGE: v1ImageCheckOutput,                         // Phase 3e: V1's image text check has its own result shape (prompt 1.5.0)
   V2: s6.extend({ result: s6.shape.result.extend({ cards }) }),
   V3: s7.extend({ result: s7.shape.result.extend({ cards }) }),
@@ -86,6 +88,7 @@ export function teamSchemaKey(role: TeamRole, raw: any): TeamSchemaKey {
   if (role === "R1") return raw?.result && "fetch_request" in raw.result ? "R1_FETCH" : "R1_EVIDENCE";
   if (role === "S2") return raw?.result && "root_cause" in raw.result ? "S2_ROOT" : "S2_BRIEF";
   if (role === "V1" && raw?.result && "card_checks" in raw.result) return "V1_IMAGE";
+  if (role === "V1" && raw?.result && "story_checks" in raw.result) return "V1_STORY";
   return role;
 }
 export const teamSchema = (key: TeamSchemaKey): z.ZodType<any> => SCHEMAS[key] as any;
