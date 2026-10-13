@@ -170,3 +170,11 @@ describe("wired into checkUnit (legalRecord on): the hoarder guide's misses beco
     expect(c).not.toContain("GATE_CLAIM_NOT_CITED");
   });
 });
+
+describe("Stage 6 part A (dry run): 'says nothing about' is an absence-of-law claim", () => {
+  it("is flagged like 'does not mention'", () => {
+    expect(legalKindsOf("It says nothing about any other city or county.")).toContain("LEGAL_ABSENCE");
+    expect(legalKindsOf("The code states nothing on hoarding.")).toContain("LEGAL_ABSENCE");
+    expect(legalKindsOf("Local rules vary; check with your city or county.")).not.toContain("LEGAL_ABSENCE");
+  });
+});

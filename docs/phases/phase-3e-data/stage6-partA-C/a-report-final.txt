@@ -1,0 +1,32 @@
+Agent 2: decision REVISION: ACCEPTED by the production checks
+
+claims:
+  clm:1 [supported, high] City and County of San Francisco | SF Housing Code 351(a) | MATCH/impact none | flags LAYER_LOCAL_AS_STATE
+      Under the City and County of San Francisco's Housing Code section 351(a), before the sale or exchange of a residential building (except the first sale or exchange, if it occurs within one year of the date of the Certificate of Final Completion of the
+  clm:2 [supported, high] City and County of San Francisco | SF Housing Code 351(b) | MATCH/impact none | flags LAYER_LOCAL_AS_STATE
+      For the purposes of San Francisco Housing Code chapter 3.5 (sections 351 to 353), a residential building is a building or a portion of a building containing one or more dwelling units, not including hotels containing 30 or more guest rooms, or motels
+  clm:3 [supported, high] City and County of San Francisco | SF Housing Code 351(a), second paragraph | NARROWER/impact none | flags LAYER_LOCAL_AS_STATE
+      Under San Francisco Housing Code section 351(a), the Report of Residential Building Record must be delivered by the owner, or the owner's authorized agent, to the buyer or transferee of the residential building before the sale or exchange is consumma
+  clm:4 [supported, high] City and County of San Francisco | SF Housing Code 351(c), note on the face of the report | NARROWER/impact none | flags LAYER_LOCAL_AS_STATE
+      San Francisco Housing Code section 351(c) provides that the Report of Residential Building Record states that the report makes no representation that the property is in compliance with the law. This is a San Francisco rule, not California law.
+  clm:5 [unsupported, high] City and County of San Francisco | no section | no verification | RESTS ON A TABLE OF CONTENTS
+      What the San Francisco Housing Code or Health Code Article 11 says about hazardous or unsafe conditions in a home, and who deals with them.
+  clm:6 [unsupported, high] San Mateo County | no section | no verification | RESTS ON A TABLE OF CONTENTS
+      What San Mateo County's Ordinance Code says about property maintenance or nuisance conditions in a home in the county's unincorporated areas.
+
+print requests:
+  City and County of San Francisco | San Francisco Housing Code | section find by title | Substandard or unsafe building conditions and enforcement (the section naming who inspects and enforces)
+      why: The article's San Francisco point on hazardous or unsafe conditions in a home and who deals with them; the library holds only the Housing Code table of contents.
+  City and County of San Francisco | San Francisco Health Code, Article 11 | section find by title | Prohibited Public Health Nuisances, with the Notice of Violation and enforcement procedure section | https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_health/0-0-0-1890
+      why: The article's San Francisco point on nuisance conditions and who acts; the stored print is labelled table of contents only and its section numbering is inconsistent, so a clean official print of the sections is needed be
+  San Mateo County | San Mateo County Ordinance Code | section find by title | Property maintenance or nuisance abatement for unincorporated areas (the section on conditions in a home)
+      why: The article's San Mateo County point on property maintenance or nuisance conditions in a home; the library holds only the table of contents.
+unresolved: San Francisco: hazardous or unsafe home conditions and who deals with them (Housing Code, Health Code Article 11): not verified; print requests made. The article says exactly: local rules vary; check with your city or co
+unresolved: San Mateo County (unincorporated areas): property maintenance or nuisance rules for a home: not verified; print request made. The article says exactly: local rules vary; check with your city or county.
+unresolved: The City of San Mateo is not on the allowed list and was not researched. Nothing here says San Francisco's rules match San Mateo County's or California's.
+unresolved: No absence claim is made (for example, nothing is said about what section 351 does not require).
+unresolved: All four supported claims are from one print (SF Housing Code 351, recheck by 2027-01-13, not passed). Local legal points need a professional-confirmation note.
+unresolved: No seller story, brand fact or service-area claim was used.
+
+measures: supported San Mateo claims 0 (must be 0 while only the table of contents is stored); supported claims resting on a table of contents 0 (must be 0); claims with layer flags 4; print requests 3; claims outside the allowed list 0
+wrote a4-packet.json: 4 supported local claim(s) in the writer's ledger

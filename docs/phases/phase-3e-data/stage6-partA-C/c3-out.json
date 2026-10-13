@@ -1,0 +1,268 @@
+{
+  "article_id": "",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "Content Architect",
+  "agent_prompt_version": "1.4.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["68d0f28660bf194888db37244092a2c49ca44762c4bc3903becb2e7306e87698"],
+  "decision": "PASS",
+  "findings": [
+    {
+      "claim": "The brief is built on Leo's directive (a Bay Area informational guide) although Agent 1 recommended HOLD. Agent 1's HOLD reasons stay open: no Bay Area query data and no data for /sell-bay-area-house-full-of-belongings/. They are carried into open_items, not resolved here.",
+      "basis": "inventory",
+      "evidence_ids": ["inv:19dea4d9-9e87-4b04-9408-07e92a2c2032", "gsc:2026-07-10..2026-10-07"]
+    },
+    {
+      "claim": "Only four ledger claims are supported (clm:1 to clm:4), all San Francisco Housing Code section 351, one print. The ledger has no supported California-law claim, and clm:5 (SF unsafe conditions) and clm:6 (San Mateo County property maintenance) are unsupported. The outline therefore states local law only from clm:1 to clm:4, plans no state-law statements, and uses 'local rules vary; check with your city or county' for the rest.",
+      "basis": "official_source",
+      "evidence_ids": ["src:1", "src:2", "src:3", "src:4"]
+    },
+    {
+      "claim": "Target queries (sell hoarder house and variants) are already attributed to /hoarder-houses/. The guide must be informational and must not take those transactional queries.",
+      "basis": "gsc_data",
+      "evidence_ids": ["q:sell hoarder house", "q:sell my hoarder house", "q:how to sell a hoarder house", "q:sell a hoarder house"]
+    }
+  ],
+  "evidence_ids": ["src:1", "src:2", "src:3", "src:4", "gsc:2026-07-10..2026-10-07", "inv:19dea4d9-9e87-4b04-9408-07e92a2c2032", "q:sell hoarder house", "q:sell my hoarder house", "q:how to sell a hoarder house", "q:sell a hoarder house"],
+  "required_actions": [
+    "Human review of the brief before any drafting; Agent 1 recommended HOLD and its data requests remain open (see open_items).",
+    "Leo to supply the official prints listed in open_items before any state-law or further local-law statement is added."
+  ],
+  "output_version_id": "a3-1d78c9e3-stage6-c3-v1",
+  "timestamp": "2026-10-13T14:00:00Z",
+  "result": {
+    "brief": {
+      "seller_situation_map": [
+        {
+          "row": "ownership",
+          "status": "answered",
+          "answer": "The person selling may be the owner, or a family member dealing with a parent's home that is full of belongings. Who holds title (individual, trust, estate) decides who can sign and who must clear the house. The guide asks the reader to confirm that first and sends inheritance authority questions to the existing authority page. No legal rule about ownership is stated.",
+          "basis": "seller_problem_logic",
+          "claim_ids": []
+        },
+        {
+          "row": "authority",
+          "status": "answered",
+          "answer": "Before anyone throws out or donates belongings, someone with authority has to decide what stays, goes or is kept for heirs. If heirs disagree or no one has authority yet, clearing out can create a family dispute. Written from the seller problem; no legal claim made. The guide points to the existing inherited-property authority page and tells the reader to confirm with an attorney.",
+          "basis": "seller_problem_logic",
+          "claim_ids": []
+        },
+        {
+          "row": "condition",
+          "status": "answered",
+          "answer": "The house may be packed from floor to ceiling, hard to walk through, with hidden damage, pests or blocked access, so buyers and inspectors cannot see the real condition. Whether a clean-out is needed first depends on whether anyone can inspect and show the home. Stated as seller-problem logic only; no statement about what any code says on unsafe conditions (clm:5 and clm:6 are unsupported).",
+          "basis": "seller_problem_logic",
+          "claim_ids": []
+        },
+        {
+          "row": "people",
+          "status": "answered",
+          "answer": "The occupant may be the person who owns the belongings and may be emotionally attached to them, or the owner may be a relative who has passed or moved. Family members, other heirs and sometimes a care professional or counselor are involved. The guide treats the occupant and the belongings with respect and gives no demeaning language. A brief, general mention that this is often a family situation is fine; no seller story and no specifics about any person.",
+          "basis": "seller_problem_logic",
+          "claim_ids": []
+        },
+        {
+          "row": "money",
+          "status": "answered",
+          "answer": "Clean-out and repair cost money before a sale, and a house that sells in as-is condition may sell for a different price than one that was cleared and repaired. Any back taxes, liens or code issues change the numbers. The guide gives no price, cost or discount figure (none in the ledger). In San Francisco, the owner or their authorized agent must obtain a Report of Residential Building Record from the Department of Building Inspection before the sale, with the first-sale exception in the print, and must deliver it to the buyer before the sale is consummated.",
+          "basis": "claim",
+          "claim_ids": ["clm:1", "clm:2", "clm:3"]
+        },
+        {
+          "row": "timing",
+          "status": "answered",
+          "answer": "Timing depends on whether the house must be cleared first, how many people must agree, and how fast a buyer can inspect. A seller who needs speed has to weigh clearing first against selling with belongings in place. No timeframe, closing time or speed promise is stated (closing time is pending Juan).",
+          "basis": "seller_problem_logic",
+          "claim_ids": []
+        },
+        {
+          "row": "risk",
+          "status": "answered",
+          "answer": "Risks that can delay or block a sale: disagreement about what to keep, a buyer or inspector who cannot see the house, unknown damage behind belongings, and paperwork that has not been obtained. For San Francisco, the Report of Residential Building Record is a required step before the sale and states that it makes no representation that the property is in compliance with the law, so it is not proof the home is in good shape.",
+          "basis": "claim",
+          "claim_ids": ["clm:1", "clm:3", "clm:4"]
+        }
+      ],
+      "honest_options": [
+        {
+          "option": "keep_it",
+          "when_it_fits": "The owner is not ready, the family has not agreed, or the house is still needed. Keeping the home and clearing it slowly, with help, may be the right choice before any sale decision. This is not a Twin Home Buyer option and the guide says so plainly.",
+          "claim_ids": []
+        },
+        {
+          "option": "fix_it",
+          "when_it_fits": "The family has time, money and helpers to clear, clean and repair before listing, and wants to sell on the open market. Clean-out services, junk-removal or estate-cleanout professionals, or a family clean-out may fit. Do not name specific vendors or prices.",
+          "claim_ids": []
+        },
+        {
+          "option": "list_it",
+          "when_it_fits": "The home can be cleared and shown, and the seller wants an agent-led listing. A real estate agent can explain what a listing needs. In San Francisco the seller or their authorized agent must obtain the Report of Residential Building Record and deliver it to the buyer before the sale is consummated.",
+          "claim_ids": ["clm:1", "clm:3"]
+        },
+        {
+          "option": "get_professional_help",
+          "when_it_fits": "Anything involving authority to sell, what the law requires, taxes, title or safety. An attorney, title or escrow company, CPA, insurance professional, and a city or county office each answer different questions. Where the occupant needs support, the family may also involve a counselor or care professional; the guide says only that this help exists and makes no clinical claim.",
+          "claim_ids": []
+        },
+        {
+          "option": "sell_directly",
+          "when_it_fits": "The seller wants to sell with the belongings still in place and no clean-out or repairs, and accepts that the price and terms will reflect that. A direct buyer such as Twin Home Buyer is one way; the guide frames it as one option among several and points to /hoarder-houses/ as the next step. No price, speed or closing promise.",
+          "claim_ids": []
+        }
+      ],
+      "real_world_warnings": [
+        {
+          "warning": "In San Francisco, the owner or their authorized agent must obtain the Report of Residential Building Record from the Department of Building Inspection before the sale or exchange of a residential building (except the first sale or exchange within one year of the Certificate of Final Completion of construction), and deliver it to the buyer before the sale is consummated. A seller who has not obtained it can hold up the closing. This is a San Francisco rule, not California law.",
+          "claim_ids": ["clm:1", "clm:2", "clm:3"]
+        },
+        {
+          "warning": "The San Francisco Report of Residential Building Record states that it makes no representation that the property is in compliance with the law, so having the report does not mean the home is clear of problems. This is a San Francisco rule, not California law.",
+          "claim_ids": ["clm:4"]
+        },
+        {
+          "warning": "Throwing out, donating or selling belongings before the family agrees and before someone with authority decides can cause a family dispute and delay the sale. Seller-problem logic; confirm authority with an attorney.",
+          "claim_ids": []
+        }
+      ],
+      "professional_confirmation": [
+        "Attorney: who has authority to sell and clear the home, what the seller must disclose, and any estate, trust or probate question.",
+        "Title or escrow company: title, liens and the steps needed to close.",
+        "CPA or tax professional: tax effects of the sale.",
+        "Insurance professional: coverage on a vacant or heavily filled home.",
+        "City or county office: for San Francisco, the Department of Building Inspection for the Report of Residential Building Record; for San Mateo County and any other city or county, local rules vary; check with your city or county."
+      ],
+      "working_title": "Selling a Packed or Hoarded House in the SF Bay Area: What to Disclose and Whether to Clean Out First",
+      "target_reader": "A Bay Area homeowner, or a family member handling a relative's home, who has a house packed with belongings (including a hoarded home) and is deciding whether to clean out first or sell as it is.",
+      "answer_first": "Open with a 40 to 60 word answer capsule: yes, a Bay Area homeowner can sell a hoarder house, and whether to clean it out first depends on who has authority, how much time and money the family has, and whether buyers and inspectors can see the home. Include 'sell a hoarder house' naturally. State that the rules for sellers differ by city and county, that the guide covers only the San Francisco point it can source, and that an attorney and the city or county should confirm. No number, price or timeframe in the capsule.",
+      "outline": [
+        {
+          "h2": "Can I sell a hoarder house in the Bay Area, or do I have to clean it out first?",
+          "purpose": "Direct answer and the honest options (keep, fix, list, get help, sell directly) with when each fits. Start from the real problem: the house is full, the family is overwhelmed, and the owner does not know where to start.",
+          "claim_ids": [],
+          "notes": "State-law points: none planned (no supported California-law claim in the ledger). Local-law points: none in this section. No figures."
+        },
+        {
+          "h2": "Who needs to agree before anything is thrown out or sold?",
+          "purpose": "Ownership, authority and people: owner, trustee, executor, heirs, and the occupant. Treat the occupant with respect. Link to the existing authority page.",
+          "claim_ids": [],
+          "notes": "State-law points: none planned. Local-law points: none. Seller-problem logic only; the reader is told to confirm authority with an attorney."
+        },
+        {
+          "h2": "What do I have to disclose when the house is packed or hoarded?",
+          "purpose": "Explain what disclosure means for the seller in plain language and where to get the answer. No statement about what California law requires, because the ledger has no California disclosure claim.",
+          "claim_ids": [],
+          "notes": "State-law points: none planned; the section tells the reader to confirm disclosure duties with an attorney or real estate professional (print request in open_items). Local-law points: none. Do not write that the law does or does not require anything about hoarding or belongings."
+        },
+        {
+          "h2": "What does San Francisco require before a house can be sold?",
+          "purpose": "Short section on the San Francisco Report of Residential Building Record, as far as the claims go: when the owner or their authorized agent must obtain it from the Department of Building Inspection, the first-sale exception, what a residential building means in that chapter, that it must be delivered to the buyer before the sale is consummated, and that the report makes no representation that the property is in compliance with the law.",
+          "claim_ids": ["clm:1", "clm:2", "clm:3", "clm:4"],
+          "notes": "State-law points: none in this section. Local-law points (City and County of San Francisco, SF Housing Code section 351): clm:1 (obtain the report before sale, with the first-sale exception), clm:2 (what a residential building is), clm:3 (deliver to the buyer before the sale is consummated), clm:4 (no representation of compliance). Label every point 'a San Francisco rule, not California law'. Keep the gates stated in the claims. Do not say the report covers belongings, clutter or unsafe conditions. Do not say anything about what section 351 does not require. Print is recheck-due 2027-01-13 (see open_items)."
+        },
+        {
+          "h2": "What about hazardous or unsafe conditions in San Francisco or San Mateo County?",
+          "purpose": "Short, honest section: the reader should not assume what a city or county will do about unsafe or unsanitary conditions. Use the exact line: local rules vary; check with your city or county. Point to the relevant city or county office.",
+          "claim_ids": [],
+          "notes": "State-law points: none planned. Local-law points: San Francisco (Housing Code, Health Code Article 11) and San Mateo County (unincorporated areas): no supported claim (clm:5 and clm:6 are unsupported), so no rule is stated and no comparison is made between the two. Use only the line 'local rules vary; check with your city or county'. Print requests are in open_items."
+        },
+        {
+          "h2": "Should I clean out the house before I sell?",
+          "purpose": "Decision logic: clear first, partly clear, or sell with belongings in place. Condition, money, timing and who does the work. Include that a seller may keep items of value or sentimental items for heirs before anything is removed. No cost or price figure.",
+          "claim_ids": [],
+          "notes": "State-law points: none planned. Local-law points: none. Seller-problem logic only. Do not name vendors. Do not state what clean-out costs."
+        },
+        {
+          "h2": "What can delay or block the sale of a packed house?",
+          "purpose": "Real-world warnings: family disagreement, inspectors unable to see the home, hidden damage, and the San Francisco report step.",
+          "claim_ids": ["clm:1", "clm:3", "clm:4"],
+          "notes": "State-law points: none planned. Local-law points: San Francisco only (clm:1, clm:3, clm:4), labelled as a San Francisco rule, not California law. For any other city or county: local rules vary; check with your city or county."
+        },
+        {
+          "h2": "Who should I talk to before I decide?",
+          "purpose": "Professional confirmation list (attorney, title or escrow company, CPA, insurance professional, city or county) and what each answers. Then the next step: link to /hoarder-houses/ for a seller who wants to sell directly, and to the existing post only where it helps.",
+          "claim_ids": [],
+          "notes": "No legal claim. No service-area claim. No Twin Home Buyer promise about price, speed or closing."
+        }
+      ],
+      "fan_out": [
+        {
+          "question": "Do I have to clean out a hoarded house before I sell it?",
+          "status": "hypothesis",
+          "map_to": "section_on_this_page"
+        },
+        {
+          "question": "What does a seller have to disclose about a packed or hoarded house?",
+          "status": "hypothesis",
+          "map_to": "section_on_this_page"
+        },
+        {
+          "question": "What does San Francisco require from a seller before a sale?",
+          "status": "hypothesis",
+          "map_to": "section_on_this_page"
+        },
+        {
+          "question": "What do San Mateo County or San Francisco rules say about unsafe or unsanitary conditions in a home?",
+          "status": "hypothesis",
+          "map_to": "official_reference"
+        },
+        {
+          "question": "Who can decide what happens to belongings in a parent's home?",
+          "status": "hypothesis",
+          "map_to": "existing_page"
+        },
+        {
+          "question": "Sell a hoarder house for cash",
+          "status": "hypothesis",
+          "map_to": "existing_page"
+        },
+        {
+          "question": "How to help a family member clear a hoarded home",
+          "status": "hypothesis",
+          "map_to": "separate_supporting_page"
+        },
+        {
+          "question": "Sell a hoarder house fast",
+          "status": "hypothesis",
+          "map_to": "exclude"
+        }
+      ],
+      "visuals": [
+        "A plain two-column table: 'Clean out first' vs 'Sell with belongings in place', rows for condition, money, timing and who does the work. Text only; no figures; no invented data.",
+        "A simple decision checklist: 'Who has authority? Can buyers and inspectors see the house? What does your city or county require?' Uses only locked article text (SR-11).",
+        "No before-and-after photos of a real home, no map, no city badges (SR-13, SR-16)."
+      ],
+      "link_plan": [
+        {
+          "to_url": "https://www.twinhomebuyer.com/hoarder-houses/",
+          "anchor_intent": "Next step for a seller who wants to sell the home directly with belongings in place (money page; must not change)."
+        },
+        {
+          "to_url": "https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/",
+          "anchor_intent": "For a family handling a parent's home, where the general full-of-belongings sale is covered; link only in the authority/people section."
+        },
+        {
+          "to_url": "https://www.twinhomebuyer.com/inherited-property-bay-area-legal-authority-to-sell/",
+          "anchor_intent": "Reader unsure whether they have authority to sell an inherited property."
+        },
+        {
+          "to_url": "https://www.twinhomebuyer.com/what-can-delay-as-is-home-sale-bay-area/",
+          "anchor_intent": "More on what can slow an as-is sale, from the delay section."
+        }
+      ],
+      "cta": "Soft, educate-first closing: confirm authority, disclosure and city or county rules with the right professionals, then, if the family wants to sell directly, see the Hoarder Houses page. No price, speed, closing-time or service-area promise.",
+      "open_items": [
+        "Agent 1 recommended HOLD. Still missing: GSC data and the inventory entry for /sell-bay-area-house-full-of-belongings/, and any GSC rows with Bay Area, San Francisco or San Mateo County modifiers near hoarder or belongings terms. Bay Area demand is unknown, not absent.",
+        "Intent difference to keep the two pages apart: /sell-bay-area-house-full-of-belongings/ is, by its title, a guide for families handling a parent's home full of belongings (a general sale). This guide is about a packed or hoarded home: whether to clean out first and what the seller must disclose, with state versus local layers. Its H1, capsule and H2s should not target generic 'sell a hoarder house' queries (they stay on /hoarder-houses/) nor 'full of belongings' parent's-home wording. Overlap cannot be judged without the post's data; if the post already covers the angle, prefer a section on the post over a new page.",
+        "Title note: 'What to Disclose' needs a supported California-law claim. The ledger has none, so the disclosure section gives no legal statement. Ask Leo for the official print of the California seller disclosure statute(s) (for example the Transfer Disclosure Statement provisions) before any 'what you must disclose' sentence is drafted; otherwise change the title.",
+        "Print request: San Francisco Housing Code, the section on substandard or unsafe building conditions and enforcement (who inspects and enforces). Needed for the San Francisco unsafe-conditions point (clm:5 unsupported).",
+        "Print request: San Francisco Health Code Article 11, Prohibited Public Health Nuisances with the Notice of Violation and enforcement procedure section (official print; stored print is table of contents only with inconsistent numbering).",
+        "Print request: San Mateo County Ordinance Code, property maintenance or nuisance abatement for unincorporated areas (clm:6 unsupported). The City of San Mateo is not on the allowed list and was not researched.",
+        "San Francisco Housing Code 351 is a single print; recheck due 2027-01-13 and not yet passed.",
+        "No California-law claims in the ledger: ask Leo for official prints for any state-level point to be added (disclosure, probate or authority, any unsafe-conditions statute).",
+        "Where Twin Home Buyer buys is pending Juan; this brief makes no service-area claim. Brand facts used: none. First-party proof is restricted; no seller story is planned.",
+        "/hoarder-houses/ has protection_status unknown and template_flag unknown: it is only linked to and must not be changed. Confirm the template before any future change to it.",
+        "Whether the clean-out or professional-help sections need any sourced local resource (for example a county or city program) is unknown; add only a real, sourced official page if Leo supplies one."
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+writer    the writer's own unit
+   V1 decision REVISION; expected PASS or REVISION, judged on its merits; code flags: H2_NOT_QUESTION
+   claim clm:1: supported_as_written / MATCH Obtain-report duty, first-sale exception and the owner or authorized agent match the 351(a) quote; attributed to San Fra
+   claim clm:2: supported_as_written / MATCH Definition with the 30-room hotel and motel exclusion matches 351(b); the unit says "For this rule", which is within the
+   claim clm:3: supported_as_written / NARROWER Delivery to the buyer or transferee before the sale is consummated matches the quote. NARROWER only by omitting the buye
+   claim clm:4: supported_as_written / NARROWER The no-representation-of-compliance statement matches the quote. NARROWER only by omitting no physical examination and c
+   finding required: The sentence "It says nothing about any other city or county." is an absence-of-law claim (SR-6). No statute_absence claim in the ledger supports it, and it als
+   finding required: The opening sentence "This is a San Francisco rule, not California law." comes before any rule is named, so "This" has no antecedent and the layer statement is 
+blend     planted: a local rule and California law in one rule
+   V1 decision BLOCKED; expected REVISION or BLOCKED; code flags: H2_NOT_QUESTION
+   claim clm:1: supported_as_written / MATCH Obtain requirement, first-sale exception and the definition (via clm:2, cited in the same paragraph) are stated; matches
+   claim clm:2: supported_as_written / MATCH Definition, 30-room hotel and motel exclusion stated as in 351(b); "for this rule" scopes it.
+   claim clm:3: supported_as_written / NARROWER Deliver to buyer or transferee before consummation, by owner or agent. Narrower than the quote (receipt filing, unlawful
+   claim clm:4: supported_as_written / NARROWER States the no-representation-of-compliance note. Narrower than the quote (no physical examination, City records); omissi
+   finding required: Last paragraph: "Under California law and San Francisco's housing code, the same conditions count as a substandard building." No ledger claim supports it (clm:1
+   finding required: First paragraph: "It says nothing about any other city or county." Absence-of-law claim (SR-6) with no statute_absence claim in the ledger. Remove the sentence.
+   finding required: The unit opens with "This is a San Francisco rule, not California law." before any rule is stated, so "This" has no antecedent. Move the layer label after the r
+   LEO REFERENCE NEEDED: California substandard-building definition (e.g. Health and Safety Code) and the corresponding SF Housing Code provision Only needed if the writer wants to keep the sentence that the same conditions count as a substandard building under California law and San Francisco's housing c
+cross     planted: San Francisco and San Mateo County treated as the same
+   V1 decision REVISION; expected REVISION or BLOCKED; code flags: H2_NOT_QUESTION
+   claim clm:1: supported_as_written / MATCH Rule, owner or authorized agent, DBI report and first-sale exception all match the quote of 351(a); the residential-buil
+   claim clm:2: supported_as_written / MATCH Definition with the 30-room hotel and motel exclusion matches 351(b); scoped "For this rule".
+   claim clm:3: supported_as_written / NARROWER Delivery to buyer or transferee before consummation matches the quote. Omitted receipt filing and unlawful-sale language
+   claim clm:4: supported_as_written / NARROWER The report's no-representation-of-compliance note matches the quote; omitted no-physical-examination wording does not ch
+   finding required: Last paragraph: "San Francisco and San Mateo County handle these conditions the same way." No ledger claim supports any San Mateo County rule or any match betwe
+   finding required: First paragraph: "It says nothing about any other city or county." This is an absence-of-law claim with no statute_absence claim in the ledger (SR-6). Delete th
+   finding optional: The section opens with "This is a San Francisco rule, not California law." before any rule is stated, so "This" has no referent. Move the sentence after the rul
+invented  planted: a San Mateo County rule with no claim and no print
+   V1 decision BLOCKED; expected REVISION or BLOCKED; code flags: H2_NOT_QUESTION, LOCAL_RULE_WITHOUT_CLAIM, UNCOVERED_FIGURE
+   claim clm:1: supported_as_written / MATCH Obligation, first-sale exception with the one-year condition, and the 351(b) definition (carried in the unit via clm:2) 
+   claim clm:2: supported_as_written / MATCH Definition with the 30-guest-room hotel and motel exclusion matches 351(b) and is scoped 'for this rule'.
+   claim clm:3: supported_as_written / NARROWER Delivery to buyer or transferee before consummation matches the quote; omitted receipt-filing and unlawful-sale language
+   claim clm:4: supported_as_written / NARROWER 'Makes no representation that the property is in compliance with the law' matches the quote; omitted no-physical-examina
+   finding required: The last paragraph says "San Mateo County's code requires owners to clear a hoarded home within 30 days." No ledger claim supports it (clm:1 to clm:4 are all Sa
+   finding required: "It says nothing about any other city or county." is an absence-of-law statement with no statute_absence claim (SR-6). Drop the sentence. Also "This is a San Fr
+   LEO REFERENCE NEEDED: San Mateo County code (hoarded or unsafe home clean-out, 30 days) The unit states that San Mateo County's code requires owners to clear a hoarded home within 30 days. No stored official San Mateo County print or claim exists. 

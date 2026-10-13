@@ -1,0 +1,7 @@
+Agent 1: decision HOLD: ACCEPTED by the production checks
+rationale: HOLD on a separate Bay Area guide for now. The data supports demand only for generic 'sell hoarder house' queries (1037 impressions, 0 clicks, position 16.3), and /hoarder-houses/ already ranks for them. No Bay Area modifier appears in the data, so a Bay Area framing has no measured query set of its own. The Bay Area angle would be an informational how-to guide for Bay Area readers dealing with a hoarded home: what to expect, how to approach the clean-out and sale options, and how state law and local rules differ, stated as separate layers and only from official prints Leo supplies. The page it could cannibalize most is the existing post /sell-bay-area-house-full-of-belongings/, because that
+   fan-out (section_on_this_page, hypothesis): What should a Bay Area homeowner expect when selling a home with heavy clutter or hoarding? (the Bay Area angle of the guide)
+   fan-out (official_reference, hypothesis): How do state law and local rules each affect a hoarded home? (separate layers; local rule only from an official city or county print)
+   fan-out (existing_page, hypothesis): Selling a house full of belongings in the Bay Area
+   fan-out (existing_page, hypothesis): Sell a hoarder house (transactional)
+   fan-out (separate_supporting_page, hypothesis): How to help a family member clear a hoarded home before a sale (supporting informational sub-intent)

@@ -1,0 +1,34 @@
+{
+  "article_id": "stage6-test-article",
+  "opportunity_id": "stage6-a-opportunity",
+  "agent_name": "Section Writer",
+  "agent_prompt_version": "1.5.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["unit:s10:none"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "stage6-a4-s10-v1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s10",
+    "addresses": [],
+    "change_note": "First draft of s10 from claims clm:1 to clm:4; local rule kept separate from California law; the exact local-rules sentence used for everything else.",
+    "declines": [],
+    "unit": {
+      "kind": "section",
+      "key": "s10",
+      "h2": "What San Francisco's own code adds",
+      "blocks": [
+        {"t": "p", "text": "This is a San Francisco rule, not California law. It says nothing about any other city or county."},
+        {"t": "p", "text": "Under San Francisco Housing Code section 351(a), before the sale or exchange of a residential building, the owner or their authorized agent must obtain a Report of Residential Building Record from the San Francisco Department of Building Inspection. The exception is the first sale or exchange, if it occurs within one year of the date of the Certificate of Final Completion of the building's construction. For this rule, a residential building is a building or a portion of a building containing one or more dwelling units, not including hotels containing 30 or more guest rooms, or motels."},
+        {"t": "p", "text": "The owner or agent must deliver the report to the buyer or transferee before the sale or exchange is consummated. The report states that it makes no representation that the property is in compliance with the law."},
+        {"t": "p", "text": "For any other local point about a packed home, such as unsafe conditions: Local rules vary; check with your city or county."},
+        {"t": "note", "text": "Confirm how this applies to your sale with an attorney or title company."}
+      ],
+      "claim_ids": ["clm:1", "clm:2", "clm:3", "clm:4"],
+      "roles": []
+    }
+  }
+}

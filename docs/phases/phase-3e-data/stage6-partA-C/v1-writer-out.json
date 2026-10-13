@@ -1,0 +1,48 @@
+{
+  "article_id": "stage6-test-article",
+  "opportunity_id": "stage6-a-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.9.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["56e0108a3c38655ec8d0eba387d51127352e0eb3a1f81f58edc5e9dbc4596dde"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "fact:s10:absence-other-jurisdictions",
+      "severity": "required",
+      "note": "The sentence \"It says nothing about any other city or county.\" is an absence-of-law claim (SR-6). No statute_absence claim in the ledger supports it, and it also reaches beyond San Francisco's code. Remove the whole sentence."
+    },
+    {
+      "issue_key": "fact:s10:layer-opening-dangling",
+      "severity": "required",
+      "note": "The opening sentence \"This is a San Francisco rule, not California law.\" comes before any rule is named, so \"This\" has no antecedent and the layer statement is not tied to its source (SR-2). Move it to directly follow the sentence naming San Francisco Housing Code section 351(a), for example \"... Department of Building Inspection. This is a San Francisco rule, not California law.\" (the wording is carried by clm:1 to clm:4), and start the section with the 351(a) sentence."
+    }
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4"],
+  "required_actions": [
+    "Delete: \"It says nothing about any other city or county.\"",
+    "Move \"This is a San Francisco rule, not California law.\" to follow the sentence that names San Francisco Housing Code section 351(a); do not open the section with it."
+  ],
+  "output_version_id": "v1-stage6-s10-review-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s10",
+    "version_hash": "56e0108a3c38655ec8d0eba387d51127352e0eb3a1f81f58edc5e9dbc4596dde",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Obtain-report duty, first-sale exception and the owner or authorized agent match the 351(a) quote; attributed to San Francisco; the building meaning is carried by clm:2, which the unit also cites and states.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Definition with the 30-room hotel and motel exclusion matches 351(b); the unit says \"For this rule\", which is within the scope 'as used in this chapter'.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Delivery to the buyer or transferee before the sale is consummated matches the quote. NARROWER only by omitting the buyer's receipt filing and the unlawful-sale wording, which do not change what a seller must do before closing; the first-sale exception is stated in the preceding sentence (clm:1).", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "The no-representation-of-compliance statement matches the quote. NARROWER only by omitting no physical examination and compiled from City records, which does not change what a reader believes or does about the compliance point.", "quote_comparison": "NARROWER", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "hedge_rulings": [
+      {"key": "hedge:05372b0c4cd9", "ruling": "reword", "note": "The layer statement is supported by the ledger wording of clm:1 to clm:4 (San Francisco rule, not California law), but as the opening sentence it has no antecedent. Attach it to the sentence naming section 351(a); no California-law claim is made, so no state-layer claim is needed."}
+    ],
+    "leo_reference_needed": [],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s10:absence-other-jurisdictions", "section": "s10", "issue": "Absence-of-law sentence \"It says nothing about any other city or county.\" has no statute_absence claim.", "severity": "must fix", "evidence": "SR-6; no statute_absence claim in the ledger", "fix": "Delete the sentence.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s10:layer-opening-dangling", "section": "s10", "issue": "Opening \"This is a San Francisco rule, not California law.\" has no antecedent because no rule has been named yet.", "severity": "must fix", "evidence": "SR-2; clm:1 to clm:4 wording; hedge:05372b0c4cd9", "fix": "Open with the section 351(a) sentence and put the layer sentence right after it.", "blocking": false}
+    ]
+  }
+}

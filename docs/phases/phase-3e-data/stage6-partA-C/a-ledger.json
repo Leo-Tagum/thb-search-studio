@@ -1,0 +1,116 @@
+[
+  {
+    "id": "clm:1",
+    "text": "Under the City and County of San Francisco's Housing Code section 351(a), before the sale or exchange of a residential building (except the first sale or exchange, if it occurs within one year of the date of the Certificate of Final Completion of the building's construction), the owner or their authorized agent must obtain a Report of Residential Building Record from the San Francisco Department of Building Inspection. This is a San Francisco rule, not California law.",
+    "risk": "high",
+    "support": "supported",
+    "jurisdiction": "City and County of San Francisco",
+    "source": {
+      "title": "SF Housing Code - Section 351 - Report of Residential Building Record",
+      "url": "https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_building/0-0-0-53734"
+    },
+    "quote": "(a) Report of Residential Building Record Required. Prior to the sale or exchange of any residential building, except the first sale\r\nor exchange, if this occurs within one year of the date of the Certificate of Final Completion of the construction of the building, the\r\nowner thereof, or their authorized agent, shall obtain from the Department of Building Inspection, a Report of Residential Building\r\nRecord.",
+    "section": "SF Housing Code 351(a)",
+    "verification_label": "MATCH",
+    "verification_reason": "The claim states the first-sale exception and who obtains the report; the meaning of residential building is in clm:2.",
+    "reader_impact": "none",
+    "gates": [
+      {
+        "kind": "exception",
+        "text": "Except the first sale or exchange, if it occurs within one year of the date of the Certificate of Final Completion of the construction of the building.",
+        "stated_in_claim": true
+      },
+      {
+        "kind": "scope",
+        "text": "Applies to a 'residential building' as defined in section 351(b), which excludes hotels with 30 or more guest rooms and motels.",
+        "stated_in_claim": false,
+        "carried_by": "clm:2"
+      }
+    ],
+    "verified_against": "official SF Housing Code section 351 print (American Legal Publishing, SF Building Inspection Commission Code Library) stored 2026-10-13"
+  },
+  {
+    "id": "clm:2",
+    "text": "For the purposes of San Francisco Housing Code chapter 3.5 (sections 351 to 353), a residential building is a building or a portion of a building containing one or more dwelling units, not including hotels containing 30 or more guest rooms, or motels. This is a San Francisco rule, not California law.",
+    "risk": "high",
+    "support": "supported",
+    "jurisdiction": "City and County of San Francisco",
+    "source": {
+      "title": "SF Housing Code - Section 351 - Report of Residential Building Record",
+      "url": "https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_building/0-0-0-53734"
+    },
+    "quote": "(b) Residential Building Defined. A residential building, as used in this chapter, is a building or a portion thereof containing one or\r\nmore dwelling units but not including hotels containing 30 or more guest rooms, or motels.",
+    "section": "SF Housing Code 351(b)",
+    "verification_label": "MATCH",
+    "verification_reason": "",
+    "reader_impact": "none",
+    "gates": [
+      {
+        "kind": "scope",
+        "text": "Definition applies 'as used in this chapter' (Housing Code chapter 3.5).",
+        "stated_in_claim": true
+      },
+      {
+        "kind": "exception",
+        "text": "Hotels containing 30 or more guest rooms, and motels, are not residential buildings for this chapter.",
+        "stated_in_claim": true
+      }
+    ],
+    "verified_against": "official SF Housing Code section 351 print stored 2026-10-13"
+  },
+  {
+    "id": "clm:3",
+    "text": "Under San Francisco Housing Code section 351(a), the Report of Residential Building Record must be delivered by the owner, or the owner's authorized agent, to the buyer or transferee of the residential building before the sale or exchange is consummated. This is a San Francisco rule, not California law.",
+    "risk": "high",
+    "support": "supported",
+    "jurisdiction": "City and County of San Francisco",
+    "source": {
+      "title": "SF Housing Code - Section 351 - Report of Residential Building Record",
+      "url": "https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_building/0-0-0-53734"
+    },
+    "quote": "Such Report of Residential Building Record shall be delivered by the owner, or the authorized agent of said owner, to the buyer or transferee of said residential building prior to the consummation of the sale or exchange thereof",
+    "section": "SF Housing Code 351(a), second paragraph",
+    "verification_label": "NARROWER",
+    "verification_reason": "The claim leaves out that the buyer must then file a receipt with the Department of Building Inspection on its form and that the section also calls a sale without obtaining and delivering the report unlawful; neither changes what a seller must do before closing.",
+    "reader_impact": "none",
+    "gates": [
+      {
+        "kind": "exception",
+        "text": "'Such Report' refers to the report required in the first paragraph, which has the first-sale exception.",
+        "stated_in_claim": false,
+        "carried_by": "clm:1"
+      },
+      {
+        "kind": "scope",
+        "text": "Applies to a residential building as defined in section 351(b).",
+        "stated_in_claim": false,
+        "carried_by": "clm:2"
+      }
+    ],
+    "verified_against": "official SF Housing Code section 351 print stored 2026-10-13"
+  },
+  {
+    "id": "clm:4",
+    "text": "San Francisco Housing Code section 351(c) provides that the Report of Residential Building Record states that the report makes no representation that the property is in compliance with the law. This is a San Francisco rule, not California law.",
+    "risk": "high",
+    "support": "supported",
+    "jurisdiction": "City and County of San Francisco",
+    "source": {
+      "title": "SF Housing Code - Section 351 - Report of Residential Building Record",
+      "url": "https://codelibrary.amlegal.com/codes/san_francisco/latest/sf_building/0-0-0-53734"
+    },
+    "quote": "The report makes no representation that the property is in compliance with the law.",
+    "section": "SF Housing Code 351(c), note on the face of the report",
+    "verification_label": "NARROWER",
+    "verification_reason": "The note also says there has been no physical examination of the property and that the report is compiled from City department records; leaving that out does not change what a reader would believe or do about the compliance point.",
+    "reader_impact": "none",
+    "gates": [
+      {
+        "kind": "scope",
+        "text": "It is a note required on the face of the report, in bold 10-point type.",
+        "stated_in_claim": false
+      }
+    ],
+    "verified_against": "official SF Housing Code section 351 print stored 2026-10-13"
+  }
+]

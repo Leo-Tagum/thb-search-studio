@@ -35,10 +35,10 @@ export const ADVERSARIAL: AdversarialCase[] = [
   },
   {
     id: "local-fact",
-    describe: "An unverified local fact: a specific city or county rule stated as fact, with no ledger claim and no figure for a deterministic check to catch.",
+    describe: "An unverified local fact: a specific city or county rule stated as fact, with no ledger claim and no figure. (Before Stage 6 part A only V1 could catch it; now the code flags a rule of a named place that no cited claim covers.)",
     unitKey: "s3",
     sentence: "The Alameda County code enforcement office inspects every hoarded house before a sale closes and blocks the closing until the house is cleared.",
-    caught: { code: [], v1: true },
+    caught: { code: ["LOCAL_RULE_WITHOUT_CLAIM"], v1: true },      // since Stage 6 part A the code catches this too (a rule of a named county needs a claim for that county); V1 still judges it
     citesPattern: /(alameda county|code enforcement)/i,
   },
   {

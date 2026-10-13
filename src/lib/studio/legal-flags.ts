@@ -14,6 +14,7 @@ const SUBJECT = "(?:statutes?|laws?|codes?|sections?|ordinances?|acts?|regulatio
 const NEGATION = "(?:does\\s+not|doesn['’]t|do\\s+not|don['’]t|did\\s+not|never|nowhere|fails?\\s+to|is\\s+silent|are\\s+silent|says?\\s+nothing|makes?\\s+no\\s+mention|has\\s+no\\s+mention)";
 const VERB = "(?:mention|say|state|require|prohibit|address|define|list|include|cover|contain|provide|apply|refer|speak|name|forbid|allow|exempt|regulate)";
 const ABSENCE_RES = [
+  /\b(?:says|states|contains|has|covers|addresses)\s+nothing\s+(?:about|on|regarding|concerning)\b/i,      // "It says nothing about any other city or county." (found in the Stage 6 dry run)
   new RegExp(`\\b${SUBJECT}\\b[^.!?]{0,60}\\b${NEGATION}\\b[^.!?]{0,40}\\b${VERB}\\w*`, "i"),                 // "The statute does not mention hoarding."
   new RegExp(`\\b(?:there\\s+is|there['’]s|is)\\s+no\\s+${SUBJECT}\\s+(?:that|which|about|on|for|requiring|saying|against)\\b`, "i"),   // "There is no law that ..."
   new RegExp(`\\bno\\s+${SUBJECT}\\s+(?:says|requires|prohibits|mentions|addresses|covers|defines)\\b`, "i"),

@@ -1,0 +1,82 @@
+{
+  "article_id": "",
+  "opportunity_id": "1d78c9e3-6b2d-4434-88ed-56b905e67c24",
+  "agent_name": "SEO Strategist",
+  "agent_prompt_version": "1.4.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["68d0f28660bf194888db37244092a2c49ca44762c4bc3903becb2e7306e87698"],
+  "decision": "HOLD",
+  "findings": [
+    {
+      "claim": "The four candidate queries (sell hoarder house, sell my hoarder house, how to sell a hoarder house, sell a hoarder house) total 1037 impressions and 0 clicks in 2026-07-10..2026-10-07, all attributed to /hoarder-houses/ at average position 16.3. None names the Bay Area, San Francisco or San Mateo County.",
+      "basis": "gsc_data",
+      "evidence_ids": ["gsc:2026-07-10..2026-10-07", "q:sell hoarder house", "q:sell my hoarder house", "q:how to sell a hoarder house", "q:sell a hoarder house"],
+      "note": "Stored GSC data does not support a Bay Area keyword variant for this topic. Bay Area demand is unknown, not absent."
+    },
+    {
+      "claim": "/hoarder-houses/ already addresses the sell-a-hoarder-house intent and is the ranking page for these queries. It is in the inventory with protection_status unknown, so treat it as protected. Per Leo's directive it must not change.",
+      "basis": "inventory",
+      "evidence_ids": ["inv:19dea4d9-9e87-4b04-9408-07e92a2c2032"],
+      "note": "template_flag is unknown. If a change were ever wanted, confirm the template first. If it is a city template, the route is a Developer Change Request, not an Elementor package."
+    },
+    {
+      "claim": "A separate Bay Area guide would be a new page on an intent the money page already ranks for. Because the query set has no Bay Area modifier, a new guide would compete for the same generic queries instead of capturing a distinct Bay Area query set. That is a cannibalization risk, but it is not supported yet: overlap.supported is false and there are no shared ranking queries in the packet.",
+      "basis": "gsc_data",
+      "evidence_ids": ["gsc:2026-07-10..2026-10-07", "q:sell hoarder house"]
+    },
+    {
+      "claim": "The existing post /sell-bay-area-house-full-of-belongings/ is not in the packet: no GSC rows, no inventory entry, no covering_pages entry. Its overlap with the Bay Area angle cannot be judged from the data. By its URL it already frames a Bay Area, full-of-belongings sale, so a Bay Area hoarder guide could overlap it more than it overlaps the money page.",
+      "basis": "assumption",
+      "evidence_ids": [],
+      "note": "The URL slug is the only signal. Verify with the data listed under required_actions."
+    },
+    {
+      "claim": "The four gaps are not established. SERP gap: not observed. THB coverage gap: /hoarder-houses/ exists, and coverage of the Bay Area angle is unknown until the post is checked. Local-information gap: not established. First-party proof gap: restricted, because no seller story is cleared (SR-7, SR-19).",
+      "basis": "assumption",
+      "evidence_ids": []
+    }
+  ],
+  "evidence_ids": ["gsc:2026-07-10..2026-10-07", "inv:19dea4d9-9e87-4b04-9408-07e92a2c2032", "q:sell hoarder house", "q:sell my hoarder house", "q:how to sell a hoarder house", "q:sell a hoarder house"],
+  "required_actions": [
+    "Leo supplies GSC data for /sell-bay-area-house-full-of-belongings/ for the same window: its queries, impressions and positions, and any queries it shares with /hoarder-houses/.",
+    "Leo supplies the inventory entry for that post (page id, title, headings or summary, protection_status, template_flag) so overlap with a Bay Area hoarder guide can be judged.",
+    "Leo supplies any GSC rows containing Bay Area, San Francisco or San Mateo County modifiers near hoarder or belongings terms. If there are none, treat Bay Area demand as unknown and do not create a page on assumed demand.",
+    "Re-run this opportunity once that data is in. Prefer a section on the existing post over a new page if the post already carries the Bay Area angle.",
+    "Leave /hoarder-houses/ unchanged (Leo's directive). Any future change to it needs a protection check first.",
+    "Any local-law angle (SF, San Mateo County) needs official city or county prints supplied by Leo (SR-2, SR-4). Until then, any copy says exactly 'local rules vary; check with your city or county'. Say nothing about where Twin Home Buyer buys (SR-3).",
+    "A human decides. This is a recommendation only."
+  ],
+  "output_version_id": "a1-1d78c9e3-v1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "rationale": "HOLD on a separate Bay Area guide for now. The data supports demand only for generic 'sell hoarder house' queries (1037 impressions, 0 clicks, position 16.3), and /hoarder-houses/ already ranks for them. No Bay Area modifier appears in the data, so a Bay Area framing has no measured query set of its own. The Bay Area angle would be an informational how-to guide for Bay Area readers dealing with a hoarded home: what to expect, how to approach the clean-out and sale options, and how state law and local rules differ, stated as separate layers and only from official prints Leo supplies. The page it could cannibalize most is the existing post /sell-bay-area-house-full-of-belongings/, because that post already pairs the Bay Area with a house full of belongings. The money page /hoarder-houses/ is a lesser risk, since the guide would answer 'how do I deal with this' while the money page answers 'sell it to us'. To keep the intents apart, /hoarder-houses/ keeps the transactional 'sell a hoarder house' queries. The post keeps the general Bay Area full-of-belongings sale. A guide, if any, would take only a distinct informational sub-intent that the post does not cover, and would link to the money page without repeating its queries. Overlap with the post cannot be judged from the packet, which holds no data for it. I need its GSC queries and inventory entry (listed in required_actions). Until then HOLD, not CREATE, because an existing page may already cover the intent. If the post turns out to cover it, an UPDATE or a section on that post is the better route.",
+    "existing_urls": [
+      "https://www.twinhomebuyer.com/hoarder-houses/",
+      "https://www.twinhomebuyer.com/sell-bay-area-house-full-of-belongings/"
+    ],
+    "cannibalization": {
+      "warning": false,
+      "support": "No warning issued: there are no shared ranking queries in the packet (overlap.supported false; the post has no data in the packet). The risk is plausible but unsupported. The data would need to show the post and /hoarder-houses/ ranking for the same queries, such as 'sell hoarder house'."
+    },
+    "score_estimates": {
+      "seller_relevance": 14,
+      "topical_fit": 8
+    },
+    "unknowns_acknowledged": [
+      "No data for /sell-bay-area-house-full-of-belongings/: its queries, positions and content overlap are unknown.",
+      "Bay Area, San Francisco or San Mateo County hoarder queries are absent from the export, which means unknown, not no demand.",
+      "SERP result types and user questions were not observed.",
+      "Lead outcomes and business value per intent are not joined.",
+      "Whether useful, sourced local information exists for the Bay Area angle is not established. No official city or county prints are in hand.",
+      "Protection status and template type of /hoarder-houses/ are unknown."
+    ],
+    "confidence": "low",
+    "fan_out": [
+      {"question": "What should a Bay Area homeowner expect when selling a home with heavy clutter or hoarding? (the Bay Area angle of the guide)", "status": "hypothesis", "map_to": "section_on_this_page"},
+      {"question": "How do state law and local rules each affect a hoarded home? (separate layers; local rule only from an official city or county print)", "status": "hypothesis", "map_to": "official_reference"},
+      {"question": "Selling a house full of belongings in the Bay Area", "status": "hypothesis", "map_to": "existing_page"},
+      {"question": "Sell a hoarder house (transactional)", "status": "hypothesis", "map_to": "existing_page"},
+      {"question": "How to help a family member clear a hoarded home before a sale (supporting informational sub-intent)", "status": "hypothesis", "map_to": "separate_supporting_page"}
+    ]
+  }
+}

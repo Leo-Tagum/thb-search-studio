@@ -1,0 +1,25 @@
+Agent 3: decision PASS: ACCEPTED by the production checks
+target: A Bay Area homeowner, or a family member handling a relative's home, who has a house packed with belongings (including a hoarded home) and is deciding whether to clean out first or sell as it is.
+   : Can I sell a hoarder house in the Bay Area, or do I have to clean it out first?
+   : Who needs to agree before anything is thrown out or sold?
+   : What do I have to disclose when the house is packed or hoarded?
+   : What does San Francisco require before a house can be sold?
+   : What about hazardous or unsafe conditions in San Francisco or San Mateo County?
+   : Should I clean out the house before I sell?
+   : What can delay or block the sale of a packed house?
+   : Who should I talk to before I decide?
+   open: Agent 1 recommended HOLD. Still missing: GSC data and the inventory entry for /sell-bay-area-house-full-of-belongings/, and any GSC rows with Bay Area, San Francisco or San Mateo County modifiers near hoarder or belongin
+   open: Intent difference to keep the two pages apart: /sell-bay-area-house-full-of-belongings/ is, by its title, a guide for families handling a parent's home full of belongings (a general sale). This guide is about a packed or
+   open: Title note: 'What to Disclose' needs a supported California-law claim. The ledger has none, so the disclosure section gives no legal statement. Ask Leo for the official print of the California seller disclosure statute(s
+   open: Print request: San Francisco Housing Code, the section on substandard or unsafe building conditions and enforcement (who inspects and enforces). Needed for the San Francisco unsafe-conditions point (clm:5 unsupported).
+   open: Print request: San Francisco Health Code Article 11, Prohibited Public Health Nuisances with the Notice of Violation and enforcement procedure section (official print; stored print is table of contents only with inconsis
+   open: Print request: San Mateo County Ordinance Code, property maintenance or nuisance abatement for unincorporated areas (clm:6 unsupported). The City of San Mateo is not on the allowed list and was not researched.
+   open: San Francisco Housing Code 351 is a single print; recheck due 2027-01-13 and not yet passed.
+   open: No California-law claims in the ledger: ask Leo for official prints for any state-level point to be added (disclosure, probate or authority, any unsafe-conditions statute).
+   open: Where Twin Home Buyer buys is pending Juan; this brief makes no service-area claim. Brand facts used: none. First-party proof is restricted; no seller story is planned.
+   open: /hoarder-houses/ has protection_status unknown and template_flag unknown: it is only linked to and must not be changed. Confirm the template before any future change to it.
+   open: Whether the clean-out or professional-help sections need any sourced local resource (for example a county or city program) is unknown; add only a real, sourced official page if Leo supplies one.
+
+cannibalization check (stored Search Console rows 2026-07-10..2026-10-07, 31790 rows): the existing post /sell-bay-area-house-full-of-belongings/ has 0 query rows; top: none
+   queries of the existing post whose key words all appear in this guide's keyword, headings or target queries: 0
+   the engine's own overlap check on stored data (pairs involving the belongings or hoarder pages): no overlapping pair found

@@ -58,8 +58,11 @@ describe("what the code alone catches (no agent involved)", () => {
 describe("before HUMAN_REVIEW: no poisoned unit can lock, whatever Agents 5, 6 and 7 say", () => {
   for (const c of ADVERSARIAL) {
     const u = () => poisoned(base, c.sentence);
+    // a case the code blocks outright (a deterministic check other than the hedge flag) never reaches V1: it is BLOCKED_CLAIM until a human resolves it
+    const blockedByCode = c.caught.code.some((x) => x !== "HEDGE_FLAG");
     it(`${c.id}: the old fact auditor's PASS no longer moves it; only V1 does`, () => {
       const s = write(u());
+      if (blockedByCode) { expect(s.status).toBe("BLOCKED_CLAIM"); return; }
       expect(s.status).toBe("NEEDS_FACT");
       expect(reviewerFor(s)).toBe("V1");
       expect(err(applyReview(s, { agent: 5, versionHash: s.versionHash!, decision: "PASS", issues: [] }))).toMatch(/cannot review/);
@@ -68,6 +71,7 @@ describe("before HUMAN_REVIEW: no poisoned unit can lock, whatever Agents 5, 6 a
     });
     it(`${c.id}: a V1 REVISION sends it back; it locks only after a clean rewrite passes V1, SEO and editorial`, () => {
       let s = write(u());
+      if (blockedByCode) { expect(s.status).toBe("BLOCKED_CLAIM"); expect(allLocked([s])).toBe(false); return; }
       const rulings = s.hedges!.map((h) => ({ key: h.key, ruling: "drop" as const, note: "no ledger claim supports it" }));
       s = ok(applyReview(s, { agent: "V1", versionHash: s.versionHash!, decision: "REVISION", issues: [{ key: `fact:${c.id}`, text: `Unsupported: "${c.sentence}"` }], hedgeRulings: rulings }));
       expect(s.status).toBe("NEEDS_REVISION");

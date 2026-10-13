@@ -1,0 +1,48 @@
+{
+  "article_id": "stage6-test-article",
+  "opportunity_id": "stage6-a-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.9.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["3e0a2c58b227a5741696c3dc3f2f7f6b39a714bbed15459f66cb2302aa99157f"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "legal:ref:s10:state-local-blend", "severity": "required", "note": "Last paragraph: \"Under California law and San Francisco's housing code, the same conditions count as a substandard building.\" No ledger claim supports it (clm:1 to clm:4 are all San Francisco Housing Code 351 and say nothing about substandard buildings or California law on them). It puts a California rule and a San Francisco rule in one sentence, and \"the same conditions\" has no antecedent. Unsupported high-risk legal claim and a state/local blend (SR-2, SR-4). Drop the sentence, or Leo must supply the official California text (e.g. Health and Safety Code) and the official SF Housing Code text, as two separate claims, one per layer.", "claim_id": null},
+    {"issue_key": "fact:s10:absence-of-law", "severity": "required", "note": "First paragraph: \"It says nothing about any other city or county.\" Absence-of-law claim (SR-6) with no statute_absence claim in the ledger. Remove the sentence. If a pointer is wanted, use only: local rules vary; check with your city or county.", "claim_id": null},
+    {"issue_key": "fact:s10:layer-opening", "severity": "required", "note": "The unit opens with \"This is a San Francisco rule, not California law.\" before any rule is stated, so \"This\" has no antecedent. Move the layer label after the rule and name it: \"San Francisco Housing Code section 351 is a San Francisco rule, not California law.\" (clm:1 to clm:4 each carry that attribution).", "claim_id": null}
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4"],
+  "required_actions": [
+    "Delete \"Under California law and San Francisco's housing code, the same conditions count as a substandard building.\" or supply two official-text claims, one per layer.",
+    "Delete \"It says nothing about any other city or county.\"",
+    "Move and name the layer label so it follows the statement of the rule (San Francisco Housing Code section 351)."
+  ],
+  "output_version_id": "v1-stage6-blend-s10-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s10",
+    "version_hash": "3e0a2c58b227a5741696c3dc3f2f7f6b39a714bbed15459f66cb2302aa99157f",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Obtain requirement, first-sale exception and the definition (via clm:2, cited in the same paragraph) are stated; matches quote 351(a).", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Definition, 30-room hotel and motel exclusion stated as in 351(b); \"for this rule\" scopes it.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Deliver to buyer or transferee before consummation, by owner or agent. Narrower than the quote (receipt filing, unlawful sale omitted); does not change what a seller does before closing. The first-sale exception sits in the preceding paragraph (clm:1).", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "States the no-representation-of-compliance note. Narrower than the quote (no physical examination, City records); omission does not change what a reader would believe or do about compliance.", "quote_comparison": "NARROWER", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "block_kind": "BLOCKED_CLAIM",
+    "leo_reference_needed": [
+      {"claim": null, "section": "California substandard-building definition (e.g. Health and Safety Code) and the corresponding SF Housing Code provision", "why": "Only needed if the writer wants to keep the sentence that the same conditions count as a substandard building under California law and San Francisco's housing code. Leo would need to supply both official prints so each layer can be its own claim; otherwise the sentence is dropped."}
+    ],
+    "hedge_rulings": [
+      {"key": "hedge:05372b0c4cd9", "ruling": "reword", "note": "The attribution is supported by clm:1 to clm:4 (each says San Francisco rule, not California law), but it opens the unit with no antecedent. Name the rule (San Francisco Housing Code section 351) and put the label after the statement of it."},
+      {"key": "hedge:c1188724bf39", "ruling": "drop", "note": "Blends California law and a San Francisco rule in one sentence; no claim for either layer (clm:1 to clm:4 do not cover substandard buildings); \"the same conditions\" is undefined."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "legal:ref:s10:state-local-blend", "section": "s10", "issue": "Last paragraph blends California law and SF housing code with no supporting claim.", "severity": "must fix", "evidence": "SR-2, SR-4; ledger clm:1-clm:4 cover only SF Housing Code 351", "fix": "Delete the sentence.", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s10:absence-of-law", "section": "s10", "issue": "\"It says nothing about any other city or county\" is an unproven absence-of-law claim.", "severity": "must fix", "evidence": "SR-6; no statute_absence claim in ledger", "fix": "Delete the sentence.", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s10:layer-opening", "section": "s10", "issue": "Layer label \"This is a San Francisco rule, not California law.\" has no antecedent at the start of the unit.", "severity": "must fix", "evidence": "SR-2; clm:1-clm:4", "fix": "Name San Francisco Housing Code section 351 and place the label after the rule is stated.", "blocking": false},
+      {"ticket": "HUMAN_ESCALATION", "from": ["V1"], "to": "LEO", "trigger": "legal_uncertain", "key": "legal:ref:s10:state-local-blend:leo", "section": "s10", "issue": "Substandard-building sentence needs official California and SF prints if it is to stay.", "severity": "should fix", "evidence": "SR-4; no stored quote for it", "fix": null, "blocking": false}
+    ]
+  }
+}

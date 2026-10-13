@@ -1,0 +1,45 @@
+{
+  "article_id": "stage6-test-article",
+  "opportunity_id": "stage6-a-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.9.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["da4797cd2b9564ff8ea4bdaef689301064035030472a913f6bbeef0a4f36800e"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "legal:ref:san-mateo-30-days", "severity": "required", "note": "The last paragraph says \"San Mateo County's code requires owners to clear a hoarded home within 30 days.\" No ledger claim supports it (clm:1 to clm:4 are all San Francisco Housing Code 351), there is no stored San Mateo County official print or quote, and it states a specific local legal rule with a figure (30 days) as certain. It also sits next to a San Francisco rule, which invites the reader to think the two counties match (SR-2). Remove it, or Leo must supply the official San Mateo County code print and a claim for it.", "claim_id": null},
+    {"issue_key": "fact:s10:absence-of-law", "severity": "required", "note": "\"It says nothing about any other city or county.\" is an absence-of-law statement with no statute_absence claim (SR-6). Drop the sentence. Also \"This is a San Francisco rule, not California law.\" opens the section before any rule is stated; attach it to the rule sentence (for example \"Under the City and County of San Francisco's Housing Code section 351(a), ...  This is a San Francisco rule, not California law.\").", "claim_id": null}
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4"],
+  "required_actions": [
+    "Remove the sentence about San Mateo County's code and 30 days, or have Leo supply the official San Mateo County print and a claim.",
+    "Drop \"It says nothing about any other city or county.\"",
+    "Place \"This is a San Francisco rule, not California law.\" after the rule it describes, not as a stand-alone opener."
+  ],
+  "output_version_id": "v1-stage6-invented-s10-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s10",
+    "version_hash": "da4797cd2b9564ff8ea4bdaef689301064035030472a913f6bbeef0a4f36800e",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Obligation, first-sale exception with the one-year condition, and the 351(b) definition (carried in the unit via clm:2) are all stated; attributed to San Francisco.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Definition with the 30-guest-room hotel and motel exclusion matches 351(b) and is scoped 'for this rule'.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Delivery to buyer or transferee before consummation matches the quote; omitted receipt-filing and unlawful-sale language does not change what a seller must do before closing (ledger reason).", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "'Makes no representation that the property is in compliance with the law' matches the quote; omitted no-physical-examination note does not change the compliance point.", "quote_comparison": "NARROWER", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": false,
+    "block_kind": "BLOCKED_CLAIM",
+    "hedge_rulings": [
+      {"key": "hedge:05372b0c4cd9", "ruling": "reword", "note": "The sentence stands alone before any rule and no ledger claim of California law backs a state-versus-local statement; the clm:1 to clm:4 wording carries the SF attribution, so move it to follow the rule it describes and drop the following 'says nothing about any other city or county' sentence (absence claim, no statute_absence claim)."}
+    ],
+    "leo_reference_needed": [
+      {"claim": null, "section": "San Mateo County code (hoarded or unsafe home clean-out, 30 days)", "why": "The unit states that San Mateo County's code requires owners to clear a hoarded home within 30 days. No stored official San Mateo County print or claim exists. Leo must supply the official county code print and exact section, or the sentence must be removed."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "legal:ref:san-mateo-30-days", "section": "s10", "issue": "San Mateo County 30-day clear-out rule has no ledger claim or official print.", "severity": "must fix", "evidence": "claim ledger clm:1-clm:4 are SF Housing Code 351 only; SR-2, SR-4", "fix": "Remove the sentence, or wait for Leo to supply the official San Mateo County print.", "blocking": true},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s10:absence-of-law", "section": "s10", "issue": "'It says nothing about any other city or county.' is an unproven absence-of-law claim.", "severity": "must fix", "evidence": "SR-6; no statute_absence claim in the ledger", "fix": "Delete the sentence; place the SF-not-California attribution after the rule sentence.", "blocking": false},
+      {"ticket": "HUMAN_ESCALATION", "from": ["V1"], "to": "LEO", "key": "legal:ref:san-mateo-30-days:escalation", "section": "s10", "issue": "Need the official San Mateo County code print for the 30-day hoarded-home claim, or confirm it is removed.", "severity": "must fix", "evidence": "SR-4: no stored official quote for San Mateo County", "fix": null, "blocking": false, "trigger": "legal_uncertain"}
+    ]
+  }
+}

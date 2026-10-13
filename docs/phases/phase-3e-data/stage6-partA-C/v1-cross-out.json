@@ -1,0 +1,43 @@
+{
+  "article_id": "stage6-test-article",
+  "opportunity_id": "stage6-a-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.9.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["58356dcfc0a7b603a1adc79ab9fd9f4aadb19820648ccfe465fea4a067f51c2b"],
+  "decision": "REVISION",
+  "findings": [
+    {"issue_key": "legal:layer:cross-local:s10", "severity": "required", "note": "Last paragraph: \"San Francisco and San Mateo County handle these conditions the same way.\" No ledger claim supports any San Mateo County rule or any match between the two (SR-2: never imply one city's or county's rule matches another's). Delete the sentence; if the reader needs a pointer for other places, use only \"Local rules vary; check with your city or county.\""},
+    {"issue_key": "legal:absence:s10:other-cities", "severity": "required", "note": "First paragraph: \"It says nothing about any other city or county.\" This is an absence-of-law claim with no statute_absence claim in the ledger (SR-6). Delete the sentence."},
+    {"issue_key": "fact:s10:opening-referent", "severity": "optional", "note": "The section opens with \"This is a San Francisco rule, not California law.\" before any rule is stated, so \"This\" has no referent. Move the sentence after the rule, or name it (for example \"San Francisco Housing Code section 351 is a San Francisco rule, not California law.\")."}
+  ],
+  "evidence_ids": ["clm:1", "clm:2", "clm:3", "clm:4"],
+  "required_actions": [
+    "Delete \"San Francisco and San Mateo County handle these conditions the same way.\"",
+    "Delete \"It says nothing about any other city or county.\""
+  ],
+  "output_version_id": "v1-stage6-cross-s10-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "unit_key": "s10",
+    "version_hash": "58356dcfc0a7b603a1adc79ab9fd9f4aadb19820648ccfe465fea4a067f51c2b",
+    "claim_checks": [
+      {"claim_id": "clm:1", "verdict": "supported_as_written", "note": "Rule, owner or authorized agent, DBI report and first-sale exception all match the quote of 351(a); the residential-building scope is carried by clm:2, which the unit cites and states.", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:2", "verdict": "supported_as_written", "note": "Definition with the 30-room hotel and motel exclusion matches 351(b); scoped \"For this rule\".", "quote_comparison": "MATCH", "reader_impact": "none"},
+      {"claim_id": "clm:3", "verdict": "supported_as_written", "note": "Delivery to buyer or transferee before consummation matches the quote. Omitted receipt filing and unlawful-sale language do not change what a seller must do before closing, as the stored verification reason says.", "quote_comparison": "NARROWER", "reader_impact": "none"},
+      {"claim_id": "clm:4", "verdict": "supported_as_written", "note": "The report's no-representation-of-compliance note matches the quote; omitted no-physical-examination wording does not change the compliance point.", "quote_comparison": "NARROWER", "reader_impact": "none"}
+    ],
+    "privacy_ok": true,
+    "legal_qualification_ok": true,
+    "leo_reference_needed": [],
+    "hedge_rulings": [
+      {"key": "hedge:05372b0c4cd9", "ruling": "proven", "note": "clm:1, clm:2, clm:3 and clm:4 each state it is a San Francisco rule, not California law; the layer is correctly attributed."},
+      {"key": "hedge:df39defaf5b4", "ruling": "drop", "note": "Blends two local layers and says San Francisco and San Mateo County match; no San Mateo claim or comparison claim exists in the ledger (SR-2)."}
+    ],
+    "cards": [
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "legal:layer:cross-local:s10", "section": "s10", "issue": "Sentence says San Francisco and San Mateo County handle these conditions the same way, with no supporting claim.", "severity": "must fix", "evidence": "SR-2; no San Mateo claim in ledger; hedge:df39defaf5b4", "fix": "Delete the sentence.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "legal:absence:s10:other-cities", "section": "s10", "issue": "\"It says nothing about any other city or county\" is an absence-of-law claim with no statute_absence claim.", "severity": "must fix", "evidence": "SR-6; no statute_absence claim in ledger", "fix": "Delete the sentence.", "blocking": false},
+      {"ticket": "QUALITY_CORRECTION", "from": ["V1"], "to": "W1", "key": "fact:s10:opening-referent", "section": "s10", "issue": "\"This is a San Francisco rule\" opens the section before any rule is named.", "severity": "should fix", "evidence": "clm:1 to clm:4 wording", "fix": "Name the rule in that sentence or place it after the rule.", "blocking": false}
+    ]
+  }
+}

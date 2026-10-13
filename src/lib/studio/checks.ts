@@ -6,7 +6,8 @@ import { parseInline, wordCount } from "./inline";
 import { riskyKeys, uncoveredKeys } from "./tokens";
 import { sha256 } from "./hash";
 import type { ClaimVerification } from "./legal-claims";
-import { deciderFindings, legalFlagReason, legalKindsOf, legalRecordFindings, LEGAL_FLAG_TERMS, type LegalFlagKind } from "./legal-flags";
+import { deciderFindings, legalFlagReason, legalKindsOf, legalRecordFindings, localNamesIn, LEGAL_FLAG_TERMS, type LegalFlagKind } from "./legal-flags";
+import { jurisdictionAllowed, jurisdictionKey } from "./jurisdictions";
 import { unitClaimIds, unitStrings, unitText, type Unit } from "./schema";
 
 export type LedgerClaim = {
@@ -32,6 +33,7 @@ export type CheckCtx = {
   legalRecord?: boolean;                          // Phase 3e: enforce the legal-claim verification record (quote, label, gates) and the decider check; set by the service, off in fixtures that predate it
 };
 
+const LOCAL_RULE_CUE = /\b(?:requires?|required|must|prohibit\w*|within \d+ days|fines?|penalt\w+|mandat\w+|enforce\w*|inspect\w*|illegal|unlawful|not allowed|is allowed|are allowed)\b/i;
 const slash = (u: string) => u.replace(/\/+$/, "");
 const wrap = (text: string) => ({ text }) as Record<string, unknown>;
 
@@ -81,9 +83,14 @@ export function checkUnit(u: Unit, ctx: CheckCtx): Finding[] {
     if ((c.risk === "high" || c.risk === "critical") && !c.sourceId) f.push({ code: "HIGH_RISK_NO_EVIDENCE", severity: "BLOCKED_CLAIM", detail: `${c.risk}-risk claim ${c.id} has no source` });
     if (c.risk === "critical") f.push({ code: "CRITICAL_NEEDS_HUMAN", severity: "BLOCKED_CLAIM", detail: `critical claim ${c.id} needs explicit human escalation` });
     if (c.sourceRecheckBy && c.sourceRecheckBy < ctx.today) f.push({ code: "STALE_RULE", severity: "BLOCKED_CLAIM", detail: `claim ${c.id}: its source was due for re-verification by ${c.sourceRecheckBy}` });
-    if (!ctx.allowedJurisdictions.some((j) => c.jurisdiction.toLowerCase().includes(j.toLowerCase()))) f.push({ code: "WRONG_JURISDICTION", severity: "BLOCKED_CLAIM", detail: `claim ${c.id} is for "${c.jurisdiction}", not this article's jurisdiction` });
+    if (!jurisdictionAllowed(c.jurisdiction, ctx.allowedJurisdictions)) f.push({ code: "WRONG_JURISDICTION", severity: "BLOCKED_CLAIM", detail: `claim ${c.id} is for "${c.jurisdiction}", not this article's jurisdiction` });
   }
   if (ctx.legalRecord) f.push(...legalRecordFindings(cited), ...deciderFindings(strings.map((s) => parseInline(s).plain), cited));
+  // Stage 6 part A (SR-2, SR-4): a sentence that states a rule of a named city or county needs a cited claim for THAT jurisdiction. The exact "local rules vary; check with your city or county" is the allowed gap-filler.
+  for (const str of strings) for (const sentence of parseInline(str).plain.split(/(?<=[.!?])\s+/)) {
+    if (/local rules vary/i.test(sentence) || /\?\s*$/.test(sentence) || !LOCAL_RULE_CUE.test(sentence)) continue;      // a question (a heading) is not a statement of a rule
+    for (const place of localNamesIn(sentence)) if (!cited.some((c) => jurisdictionKey(c.jurisdiction).includes(place))) f.push({ code: "LOCAL_RULE_WITHOUT_CLAIM", severity: "BLOCKED_CLAIM", detail: `"${sentence.slice(0, 100)}" states a rule of ${place} but no claim for ${place} is cited; a local rule needs its own claim from its own official print (ask Leo for the print), otherwise say exactly "Local rules vary; check with your city or county."` });
+  }
   const unc = uncoveredKeys(text, [...cited.map((c) => c.text), ...ctx.approvedFactTexts]);
   for (const k of unc) f.push({ code: "UNCOVERED_FIGURE", severity: "BLOCKED_CLAIM", detail: `the text states ${k}, which no cited ledger claim or approved brand fact contains (unsupported or altered detail)` });
   if (HISTORY.test(text) && !cited.some((c) => c.claimType === "thb_history")) f.push({ code: "UNDECLARED_HISTORY_CLAIM", severity: "BLOCKED_CLAIM", detail: "states what THB or Juan has done or seen without a declared, evidenced thb_history claim" });
