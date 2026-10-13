@@ -1,0 +1,44 @@
+{
+ "top": {
+  "purpose": "A guide for California families, heirs and owners who need to sell a house that is full of belongings: what the law makes you tell a buyer, whether to clear it out first, and what the options are.",
+  "leo_check": "Leo's check: proofread, legal points checked against California law, ready to approve.",
+  "question": "Can we say we buy houses as-is without the seller cleaning out first? The guide doesn't say it for now.",
+  "fine_print": "Your approval is for this exact version. If anything changes later, we'll ask you again. Approving doesn't publish it.",
+  "voice_question": "These example lines guide how future articles are written in your voice. Approve once and we won't ask again."
+ },
+ "ai_summary": [
+  {
+   "title": "What this page is",
+   "text": "A draft guide for the Twin Home Buyer website, \"Packed or Hoarded House in California: What to Disclose and Whether to Clean Out First\", waiting for approval from Juan and Cherry. Approving does not publish it; publishing is a separate later step done by Leo. The guide is written for sellers and families, in Juan's voice, and it does not promise that Twin Home Buyer buys these houses as-is."
+  },
+  {
+   "title": "What was checked",
+   "items": [
+    "Every section was written by an AI writer and then reviewed by three separate AI reviewers: one for facts and privacy (the only one that can block), one for search and answer quality, and one for editorial voice. Every section passed all three on its final wording.",
+    "Legal points were checked against the official California text: Health and Safety Code section 17920.3 (conditions that can make a building substandard) and Civil Code sections 1102 and 1102.6 (seller disclosure). Each of the eight legal points has its exact quote, section and a label saying how closely the guide's wording matches. The text used is Leo's official printouts of 2026-10-10.",
+    "Leo reviewed the content and found no release blockers."
+   ]
+  },
+  {
+   "title": "What was changed after Leo's review, and why",
+   "items": [
+    "A sentence saying the statute does not mention hoarding was removed, because nothing in the sources supports a statement about what the statute leaves out.",
+    "The guide now says a listed condition counts only when it is bad enough to endanger the life, limb, health, property, safety or welfare of the people living there, nearby residents or the public. That is what the statute says; before, the guide could be read as saying clutter alone is a code problem. The same sentence was added to the FAQ.",
+    "The guide no longer implies that only a health officer or fire official decides. For infestation and garbage conditions the statute also allows a code enforcement officer, so the text now says a local official, such as a health officer, a code enforcement officer or a fire official.",
+    "The opening of the section on what can delay or block a sale now names the three causes first (a local official's attention, a disclosure misstep, and authority, heir or lien problems)."
+   ]
+  },
+  {
+   "title": "What is optional",
+   "text": "The polish items below are suggestions from the reviewers and from Leo. None was applied, and none is needed for approval. Leo sees no release blockers. Examples: a sentence in the answer box that reads like legal text, a slightly abstract line, an optional warmer sentence about the family, more Bay Area detail only if it is specific and useful, repeated use of the word \"stall\"."
+  },
+  {
+   "title": "What is still pending",
+   "items": [
+    "Juan's answer on the as-is question: can Twin Home Buyer say it buys houses as-is without the seller cleaning out first? The guide does not say so for now. If the answer is yes, wording can be added later with its source.",
+    "Leo's fresh printouts of the three statute sections (Health and Safety Code 17920.3, Civil Code 1102 and 1102.6) before publishing, so the record carries a fresh date. The checks so far used the printouts of 2026-10-10.",
+    "The voice reference (the short style guide that says how articles should sound) is a one-time question below the approval buttons: \"does this sound like you?\". Approving it once means future proposals will not include it. It is stored in the studio's brand facts record under the key voice_reference (status proposed, provisionally approved by Leo on 2026-10-10) and in a snapshot attached to this proposal. No decision on it has been recorded yet."
+   ]
+  }
+ ]
+}
