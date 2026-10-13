@@ -2,12 +2,12 @@
 // R1 may cite only official sources (the same allowlist Agent 2 uses, from official-sources.ts) and may state a legal rule only with a word-for-word quote.
 // The bridge extension (task 9) calls r1SubmitErrors on every R1 output before it is accepted.
 import { officialUrl } from "../agents/official-sources";
+import { QUOTE_MAX } from "../studio/legal-claims";
 
 type Src = { id?: string; kind?: string; url?: string | null };
 type Claim = { id?: string; support?: string; risk?: string; quote?: string | null; passage_ids?: string[]; source_ids?: string[] };
 export type ResearchOutput = { result?: { sources?: Src[]; claims?: Claim[] } };
 
-const QUOTE_MAX = 400;
 
 /** Every problem that makes an R1 output unacceptable. Empty means it may proceed to the ledger checks. */
 export function r1SubmitErrors(out: ResearchOutput): string[] {

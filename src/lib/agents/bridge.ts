@@ -2,6 +2,7 @@
 // Agent bridge: task packets out, validated submissions in. Pure logic with injected storage (see supabase-deps.ts).
 // The orchestrator, not the agent, decides state. An agent output can never set an approval or a state.
 import { randomBytes } from "node:crypto";
+import { legalLibraryErrors, legalStaticErrors } from "./legal-checks";
 import { type Actor, type Orchestrator } from "../orchestrator";
 import { buildScore } from "../engine/score";
 import { AGENT_KEYS, AGENT_META, SITUATION_ROWS, outputSchemas, type AgentKey } from "./schemas";
@@ -144,6 +145,7 @@ export type ValidationContext = {
   agent2Claims?: { id: string; support: string }[]; // Agent 3
   agent2SourceIds?: string[]; // Agent 3
   libraryPassages?: Map<string, { source_id: string; text: string }>; // Agent 2: stored text of Evidence Library passages
+  legal?: { librarySources?: Map<string, { recheck_by: string | null }>; today?: string; skip?: boolean }; // Phase 3e: legal-claim checks (skip: roles that carry no legal claims, e.g. R3)
 };
 
 export const norm = (t: string) => t.toLowerCase().replace(/\s+/g, " ").trim();
@@ -183,7 +185,7 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
     }
     for (const c of out.result.claims) {
       const libSources = c.source_ids.map((sid: string) => out.result.sources.find((s: any) => s.id === sid)).filter((s: any) => s?.kind === "library");
-      if (c.support === "supported" && libSources.length > 0 && ctx.libraryPassages) {
+      if (c.support === "supported" && libSources.length > 0 && ctx.libraryPassages && (c.risk !== "high" || ctx.legal?.skip)) {
         const pids: string[] = c.passage_ids ?? [];
         if (pids.length === 0 || !c.quote) errs.push(`claim ${c.id} is supported by an Evidence Library source: give passage_ids and a short verbatim quote`);
         const texts: string[] = [];
@@ -205,6 +207,8 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
     const declared = new Set<string>(out.evidence_ids);
     for (const id of ids) if (!declared.has(id)) errs.push(`evidence_ids must list every source id (missing ${id})`);
     if (out.decision === "PASS" && out.result.claims.some((c: any) => c.support !== "supported" && c.risk === "high")) errs.push("PASS is not allowed while a high-risk claim is unsupported/conflicting");
+    // Phase 3e: a supported high-risk (legal) claim carries its full verification record, rests on Evidence Library prints, and its quote is verbatim.
+    if (!ctx.legal?.skip) errs.push(...legalStaticErrors(out.result.claims, out.result.sources), ...legalLibraryErrors(out.result.claims, out.result.sources, { libraryPassages: ctx.libraryPassages, librarySources: ctx.legal?.librarySources, today: ctx.legal?.today }));
   }
 
   if (agent !== "thb-01-seo-strategist") {

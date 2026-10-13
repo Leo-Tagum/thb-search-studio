@@ -18,6 +18,7 @@ async function EvidenceContent() {
         <input name="jurisdiction" placeholder="Jurisdiction" className="border px-1" />
         <label>Effective date <input type="date" name="effectiveDate" /></label>
         <label>Retrieved date <input type="date" name="retrievedDate" /></label>
+        <label>Recheck by (statutes and codes: required for Agents 2 and R1) <input type="date" name="recheckBy" /></label>
         <textarea name="provenance" required placeholder="Provenance: where it came from, who gave it, permission to use" className="border px-1" />
         <button className="border px-2 py-1">Upload</button>
       </form>

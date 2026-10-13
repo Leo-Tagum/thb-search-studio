@@ -1,6 +1,7 @@
 // Extracts text passages from PDFs in the private "evidence" bucket into evidence_passages (so agents can cite them).
 // Usage: npm run evidence:extract            (all PDF sources with no passages yet)
 //        npm run evidence:extract -- --rename <source_id> "<new title>"   (title change, written to the audit log)
+//        npm run evidence:extract -- --recheck <source_id> <yyyy-mm-dd>    (sets the recheck-by date, written to the audit log)
 // Files are untrusted: they are downloaded to a fresh temp directory and only passed to pdftotext as an argument.
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -9,6 +10,19 @@ import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
+
+if (process.argv[2] === "--recheck") {
+  // Sets the "recheck by" date of one source (Agents 2 and R1 refuse a legal claim whose source has none, or one that has passed). Audited.
+  const [id, date] = [process.argv[3], process.argv[4]];
+  if (!id || !/^\d{4}-\d{2}-\d{2}$/.test(date ?? "")) throw new Error("usage: npm run evidence:extract -- --recheck <source_id> <yyyy-mm-dd>");
+  const { data: before } = await db.from("evidence_sources").select("title,recheck_by").eq("id", id).single();
+  if (!before) throw new Error("source not found");
+  const { error } = await db.from("evidence_sources").update({ recheck_by: date }).eq("id", id);
+  if (error) throw error;
+  await db.from("audit_events").insert({ actor: "leo", subject_type: "evidence_source", subject_id: id, event_type: "evidence_recheck_by_set", accepted: true, detail: { title: before.title, old: before.recheck_by, new: date } });
+  console.log(`"${before.title}": recheck by ${before.recheck_by ?? "(none)"} -> ${date} (audited)`);
+  process.exit(0);
+}
 
 if (process.argv[2] === "--rename") {
   const [id, title] = [process.argv[3], process.argv[4]];

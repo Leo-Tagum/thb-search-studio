@@ -5,7 +5,7 @@ import { buildTaskPacket, semanticChecks } from "./bridge";
 
 const packet = buildTaskPacket("thb-02-research-evidence", { id: "o1", versionHash: "h1" }, {}, "agent-defined");
 const src = (over: Record<string, unknown> = {}) => ({ id: "src:1", kind: "official_url", url: "https://www.dre.ca.gov/x", title: "DRE", tier: 2, jurisdiction: "California", effective_date: null, retrieved_date: "2026-10-10", locality_matches: true, ...over });
-const clm = (over: Record<string, unknown> = {}) => ({ id: "clm:1", text: "A seller must deliver a disclosure.", source_ids: ["src:1"], support: "supported", jurisdiction: "California", risk: "high", ...over });
+const clm = (over: Record<string, unknown> = {}) => ({ id: "clm:1", text: "A seller must deliver a disclosure.", source_ids: ["src:1"], support: "supported", jurisdiction: "California", risk: "medium", ...over });
 const out = (result: Record<string, unknown>, decision = "PASS") => ({
   article_id: "", opportunity_id: "o1", agent_name: "Research & Evidence", agent_prompt_version: "1.0.0", model_version: "claude-code/test", input_version_ids: ["h1"],
   decision, findings: [], evidence_ids: ["src:1"], required_actions: [], output_version_id: "v1", timestamp: "2026-10-10T12:00:00Z",
@@ -33,8 +33,8 @@ describe("Agent 2 evidence rules (blueprint §14 rows 5, 8, 9)", () => {
     expect(check(out({ claims: [clm({ source_ids: [] })] })).join(" ")).toMatch(/supported without source_ids/);
   });
   it("PASS is not allowed while a high-risk claim is unsupported (BLOCKED_CLAIM stance)", () => {
-    expect(check(out({ claims: [clm({ support: "unsupported", source_ids: [] })] })).join(" ")).toMatch(/PASS is not allowed/);
-    expect(check(out({ claims: [clm({ support: "unsupported", source_ids: [] })] }, "REVISION"))).toEqual([]);
+    expect(check(out({ claims: [clm({ support: "unsupported", source_ids: [], risk: "high" })] })).join(" ")).toMatch(/PASS is not allowed/);
+    expect(check(out({ claims: [clm({ support: "unsupported", source_ids: [], risk: "high" })] }, "REVISION"))).toEqual([]);
   });
   it("seller material is never part of an Agent 2 packet (first-party proof stays restricted)", () => {
     expect(JSON.stringify(packet)).not.toMatch(/seller_brief_passages/);

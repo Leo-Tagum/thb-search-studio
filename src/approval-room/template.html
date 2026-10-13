@@ -69,7 +69,8 @@ details.notes .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:
 
   if (!P || !P.proposal_id) {
     top.appendChild(el('h1',{text:'THB Approval Room'}));
-    top.appendChild(el('div',{class:'card',text:'Nothing is waiting for review right now. The next guide will appear here, at this same address.'}));
+    if (P && P.hold_note) top.appendChild(el('div',{class:'card',role:'status'},[el('p',{class:'lead'},[el('b',{text:'On hold. '}), txt(P.hold_note)])]));
+    else top.appendChild(el('div',{class:'card',text:'Nothing is waiting for review right now. The next guide will appear here, at this same address.'}));
     document.getElementById('notes').hidden = true;
     return;
   }

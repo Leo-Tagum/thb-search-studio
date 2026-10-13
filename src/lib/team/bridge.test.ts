@@ -129,7 +129,7 @@ describe("R1: fetch request, then evidence pack checked against stored passages"
     const out = env("R1", "PASS", {
       ticket_id: null,
       sources: [{ id: "src:1", kind: "official_url", url: URL1, title: "DRE", tier: 2, jurisdiction: "California", effective_date: null, retrieved_date: "2026-10-12", locality_matches: true, ...srcOver }],
-      claims: [{ id: "clm:1", text: "A seller must deliver the statement to the buyer.", source_ids: ["src:1"], support: "supported", jurisdiction: "California", risk: "high", passage_ids: [snap.passages[0].passageId], quote: QUOTE, ...claimOver }],
+      claims: [{ id: "clm:1", text: "A seller must deliver the statement to the buyer.", source_ids: ["src:1"], support: "supported", jurisdiction: "California", risk: "medium", passage_ids: [snap.passages[0].passageId], quote: QUOTE, ...claimOver }],
       brand_facts_pending: [], first_party_proof: "restricted", unresolved: [],
     }, { findings: [{ claim: "disclosure duty", basis: "official_source", evidence_ids: ["src:1"] }], evidence_ids: ["src:1"] });
     return { out, store };
@@ -148,6 +148,10 @@ describe("R1: fetch request, then evidence pack checked against stored passages"
     await bad("R1", a.out, /does not appear word for word/, { snapshotStore: a.store });
     const b = await pack({}, { url: "https://www.opendoor.com/blog/x" });
     await bad("R1", b.out, /allowlist/, { snapshotStore: b.store });
+  });
+  it("a high-risk legal claim cannot rest on a fetched web page: it needs an Evidence Library print (ask Leo)", async () => {
+    const { out, store } = await pack({ risk: "high" });
+    await bad("R1", out, /must rest on an Evidence Library source/, { snapshotStore: store });
   });
   it("without a snapshot store the check cannot pass silently", async () => {
     const { out } = await pack();

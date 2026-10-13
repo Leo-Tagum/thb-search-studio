@@ -55,7 +55,8 @@ describe("R1 states a legal rule only with a word-for-word quote", () => {
     expect(r1SubmitErrors(out([src("https://www.dre.ca.gov/x")]))).toEqual([]);
     expect(r1SubmitErrors(out([src("https://www.dre.ca.gov/x")], [claim({ support: "unsupported", quote: undefined, source_ids: [] })]))).toEqual([]);
   });
-  it("a quote over 400 characters is rejected", () => {
-    expect(r1SubmitErrors(out([src("https://www.dre.ca.gov/x")], [claim({ quote: "x".repeat(401) })])).join(" ")).toMatch(/longer than 400/);
+  it("a quote over 1200 characters is rejected, 1200 is accepted", () => {
+    expect(r1SubmitErrors(out([src("https://www.dre.ca.gov/x")], [claim({ quote: "x".repeat(1201) })])).join(" ")).toMatch(/longer than 1200/);
+    expect(r1SubmitErrors(out([src("https://www.dre.ca.gov/x")], [claim({ quote: "x".repeat(1200) })])).join(" ")).not.toMatch(/longer than/);
   });
 });

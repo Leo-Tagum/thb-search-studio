@@ -42,7 +42,7 @@ export async function uploadEvidenceAction(formData: FormData) {
   const orNull = (k: string) => (String(formData.get(k) ?? "").trim() || null);
   const { error } = await db.from("evidence_sources").insert({
     title, storage_path: path, source_tier: tier, source_url: orNull("sourceUrl"), jurisdiction: orNull("jurisdiction"),
-    effective_date: orNull("effectiveDate"), retrieved_date: orNull("retrievedDate"), uploaded_by: ACTOR,
+    effective_date: orNull("effectiveDate"), retrieved_date: orNull("retrievedDate"), recheck_by: orNull("recheckBy"), uploaded_by: ACTOR,
     provenance_note: provenance, content_sha256: createHash("sha256").update(buf).digest("hex"),
   });
   if (error) throw error;
