@@ -7,6 +7,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { wrapUntrusted } from "../src/lib/agents/bridge";
 import { V1_PROMPT_VERSION } from "../src/lib/studio/agents";
+import { RECEIPT_INSTRUCTION } from "../src/lib/agents/prompt-receipt";
 import { v1StoryCheckErrors, v1StoryCheckOutput } from "../src/lib/studio/story-agents";
 import { storyFindings, storyVerdict, APPROVED_PROCESS_WORDING } from "../src/lib/studio/story-cards";
 import { STORY_FIXTURES } from "../src/lib/studio/story-fixtures";
@@ -19,7 +20,7 @@ const picked = STORY_FIXTURES.filter((f) => f.inV1Calibration);
 if (cmd === "prepare") {
   for (const f of picked) {
     const data = { stories: [{ story_id: f.card.story_id, story_card: f.card, draft_text: f.text }], approved_process_wording: f.approvedProcess ?? APPROVED_PROCESS_WORDING, note: "FAKE: every name, place, number and record in this packet is made up for a calibration. No real seller or deal data." };
-    const packet = { run_id: `story-${f.id}`, attempts_used: 0, last_error: null, agent_key: "thb-v1-fact-privacy", prompt_version: V1_PROMPT_VERSION, mode: "STORY_CHECK", article_id: "fake-article", opportunity_id: "fake-opportunity", input_version_ids: [f.card.story_id], instructions: "This is a STORY check (see 'Story check' in your prompt): check the story in the data block against SR-18 to SR-20 (and SR-3, SR-7). Write ONE JSON output whose result has story_checks. Use article_id and opportunity_id from this packet; input_version_ids must contain the story_id.", untrusted_data_block: wrapUntrusted(data) };
+    const packet = { run_id: `story-${f.id}`, attempts_used: 0, last_error: null, agent_key: "thb-v1-fact-privacy", prompt_version: V1_PROMPT_VERSION, mode: "STORY_CHECK", prompt_receipt_required: true, article_id: "fake-article", opportunity_id: "fake-opportunity", input_version_ids: [f.card.story_id], instructions: RECEIPT_INSTRUCTION("thb-v1-fact-privacy") + " This is a STORY check (see 'Story check' in your prompt): check the story in the data block against SR-18 to SR-20 (and SR-3, SR-7). Write ONE JSON output whose result has story_checks. Use article_id and opportunity_id from this packet; input_version_ids must contain the story_id.", untrusted_data_block: wrapUntrusted(data) };
     writeFileSync(join(dir, `v1-${f.id}-packet.json`), JSON.stringify(packet, null, 2));
   }
   console.log(`prepared ${picked.length} packets: ${picked.map((f) => f.id).join(", ")}`);

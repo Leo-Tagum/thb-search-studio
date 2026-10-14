@@ -14,7 +14,7 @@ export type LegalClaim = {
 export type LegalSource = { id?: string; kind?: string; library_source_id?: string };
 export type LegalCtx = {
   libraryPassages?: Map<string, { source_id: string; text: string }>;
-  librarySources?: Map<string, { recheck_by: string | null }>;   // evidence_sources.id -> its recheck_by date
+  librarySources?: Map<string, { recheck_by: string | null; needs_reprint?: boolean }>;   // evidence_sources.id -> its recheck_by date
   today?: string;                                               // yyyy-mm-dd (tests inject it)
 };
 
@@ -92,6 +92,7 @@ export function legalLibraryErrors(claims: LegalClaim[], sources: LegalSource[],
       for (const s of libs) {
         const rec = s.library_source_id ? ctx.librarySources.get(s.library_source_id) : undefined;
         if (!rec) continue;
+        if (rec.needs_reprint) errs.push(`${at}: its source is marked NEEDS REPRINT in the Evidence Library (Leo found the print bad); no claim may use it until Leo uploads a clean print`);
         if (!rec.recheck_by) errs.push(`${at}: its source has no "recheck by" date in the Evidence Library; a statute needs one (ask Leo to set it)`);
         else if (rec.recheck_by < today) errs.push(`${at}: its source was due for re-verification by ${rec.recheck_by}; ask Leo for a fresh print`);
       }

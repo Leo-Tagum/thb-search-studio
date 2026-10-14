@@ -13,6 +13,7 @@ import { needsRuling } from "./hedge-rulings";
 import { materialSig } from "./tokens";
 import { unitClaimIds, unitText, type Draft, type Unit } from "./schema";
 import { brandRuleFindings } from "./brand-check";
+import { RECEIPT_INSTRUCTION } from "../agents/prompt-receipt";
 import { allowedJurisdictionsOf } from "./jurisdictions";
 import { auditHtml, composeAuthor, composeCta, renderBody, type BrandFactRow, type Composed } from "./template";
 import { modeChangeRule, modeOf, pipelineGuard, type PipelineMode } from "../team/mode";
@@ -185,7 +186,8 @@ export async function queueStudioRun(db: SupabaseClient, agent: ClassicAgent, ar
   const fixPass = agent === "thb-04-section-writer" && isV1FixPass(st);
   const packet = {
     agent_key: agent, prompt_version: metaOf(agent).promptVersion,
-    instructions: `You are ${agent === CLASSIC_V1_KEY ? "V1 (Fact and Privacy, the fact gate of the classic loop)" : `Agent ${STUDIO_AGENT_META[agent as StudioAgentKey].n}`}. Follow .claude/agents/${agent}.md exactly. Work on ONE unit (${unitKey}) of ONE article using only the data block. You never approve, lock or set a state.${fixPass ? " This is a V1 fix pass: change only the sentences V1 cited (v1_fix_pass.fix_only_cited_sentences) and keep every other sentence exactly as it is; a version that changes other sentences is rejected by code." : ""}`,
+    instructions: `You are ${agent === CLASSIC_V1_KEY ? "V1 (Fact and Privacy, the fact gate of the classic loop)" : `Agent ${STUDIO_AGENT_META[agent as StudioAgentKey].n}`}. Follow .claude/agents/${agent}.md exactly.${agent === CLASSIC_V1_KEY ? ` ${RECEIPT_INSTRUCTION(agent)}` : ""} Work on ONE unit (${unitKey}) of ONE article using only the data block. You never approve, lock or set a state.${fixPass ? " This is a V1 fix pass: change only the sentences V1 cited (v1_fix_pass.fix_only_cited_sentences) and keep every other sentence exactly as it is; a version that changes other sentences is rejected by code." : ""}`,
+    ...(agent === CLASSIC_V1_KEY ? { prompt_receipt_required: true } : {}),      // Leo, 2026-10-14: V1 must load its prompt file; the output carries the receipt
     opportunity_id: L.article.opportunity_id, article_id: articleId, unit_key: unitKey, unit_hash: cur?.content_hash ?? null, allowed_claim_ids: allowed,
     input_version_ids: [cur?.content_hash ?? `unit:${unitKey}:none`],
     output_contract: { schema: agent === CLASSIC_V1_KEY ? "blueprint-§5-common+team-role-result" : "blueprint-§5-common+studio-agent-result", decisions: metaOf(agent).decisions, submit: "npm run studio -- submit <run_id> <file.json>" },

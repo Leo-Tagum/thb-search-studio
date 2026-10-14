@@ -14,7 +14,7 @@ export const v1StoryCheckResult = z.strictObject({ story_checks: z.array(storyCh
 export const v1StoryCheckOutput = z.strictObject({
   article_id: z.string().min(1), opportunity_id: z.string().min(1), agent_name: z.string(), agent_prompt_version: z.string(), model_version: z.string(),
   input_version_ids: z.array(z.string()), decision: z.enum(["PASS", "REVISION", "BLOCKED"]), findings: z.array(finding), evidence_ids: z.array(z.string()), required_actions: z.array(z.string()),
-  output_version_id: z.string(), timestamp: z.iso.datetime(), result: v1StoryCheckResult,
+  output_version_id: z.string(), timestamp: z.iso.datetime(), prompt_receipt: z.string().optional(), result: v1StoryCheckResult,
 });
 export type V1StoryCheckOutput = z.infer<typeof v1StoryCheckOutput>;
 

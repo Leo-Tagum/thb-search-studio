@@ -9,9 +9,12 @@ import { TEAM_ROLES, type TeamRole } from "./tickets";
 
 const NOW = "2026-10-12T12:00:00Z";
 const ENV: Record<string, string> = { R1: "R1 Legal and official", R2: "R2 Search", R3: "R3 Experience", S1: "S1 Strategist", S2: "S2 Architect", W1: "W1 Writer", W2: "W2 Co-writer", V1: "V1 Fact and Privacy", V2: "V2 SEO/AEO/GEO", V3: "V3 Editorial Critic" };
+import { receiptInFile } from "../agents/prompt-receipt";
+import { readFileSync as readPromptFile } from "node:fs";
+const V1_RECEIPT = receiptInFile(readPromptFile(".claude/agents/thb-v1-fact-privacy.md", "utf8"))!;
 const env = (role: string, decision: string, result: object, o: Record<string, unknown> = {}) => ({
   article_id: "a1", opportunity_id: "o1", agent_name: ENV[role], agent_prompt_version: TEAM_PROMPT_VERSIONS[role as TeamRole], model_version: "claude-code/test", input_version_ids: ["h1"], decision, findings: [],
-  evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: NOW, result, ...o,
+  evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: NOW, result, ...(role === "V1" ? { prompt_receipt: V1_RECEIPT } : {}), ...o,      // V1 outputs carry the receipt of the prompt file (Leo, 2026-10-14)
 });
 const packet = (role: TeamRole, data: unknown = { note: "x" }, unit: string | null = "s2") => buildTeamPacket(role, { articleId: "a1", opportunityId: "o1", unitKey: unit, versionHash: "h1" }, data);
 

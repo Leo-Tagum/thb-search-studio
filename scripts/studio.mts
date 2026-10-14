@@ -25,6 +25,7 @@
 //   npm run studio -- branch <article_id> <expected_findings> [--classic] [--dry-run]   (Leo: creates a BRANCH of a classic article for a comparison, team mode by default, or a classic revision baseline with --classic; reads the original only)
 //   npm run studio -- fingerprint <article_id>          (read-only fingerprint of an article and everything attached to it)
 //   npm run studio -- fingerprint-v2 <article_id>       (read-only; stable: fixed column list, ordered by id; a column added later cannot change it. Report it next to v1)
+//   npm run studio -- images-record-plan <articleId> <plan.json> | images-advance <planId> <STATUS> | images-store <planId> <dir> | images-leo-check <planId> "<what you checked>" | images-insert <articleId> <planId>   (the real-pilot image steps, all acting as leo; never run on a real article without Leo saying so)
 //   npm run studio -- images-pull <dir> [--out <dir2>]  (read-only on the database: checks Lawrence's finished images from a folder the operator downloaded from the Image board, strips metadata, and prints the report; --out writes the cleaned files and records.json. <dir> holds plan.json, work.json and files/<asset id>)
 //   npm run studio -- branch-delete <branch_id> --yes   (Leo: removes one branch and what it created; refuses anything that is not a branch)
 //   npm run studio -- voice-approve                    (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
@@ -36,6 +37,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { pullImages } from "../src/lib/studio/image-pull";
+import { advancePlan, createImageVersion, leoCheckImages, recordImagePlan, storeImages, supabaseImageStore } from "../src/lib/studio/image-pilot";
 import { createClient } from "@supabase/supabase-js";
 import { AGENT_KEYS, type AgentKey } from "../src/lib/agents/schemas";
 import { semanticChecks, submitOutput } from "../src/lib/agents/bridge";
@@ -252,6 +254,22 @@ if (cmd === "queue") {
     writeFileSync(join(out, "records.json"), JSON.stringify(res.ready, null, 1));
     console.log(`wrote ${res.files.size} cleaned file(s) and records.json to ${out}`);
   }
+} else if (cmd === "images-record-plan") {
+  const plan = JSON.parse(readFileSync(process.argv[4], "utf8")); const r = await recordImagePlan(db, a, plan.cards ?? plan, "leo");
+  console.log(r.ok ? `plan ${r.planId} recorded (${r.cardIds.size} card(s))` : `NOT RECORDED: ${r.reason}`);
+} else if (cmd === "images-advance") {
+  const r = await advancePlan(db, a, process.argv[4] as never, "leo"); console.log(r.ok ? `plan ${a} is now ${process.argv[4]}` : `NOT MOVED: ${r.reason}`);
+} else if (cmd === "images-store") {
+  const dir = process.argv[4]; const plan = JSON.parse(readFileSync(join(dir, "plan.json"), "utf8")); const work = JSON.parse(readFileSync(join(dir, "work.json"), "utf8"));
+  const files = new Map<string, Uint8Array>(); const fdir = join(dir, "files");
+  if (existsSync(fdir)) for (const f of readdirSync(fdir)) files.set(f.replace(/\.[^.]+$/, ""), new Uint8Array(readFileSync(join(fdir, f))));
+  const pulled = pullImages({ articleId: plan.article_id, cards: plan.cards, work, files });
+  const r = await storeImages(db, a, pulled, supabaseImageStore(db)); console.log(r.ok ? `stored ${r.stored}, already stored ${r.skipped}` : `NOT STORED: ${r.reason}`);
+} else if (cmd === "images-leo-check") {
+  const r = await leoCheckImages(db, a, process.argv[4] ?? "", "leo"); console.log(r.ok ? `${r.checked} image(s) checked by Leo` : `NOT RECORDED: ${r.reason}`);
+} else if (cmd === "images-insert") {
+  const r = await createImageVersion(db, a, process.argv[4], "leo");
+  console.log(r.ok ? `image version created (${r.figures} figure(s)); hash ${r.hash.slice(0, 12)}; text-only hash ${r.textOnlyHash.slice(0, 12)}; the article is back in HUMAN_REVIEW and needs a new proposal` : `NOT CREATED: ${r.reason}`);
 } else if (cmd === "branch-delete") {
   const res = await branchDelete(db, a, { actor: "leo", yes: process.argv.includes("--yes") });
   console.log(res.ok ? `branch ${a} deleted: ${res.summary}\n${res.originalChanged?.length ? `ORIGINAL CHANGED: ${res.originalChanged.join("; ")}` : "original fingerprint unchanged"}` : `NOT DELETED: ${res.reason}`);

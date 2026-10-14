@@ -114,6 +114,7 @@ describe("the quote is verbatim in the stored official print, and its source is 
     expect(ok(full(), { ...p, librarySources: new Map([["L1", { recheck_by: null }]]) })).toMatch(/no "recheck by" date/);
     expect(ok(full(), { ...p, librarySources: new Map([["L1", { recheck_by: "2026-10-01" }]]) })).toMatch(/due for re-verification by 2026-10-01/);
     expect(ok(full(), { ...p, librarySources: new Map([["L1", { recheck_by: "2027-01-13" }]]) })).toBe("");
+    expect(ok(full(), { ...p, librarySources: new Map([["L1", { recheck_by: "2027-01-13", needs_reprint: true }]]) })).toMatch(/NEEDS REPRINT/);      // Leo, 2026-10-14: a print he found bad cannot support any claim
   });
 });
 

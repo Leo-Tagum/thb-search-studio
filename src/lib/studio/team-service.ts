@@ -184,8 +184,8 @@ async function teamCtxFor(db: SupabaseClient, run: TeamRun): Promise<TeamCtx> {
   const opp = await opportunityOf(db, L);
   if (role === "R1" || role === "R3") {
     const { data: pas } = await db.from("evidence_passages").select("id,source_id,passage").limit(4000);
-    const { data: lib } = await db.from("evidence_sources").select("id,recheck_by,title,jurisdiction");
-    ctx.legacy = { libraryPassages: new Map((pas ?? []).map((x: any) => [x.id, { source_id: x.source_id, text: x.passage }])), legal: role === "R3" ? { skip: true } : { librarySources: new Map((lib ?? []).map((x: any) => [x.id, { recheck_by: x.recheck_by ?? null }])), library: (lib ?? []).map((x: any) => ({ title: x.title, jurisdiction: x.jurisdiction })), allowedJurisdictions: allowedJurisdictionsOf(L.brief.outline) } };
+    const { data: lib } = await db.from("evidence_sources").select("id,recheck_by,title,jurisdiction,provenance_note");
+    ctx.legacy = { libraryPassages: new Map((pas ?? []).map((x: any) => [x.id, { source_id: x.source_id, text: x.passage }])), legal: role === "R3" ? { skip: true } : { librarySources: new Map((lib ?? []).map((x: any) => [x.id, { recheck_by: x.recheck_by ?? null, needs_reprint: /^NEEDS REPRINT/i.test(x.provenance_note ?? "") }])), library: (lib ?? []).map((x: any) => ({ title: x.title, jurisdiction: x.jurisdiction })), allowedJurisdictions: allowedJurisdictionsOf(L.brief.outline) } };
     if (role === "R1") ctx.snapshotStore = dbSnapshotStore(db);
     if (role === "R3") { ctx.approvedFacts = new Map(L.facts.filter((f: any) => f.status === "approved").map((f: any) => [f.fact_key, f.fact_value])); ctx.clearedStories = new Map(); }
   }

@@ -146,7 +146,7 @@ export type ValidationContext = {
   agent2Claims?: { id: string; support: string }[]; // Agent 3
   agent2SourceIds?: string[]; // Agent 3
   libraryPassages?: Map<string, { source_id: string; text: string }>; // Agent 2: stored text of Evidence Library passages
-  legal?: { librarySources?: Map<string, { recheck_by: string | null }>; today?: string; skip?: boolean; allowedJurisdictions?: string[]; library?: { title: string; jurisdiction: string }[] }; // Phase 3e: legal-claim checks (skip: roles that carry no legal claims, e.g. R3); Stage 6: the article's allowed-jurisdiction list and the stored sources (for print requests)
+  legal?: { librarySources?: Map<string, { recheck_by: string | null; needs_reprint?: boolean }>; today?: string; skip?: boolean; allowedJurisdictions?: string[]; library?: { title: string; jurisdiction: string }[] }; // Phase 3e: legal-claim checks (skip: roles that carry no legal claims, e.g. R3); Stage 6: the article's allowed-jurisdiction list and the stored sources (for print requests)
 };
 
 export const norm = (t: string) => t.toLowerCase().replace(/\s+/g, " ").trim();

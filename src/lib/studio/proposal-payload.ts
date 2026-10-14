@@ -5,8 +5,12 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { sha256 } from "./hash";
 import { voiceHash } from "./proposals";
 import { unitClaimIds, unitText, type Unit } from "./schema";
+import type { LedgerClaim } from "./checks";
+import type { ImagesPayload } from "./images-payload";
+import { imagesForProposal, type ImageStore } from "./image-pilot";
 
-export async function buildProposalPayload(db: SupabaseClient, proposalId: string) {
+/** `store` is needed only for a version that carries images (signed, short-lived addresses for the preview; they are not part of any hash). Without it such a proposal is refused, never shown without its pictures. */
+export async function buildProposalPayload(db: SupabaseClient, proposalId: string, store?: ImageStore) {
   const { data: p } = await db.from("proposals").select("*").eq("id", proposalId).single();
   const { data: art } = await db.from("articles").select("*").eq("id", p.article_id).single();
   const { data: ver } = await db.from("article_versions").select("*").eq("id", p.article_version_id).single();
@@ -24,7 +28,14 @@ export async function buildProposalPayload(db: SupabaseClient, proposalId: strin
   const items: { kind: string; label: string; hash: string }[] = [{ kind: "article", label: `Article: ${art.title}`, hash: articleHash }];
   if (p.voice_snapshot) items.push({ kind: "voice_reference", label: "Voice reference (provisionally approved by Leo)", hash: voiceHash(JSON.stringify(p.voice_snapshot))! });
   const { data: brief } = await db.from("briefs").select("outline").eq("id", art.brief_id).single();
+  let imagesBlock: ImagesPayload | null = null;
+  if (ver.body.images?.length) {
+    if (!store) throw new Error("this version carries images; pass the image store so the proposal can show them (refusing to build a proposal without its pictures)");
+    const ledger = new Map<string, LedgerClaim>((claims ?? []).map((c: any) => [c.claim_key, { id: c.claim_key, text: c.locked_text ?? c.claim_text, risk: c.risk_level, support: c.support, sourceId: c.source_id, sourceRecheckBy: null, jurisdiction: c.jurisdiction ?? "", claimType: c.claim_type, lockedText: c.locked_text } as unknown as LedgerClaim]));
+    imagesBlock = await imagesForProposal(db, ver, ledger, store);
+  }
   return {
+    ...(imagesBlock ?? {}),
     proposal_id: p.id, created_at: p.created_at, requires_secondary: p.requires_secondary,
     article: { id: art.id, title: art.title, slug: art.slug, state: art.state, kind: "CREATE (new page): no live text to compare" },
     items, html,

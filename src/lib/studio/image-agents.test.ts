@@ -76,7 +76,7 @@ describe("the planner's output: envelope and card checks together", () => {
 describe("V1's image text check", () => {
   const p = plan([base(), legal]);
   const check = (c: string, over: Record<string, unknown> = {}) => ({ card_id: c, overlay_matches_locked_text: true, prompt_ok: true, note: "Matches the locked block.", ...over });
-  const v1 = (cardChecks: object[], decision = "PASS", result: Record<string, unknown> = {}) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "V1", agent_prompt_version: "1.9.0", model_version: "claude-code/test", input_version_ids: ["th"], decision, findings: [], evidence_ids: [], required_actions: [], output_version_id: "v", timestamp: "2026-10-13T12:00:00Z", result: { plan_text_hash: "th", card_checks: cardChecks, cards: [], leo_reference_needed: [], ...result } });
+  const v1 = (cardChecks: object[], decision = "PASS", result: Record<string, unknown> = {}) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "V1", agent_prompt_version: "1.10.0", model_version: "claude-code/test", input_version_ids: ["th"], decision, findings: [], evidence_ids: [], required_actions: [], output_version_id: "v", timestamp: "2026-10-13T12:00:00Z", result: { plan_text_hash: "th", card_checks: cardChecks, cards: [], leo_reference_needed: [], ...result } });
   it("has its own schema key, picked from card_checks", () => {
     expect(teamSchemaKey("V1", v1([]))).toBe("V1_IMAGE");
     expect(v1ImageCheckOutput.safeParse(v1([check("img:1")])).success).toBe(true);

@@ -100,6 +100,8 @@ What happened to the property: condition, what was done, outcome.
 
 **Inputs needed from Leo:** whether the working title option 1 stays ("Selling a Packed or Hoarded House in the SF Bay Area: What to Disclose and Whether to Clean Out First", slug `packed-or-hoarded-house-bay-area-what-to-disclose-clean-out-first`); the current Search Console window for both pages (stored data, no new fetch); Juan's decision on whether the two pages are meant to coexist or one should absorb the other.
 
+**Status (Leo, 2026-10-14):** the cannibalization check for `/sell-bay-area-house-full-of-belongings/` is recorded as **NO DATA** until Leo reports the Search Console Pages data (last 3 months). It is not "no overlap".
+
 **Pass / fail:** the brief names its Bay Area angle and the difference in intent from the existing page; the overlap report runs and names the shared queries; **no** service-area claim, no city list, no "we buy in" wording (the brand-rule check is clean on the brief's sample text); open items list what Juan still has to confirm. **Fail** if the cannibalization check does not run, or the brief states or implies coverage.
 
 **Token estimate:** about 120k to 180k (Agent 1 about 55k, Agent 3 about 60k to 90k, the overlap check is code).

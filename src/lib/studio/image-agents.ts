@@ -56,7 +56,7 @@ export const v1ImageCheckResult = z.strictObject({
   cards: z.array(z.strictObject({ issue_key: z.string(), severity: z.enum(["required", "optional"]), note: z.string() })).max(20).default([]),
   leo_reference_needed: z.array(z.strictObject({ claim: z.string().nullable(), section: z.string().nullable(), why: z.string().trim().min(10).max(600) })).max(5).default([]),
 });
-export const v1ImageCheckOutput = z.strictObject({ ...envelope, decision: z.enum(["PASS", "REVISION", "BLOCKED"]), result: v1ImageCheckResult });
+export const v1ImageCheckOutput = z.strictObject({ ...envelope, prompt_receipt: z.string().optional(), decision: z.enum(["PASS", "REVISION", "BLOCKED"]), result: v1ImageCheckResult });
 
 /**
  * The code refuses a V1 PASS when: a card has no check; an overlay line or prompt was found wrong; or a card with a legal overlay line has no quote comparison,

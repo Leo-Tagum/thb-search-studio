@@ -7,6 +7,9 @@ import type { StudioValidationCtx } from "./agents";
 import { isMustFixRuling, needsRuling, rulingGuard } from "./hedge-rulings";
 import { applyDeterministic as teamDet, newTeamSection, recordReview, recordVersion as teamRecord, forLeo as teamForLeo, type Outcome as TeamOutcome, type TeamSectionState } from "../team/loop";
 import { buildTeamPacket, teamSchema, teamSemanticChecks } from "../team/bridge";
+import { receiptInFile } from "../agents/prompt-receipt";
+import { readFileSync as readPrompt } from "node:fs";
+const V1_RECEIPT = receiptInFile(readPrompt(".claude/agents/thb-v1-fact-privacy.md", "utf8"))!;
 import { poisoned } from "../../../scripts/fixtures/adversarial-units";
 
 // Phase 3d, V1 severity calibration (prompt 1.2.0). Leo's ten blind verdicts are the fixtures: A must-fix, B should-fix, C no finding.
@@ -164,7 +167,7 @@ describe("the team loop applies the same severities", () => {
 });
 
 describe("the bridge accepts the new rulings and the new prompt version", () => {
-  const res = (hedge_rulings: object[]) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "V1 Fact and Privacy", agent_prompt_version: "1.9.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-12T12:00:00Z", result: { unit_key: "s2", version_hash: "h1", claim_checks: [{ claim_id: "clm:1", verdict: "supported_as_written", note: "ok" }], privacy_ok: true, legal_qualification_ok: true, cards: [], hedge_rulings } });
+  const res = (hedge_rulings: object[]) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "V1 Fact and Privacy", agent_prompt_version: "1.10.0", prompt_receipt: V1_RECEIPT, model_version: "claude-code/test", input_version_ids: ["h1"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-12T12:00:00Z", result: { unit_key: "s2", version_hash: "h1", claim_checks: [{ claim_id: "clm:1", verdict: "supported_as_written", note: "ok" }], privacy_ok: true, legal_qualification_ok: true, cards: [], hedge_rulings } });
   const run = async (out: object, pend: { key: string; sentence: string }[]) => {
     const p = teamSchema("V1").safeParse(out);
     if (!p.success) return ["SCHEMA " + p.error.issues.map((i: { message: string }) => i.message).join("; ")];
