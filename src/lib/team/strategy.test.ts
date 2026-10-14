@@ -128,9 +128,9 @@ describe("strategy files", () => {
     expect(t).toMatch(/EVIDENCE_REQUEST/);
     expect(t).toMatch(/UNTRUSTED_DATA/);
   });
-  it("S2 carries the Agent 3 Prohibited action, 1.5.0, Read/Write only, and handles ROOT_CAUSE_NOTE without touching the approved identity", () => {
+  it("S2 carries the Agent 3 Prohibited action, 1.6.0, Read/Write only, and handles ROOT_CAUSE_NOTE without touching the approved identity", () => {
     const t = read("thb-s2-architect");
-    expect(t).toMatch(/prompt_version: 1\.5\.0/);
+    expect(t).toMatch(/prompt_version: 1\.6\.0/);
     expect(t).toContain("**Prohibited action: Inventing facts to fill outline gaps.**");
     expect(toolsOf(t)).toBe("tools: Read, Write");
     expect(t).toMatch(/ROOT_CAUSE_NOTE/);

@@ -63,9 +63,13 @@ export async function syncVoiceApproval(db: SupabaseClient, records: RoomRecord[
 }
 
 /** What the voice page shows: a few example lines (the same filter the Approval Room used) and the hash the decision will be recorded against. Read-only. */
-export function voicePagePayload(factValue: string): { id: string; hash: string; excerpts: { text: string }[]; question: string } | null {
+export type VoicePagePayload = { id: string; hash: string; excerpts: { text: string }[]; question: string; imitate: string[]; avoid: string[]; banned_phrases: { dont: string; write_like_juan: string }[]; all_excerpts: string[] };
+export function voicePagePayload(factValue: string): VoicePagePayload | null {
   const hash = voiceHash(factValue); if (!hash) return null;
   const v = JSON.parse(factValue);
   const ex = (v.excerpts ?? []).filter((x: any) => (x.use === "primary" || x.use === "warmth") && x.text.length <= 170 && !/(usually|often|most)/i.test(x.text)).slice(0, 4).map((x: any) => ({ text: x.text }));
-  return { id: voiceItemId(hash), hash, excerpts: ex, question: "These example lines guide how future articles are written in your voice. Confirm once and we won't ask again." };
+  // everything the hash covers is shown (Leo, 2026-10-14): the example lines, the "imitate" and "avoid" lists, the rewrite pairs and every excerpt
+  const strs = (a: any): string[] => (Array.isArray(a) ? a.filter((x) => typeof x === "string") : []);
+  const pairs = (Array.isArray(v.banned_phrases) ? v.banned_phrases : []).filter((b: any) => typeof b?.dont === "string" && typeof b?.write_like_juan === "string").map((b: any) => ({ dont: b.dont, write_like_juan: b.write_like_juan }));
+  return { id: voiceItemId(hash), hash, excerpts: ex, imitate: strs(v.imitate), avoid: strs(v.avoid), banned_phrases: pairs, all_excerpts: (v.excerpts ?? []).map((x: any) => String(x.text)), question: "These example lines guide how future articles are written in your voice. Confirm once and we won't ask again." };
 }

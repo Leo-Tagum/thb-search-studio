@@ -26,6 +26,11 @@ button.primary{background:var(--accent);color:var(--accent-ink);border-color:var
 button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 button[disabled]{opacity:.5;cursor:not-allowed}
 .fine{font-size:13px;color:var(--ink-2);margin:0}
+h2{font-size:17px;line-height:1.3;margin:0 0 8px}
+ul.list{margin:0;padding-left:20px}ul.list li{margin:0 0 6px}
+details summary{cursor:pointer;font-weight:600}
+details summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.pair{border-top:1px solid var(--line);padding-top:8px;margin-top:8px}
 </style>
 <div class="wrap" id="app"></div>
 <script type="application/json" id="payload">__PAYLOAD__</script>
@@ -41,6 +46,15 @@ button[disabled]{opacity:.5;cursor:not-allowed}
   card.appendChild(el('p',{text:P.question}));
   (P.excerpts||[]).forEach(function(x){ card.appendChild(el('blockquote',{text:x.text})); });
   app.appendChild(card);
+  function listCard(title, items){ var c = el('div',{class:'card'}); c.appendChild(el('h2',{text:title})); var ul = el('ul',{class:'list'}); items.forEach(function(t){ ul.appendChild(el('li',{text:t})); }); c.appendChild(ul); return c; }
+  if ((P.imitate||[]).length) app.appendChild(listCard('How the writing should sound', P.imitate));
+  if ((P.avoid||[]).length) app.appendChild(listCard('What the writing must avoid', P.avoid));
+  if ((P.banned_phrases||[]).length || (P.all_excerpts||[]).length) {
+    var more = el('details',{class:'card'}); more.appendChild(el('summary',{text:'Everything else this answer covers (rewrite examples and all '+(P.all_excerpts||[]).length+' example lines)'}));
+    (P.banned_phrases||[]).forEach(function(b){ var d = el('div',{class:'pair'}); d.appendChild(el('p',{class:'fine',text:'Not like this: '+b.dont})); d.appendChild(el('p',{text:'Like this: '+b.write_like_juan})); more.appendChild(d); });
+    if ((P.all_excerpts||[]).length) { var d2 = el('div',{class:'pair'}); d2.appendChild(el('p',{class:'fine',text:'All example lines'})); var ul2 = el('ul',{class:'list'}); P.all_excerpts.forEach(function(t){ ul2.appendChild(el('li',{text:t})); }); d2.appendChild(ul2); more.appendChild(d2); }
+    app.appendChild(more);
+  }
   app.appendChild(el('p',{class:'ask',text:'Do these lines sound like you?'}));
   var note = el('textarea',{id:'note','aria-label':'Your note',placeholder:'Optional: what should sound different?'});
   var status = el('p',{class:'fine',id:'status',text:'Checking your sign-in…'});

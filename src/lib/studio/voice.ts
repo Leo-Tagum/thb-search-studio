@@ -32,6 +32,15 @@ export const CANDIDATES: { source: VoiceSourceKey; text: string }[] = [
   { source: "belongings", text: "A house full of belongings is not always a junk problem. Sometimes it is a family history problem." },
   { source: "belongings", text: "Many families do not need to be judged. They need time, clarity, and a practical way to move forward." },
   { source: "belongings", text: "For adult children, heirs, or family members, deciding what to keep can be emotional." },
+  // added 2026-10-14 (Leo): the Content March phrasing, again from the same existing posts only (verbatim; style only, no facts count)
+  { source: "older_home", text: "The real question is usually this: are the repairs worth doing before I sell, or am I about to spend money that won't come back?" },
+  { source: "older_home", text: "The right approach depends on the home's condition, the repairs needed, your timeline, your budget, and your goals." },
+  { source: "older_home", text: "A trust, will, probate case, or multiple heirs can each change who signs and how long the process takes." },
+  { source: "older_home", text: "A probate attorney or title company can tell you which applies." },
+  { source: "older_home", text: "Confirm what applies to you with a real estate attorney or your escrow or title company." },
+  { source: "juan_page", text: "It is a fair concern because selling a house is too important to leave to guesswork, especially when the property needs repairs, the timeline is tight, or the seller is already under stress." },
+  { source: "juan_page", text: "Any buyer worth taking seriously should be comfortable with you reviewing the paperwork, comparing alternatives, or having an attorney or family member look at the agreement before you sign." },
+  { source: "belongings", text: "Family disagreement is another reason these situations get stuck." },
 ];
 
 const ENTITIES: Record<string, string> = { "&amp;": "&", "&nbsp;": " ", "&#8217;": "'", "&#8216;": "'", "&#8220;": '"', "&#8221;": '"', "&#8211;": "-", "&#8212;": "-", "&quot;": '"', "&#039;": "'", "&lt;": "<", "&gt;": ">" };
@@ -80,6 +89,11 @@ export const IMITATE = [
   "Be honest about options, including ones that are not Twin Home Buyer. Say what each fits and what it costs the seller in time, certainty or control.",
   "Treat the family and the person living in the house with respect. No judgment, no pity, no sales energy.",
   "Close a section on what the seller can do next or what to confirm, not on a pitch.",
+  "Educate first, sell second. Explain the real problem before any solution, and give the seller something useful even if they never call us.",
+  "Open on the seller's situation so the seller feels understood: the practical truth first, plain and direct. No sales-pitch opening and no soft opening: no 'contact us', no 'we buy', no cash-offer line in the first sentences.",
+  "Plain, strong, useful: say the hard part directly, then say what to do about it. No filler, no fake motivation, no generic seller promises.",
+  "On anything legal, tax, title or code related, say what you do not know and tell the seller who to confirm it with: an attorney, a title company, a CPA or a tax professional ('confirm this with a real estate attorney or your title company'). This is phrasing only; the facts come from the claim ledger.",
+  "Local realities are phrasing, not facts: name the kinds of problems Bay Area sellers run into (older homes, expensive repairs, tenants, probate, liens, title issues, family disagreement, costly delays) as things to check or ask about, never as a statistic or a claim about how common or costly they are. Any specific local fact must be a claim in the ledger; deal details come only from ledger facts and approved story cards (SR-18 to SR-20).",
 ];
 export const AVOID = [
   "Any number, year, price, timeline, count or percentage that is not in the claim ledger (the excerpts contain none on purpose).",

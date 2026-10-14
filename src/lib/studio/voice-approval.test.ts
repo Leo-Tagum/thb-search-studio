@@ -78,6 +78,14 @@ describe("the page and the article proposal", () => {
     expect(p.hash).toBe(HASH); expect(p.id).toBe(voiceItemId(HASH));
     expect(voicePagePayload("not json")).toBeNull();
   });
+  it("the page also carries everything else the hash covers: the imitate and avoid lists, the rewrite pairs and every excerpt", () => {
+    const ref = JSON.stringify({ excerpts: [{ use: "primary", text: "Age alone isn't the problem." }, { use: "company", text: "We want homeowners to feel informed." }], imitate: ["Educate first, sell second."], avoid: ["Generic filler."], banned_phrases: [{ dont: "We make selling easy.", write_like_juan: "We look at the actual situation." }, { dont: 5 }] });
+    const p = voicePagePayload(ref)!;
+    expect(p.imitate).toEqual(["Educate first, sell second."]); expect(p.avoid).toEqual(["Generic filler."]);
+    expect(p.banned_phrases).toEqual([{ dont: "We make selling easy.", write_like_juan: "We look at the actual situation." }]);
+    expect(p.all_excerpts).toEqual(["Age alone isn't the problem.", "We want homeowners to feel informed."]);
+    expect(voicePagePayload(JSON.stringify({ excerpts: [] }))!.imitate).toEqual([]);          // missing lists are empty, never an error
+  });
   it("the article Approval Room no longer has the voice question, and an article proposal no longer carries a voice item", () => {
     const room = readFileSync("src/approval-room/template.html", "utf8");
     expect(room).not.toContain("does this sound like you");

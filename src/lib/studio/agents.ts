@@ -13,7 +13,7 @@ export const V1_PROMPT_VERSION = "1.11.0";   // 1.1.0 declines wording; 1.2.0 se
 export const isStudioAgent = (k: string): k is StudioAgentKey => (STUDIO_AGENT_KEYS as readonly string[]).includes(k);
 
 export const STUDIO_AGENT_META: Record<StudioAgentKey, { n: 4 | 5 | 6 | 7; name: string; promptVersion: string; decisions: readonly string[] }> = {
-  "thb-04-section-writer": { n: 4, name: "Section Writer", promptVersion: "1.6.0", decisions: ["PASS", "BLOCKED"] },
+  "thb-04-section-writer": { n: 4, name: "Section Writer", promptVersion: "1.7.0", decisions: ["PASS", "BLOCKED"] },
   "thb-05-fact-privacy-auditor": { n: 5, name: "Fact & Privacy Auditor", promptVersion: "1.5.0", decisions: ["PASS", "REVISION", "BLOCKED"] },
   "thb-06-seo-aeo-geo-auditor": { n: 6, name: "SEO/AEO/GEO Auditor", promptVersion: "1.6.0", decisions: ["PASS", "REVISION"] },
   "thb-07-editorial-critic": { n: 7, name: "Editorial Critic", promptVersion: "1.6.0", decisions: ["PASS", "REVISION"] },

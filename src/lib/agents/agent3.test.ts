@@ -22,7 +22,7 @@ const brief = (over: Record<string, unknown> = {}) => ({
   ...over,
 });
 const out = (b: Record<string, unknown>) => ({
-  article_id: "", opportunity_id: "o1", agent_name: "Content Architect", agent_prompt_version: "1.5.0", model_version: "claude-code/test",
+  article_id: "", opportunity_id: "o1", agent_name: "Content Architect", agent_prompt_version: "1.6.0", model_version: "claude-code/test",
   input_version_ids: ["h1"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-10T12:00:00Z",
   result: { brief: b },
 });
@@ -45,6 +45,10 @@ describe("Agent 3: editorial standards", () => {
   it("requires at least one real-world warning and at least three honest options", () => {
     expect(check(brief({ real_world_warnings: [] })).length).toBeGreaterThan(0);
     expect(check(brief({ honest_options: brief().honest_options.slice(0, 2) })).length).toBeGreaterThan(0);
+  });
+  it("a real-world warning must name what can delay, block or ruin the sale (Content March)", () => {
+    expect(check(brief({ real_world_warnings: [{ warning: "Selling a house is a big decision for a family", claim_ids: [] }] })).join(" ")).toMatch(/does not name what can delay, block or ruin the sale/);
+    for (const w of ["A lien can surface late and hold up escrow", "The wrong person signing can block the sale", "Tenants who will not leave can derail a closing"]) expect(check(brief({ real_world_warnings: [{ warning: w, claim_ids: [] }] })).join(" ")).not.toMatch(/does not name/);
   });
   it("a row that says basis=claim must cite a claim", () => {
     const bad = rows.map((r) => (r.row === "money" ? { ...r, basis: "claim" } : r));

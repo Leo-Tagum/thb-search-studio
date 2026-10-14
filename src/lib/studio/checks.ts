@@ -8,6 +8,7 @@ import { sha256 } from "./hash";
 import type { ClaimVerification } from "./legal-claims";
 import { deciderFindings, legalFlagReason, legalKindsOf, legalRecordFindings, localNamesIn, LEGAL_FLAG_TERMS, type LegalFlagKind } from "./legal-flags";
 import { jurisdictionAllowed, jurisdictionKey } from "./jurisdictions";
+import { PITCH_OPENING, PRO_REQUIRED, SALE_RISK } from "./content-march";
 import { unitClaimIds, unitStrings, unitText, type Unit } from "./schema";
 
 export type LedgerClaim = {
@@ -118,7 +119,6 @@ const OPTION_RES: Record<string, RegExp> = {
   get_professional_help: /\b(?:attorney|title company|probate|cpa|insurance professional|real estate agent|licensed professional)\b/i,
   sell_directly: /\b(?:sell(?:ing)?\s+(?:it\s+|the (?:house|home) )?(?:directly|as-is|as is)|direct (?:sale|buyer)|cash buyer|investor)\b/i,
 };
-const PRO_TERMS = /\b(attorney|title company|cpa|tax professional|insurance professional|city|county|code enforcement|building department)\b/i;
 
 export type ArticleCtx = Pick<CheckCtx, "briefH2" | "keyword"> & { title: string; requiredUnitKeys: string[] };
 
@@ -140,9 +140,17 @@ export function checkArticle(units: Unit[], ctx: ArticleCtx): Finding[] {
     if (hit.length < 3) f.push({ code: "OPTIONS_TOO_FEW", severity: "REVISION", detail: `the options section covers ${hit.length} of keep/list/fix/professional help/sell directly; it needs at least 3 where they apply` });
     if (!hit.some((k) => k !== "sell_directly")) f.push({ code: "OPTIONS_ONLY_THB", severity: "REVISION", detail: "options must include choices other than selling directly" });
   }
-  if (!roleText("real_world_warning")) f.push({ code: "NO_REAL_WORLD_WARNING", severity: "REVISION", detail: "at least one real-world warning section (role: real_world_warning) is required" });
+  const warn = roleText("real_world_warning");
+  if (!warn) f.push({ code: "NO_REAL_WORLD_WARNING", severity: "REVISION", detail: "at least one real-world warning section (role: real_world_warning) is required" });
+  else if (!SALE_RISK.test(warn)) f.push({ code: "WARNING_NO_RISK", severity: "REVISION", detail: "the real-world warning must name what can delay, block or ruin the sale (for example a lien, a signer who is not authorized, an unpermitted room, a tenant)" });
   const pro = roleText("professional_confirmation");
-  if (!pro || !PRO_TERMS.test(pro)) f.push({ code: "NO_PROFESSIONAL_CONFIRMATION", severity: "REVISION", detail: "a professional-confirmation section naming who to confirm with is required" });
+  if (!pro || !PRO_REQUIRED.test(pro)) f.push({ code: "NO_PROFESSIONAL_CONFIRMATION", severity: "REVISION", detail: "the professional-confirmation section must name an attorney, a title company, a CPA or a tax professional (a city or county alone does not count)" });
+  // the opening starts from the seller's problem, not a pitch (voice SOP: "Do not open with a sales pitch")
+  if (first?.roles.includes("opening")) {
+    const opening = unitStrings(first).slice(1, 3).map((x) => parseInline(x).plain).join(" ");
+    const hit = PITCH_OPENING.exec(opening);
+    if (hit) f.push({ code: "PITCH_OPENING", severity: "REVISION", detail: `the opening reads like a sales pitch ("${hit[0]}"); open from the seller's situation and give the practical truth first` });
+  }
 
   // keyword: natural, in the title, the capsule and one question H2
   const kw = ctx.keyword.toLowerCase().split(/\s+/).filter(Boolean);

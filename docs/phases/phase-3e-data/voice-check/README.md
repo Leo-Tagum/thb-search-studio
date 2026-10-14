@@ -1,6 +1,6 @@
 # Voice Check page for Juan (prepared, NOT published)
 
-Built locally from the real voice reference (read-only from the database): `voice-check-final.html` (7 KB, one page, payload hash `86f828bd…1fec`). Nothing has been published, shared or sent. Juan has not been contacted.
+Built locally from the real voice reference (read-only from the database): `voice-check-final.html` (7 KB, one page, payload hash `96c68595…fe85`, updated 2026-10-14: 26 example lines, the Content March imitate lines, and the page now also shows the imitate and avoid lists, the rewrite pairs and all example lines; local preview `voice-check-v2-desktop.png`). Nothing has been published, shared or sent. Juan has not been contacted.
 
 **What it is.** A one-time page for Juan only. He reads the excerpts and the imitate/avoid list and answers: approve, or request changes with a note. It is not an article approval, and Cherry cannot confirm the voice (SR-8, SR-20).
 

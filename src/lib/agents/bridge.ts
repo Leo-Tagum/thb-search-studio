@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- agent outputs and DB JSON columns are validated by zod at the boundary */
 // Agent bridge: task packets out, validated submissions in. Pure logic with injected storage (see supabase-deps.ts).
 // The orchestrator, not the agent, decides state. An agent output can never set an approval or a state.
+import { SALE_RISK } from "../studio/content-march";
 import { randomBytes } from "node:crypto";
 import { legalLibraryErrors, legalStaticErrors } from "./legal-checks";
 import { jurisdictionErrors, printRequestErrors } from "../studio/jurisdictions";
@@ -236,6 +237,8 @@ export function semanticChecks(agent: AgentKey, out: Record<string, any>, ctx: V
       const target = `${out.result.brief.working_title} ${out.result.brief.answer_first} ${out.result.brief.outline.map((o: any) => o.h2).join(" ")}`.toLowerCase();
       for (const ph of pk.forbidden_target_phrases) if (target.includes(ph.toLowerCase())) errs.push(`the title, answer capsule or H2s target the forbidden phrase "${ph}" (this guide is informational only)`);
     }
+    // Content March (voice SOP, Leo 2026-10-14): a real-world warning names what can delay, block or ruin the sale.
+    for (const w of out.result.brief.real_world_warnings) if (!SALE_RISK.test(w.warning)) errs.push(`real-world warning "${String(w.warning).slice(0, 60)}" does not name what can delay, block or ruin the sale`);
     const extra = [...out.result.brief.seller_situation_map, ...out.result.brief.honest_options, ...out.result.brief.real_world_warnings];
     for (const e of extra) for (const id of e.claim_ids) if (!claims.has(id)) errs.push(`unknown claim ${id} cited in the situation map/options/warnings`);
     for (const sec of out.result.brief.outline) {

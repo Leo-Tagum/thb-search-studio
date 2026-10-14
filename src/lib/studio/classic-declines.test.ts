@@ -71,10 +71,10 @@ describe("classic loop: optional findings and declines (report 6.1 in classic)",
 describe("Agent 4 declines: validated against the packet", () => {
   const unit = { kind: "section", key: "s2", h2: "What now?", blocks: [{ t: "p", text: "Text." }], claim_ids: [], roles: [] };
   const ctx = (o: Partial<StudioValidationCtx> = {}): StudioValidationCtx => ({
-    packet: { agent_key: "thb-04-section-writer", prompt_version: "1.6.0", unit_key: "s2", unit_hash: "h1", allowed_claim_ids: [], opportunity_id: "o1", article_id: "a1" },
+    packet: { agent_key: "thb-04-section-writer", prompt_version: "1.7.0", unit_key: "s2", unit_hash: "h1", allowed_claim_ids: [], opportunity_id: "o1", article_id: "a1" },
     currentUnit: null, currentHash: null, check: {} as never, voiceUsable: true, requiredIssuesOpen: ["fact:must"], declinableKeys: ["seo:anchor"], ...o,
   });
-  const out = (declines: unknown) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "x", agent_prompt_version: "1.6.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-12T12:00:00Z", result: { unit_key: "s2", unit, addresses: ["fact:must"], change_note: "fixed", declines } });
+  const out = (declines: unknown) => ({ article_id: "a1", opportunity_id: "o1", agent_name: "x", agent_prompt_version: "1.7.0", model_version: "claude-code/test", input_version_ids: ["h1"], decision: "PASS", findings: [], evidence_ids: [], required_actions: [], output_version_id: "v1", timestamp: "2026-10-12T12:00:00Z", result: { unit_key: "s2", unit, addresses: ["fact:must"], change_note: "fixed", declines } });
   const check = (declines: unknown) => { const p = studioOutputSchemas["thb-04-section-writer"].safeParse(out(declines)); return p.success ? studioSemanticChecks("thb-04-section-writer", p.data, ctx()) : p.error.issues.map((i) => i.message); };
   it("accepts a decline of an open optional key, and no declines field at all", () => {
     expect(check([{ key: "seo:anchor", reason: "No local fact exists in the ledger." }])).toEqual([]);
