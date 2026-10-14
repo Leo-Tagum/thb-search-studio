@@ -100,7 +100,7 @@ What happened to the property: condition, what was done, outcome.
 
 **Inputs needed from Leo:** whether the working title option 1 stays ("Selling a Packed or Hoarded House in the SF Bay Area: What to Disclose and Whether to Clean Out First", slug `packed-or-hoarded-house-bay-area-what-to-disclose-clean-out-first`); the current Search Console window for both pages (stored data, no new fetch); Juan's decision on whether the two pages are meant to coexist or one should absorb the other.
 
-**Status (Leo, 2026-10-14):** the cannibalization check for `/sell-bay-area-house-full-of-belongings/` is recorded as **NO DATA** until Leo reports the Search Console Pages data (last 3 months). It is not "no overlap".
+**Status (Leo, 2026-10-14):** the main Search Console import (page x query, 2026-07-10..2026-10-07) has no rows for `/sell-bay-area-house-full-of-belongings/` (Google leaves rare queries out), so the cannibalization check reads the page total from the blog-audit import and reports "no query data, page total X (window)", never "no overlap". Stored page total: 79 impressions, 1 click, average position 7.4 (2025-06-15..2026-10-07). Live read-only page query, last 90 days (2026-07-14..2026-10-11): 63 impressions, 1 click, CTR 1.6%, average position 7.3. Which queries the post ranks for stays unknown.
 
 **Pass / fail:** the brief names its Bay Area angle and the difference in intent from the existing page; the overlap report runs and names the shared queries; **no** service-area claim, no city list, no "we buy in" wording (the brand-rule check is clean on the brief's sample text); open items list what Juan still has to confirm. **Fail** if the cannibalization check does not run, or the brief states or implies coverage.
 

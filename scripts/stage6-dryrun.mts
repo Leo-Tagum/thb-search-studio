@@ -9,6 +9,7 @@
 //   Part C (Bay Area):   c-prepare <dir>   -> Agent 1 packet (c1-packet.json)            [dispatch thb-01-seo-strategist -> c1-out.json]
 //                        c-brief   <dir>   -> checks it; writes the Agent 3 packet (c3-packet.json)  [dispatch thb-03-content-architect -> c3-out.json]
 //                        c-verify  <dir>   -> checks it and runs the cannibalization check on stored Search Console rows
+import { noQueryDataNote } from "../src/lib/studio/cannibalization-note";
 import { createClient } from "@supabase/supabase-js";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -201,8 +202,13 @@ if (cmd === "a-prepare") {
   const known = (pages ?? []).map((p: any) => ({ id: p.id, url: p.canonical_url, title: p.title, wp_type: p.wp_type, protection: p.protection_status }));
   const existing = rows.filter((r) => /sell-bay-area-house-full-of-belongings/.test(r.page_url));
   const top = [...existing].sort((a, c) => c.impressions - a.impressions).slice(0, 8);
-  // Leo, 2026-10-14: until Leo reports the Search Console Pages data (last 3 months) for the existing post, the check is recorded as "no data", never as "no overlap".
-  if (!existing.length) say("\ncannibalization check: NO DATA. The stored Search Console rows have none for /sell-bay-area-house-full-of-belongings/; Leo is checking the Pages filter (last 3 months). This is not a finding of 'no overlap'.");
+  // Leo, 2026-10-14: with no query rows in the main import, read the page total from the blog-audit import and say "no query data, page total X (window)"; never "no overlap".
+  if (!existing.length) {
+    const { data: aimp } = await db.from("audit_gsc_imports").select("id,start_date,end_date").order("fetched_at", { ascending: false }).limit(1).maybeSingle();
+    const { data: tot } = aimp ? await db.from("audit_gsc_rows").select("page_url,impressions,clicks,position").eq("import_id", aimp.id).is("query", null).ilike("page_url", "%sell-bay-area-house-full-of-belongings%").limit(1) : { data: null };
+    const t = tot?.[0];
+    say(`\ncannibalization check: ${noQueryDataNote("/sell-bay-area-house-full-of-belongings/", t && aimp ? { impressions: t.impressions, clicks: t.clicks, position: Number(t.position), start: aimp.start_date, end: aimp.end_date } : null)}`);
+  }
   say(`\ncannibalization check (stored Search Console rows ${imp!.start_date}..${imp!.end_date}, ${rows.length} rows): the existing post /sell-bay-area-house-full-of-belongings/ has ${existing.length} query rows; top: ${top.map((r) => `"${r.query}" (${r.impressions})`).join("; ") || "none"}`);
   const words = (s: string) => new Set(s.toLowerCase().replace(/[^a-z0-9 ]+/g, " ").split(/\s+/).filter((w) => w.length > 3 && !["house", "that", "with", "your", "what", "when", "sell", "selling"].includes(w)));
   const guide = [b?.primary_keyword, b?.h1, ...(out.result?.brief?.outline ?? []).map((s: any) => s.h2), ...(o.packet.queries ?? []).map((q: any) => q.query)].filter(Boolean).join(" ");
