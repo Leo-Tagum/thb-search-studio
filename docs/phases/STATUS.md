@@ -19,3 +19,5 @@ Update this table at the end of every phase. Only one phase is IN PROGRESS at a 
 Status values: `NOT STARTED` · `IN PROGRESS` · `DONE`. A phase whose handoff says `PARTIAL` or `BLOCKED` stays `IN PROGRESS` until Leo accepts it. Note the reason in the Date column (for example: `2026-10-14 (PARTIAL, accepted by Leo)`).
 
 Design: [../superpowers/specs/2026-10-10-thb-search-studio-design.md](../superpowers/specs/2026-10-10-thb-search-studio-design.md)
+
+/sell-bay-area-house-full-of-belongings/ 90-day GSC (2026-07-14..10-11): 63 impr, 1 click, pos 7.3.
