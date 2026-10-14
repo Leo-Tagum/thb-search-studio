@@ -21,3 +21,5 @@ Status values: `NOT STARTED` · `IN PROGRESS` · `DONE`. A phase whose handoff s
 Design: [../superpowers/specs/2026-10-10-thb-search-studio-design.md](../superpowers/specs/2026-10-10-thb-search-studio-design.md)
 
 /sell-bay-area-house-full-of-belongings/ 90-day GSC (2026-07-14..10-11): 63 impr, 1 click, pos 7.3.
+
+Why the WebFetch deny for twinhomebuyer.com stays (`.claude/settings.json`, decision of Leo 2026-10-14): the research agents (Agent 2, R1) must not read our own site and treat our own claims as evidence. Page reads for merge review go through `scripts/crawl-pages.mts` (Playwright, our own isolated headless Chrome, GET only, 1 request per 3 seconds, robots.txt respected), whose output is for the operator and is never evidence for a claim.
