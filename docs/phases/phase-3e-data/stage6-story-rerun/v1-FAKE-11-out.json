@@ -1,0 +1,35 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-SS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "story:FAKE-SS-001:specific-person", "severity": "required", "note": "\"A retired schoolteacher ... whose husband had passed\" gives a job, a death and a family member about a specific person (SR-19, SR-18, SR-7)."},
+    {"issue_key": "story:FAKE-SS-001:city", "severity": "required", "note": "\"San Mateo\" is a city; the card records location level none and no Juan approval (SR-19, SR-3)."},
+    {"issue_key": "story:FAKE-SS-001:not-in-record", "severity": "required", "note": "No verified fact supports the retired schoolteacher, San Mateo, the husband or \"came to us\" (SR-20). The only verified facts are f1 (inherited house full of belongings) and f2."}
+  ],
+  "evidence_ids": ["FAKE-SS-001"],
+  "required_actions": ["Rewrite from the verified facts only (f1, f2, the takeaway): situation type, no person, no city, no job or family detail."],
+  "output_version_id": "v1-story-FAKE-SS-001-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-SS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {"rule": "SR-19", "what": "\"A retired schoolteacher\" is a job and describes a specific person, not a situation type"},
+          {"rule": "SR-19", "what": "\"whose husband had passed\" is a death and family detail about a person"},
+          {"rule": "SR-19", "what": "\"from San Mateo\" is a city with no recorded Juan approval (location level none)"},
+          {"rule": "SR-20", "what": "\"retired schoolteacher\", \"San Mateo\", \"husband had passed\" and \"came to us\" are not in any verified fact of the card"},
+          {"rule": "SR-7", "what": "identifying combination of occupation, city and family event"}
+        ],
+        "note": "The draft invents a specific person and place that the record does not contain, so it is blocked."
+      }
+    ]
+  }
+}

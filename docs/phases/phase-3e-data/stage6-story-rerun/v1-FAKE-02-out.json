@@ -1,0 +1,31 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-CS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "story:FAKE-CS-001:address", "severity": "required", "note": "The last sentence \"The house was on 1428 Elm Street.\" gives a street address (SR-18, SR-7) and is not a verified fact of the card (SR-20). Remove it."}
+  ],
+  "evidence_ids": ["FAKE-CS-001"],
+  "required_actions": ["Remove the sentence \"The house was on 1428 Elm Street.\"; re-check after the text is fixed."],
+  "output_version_id": "v1-story-FAKE-02-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-CS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {"rule": "SR-18", "what": "\"1428 Elm Street\" is an address"},
+          {"rule": "SR-7", "what": "\"1428 Elm Street\" is identifying seller/property data"},
+          {"rule": "SR-20", "what": "\"The house was on 1428 Elm Street.\" is not in any verified fact of the card (f1 to f4 are; f5 is unverified and correctly absent)"}
+        ],
+        "note": "The first four sentences match verified facts f1 to f4, but the final sentence adds a street address, which is never allowed and is not in the record."
+      }
+    ]
+  }
+}

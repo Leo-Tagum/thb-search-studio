@@ -1,0 +1,38 @@
+FAKE-01  expected PASS          code PASS          V1 PASS          AGREE 
+      clean case study (Green, all facts verified)
+FAKE-02  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      case study with a street address
+      V1 rules: SR-18 "1428 Elm Street" is an address | SR-7 "1428 Elm Street" is identifying seller/property d | SR-20 "The house was on 1428 Elm Street." is not in any 
+FAKE-05  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      case study with an unverified number (fact f5 has no record)
+      V1 rules: SR-18 "We spent about $85,000 on repairs." gives a rehab | SR-20 The same sentence uses a fact with verified: null,
+FAKE-06  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      case study with an invented detail (not in the record)
+      V1 rules: SR-20 "The kitchen was sunny, with original oak cabinets
+FAKE-08  expected HELD_FOR_JUAN code HELD_FOR_JUAN V1 HELD_FOR_JUAN AGREE 
+      clean case study, Yellow gate
+      V1 rules: SR-20 Gate color is yellow (set by Leo) with no approval
+FAKE-09  expected PASS          code PASS          V1 PASS          AGREE 
+      clean seller story (Green, situation only)
+FAKE-10  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      seller story with a promise ("we'll close in 7 days and pay cash")
+      V1 rules: SR-20 "We'll close in 7 days and pay cash." is not in an | SR-19 "We'll close in 7 days" is a promise/implication a | SR-3 "close in 7 days" is a closing-time claim, a PENDI
+FAKE-11  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      seller story with identifying detail (occupation, family detail, city)
+      V1 rules: SR-19 "A retired schoolteacher" is a job and describes a | SR-19 "whose husband had passed" is a death and family d | SR-19 "from San Mateo" is a city with no recorded Juan a | SR-20 "retired schoolteacher", "San Mateo", "husband had | SR-7 identifying combination of occupation, city and fa
+FAKE-18  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      a quotation with no written permission on file
+      V1 rules: SR-19 "It was a relief to have help." is a quotation, bu | SR-20 "It was a relief to have help." is not in the reco
+FAKE-21  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      city-level location without Juan's approval
+      V1 rules: SR-19 "in San Mateo": a city with no recorded Juan appro | SR-20 "in San Mateo" is a detail not in the record, adde | SR-3 "families in San Mateo" implies a service area bef
+FAKE-22  expected PASS          code PASS          V1 PASS          AGREE 
+      region-level location (the Bay Area)
+FAKE-23  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      a process description that is not Juan-approved wording
+      V1 rules: SR-19 "We clear out the house, handle the repairs and bu | SR-20 The same sentence is not supported by any verified
+FAKE-31  expected BLOCKED       code BLOCKED       V1 BLOCKED       AGREE 
+      case study giving a death as the reason for the sale (a specific about a person)
+      V1 rules: SR-18 "The owners sold the home after her husband died."
+
+V1 agrees with the expected verdict on 13 of 13; the code checks agree on 13 of 13; outputs refused by the production checks: 0; missing: 0

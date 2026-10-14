@@ -1,0 +1,25 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "prompt_receipt": "229ac8bae6e9",
+  "agent_prompt_version": "1.10.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-SS-001"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": ["FAKE-SS-001"],
+  "required_actions": [],
+  "output_version_id": "v1-story-FAKE-09-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-SS-001",
+        "verdict": "PASS",
+        "rules_broken": [],
+        "note": "Sentences 1 and 2 are word for word the verified facts f1 and f2, sentence 3 is the card's takeaway; no person, place, number, quote, promise, process or service-area claim, and the green gate was set by Leo."
+      }
+    ]
+  }
+}

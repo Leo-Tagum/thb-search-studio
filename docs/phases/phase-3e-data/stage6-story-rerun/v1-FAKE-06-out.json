@@ -1,0 +1,29 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-CS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "story:FAKE-CS-001:SR-20:invented-detail", "severity": "required", "note": "\"The kitchen was sunny, with original oak cabinets.\" is not in any verified fact of the card (f1 to f4); added for color."}
+  ],
+  "evidence_ids": ["FAKE-CS-001"],
+  "required_actions": ["Remove the sentence about the sunny kitchen and original oak cabinets; the text may use only verified facts f1 to f4."],
+  "output_version_id": "v1-story-FAKE-06-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-CS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {"rule": "SR-20", "what": "\"The kitchen was sunny, with original oak cabinets.\" is a detail not in the record (no verified fact), added for color"}
+        ],
+        "note": "The first four sentences match verified facts f1 to f4 and f5 ($85,000, unverified) is correctly absent, but the last sentence is invented detail."
+      }
+    ]
+  }
+}

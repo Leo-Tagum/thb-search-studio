@@ -1,0 +1,36 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-CS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {
+      "issue_key": "story:FAKE-CS-001:SR-18:person-specifics",
+      "severity": "required",
+      "note": "\"after her husband died\" gives a death and a family member; SR-18 allows only a brief, general reason for the sale. Fact f1 is verified but the record does not make it publishable; the card needs a general reason from Leo or the sentence must go."
+    }
+  ],
+  "evidence_ids": ["FAKE-CS-001"],
+  "required_actions": ["Remove the death and family-member detail; use only a general verified reason for the sale supplied by Leo."],
+  "output_version_id": "v1-story-FAKE-31-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-CS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {
+            "rule": "SR-18",
+            "what": "\"The owners sold the home after her husband died.\" states a death and a family member, which SR-18 forbids (only a brief general reason is allowed)."
+          }
+        ],
+        "note": "The second sentence is fine, but the first gives person-specific details (a death and a spouse) that SR-18 forbids."
+      }
+    ]
+  }
+}

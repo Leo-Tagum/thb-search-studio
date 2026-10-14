@@ -1,0 +1,31 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-SS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "story:FAKE-SS-001:city-not-approved", "severity": "required", "note": "\"in San Mateo\" is a city that is in no verified fact (f1, f2), the card location level is none and no Juan approval is recorded. It is also a service-area hint (SR-3, SR-19). Remove the words \"in San Mateo\"."}
+  ],
+  "evidence_ids": ["FAKE-SS-001"],
+  "required_actions": ["Remove \"in San Mateo\" from the draft; use no place or a region only if the card records one."],
+  "output_version_id": "v1-story-FAKE-21-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-SS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {"rule": "SR-19", "what": "\"in San Mateo\": a city with no recorded Juan approval (location level none); not in any verified fact"},
+          {"rule": "SR-20", "what": "\"in San Mateo\" is a detail not in the record, added to the verified facts f1 and f2"},
+          {"rule": "SR-3", "what": "\"families in San Mateo\" implies a service area before Juan confirms cities"}
+        ],
+        "note": "The rest of the text matches verified facts f1 and f2 with no promise, quote or person detail, but the city San Mateo is unapproved and not in the record."
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-SS-001"],
+  "decision": "REVISION",
+  "findings": [
+    {
+      "issue_key": "story:FAKE-SS-001:process-and-promise",
+      "severity": "required",
+      "note": "The last sentence \"We clear out the house, handle the repairs and buy it directly.\" is not in any verified fact, describes what we do with no Juan-approved process wording (none exists), and implies what we will do for the reader (SR-19, SR-20)."
+    }
+  ],
+  "evidence_ids": ["FAKE-SS-001"],
+  "required_actions": ["Delete the sentence \"We clear out the house, handle the repairs and buy it directly.\" The first three sentences rest on verified facts f1, f2 and the takeaway."],
+  "output_version_id": "v1-story-FAKE-SS-001-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-SS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {
+            "rule": "SR-19",
+            "what": "\"We clear out the house, handle the repairs and buy it directly.\" describes what we do with no Juan-approved process wording, and implies what we will do for the reader"
+          },
+          {
+            "rule": "SR-20",
+            "what": "The same sentence is not supported by any verified fact, the takeaway or approved process wording on the card"
+          }
+        ],
+        "note": "The first three sentences are supported by verified facts f1, f2 and the takeaway; the final sentence is an unapproved process and promise claim and must be removed."
+      }
+    ]
+  }
+}

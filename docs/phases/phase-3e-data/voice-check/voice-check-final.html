@@ -1,0 +1,80 @@
+<title>Voice Check</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap">
+<style>
+/* A small separate page for Juan, once (2026-10-14): does the writing sound like him? Same look as the Approval Room, same recorded decision. Nothing here is an article approval. */
+:root{
+  --ink:#0d1b2e; --ink-2:#4a5568; --paper:#f6f4f0; --card:#ffffff; --line:#d9d5cc; --accent:#c2410c; --accent-ink:#ffffff; --ok:#17673b; --ok-bg:#e3f2e8;
+  --font-body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ink:#e8ecf2; --ink-2:#a7b1c1; --paper:#0c1626; --card:#13233a; --line:#2a3b55; --accent:#f08a4b; --accent-ink:#0c1626; --ok:#7fd3a0; --ok-bg:#12331f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ink:#e8ecf2; --ink-2:#a7b1c1; --paper:#0c1626; --card:#13233a; --line:#2a3b55; --accent:#f08a4b; --accent-ink:#0c1626; --ok:#7fd3a0; --ok-bg:#12331f; color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font:16px/1.55 var(--font-body);margin:0;padding-inline:16px;padding-block:20px 32px}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-size:24px;line-height:1.2;margin:0;text-wrap:balance}
+p{margin:0 0 8px}
+.meta{color:var(--ink-2);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--ok-bg);color:var(--ok)}
+blockquote{margin:10px 0;padding:4px 14px;border-left:4px solid var(--line);font-size:17px}
+.ask{border-left:4px solid var(--accent);background:var(--card);border-radius:0 8px 8px 0;padding:12px 16px;margin:0;font-size:17px;font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+textarea{width:100%;box-sizing:border-box;min-height:56px;font:inherit;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px}
+button{font:inherit;font-weight:600;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 18px;cursor:pointer}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button[disabled]{opacity:.5;cursor:not-allowed}
+.fine{font-size:13px;color:var(--ink-2);margin:0}
+</style>
+<div class="wrap" id="app"></div>
+<script type="application/json" id="payload">{"id":"voice-reference:86f828bdea99","hash":"86f828bdea99fa5d3dbcdfe29f95c3a75ab109bd27da260659a1f705e5941fec","excerpts":[{"text":"Age alone isn't the problem."},{"text":"What matters is the condition of the property today, and whether the paperwork tells the same story as the house."},{"text":"None of these mean the house can't sell. They mean you want to know about them before you pick a path."},{"text":"A house full of belongings is not always a junk problem. Sometimes it is a family history problem."}],"question":"These example lines guide how future articles are written in your voice. Confirm once and we won't ask again."}</script>
+<script>
+(function(){
+  var P = JSON.parse(document.getElementById('payload').textContent);
+  var app = document.getElementById('app');
+  function el(tag, attrs, kids){ var e=document.createElement(tag); for (var k in (attrs||{})) { if (k==='text') e.textContent=attrs[k]; else if (k==='class') e.className=attrs[k]; else e.setAttribute(k, attrs[k]); } (kids||[]).forEach(function(c){ if(c) e.appendChild(c); }); return e; }
+  if (!P || !P.id) { app.appendChild(el('h1',{text:'Voice Check'})); app.appendChild(el('div',{class:'card',text:'Nothing is waiting for you here right now.'})); return; }
+  app.appendChild(el('p',{class:'meta',text:'Twin Home Buyer · one quick question for Juan'}));
+  app.appendChild(el('h1',{text:'Does this sound like you?'}));
+  var card = el('div',{class:'card'});
+  card.appendChild(el('p',{text:P.question}));
+  (P.excerpts||[]).forEach(function(x){ card.appendChild(el('blockquote',{text:x.text})); });
+  app.appendChild(card);
+  app.appendChild(el('p',{class:'ask',text:'Do these lines sound like you?'}));
+  var note = el('textarea',{id:'note','aria-label':'Your note',placeholder:'Optional: what should sound different?'});
+  var status = el('p',{class:'fine',id:'status',text:'Checking your sign-in…'});
+  var row = el('div',{class:'row'}); var buttons=[];
+  [['approve','Yes, sounds like me','primary'],['request_changes','Needs changes','']].forEach(function(d){
+    var b = el('button',{type:'button',class:d[2],id:'btn-'+d[0],text:d[1]}); b.disabled=true; buttons.push(b);
+    b.addEventListener('click', function(){ decide(d[0]); }); row.appendChild(b);
+  });
+  app.appendChild(row); app.appendChild(note); app.appendChild(status);
+  app.appendChild(el('p',{class:'fine',text:"Asked once. Your answer is saved against your own account. This is not an article approval, and nothing is published."}));
+  var state = { db:null, uid:null, me:null };
+  async function decide(decision){
+    if (!state.db || !state.uid) { status.textContent='Not signed in with write access: your answer cannot be saved.'; return; }
+    buttons.forEach(function(b){b.disabled=true;});
+    try {
+      // the same record shape as the Approval Room: proposal (here the voice item's id), item, decision, claimed hash, note, time, name
+      var rec = { proposalId:P.id, itemKind:'voice_reference', decision:decision, claimedHash:P.hash, note:note.value||'', decidedAt:new Date().toISOString(), displayName:(state.me&&state.me.name)||'' };
+      await state.db.collection('decisions/'+state.uid+'/records').doc(P.id+'__voice_reference').set(rec);
+      await state.db.doc('people/'+state.uid).set({ displayName:rec.displayName, lastSeen:rec.decidedAt });
+      status.textContent = 'Saved: '+decision.replace('_',' ')+'. Thank you. Leo will read it back.';
+    } catch(e){ status.textContent = 'Could not save ('+(e&&e.code||'error')+'). '+(e&&e.message||''); }
+    buttons.forEach(function(b){b.disabled=false;});
+  }
+  (async function(){
+    try {
+      if (!window.claude || !window.claude.use) throw new Error('no runtime');
+      state.db = await window.claude.use('db'); var user = await window.claude.use('user');
+      if (user) { state.uid = await user.id(); state.me = await user.me(); }
+      var can = user ? await user.can('data.write') : null;
+      var ok = !!(state.db && state.uid) && can !== false;
+      buttons.forEach(function(b){ b.disabled=!ok; });
+      status.textContent = ok ? 'Signed in as '+((state.me&&state.me.name)||'your account')+'. Your answer is saved against your own account.' : 'You can read this page, but your account cannot save an answer yet. Ask Leo.';
+      if (ok) state.db.collection('decisions/'+state.uid+'/records').doc(P.id+'__voice_reference').onSnapshot(function(s){ if(s.exists){ var d=s.data(); status.textContent='Your saved answer: '+String(d.decision).replace('_',' ')+' ('+d.decidedAt+').'; } }, function(){});
+    } catch(e){ status.textContent='Saving is unavailable in this view. You can still read the page.'; }
+  })();
+})();
+</script>

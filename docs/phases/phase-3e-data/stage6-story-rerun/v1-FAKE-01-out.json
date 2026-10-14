@@ -1,0 +1,25 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "prompt_receipt": "229ac8bae6e9",
+  "agent_prompt_version": "1.10.0",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-CS-001"],
+  "decision": "PASS",
+  "findings": [],
+  "evidence_ids": [],
+  "required_actions": [],
+  "output_version_id": "v1-story-FAKE-01-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-CS-001",
+        "verdict": "PASS",
+        "rules_broken": [],
+        "note": "All four sentences match verified facts f1 to f4 word for word; unverified f5 (repair figure) does not appear; no place, price, date, person detail or promise; gate is Green set by Leo."
+      }
+    ]
+  }
+}

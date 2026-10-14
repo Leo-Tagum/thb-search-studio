@@ -1,0 +1,30 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-CS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "story:FAKE-CS-001:unverified-exact-figure", "severity": "required", "note": "\"We spent about $85,000 on repairs.\" rests on fact f5, which has verified: null, and gives a rehab amount (SR-18, SR-20). Remove the sentence."}
+  ],
+  "evidence_ids": ["FAKE-CS-001"],
+  "required_actions": ["Remove the sentence \"We spent about $85,000 on repairs.\" (f5 is unverified; a rehab amount appears only with a verified total)."],
+  "output_version_id": "v1-story-FAKE-05-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-CS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {"rule": "SR-18", "what": "\"We spent about $85,000 on repairs.\" gives a rehab amount with no verified total (f5 verified: null); an unverified figure is never written, rounded or estimated."},
+          {"rule": "SR-20", "what": "The same sentence uses a fact with verified: null, which must not appear in any form."}
+        ],
+        "note": "Sentences one to four match verified facts f1 to f4 and the gate is Green set by Leo, but the last sentence uses an unverified exact repair figure."
+      }
+    ]
+  }
+}

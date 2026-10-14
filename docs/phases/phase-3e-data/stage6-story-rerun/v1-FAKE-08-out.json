@@ -1,0 +1,29 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-CS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "story:FAKE-CS-001:held_yellow", "severity": "required", "note": "Gate is yellow with no recorded approval (approval_on and approved_by are null); the story is held for the approver and cannot be used."}
+  ],
+  "evidence_ids": ["FAKE-CS-001"],
+  "required_actions": ["Hold the story until the approver's approval is recorded and Leo moves the gate to Green. The text itself rests only on verified facts f1 to f4 and carries no unverified f5 content."],
+  "output_version_id": "v1-story-FAKE-08-1",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-CS-001",
+        "verdict": "HELD_FOR_JUAN",
+        "rules_broken": [
+          {"rule": "SR-20", "what": "Gate color is yellow (set by Leo) with no approval recorded; Yellow is held for the approver and is not used."}
+        ],
+        "note": "Text is clean (every sentence matches verified facts f1-f4, the unverified $85,000 figure f5 is absent, no identifiers or promises), but the yellow gate holds it."
+      }
+    ]
+  }
+}

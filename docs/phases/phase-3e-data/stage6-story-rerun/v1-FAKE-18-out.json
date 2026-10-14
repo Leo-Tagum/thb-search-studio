@@ -1,0 +1,30 @@
+{
+  "article_id": "fake-article",
+  "opportunity_id": "fake-opportunity",
+  "agent_name": "V1 Fact and Privacy",
+  "agent_prompt_version": "1.10.0",
+  "prompt_receipt": "229ac8bae6e9",
+  "model_version": "claude-code/claude-sonnet-5-5",
+  "input_version_ids": ["FAKE-SS-001"],
+  "decision": "BLOCKED",
+  "findings": [
+    {"issue_key": "story:FAKE-SS-001:unpermitted_quote", "severity": "required", "note": "The text ends with the quotation \"It was a relief to have help.\" The card has no permitted quotes (quotes: []) and no written seller permission (permission.status none); it is also not a verified fact. SR-19, SR-20, SR-7."}
+  ],
+  "evidence_ids": ["FAKE-SS-001"],
+  "required_actions": ["Remove the sentence \"It was a relief to have help.\" The rest of the text matches verified facts f1, f2 and the card takeaway."],
+  "output_version_id": "v1-story-FAKE-18-001",
+  "timestamp": "2026-10-13T12:00:00Z",
+  "result": {
+    "story_checks": [
+      {
+        "story_id": "FAKE-SS-001",
+        "verdict": "BLOCKED",
+        "rules_broken": [
+          {"rule": "SR-19", "what": "\"It was a relief to have help.\" is a quotation, but the card has no written seller permission and no permitted quotes"},
+          {"rule": "SR-20", "what": "\"It was a relief to have help.\" is not in the record (no verified fact, takeaway or permitted quote supports it)"}
+        ],
+        "note": "The first three sentences rest on verified facts f1 and f2 and the takeaway, but the added quotation is invented and unpermitted."
+      }
+    ]
+  }
+}
