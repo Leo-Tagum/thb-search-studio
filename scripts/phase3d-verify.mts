@@ -6,7 +6,8 @@ import { execSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { createClient } from "@supabase/supabase-js";
-import { fingerprint } from "../src/lib/studio/branch";
+import { fingerprint, V1_CANONICAL_STRIP } from "../src/lib/studio/branch";
+import { fingerprintV2 } from "../src/lib/studio/fingerprint-v2";
 import { stateOf } from "../src/lib/studio/service";
 import { V1_PROMPT_VERSION, STUDIO_AGENT_META } from "../src/lib/studio/agents";
 import { TEAM_PROMPT_VERSIONS } from "../src/lib/team/bridge";
@@ -32,9 +33,11 @@ console.log(`  declines (module, classic, team 6.1):        ${byFile(/studio[\\/
 console.log(`  V1 gate, Agent 5 audit, escalation:          ${byFile(/studio[\\/]v1-gate\.test/)}`);
 console.log(`  adversarial fixtures:                        ${byFile(/studio[\\/]adversarial\.test/)}`);
 
-// ---- migrations: 0015-0019 only (Phase 3d adds none) ----
+// ---- migrations: Phase 3d added none after 0019; the ones Leo approved since for Phase 3e are listed here (updated, 2026-10-14). Any other migration after 0019 is a real problem. ----
+const EXPECTED_AFTER_0019 = ["0020_legal_claim_verification.sql", "0021_image_planner.sql", "0022_image_card_fields.sql", "0023_story_cards.sql"];
 const migs = readdirSync("supabase/migrations").filter((f) => /^\d{4}_/.test(f)).sort();
-check(migs.at(-1)?.startsWith("0019_") === true, "no migration after 0019 (Phase 3d adds none)", migs.at(-1));
+const after = migs.filter((f) => f.slice(0, 4) > "0019");
+check(JSON.stringify(after) === JSON.stringify(EXPECTED_AFTER_0019), "migrations after 0019 are exactly the ones Leo approved (0020-0023)", after.map((f) => f.slice(0, 4)).join(", ") || "none");
 
 // ---- prompt versions: files and code agree; only the declines roles moved ----
 const fileVersion = (f: string) => /^prompt_version:\s*(\S+)/m.exec(readFileSync(`.claude/agents/${f}.md`, "utf8"))?.[1];
@@ -44,9 +47,12 @@ console.log(`  roles at 1.1.0 (declines wording only): ${moved.join(", ")}`);
 
 // ---- the original article, untouched ----
 const { data: orig } = await db.from("articles").select("id,state,version_hash,pipeline_mode,is_fixture").eq("id", ORIGINAL).single();
-const fp = await fingerprint(db, ORIGINAL);
+const fp = await fingerprint(db, ORIGINAL, V1_CANONICAL_STRIP), fpv2 = await fingerprintV2(db, ORIGINAL), fpRaw = await fingerprint(db, ORIGINAL);
 check(orig?.state === "HUMAN_REVIEW" && orig?.version_hash?.startsWith("4db42fea93cc") === true, "original article: HUMAN_REVIEW, version 4db42fea93cc", `${orig?.state} ${orig?.version_hash?.slice(0, 12)}`);
-check(fp.total.startsWith("23f8dd72") && fp.total.endsWith("4611"), "original article fingerprint is 23f8dd72…4611", `${fp.total.slice(0, 8)}…${fp.total.slice(-4)}`);
+const BASELINE = "23f8dd722ed7bc26a6f5f10568cf6fb6053596a678980d223ab65dd31dea4611";
+check(fp.total === BASELINE, "original article fingerprint v1 (canonical: the eight 0020 columns removed) is the baseline 23f8dd72…4611", `${fp.total.slice(0, 8)}…${fp.total.slice(-4)}`);
+check(fpv2.total === BASELINE, "original article fingerprint v2 is the baseline 23f8dd72…4611", `${fpv2.total.slice(0, 8)}…${fpv2.total.slice(-4)}`);
+console.log(`  (raw v1, whole rows, informational only: it moved to 7ea7f5e2… when migration 0020 added columns, and any later column changes it again: ${fpRaw.total.slice(0, 8)}…${fpRaw.total.slice(-4)})`);
 
 // ---- the two Phase 3c branches ----
 for (const [name, id] of [["team branch", TEAM_BRANCH], ["classic-revision branch", CLASSIC_BRANCH]] as const) {

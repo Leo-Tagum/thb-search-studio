@@ -66,7 +66,12 @@ async function fetchAll(db: SupabaseClient, table: string, filter: (q: any) => a
 export type Fingerprint = { total: string; parts: Record<string, { count: number; hash: string }> };
 
 /** Row counts and content hashes of everything attached to one article. Reads only. */
-export async function fingerprint(db: SupabaseClient, articleId: string): Promise<Fingerprint> {
+/** The eight columns migration 0020 added (claims x7, escalations x1). The v1 baseline predates them; "canonical" v1 removes them again (Leo, 2026-10-14), so v1 can be compared with the baseline after later migrations. */
+export const V1_CANONICAL_STRIP: Record<string, string[]> = {
+  claims: ["quote_full", "section_cite", "verification_label", "verification_reason", "verified_against", "gates", "reader_impact"],
+  escalations: ["reference_needed"],
+};
+export async function fingerprint(db: SupabaseClient, articleId: string, strip: Record<string, string[]> = {}): Promise<Fingerprint> {
   const art = await fetchAll(db, "articles", (q) => q.eq("id", articleId));
   const briefId = art[0]?.brief_id as string | undefined;
   const brief = briefId ? await fetchAll(db, "briefs", (q) => q.eq("id", briefId)) : [];
@@ -82,7 +87,7 @@ export async function fingerprint(db: SupabaseClient, articleId: string): Promis
     audit_events: await fetchAll(db, "audit_events", (q) => q.eq("subject_id", articleId)),
   };
   const out: Fingerprint["parts"] = {};
-  for (const [k, rows] of Object.entries(parts)) out[k] = { count: rows.length, hash: sha256(stableStringify(rows)) };
+  for (const [k, rows0] of Object.entries(parts)) { const drop = strip[k] ?? []; const rows = drop.length ? rows0.map((r) => Object.fromEntries(Object.entries(r).filter(([c]) => !drop.includes(c)))) : rows0; out[k] = { count: rows.length, hash: sha256(stableStringify(rows)) }; }
   return { total: sha256(stableStringify(out)), parts: out };
 }
 export const fingerprintDiff = (a: Fingerprint, b: Fingerprint): string[] => Object.keys(a.parts).filter((k) => a.parts[k].hash !== b.parts[k]?.hash || a.parts[k].count !== b.parts[k]?.count).map((k) => `${k}: ${a.parts[k].count} rows -> ${b.parts[k]?.count ?? "missing"}`);

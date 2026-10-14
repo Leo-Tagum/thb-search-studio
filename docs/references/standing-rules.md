@@ -1,8 +1,8 @@
 # THB Search Studio: standing rules
 
-standing-rules-version: 1.3.0
+standing-rules-version: 1.3.1
 owner: Leo
-last-updated: 2026-10-14 (1.3.0: the approver is Cherry, Juan may also approve; SR-18 general reason for a sale)
+last-updated: 2026-10-14 (1.3.1: SR-10 operator rule, never overwrite, delete or move an untracked or uncommitted file without asking Leo; 1.3.0: the approver is Cherry, Juan may also approve; SR-18 general reason for a sale)
 
 Every agent prompt and the operator (Claude Code) load this file first. Where it conflicts with anything else, these rules win. Only Leo changes it. A change bumps the version above, the constant `STANDING_RULES_VERSION` in `src/lib/agents/standing-rules.ts`, and the `standing_rules_version:` line in every agent prompt in `.claude/agents/` (a test fails until they all agree).
 
@@ -43,7 +43,7 @@ Source: Leo. Date: 2026-10-10.
 
 ## Operator rules (Claude Code working on this repo)
 
-**SR-10.** Only act as leo on real articles. No proposal, approval, publish or WordPress action unless Leo says so in that step. No force-push. Migrations only with Leo's approval. Never change the original article (check its fingerprint, v1 and v2, before and after anything that touches an article's data). Do not contact Juan or Cherry; Leo does. Report outcomes faithfully, and stop and ask when a legal point cannot be verified.
+**SR-10.** Only act as leo on real articles. No proposal, approval, publish or WordPress action unless Leo says so in that step. No force-push. Migrations only with Leo's approval. Never change the original article (check its fingerprint, v1 and v2, before and after anything that touches an article's data). Do not contact Juan or Cherry; Leo does. Never overwrite, delete or move an untracked or uncommitted file without asking Leo first (a file git does not have cannot be recovered; read it and ask, or write to a new name). Report outcomes faithfully, and stop and ask when a legal point cannot be verified.
 Source: Leo, restated at each step. Date: 2026-10-13.
 
 ## Images (Phase 3e image planner, Agent 8 / D1)

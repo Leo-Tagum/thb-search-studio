@@ -26,7 +26,7 @@ function setup(agent: AgentKey = "thb-01-seo-strategist", state: "CANDIDATE" | "
 }
 
 const good1 = (over: Record<string, unknown> = {}) => JSON.stringify({
-  article_id: "", opportunity_id: "o1", agent_name: "SEO Strategist", agent_prompt_version: "1.4.0", model_version: "claude-code/test", input_version_ids: ["h1"],
+  article_id: "", opportunity_id: "o1", agent_name: "SEO Strategist", agent_prompt_version: "1.5.0", model_version: "claude-code/test", input_version_ids: ["h1"],
   decision: "HOLD", findings: [{ claim: "Impressions are high", basis: "gsc_data", evidence_ids: ["gsc:w"] }], evidence_ids: ["gsc:w"], required_actions: ["Observe the SERP"],
   output_version_id: "v1", timestamp: "2026-10-10T12:00:00Z",
   result: { rationale: "Demand exists but intent overlaps an existing page; hold pending SERP.", existing_urls: [], cannibalization: { warning: false, support: "" }, score_estimates: {}, unknowns_acknowledged: ["SERP not observed"], confidence: "low", fan_out: [] },

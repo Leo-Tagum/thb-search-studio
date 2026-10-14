@@ -7,7 +7,7 @@ const packet = buildTaskPacket("thb-02-research-evidence", { id: "o1", versionHa
 const src = (over: Record<string, unknown> = {}) => ({ id: "src:1", kind: "official_url", url: "https://www.dre.ca.gov/x", title: "DRE", tier: 2, jurisdiction: "California", effective_date: null, retrieved_date: "2026-10-10", locality_matches: true, ...over });
 const clm = (over: Record<string, unknown> = {}) => ({ id: "clm:1", text: "A seller must deliver a disclosure.", source_ids: ["src:1"], support: "supported", jurisdiction: "California", risk: "medium", ...over });
 const out = (result: Record<string, unknown>, decision = "PASS") => ({
-  article_id: "", opportunity_id: "o1", agent_name: "Research & Evidence", agent_prompt_version: "1.5.0", model_version: "claude-code/test", input_version_ids: ["h1"],
+  article_id: "", opportunity_id: "o1", agent_name: "Research & Evidence", agent_prompt_version: "1.6.0", model_version: "claude-code/test", input_version_ids: ["h1"],
   decision, findings: [], evidence_ids: ["src:1"], required_actions: [], output_version_id: "v1", timestamp: "2026-10-10T12:00:00Z",
   result: { sources: [src()], claims: [clm()], brand_facts_pending: [], first_party_proof: "restricted", unresolved: [], ...result },
 });

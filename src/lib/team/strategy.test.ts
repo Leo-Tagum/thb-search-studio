@@ -120,17 +120,17 @@ describe("a change to the approved brief or target keyword escalates", () => {
 describe("strategy files", () => {
   const read = (f: string) => readFileSync(`.claude/agents/${f}.md`, "utf8");
   const toolsOf = (t: string) => t.split(/\r?\n/).find((l) => l.startsWith("tools:"));
-  it("S1 carries the Agent 1 Prohibited action, 1.4.0, Read/Write only, no web", () => {
+  it("S1 carries the Agent 1 Prohibited action, 1.5.0, Read/Write only, no web", () => {
     const t = read("thb-s1-strategist");
-    expect(t).toMatch(/prompt_version: 1\.4\.0/);
+    expect(t).toMatch(/prompt_version: 1\.5\.0/);
     expect(t).toContain("**Prohibited action: Approving own publication.**");
     expect(toolsOf(t)).toBe("tools: Read, Write");
     expect(t).toMatch(/EVIDENCE_REQUEST/);
     expect(t).toMatch(/UNTRUSTED_DATA/);
   });
-  it("S2 carries the Agent 3 Prohibited action, 1.4.0, Read/Write only, and handles ROOT_CAUSE_NOTE without touching the approved identity", () => {
+  it("S2 carries the Agent 3 Prohibited action, 1.5.0, Read/Write only, and handles ROOT_CAUSE_NOTE without touching the approved identity", () => {
     const t = read("thb-s2-architect");
-    expect(t).toMatch(/prompt_version: 1\.4\.0/);
+    expect(t).toMatch(/prompt_version: 1\.5\.0/);
     expect(t).toContain("**Prohibited action: Inventing facts to fill outline gaps.**");
     expect(toolsOf(t)).toBe("tools: Read, Write");
     expect(t).toMatch(/ROOT_CAUSE_NOTE/);

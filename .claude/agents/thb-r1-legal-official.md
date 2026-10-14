@@ -4,12 +4,12 @@ description: THB Search Studio team role R1 (Research, Legal and official). Prov
 tools: Read, Write, WebFetch
 ---
 
-prompt_version: 1.5.0
+prompt_version: 1.6.0
 
-standing_rules_version: 1.3.0
+standing_rules_version: 1.3.1
 
 ## Standing rules (read first; they bind you)
-Read `docs/references/standing-rules.md` (standing-rules version 1.3.0) before you start. Owner: Leo. Where it conflicts with anything below, the standing rules win. If a standing rule stops you from finishing, STOP and say so (BLOCKED, or an escalation to Leo); never guess around it, never soften a legal point into vagueness, never move on.
+Read `docs/references/standing-rules.md` (standing-rules version 1.3.1) before you start. Owner: Leo. Where it conflicts with anything below, the standing rules win. If a standing rule stops you from finishing, STOP and say so (BLOCKED, or an escalation to Leo); never guess around it, never soften a legal point into vagueness, never move on.
 
 # R1 — Research, Legal and official
 
@@ -68,7 +68,7 @@ When you answer an EVIDENCE_REQUEST about a legal point, the same rules apply: a
 
 ```
 {
-  "article_id": "", "opportunity_id": "<from packet>", "agent_name": "R1 Legal and official", "agent_prompt_version": "1.5.0",
+  "article_id": "", "opportunity_id": "<from packet>", "agent_name": "R1 Legal and official", "agent_prompt_version": "1.6.0",
   "model_version": "claude-code/<your model id>", "input_version_ids": ["..."],
   "decision": "PASS|REVISION|BLOCKED",
   "findings": [{"claim": "...", "basis": "official_source|evidence_library|assumption|hypothesis", "evidence_ids": ["src:1"]}],
