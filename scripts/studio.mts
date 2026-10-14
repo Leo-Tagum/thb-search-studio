@@ -28,6 +28,7 @@
 //   npm run studio -- images-record-plan <articleId> <plan.json> | images-advance <planId> <STATUS> | images-store <planId> <dir> | images-leo-check <planId> "<what you checked>" | images-insert <articleId> <planId>   (the real-pilot image steps, all acting as leo; never run on a real article without Leo saying so)
 //   npm run studio -- images-pull <dir> [--out <dir2>]  (read-only on the database: checks Lawrence's finished images from a folder the operator downloaded from the Image board, strips metadata, and prints the report; --out writes the cleaned files and records.json. <dir> holds plan.json, work.json and files/<asset id>)
 //   npm run studio -- branch-delete <branch_id> --yes   (Leo: removes one branch and what it created; refuses anything that is not a branch)
+//   npm run studio -- voice-approve-written <full hash> "<channel>" <YYYY-MM-DD>   (Leo enters Juan's written approval of the voice reference: date and channel only; bound to that exact hash; no account is confirmed)
 //   npm run studio -- voice-approve                    (Leo: provisionally approve the voice reference; Juan confirms in the Approval Room)
 //   npm run studio -- proposal <article_id> <out.json>  (creates the proposal and writes the Approval Room payload)
 //   npm run studio -- sync-approvals <records.json>     (records read from the Approval Room with ArtifactData)
@@ -53,7 +54,7 @@ import { teamRoleOfAgentKey, isTeamRole } from "../src/lib/team/bridge";
 import { leoAnswerEscalationAs, loadTeamView, raiseTicketBudget, startTeamRun } from "../src/lib/team/store";
 import { parseTeamQueueArgs } from "../src/lib/studio/cli-args";
 import { confirmApprover, createProposal, syncApprovals } from "../src/lib/studio/proposals";
-import { syncVoiceApproval } from "../src/lib/studio/voice-approval";
+import { approveVoiceInWriting, syncVoiceApproval } from "../src/lib/studio/voice-approval";
 import { buildProposalPayload } from "../src/lib/studio/proposal-payload";
 import { fingerprintV2 } from "../src/lib/studio/fingerprint-v2";
 
@@ -306,6 +307,11 @@ if (cmd === "queue") {
   await db.from("brand_facts").update({ provisional_by: "leo", provisional_at: new Date().toISOString() }).eq("fact_key", "voice_reference");
   await db.from("audit_events").insert({ actor: "leo", subject_type: "brand_fact", subject_id: "voice_reference", event_type: "voice_reference_provisionally_approved", accepted: true, detail: { note: "provisional; Juan confirms in the Approval Room with the first article" } });
   console.log("voice_reference provisionally approved by leo (status stays 'proposed' until Juan confirms)");
+} else if (cmd === "voice-approve-written") {
+  // Juan's written approval of the voice reference, entered by Leo: voice-approve-written <full hash> "<channel>" <YYYY-MM-DD>. Date and channel only, never message text.
+  const res = await approveVoiceInWriting(db, { hash: a ?? "", channel: b ?? "", date: c ?? "", actor: "leo" });
+  console.log(res.ok ? `voice reference ${res.hash.slice(0, 12)}… recorded as approved: ${res.approvedBy}` : `NOT RECORDED: ${res.reason}`);
+  if (!res.ok) process.exitCode = 2;
 } else if (cmd === "proposal") {
   const p = await createProposal(db, a, "leo");
   const payload = await buildProposalPayload(db, p.id);

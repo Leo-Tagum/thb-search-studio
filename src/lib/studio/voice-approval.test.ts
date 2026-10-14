@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { classifyVoiceRecord, syncVoiceApproval, voiceItemId, voicePagePayload } from "./voice-approval";
+import { approveVoiceInWriting, classifyVoiceRecord, syncVoiceApproval, voiceItemId, voicePagePayload } from "./voice-approval";
 import { voiceHash } from "./proposals";
 import { memDb } from "./memdb.testlib";
 import type { Registry, RoomRecord } from "./approvals";
@@ -99,5 +99,59 @@ describe("the page and the article proposal", () => {
     for (const k of ["proposalId:P.id", "itemKind:'voice_reference'", "decision:decision", "claimedHash:P.hash", "note:note.value", "decidedAt:", "displayName:"]) expect(t, k).toContain(k);
     expect(t).toContain("'decisions/'+state.uid+'/records'");
     expect(t).toContain("This is not an article approval");
+  });
+});
+
+// Juan's written approval entered by Leo (2026-10-14): Juan was away, Leo and Juan share one account, so no account is confirmed as Juan.
+describe("written approval entered by Leo", () => {
+  const input = (over: Record<string, string> = {}) => ({ hash: HASH, channel: "Google Chat", date: "2026-10-14", actor: "leo", ...over });
+  it("approves the voice reference with the precedent wording, binds it to the hash, and writes an audit event with date and channel only", async () => {
+    const m = world();
+    const r = await approveVoiceInWriting(m.db as any, input());
+    expect(r).toMatchObject({ ok: true, hash: HASH, approvedBy: "juan: approved in writing, 2026-10-14 via Google Chat (relayed by Leo)" });
+    expect(m.t.brand_facts[0]).toMatchObject({ status: "approved", approved_by: "juan: approved in writing, 2026-10-14 via Google Chat (relayed by Leo)", approved_at: "2026-10-14T00:00:00.000Z" });
+    const ev = m.t.audit_events.find((e: any) => e.event_type === "voice_reference_confirmed");
+    expect(ev).toMatchObject({ actor: "leo", version_hash: HASH, detail: { method: "written approval entered by leo", approver: "Juan", channel: "Google Chat", date: "2026-10-14", hash: HASH, relayed_by: "Leo" } });
+    expect(JSON.stringify(ev.detail)).not.toMatch(/approved the|message text:/i);          // nothing but the facts above: no chat content
+  });
+  it("never touches the approver registry: no account is confirmed or queued as Juan", async () => {
+    const m = world();
+    const before = JSON.stringify(m.t.approver_registry);
+    await approveVoiceInWriting(m.db as any, input());
+    expect(JSON.stringify(m.t.approver_registry)).toBe(before);
+  });
+  it("is refused for anyone but leo", async () => {
+    const m = world();
+    for (const actor of ["juan", "cherry", "lawrence", "system:voice-sync", ""]) expect(await approveVoiceInWriting(m.db as any, input({ actor }))).toMatchObject({ ok: false, reason: expect.stringContaining("only leo") });
+    expect(m.t.brand_facts[0].status).toBe("provisional");
+  });
+  it("is refused for a hash that is not the stored voice reference (an older or different text), and the case of the hash does not matter", async () => {
+    const m = world();
+    const bad = await approveVoiceInWriting(m.db as any, input({ hash: "f".repeat(64) }));
+    expect(bad).toMatchObject({ ok: false, reason: expect.stringContaining("does not apply to the current text") });
+    expect(await approveVoiceInWriting(m.db as any, input({ hash: HASH.slice(0, 12) }))).toMatchObject({ ok: false });       // a short prefix is not enough
+    expect(m.t.brand_facts[0].status).toBe("provisional");
+    expect(await approveVoiceInWriting(m.db as any, input({ hash: HASH.toUpperCase() }))).toMatchObject({ ok: true });
+  });
+  it("needs the channel and a real date, one line, and refuses pasted message text", async () => {
+    const m = world();
+    for (const channel of ["", " ", "x", "Google Chat\nJuan: yes", "a".repeat(61)]) expect(await approveVoiceInWriting(m.db as any, input({ channel }))).toMatchObject({ ok: false });
+    for (const date of ["", "14-10-2026", "2026-13-40", "yesterday"]) expect(await approveVoiceInWriting(m.db as any, input({ date }))).toMatchObject({ ok: false });
+    expect(m.t.brand_facts[0].status).toBe("provisional");
+    expect(m.t.audit_events ?? []).toHaveLength(0);
+  });
+  it("is refused when the voice reference is already approved, and changes nothing", async () => {
+    const m = world("approved");
+    expect(await approveVoiceInWriting(m.db as any, input())).toMatchObject({ ok: false, reason: expect.stringContaining("already approved") });
+    expect(m.t.audit_events ?? []).toHaveLength(0);
+  });
+  it("a later change to the reference text means this approval no longer matches (the hash of the new text differs)", () => {
+    const changed = JSON.stringify({ ...JSON.parse(REF), imitate: ["a new line"] });
+    expect(voiceHash(changed)).not.toBe(HASH);
+  });
+  it("the command exists and acts only as leo", () => {
+    const cli = readFileSync("scripts/studio.mts", "utf8");
+    expect(cli).toContain('cmd === "voice-approve-written"');
+    expect(cli).toMatch(/approveVoiceInWriting\(db, \{ hash: a \?\? "", channel: b \?\? "", date: c \?\? "", actor: "leo" \}\)/);
   });
 });

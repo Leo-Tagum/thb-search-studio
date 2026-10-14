@@ -62,6 +62,30 @@ export async function syncVoiceApproval(db: SupabaseClient, records: RoomRecord[
   return rep;
 }
 
+/**
+ * Juan's WRITTEN approval of the voice reference, entered by Leo (Leo, 2026-10-14: Juan was away and could not click, and Leo and Juan share one claude.ai account, so no account is ever confirmed as Juan).
+ * Bound to the exact hash of the reference as stored now: if the reference changes later this approval no longer covers it. Records the date and channel only, never any chat text.
+ * Does not touch the approver registry. Acts only as leo.
+ */
+export type WrittenVoiceApproval = { ok: true; approvedBy: string; hash: string } | { ok: false; reason: string };
+export async function approveVoiceInWriting(db: SupabaseClient, input: { hash: string; channel: string; date: string; actor: string }): Promise<WrittenVoiceApproval> {
+  const fail = (reason: string): WrittenVoiceApproval => ({ ok: false, reason });
+  if (input.actor !== "leo") return fail("only leo enters a written approval");
+  const channel = input.channel.trim();
+  if (channel.length < 2 || channel.length > 60 || /[\r\n]/.test(channel)) return fail("the channel is required (for example \"Google Chat\"), on one line, up to 60 characters; do not paste any message text");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.date) || Number.isNaN(Date.parse(`${input.date}T00:00:00Z`))) return fail("the date must be a real date, YYYY-MM-DD");
+  const { data: vr } = await db.from("brand_facts").select("fact_value,status").eq("fact_key", "voice_reference").single();
+  const current = voiceHash(vr?.fact_value);
+  if (!vr || !current) return fail("there is no voice reference stored");
+  if (vr.status === "approved") return fail("the voice reference is already approved; nothing to record");
+  if (input.hash.trim().toLowerCase() !== current) return fail(`the approval is for ${input.hash.trim().slice(0, 12)}…, but the stored voice reference hashes to ${current.slice(0, 12)}…; it does not apply to the current text`);
+  const approvedBy = `juan: approved in writing, ${input.date} via ${channel} (relayed by Leo)`;
+  const { error } = await db.from("brand_facts").update({ status: "approved", approved_by: approvedBy, approved_at: `${input.date}T00:00:00.000Z` }).eq("fact_key", "voice_reference");
+  if (error) return fail(`not recorded: ${error.message}`);
+  await db.from("audit_events").insert({ actor: "leo", subject_type: "brand_fact", subject_id: "voice_reference", event_type: "voice_reference_confirmed", accepted: true, version_hash: current, detail: { method: "written approval entered by leo", approver: "Juan", channel, date: input.date, hash: current, relayed_by: "Leo", note: "date and channel only; no copy of the message is stored" } });
+  return { ok: true, approvedBy, hash: current };
+}
+
 /** What the voice page shows: a few example lines (the same filter the Approval Room used) and the hash the decision will be recorded against. Read-only. */
 export type VoicePagePayload = { id: string; hash: string; excerpts: { text: string }[]; question: string; imitate: string[]; avoid: string[]; banned_phrases: { dont: string; write_like_juan: string }[]; all_excerpts: string[] };
 export function voicePagePayload(factValue: string): VoicePagePayload | null {
