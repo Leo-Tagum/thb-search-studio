@@ -1,0 +1,189 @@
+<title>Page Type Review</title>
+<style>
+/* Concept: a reviewer's desk sheet. Cool paper, ink text, one blue for actions; amber only for holds. Cards compare two pages side by side and stack on a phone. */
+:root {
+  --paper: #f1f4f7; --card: #ffffff; --ink: #14202b; --muted: #556575; --line: #d3dbe3;
+  --accent: #0b5cd5; --accent-ink: #ffffff; --hold-bg: #fff0d9; --hold-ink: #8a4300; --ok-bg: #e4f4e9; --ok-ink: #1b6334; --test-bg: #efe7ff; --test-ink: #4b2a9a;
+  --shade: #e7ecf1;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif; --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif; --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0f1720; --card: #17212c; --ink: #e8eef4; --muted: #9db0c1; --line: #2b3a49; --accent: #6aa3ff; --accent-ink: #08111c;
+  --hold-bg: #3b2a10; --hold-ink: #ffc885; --ok-bg: #153423; --ok-ink: #8fe0ad; --test-bg: #2a2147; --test-ink: #c9b8ff; --shade: #1f2c39; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #0f1720; --card: #17212c; --ink: #e8eef4; --muted: #9db0c1; --line: #2b3a49; --accent: #6aa3ff; --accent-ink: #08111c;
+  --hold-bg: #3b2a10; --hold-ink: #ffc885; --ok-bg: #153423; --ok-ink: #8fe0ad; --test-bg: #2a2147; --test-ink: #c9b8ff; --shade: #1f2c39; color-scheme: dark; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5; }
+* { box-sizing: border-box; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 56px; }
+h1 { font-family: var(--font-display); font-size: clamp(1.6rem, 4.5vw, 2.3rem); line-height: 1.1; margin: 0 0 6px; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-size: 1.25rem; margin: 28px 0 10px; }
+.lede { color: var(--muted); max-width: 66ch; margin: 0 0 14px; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 18px; }
+.chip { font-family: var(--font-mono); font-size: 12px; letter-spacing: .02em; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; background: var(--card); color: var(--ink); }
+.chip.btn { cursor: pointer; } .chip.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin: 0 0 18px; }
+.card.test { border-color: var(--test-ink); }
+.top { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; margin-bottom: 10px; }
+.mono { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.badge { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: 6px; background: var(--shade); color: var(--ink); }
+.badge.hold { background: var(--hold-bg); color: var(--hold-ink); } .badge.ok { background: var(--ok-bg); color: var(--ok-ink); } .badge.test { background: var(--test-bg); color: var(--test-ink); }
+.flags { margin: 6px 0 12px; padding: 0; list-style: none; display: grid; gap: 6px; }
+.flags li { background: var(--hold-bg); color: var(--hold-ink); border-radius: 6px; padding: 6px 10px; font-size: 14px; }
+.flags li.confirm { background: var(--shade); color: var(--ink); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 760px) { .pair { grid-template-columns: 1fr; } }
+.page { min-width: 0; border: 1px solid var(--line); border-radius: 8px; padding: 12px; background: var(--paper); }
+.page h3 { font-family: var(--font-display); font-size: 1rem; margin: 0 0 4px; }
+.url { font-family: var(--font-mono); font-size: 12px; overflow-wrap: anywhere; color: var(--muted); margin: 0 0 8px; }
+.facts { margin: 0 0 8px; padding-left: 18px; font-size: 14px; } .facts li { margin: 2px 0; }
+.views { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.shot { border: 1px solid var(--line); border-radius: 6px; background: var(--card); max-height: 420px; overflow: auto; }
+.shot img { display: block; width: 100%; height: auto; }
+.shot.tall { max-height: 70vh; } .shot.phone img { max-width: 390px; margin-inline: auto; }
+.none { padding: 18px; color: var(--muted); font-size: 14px; }
+.decision { margin: 12px 0; display: grid; gap: 4px; font-size: 14px; }
+.decision b { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+.answer { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; display: grid; gap: 10px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+button, select, textarea { font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; min-height: 44px; }
+button { cursor: pointer; } button.pick.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button.save { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+button:disabled { opacity: .55; cursor: default; }
+button:focus-visible, select:focus-visible, textarea:focus-visible, .chip.btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+textarea { width: 100%; min-height: 72px; resize: vertical; }
+.status { font-size: 14px; color: var(--muted); min-height: 1.4em; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; } th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
+.scroll { overflow-x: auto; }
+details > summary { cursor: pointer; font-family: var(--font-display); font-size: 1.1rem; margin: 20px 0 8px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Mono&family=Source+Sans+3:wght@400;600&display=swap">
+<div class="wrap" id="app">
+  <h1>Page Type Review</h1>
+  <p class="lede" id="lede">Each card compares a redirect source with its destination, shows why it was flagged, and asks for your answer. Your answers save to your own account. Nothing here changes the master map or the live site.</p>
+  <div class="bar" id="bar" role="group" aria-label="Filter cards"></div>
+  <div id="cards"></div>
+  <details id="unflagged"><summary id="unflagged-summary">Pages with no new issue</summary><div class="scroll" id="unflagged-body"></div></details>
+  <p class="status" id="who"></p>
+</div>
+<script id="payload" type="application/json">__PAYLOAD__</script>
+<script>
+(function () {
+  'use strict';
+  var P = JSON.parse(document.getElementById('payload').textContent);
+  var TYPES = P.types, DECISIONS = P.decisions;
+  var state = { db: null, uid: null, me: null, answers: {}, filter: 'all', open: {} };
+  function el(tag, attrs, kids) { var e = document.createElement(tag); Object.keys(attrs || {}).forEach(function (k) { if (k === 'text') e.textContent = attrs[k]; else if (k === 'class') e.className = attrs[k]; else e.setAttribute(k, attrs[k]); }); (kids || []).forEach(function (c) { if (c) e.appendChild(c); }); return e; }
+  function short(u) { try { var x = new URL(u); return x.pathname === '/' ? '/ (homepage)' : x.pathname; } catch (e) { return u; } }
+  function blob(id) { return '/_blob/' + encodeURIComponent(id); }
+  var KIND_LABEL = { 'desktop-top': 'Top', 'desktop-full': 'Full page', 'mobile-top': 'Phone top', 'mobile-full': 'Phone full' };
+
+  function shotBox(page, cardId, side) {
+    var wrap = el('div');
+    var shots = (page.shots || []).filter(function (s) { return s.assetId; });
+    if (!shots.length) { wrap.appendChild(el('div', { class: 'shot none', text: page.noShotReason || 'No screenshot uploaded for this page.' })); return wrap; }
+    var views = el('div', { class: 'views' }); var box = el('div', { class: 'shot' }); var img = el('img', { alt: 'Screenshot of ' + short(page.url), loading: 'lazy' });
+    box.appendChild(img);
+    function show(kind) { var s = shots.filter(function (x) { return x.kind === kind; })[0] || shots[0]; img.src = blob(s.assetId); img.width = s.width; img.height = s.height; box.className = 'shot' + (/full/.test(s.kind) ? ' tall' : '') + (/mobile/.test(s.kind) ? ' phone' : ''); Array.prototype.forEach.call(views.children, function (b) { b.className = 'chip btn' + (b.getAttribute('data-kind') === s.kind ? ' on' : ''); }); }
+    shots.forEach(function (s) { var b = el('button', { type: 'button', class: 'chip btn', 'data-kind': s.kind, text: KIND_LABEL[s.kind] || s.kind }); b.addEventListener('click', function () { show(s.kind); }); views.appendChild(b); });
+    wrap.appendChild(views); wrap.appendChild(box); show(shots[0].kind); return wrap;
+  }
+  function pagePanel(label, page, cardId) {
+    var p = el('div', { class: 'page' });
+    p.appendChild(el('h3', { text: label + ': ' + page.visualType }));
+    p.appendChild(el('p', { class: 'url', text: page.url }));
+    var f = el('ul', { class: 'facts' });
+    [['Confidence', page.confidence + (page.source === 'visual-review' ? ' (set by visual review)' : '')], ['WordPress type', page.wpType], ['Purpose', page.purposeText || '(not described)'], ['Place', page.geography], ['Protected (Ads list)', page.protected ? 'YES' : 'no']].forEach(function (r) { f.appendChild(el('li', { text: r[0] + ': ' + r[1] })); });
+    page.evidence.slice(0, 5).forEach(function (t) { f.appendChild(el('li', { text: 'Seen: ' + t })); });
+    p.appendChild(f); p.appendChild(shotBox(page, cardId, label)); return p;
+  }
+
+  function buildCard(c) {
+    var card = el('article', { class: 'card' + (c.test ? ' test' : ''), id: 'card-' + c.id, 'data-id': c.id });
+    var top = el('div', { class: 'top' }, [el('span', { class: 'badge' + (c.test ? ' test' : ''), text: c.test ? 'TEST CARD' : c.group }), el('span', { class: 'mono', text: c.row.status })]);
+    card.appendChild(top);
+    if (c.test) card.appendChild(el('p', { class: 'status', text: 'Checkpoint test. An answer saved here is marked as a test and is ignored when answers are read back.' }));
+    var fl = el('ul', { class: 'flags' }); c.flags.forEach(function (f) { fl.appendChild(el('li', { class: f.severity, text: f.rule })); });
+    if (c.flags.length) card.appendChild(fl);
+    var pair = el('div', { class: 'pair' }); pair.appendChild(pagePanel('Source', c.source, c.id)); if (c.destination) pair.appendChild(pagePanel('Destination', c.destination, c.id)); else pair.appendChild(el('div', { class: 'page' }, [el('h3', { text: 'No destination' }), el('p', { class: 'mono', text: 'Removal recommendation: the page would be removed, not redirected.' })]));
+    card.appendChild(pair);
+    var d = el('div', { class: 'decision' });
+    d.appendChild(el('b', { text: 'Existing decision' })); d.appendChild(el('span', { text: c.existingDecision }));
+    if (c.confirmedException) { d.appendChild(el('b', { text: 'Previously confirmed exception' })); d.appendChild(el('span', { text: c.confirmedException })); }
+    d.appendChild(el('b', { text: 'Proposed change' })); d.appendChild(el('span', { class: 'badge ' + (c.proposed.kind === 'hold' ? 'hold' : 'ok'), text: c.proposed.text }));
+    card.appendChild(d);
+
+    var a = el('div', { class: 'answer' }); var chosen = { action: null }; var picks = el('div', { class: 'row' }); var pickBtns = {};
+    var explain = el('p', { class: 'status', text: 'Accept proposal = ' + c.proposed.text + ' | Keep existing = ' + c.existingDecision });
+    [['agree', 'Accept proposal'], ['keep_existing', 'Keep existing decision'], ['change_type', 'Change type'], ['change_decision', 'Change decision']].forEach(function (p) {
+      var b = el('button', { type: 'button', class: 'pick', text: p[1], id: 'pick-' + c.id + '-' + p[0] }); pickBtns[p[0]] = b;
+      b.addEventListener('click', function () { chosen.action = p[0]; Object.keys(pickBtns).forEach(function (k) { pickBtns[k].className = 'pick' + (k === p[0] ? ' on' : ''); }); typeRow.hidden = p[0] !== 'change_type'; decRow.hidden = p[0] !== 'change_decision'; save.disabled = !state.db; });
+      picks.appendChild(b);
+    });
+    var typeTarget = el('select', { id: 'target-' + c.id }); [['source', 'Source page'], ['destination', 'Destination page']].forEach(function (o) { var op = el('option', { value: o[0], text: o[1] }); typeTarget.appendChild(op); });
+    var typeSel = el('select', { id: 'type-' + c.id }); TYPES.forEach(function (t) { typeSel.appendChild(el('option', { value: t, text: t })); });
+    var typeRow = el('div', { class: 'row' }, [typeTarget, typeSel]); typeRow.hidden = true;
+    var decSel = el('select', { id: 'dec-' + c.id }); DECISIONS.forEach(function (t) { decSel.appendChild(el('option', { value: t, text: t })); });
+    var decRow = el('div', { class: 'row' }, [decSel]); decRow.hidden = true;
+    var note = el('textarea', { id: 'note-' + c.id, placeholder: 'Optional note. It is saved as text and never treated as an instruction.', maxlength: '500' });
+    var status = el('p', { class: 'status', id: 'status-' + c.id, role: 'status' });
+    var save = el('button', { type: 'button', class: 'save', id: 'save-' + c.id, text: 'Save answer' }); save.disabled = true;
+    save.addEventListener('click', function () { saveAnswer(c, chosen.action, typeTarget.value, typeSel.value, decSel.value, note.value, status, save); });
+    [explain, picks, typeRow, decRow, note, el('div', { class: 'row' }, [save]), status].forEach(function (n) { a.appendChild(n); });
+    card.appendChild(a);
+    state.open[c.id] = { status: status, save: save, pickBtns: pickBtns, chosen: chosen, note: note };
+    return card;
+  }
+
+  async function saveAnswer(c, action, target, type, dec, note, status, save) {
+    if (!state.db || !state.uid) { status.textContent = 'Not signed in with write access: your answer cannot be saved.'; return; }
+    if (!action) { status.textContent = 'Pick Accept proposal, Keep existing decision, Change type or Change decision first.'; return; }
+    save.disabled = true;
+    var rec = { cardId: c.id, action: action, decidedAt: new Date().toISOString(), displayName: (state.me && state.me.name) || '', note: String(note || '').slice(0, 500), test: !!c.test, payloadVersion: P.version };
+    if (action === 'change_type') { rec.typeTarget = target; rec.newType = type; }
+    if (action === 'change_decision') rec.newDecision = dec;
+    try {
+      await state.db.collection('decisions/' + state.uid + '/records').doc(c.id).set(rec);
+      status.textContent = 'Saved ' + action.replace('_', ' ') + ' at ' + new Date(rec.decidedAt).toLocaleTimeString() + (c.test ? ' (test)' : '') + '.';
+    } catch (e) { status.textContent = 'Could not save (' + ((e && e.code) || 'error') + '). ' + ((e && e.message) || ''); }
+    save.disabled = false;
+  }
+  function showSaved(id, d) {
+    var s = state.open[id]; if (!s) return; state.answers[id] = d;
+    s.status.textContent = 'Your saved answer: ' + String(d.action).replace('_', ' ') + (d.newType ? ' (' + d.typeTarget + ' is ' + d.newType + ')' : '') + (d.newDecision ? ' (' + d.newDecision + ')' : '') + ' at ' + new Date(d.decidedAt).toLocaleTimeString() + (d.test ? ' (test)' : '') + '.';
+    if (d.note && !s.note.value) s.note.value = d.note;
+    if (s.pickBtns[d.action]) Object.keys(s.pickBtns).forEach(function (k) { s.pickBtns[k].className = 'pick' + (k === d.action ? ' on' : ''); });
+    s.chosen.action = d.action; s.save.disabled = !state.db; renderBar();
+  }
+
+  function renderBar() {
+    var bar = document.getElementById('bar'); bar.textContent = '';
+    var total = P.cards.length, done = Object.keys(state.answers).length;
+    bar.appendChild(el('span', { class: 'chip', text: total + ' cards, ' + done + ' answered' }));
+    [['all', 'All'], ['open', 'Not answered'], ['hold', 'HOLD recommended']].forEach(function (f) { var b = el('button', { type: 'button', class: 'chip btn' + (state.filter === f[0] ? ' on' : ''), text: f[1] }); b.addEventListener('click', function () { state.filter = f[0]; applyFilter(); renderBar(); }); bar.appendChild(b); });
+  }
+  function applyFilter() { P.cards.forEach(function (c) { var n = document.getElementById('card-' + c.id); if (!n) return; var show = state.filter === 'all' || (state.filter === 'open' && !state.answers[c.id]) || (state.filter === 'hold' && c.proposed.kind === 'hold'); n.hidden = !show; }); }
+
+  var cards = document.getElementById('cards'); P.cards.forEach(function (c) { cards.appendChild(buildCard(c)); });
+  document.getElementById('lede').textContent = P.lede;
+  var u = P.unflagged || []; document.getElementById('unflagged-summary').textContent = u.length + ' rows: No new issue detected; existing decision unchanged.';
+  var tb = el('table'); var thead = el('thead', {}, [el('tr', {}, ['Group', 'Source', 'Destination', 'Types'].map(function (h) { return el('th', { text: h }); }))]); tb.appendChild(thead);
+  var tbody = el('tbody'); u.forEach(function (r) { tbody.appendChild(el('tr', {}, [el('td', { text: r.group }), el('td', { text: short(r.oldUrl) }), el('td', { text: r.newUrl ? short(r.newUrl) : 'REMOVE' }), el('td', { text: r.sourceType + (r.destinationType ? ' to ' + r.destinationType : '') })])); });
+  tb.appendChild(tbody); document.getElementById('unflagged-body').appendChild(tb);
+  renderBar(); applyFilter();
+
+  (async function () {
+    var who = document.getElementById('who');
+    try {
+      if (!window.claude || !window.claude.use) throw new Error('no runtime');
+      state.db = await window.claude.use('db'); var user = await window.claude.use('user');
+      if (user) { state.uid = await user.id(); state.me = await user.me(); }
+      var can = user ? await user.can('data.write') : null; var ok = !!(state.db && state.uid) && can !== false;
+      who.textContent = ok ? 'Signed in as ' + ((state.me && state.me.name) || 'your account') + '. Answers save to your account only.' : 'You can read this page, but your account cannot save answers.';
+      if (ok) state.db.collection('decisions/' + state.uid + '/records').onSnapshot(function (snap) { snap.forEach(function (d) { showSaved(d.id, d.data()); }); applyFilter(); });
+      Object.keys(state.open).forEach(function (id) { state.open[id].save.disabled = !ok || !state.open[id].chosen.action; });
+    } catch (e) { who.textContent = 'Saving is unavailable in this view. You can still read the cards.'; }
+  })();
+})();
+</script>
